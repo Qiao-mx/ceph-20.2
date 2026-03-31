@@ -1,6 +1,7 @@
 #ifndef RGW_VINYL_VMOD_H
 #define RGW_VINYL_VMOD_H
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -84,6 +85,13 @@ int rgw_vinyl_register_callbacks(
     vinyl_req_destroy_cb_t req_destroy_cb,
     void* user_data
 );
+
+/**
+ * 注销回调函数
+ * 重置所有回调指针和注册状态
+ * 线程安全
+ */
+void rgw_vinyl_unregister_callbacks(void);
 
 /**
  * 获取 Vinyl Cache 版本

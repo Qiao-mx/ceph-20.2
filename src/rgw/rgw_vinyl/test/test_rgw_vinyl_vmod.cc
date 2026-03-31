@@ -10,6 +10,10 @@ protected:
         user_data_ = nullptr;
     }
 
+    void TearDown() override {
+        rgw_vinyl_unregister_callbacks();
+    }
+
     struct TestCallbacks {
         vinyl_recv_cb_t recv_cb;
         vinyl_send_cb_t send_cb;
@@ -44,6 +48,48 @@ TEST_F(VinylVMODTest, RegisterCallbacksSuccess) {
     );
 
     EXPECT_EQ(result, 0);
+}
+
+TEST_F(VinylVMODTest, RegisterCallbacksFailsIfAlreadyRegistered) {
+    int result = rgw_vinyl_register_callbacks(
+        [](vinyl_handle_t, vinyl_request_ctx_t*, const char*,
+           const char*, const char*, uint16_t, const char*, size_t, char*, size_t) -> int {
+            return VINYL_OK;
+        },
+        [](vinyl_handle_t, vinyl_request_ctx_t*, int, const char*,
+           const char*, size_t, const char*, size_t) -> int {
+            return VINYL_OK;
+        },
+        [](void*) -> int { return VINYL_OK; },
+        [](void) {},
+        [](vinyl_handle_t) -> vinyl_request_ctx_t* {
+            return new vinyl_request_ctx_t{nullptr, 0};
+        },
+        [](vinyl_handle_t, vinyl_request_ctx_t* ctx) { delete ctx; },
+        &user_data_
+    );
+
+    EXPECT_EQ(result, 0);
+
+    result = rgw_vinyl_register_callbacks(
+        [](vinyl_handle_t, vinyl_request_ctx_t*, const char*,
+           const char*, const char*, uint16_t, const char*, size_t, char*, size_t) -> int {
+            return VINYL_OK;
+        },
+        [](vinyl_handle_t, vinyl_request_ctx_t*, int, const char*,
+           const char*, size_t, const char*, size_t) -> int {
+            return VINYL_OK;
+        },
+        [](void*) -> int { return VINYL_OK; },
+        [](void) {},
+        [](vinyl_handle_t) -> vinyl_request_ctx_t* {
+            return new vinyl_request_ctx_t{nullptr, 0};
+        },
+        [](vinyl_handle_t, vinyl_request_ctx_t* ctx) { delete ctx; },
+        &user_data_
+    );
+
+    EXPECT_EQ(result, VINYL_ERROR);
 }
 
 TEST_F(VinylVMODTest, GetVersion) {

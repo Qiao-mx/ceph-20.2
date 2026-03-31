@@ -48,6 +48,19 @@ int rgw_vinyl_register_callbacks(
     return VINYL_OK;
 }
 
+void rgw_vinyl_unregister_callbacks(void) {
+    std::lock_guard<std::mutex> lock(callback_mutex);
+
+    g_callbacks.recv_cb = nullptr;
+    g_callbacks.send_cb = nullptr;
+    g_callbacks.init_cb = nullptr;
+    g_callbacks.fini_cb = nullptr;
+    g_callbacks.req_create_cb = nullptr;
+    g_callbacks.req_destroy_cb = nullptr;
+    g_callbacks.user_data = nullptr;
+    g_callbacks_registered = false;
+}
+
 const char* rgw_vinyl_get_version(void) {
     return "1.0.0";
 }
