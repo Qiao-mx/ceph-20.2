@@ -177,12 +177,7 @@ public:
     /**
      * 获取配置
      */
-    const VinylCacheConfig& get_config() const { return config_; }
-
-    /**
-     * 获取 VCL 配置目录
-     */
-    const std::string& get_config_dir() const { return config_dir_; }
+    const VinylCacheConfig& get_config() const;
 
     /**
      * 获取版本信息
@@ -192,8 +187,6 @@ public:
 private:
     class Impl;
     std::unique_ptr<Impl> impl_;
-    VinylCacheConfig config_;
-    std::string config_dir_;
     std::atomic<VinylCacheState> state_{VinylCacheState::UNINITIALIZED};
 };
 

@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <regex>
 
 namespace fs = std::filesystem;
 
@@ -33,11 +34,10 @@ public:
     }
 
     int start() {
-        if (state_.load() != VinylCacheState::INITIALIZED) {
+        auto expected = VinylCacheState::INITIALIZED;
+        if (!state_.compare_exchange_strong(expected, VinylCacheState::RUNNING)) {
             return VINYL_ERROR;
         }
-
-        state_ = VinylCacheState::RUNNING;
         return VINYL_OK;
     }
 
@@ -59,12 +59,19 @@ public:
         if (state_.load() != VinylCacheState::RUNNING) {
             return VINYL_ERROR;
         }
-        // 重新加载 VCL 配置
+        // TODO: 实现重新加载 VCL 配置逻辑
+        // 1. 重新扫描配置文件目录
+        // 2. 验证新的 VCL 配置
+        // 3. 原子切换到新配置
         return VINYL_OK;
     }
 
     void set_cache_enabled(bool enabled) {
         config_.cache_enabled = enabled;
+    }
+
+    const VinylCacheConfig& get_config() const {
+        return config_;
     }
 
     VinylCacheConfig config_;
@@ -79,16 +86,14 @@ VinylCache::~VinylCache() = default;
 
 VinylCache::VinylCache(VinylCache&& other) noexcept
     : impl_(std::move(other.impl_))
-    , config_(other.config_)
-    , config_dir_(std::move(other.config_dir_))
     , state_(other.state_.load()) {
+    other.impl_.reset();
 }
 
 VinylCache& VinylCache::operator=(VinylCache&& other) noexcept {
     if (this != &other) {
         impl_ = std::move(other.impl_);
-        config_ = other.config_;
-        config_dir_ = std::move(other.config_dir_);
+        other.impl_.reset();
         state_ = other.state_.load();
     }
     return *this;
@@ -99,8 +104,6 @@ int VinylCache::init(const VinylCacheConfig& config) {
     if (!state_.compare_exchange_strong(expected, VinylCacheState::INITIALIZED)) {
         return VINYL_ERROR;
     }
-    config_ = config;
-    config_dir_ = config.config_dir;
     return impl_->init(config);
 }
 
@@ -122,6 +125,10 @@ int VinylCache::reload_vcl() {
 
 void VinylCache::set_cache_enabled(bool enabled) {
     impl_->set_cache_enabled(enabled);
+}
+
+const VinylCacheConfig& VinylCache::get_config() const {
+    return impl_->get_config();
 }
 
 // VCLConfigLoader implementation
@@ -197,9 +204,9 @@ int VCLConfig::load_directory(const std::string& dir_path) {
 }
 
 int VCLConfig::validate_vcl(const std::string& vcl_content) const {
-    // 基本的 VCL 语法检查
-    // 检查匹配的 vcl 4.1;
-    if (vcl_content.find("vcl 4.1;") == std::string::npos) {
+    // 使用正则表达式验证 VCL 版本声明（必须在行首，排除注释）
+    std::regex vcl_version_regex(R"(^\s*vcl\s+4\.1\s*;)", std::regex_constants::multiline);
+    if (!std::regex_search(vcl_content, vcl_version_regex)) {
         return VINYL_ERROR;
     }
 
