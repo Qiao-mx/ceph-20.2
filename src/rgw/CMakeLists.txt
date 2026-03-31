@@ -278,6 +278,11 @@ if(WITH_RADOSGW_D4N)
         driver/d4n/rgw_sal_d4n.cc)
 endif()
 
+if(WITH_RGW_VINYL)
+  add_subdirectory(rgw_vinyl)
+  list(APPEND librgw_common_srcs rgw_vinyl/rgw_vinyl.cc)
+endif()
+
 add_library(rgw_common STATIC ${librgw_common_srcs})
 
 include(CheckCXXCompilerFlag)
