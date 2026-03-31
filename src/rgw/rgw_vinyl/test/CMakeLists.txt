@@ -1,6 +1,7 @@
 set(test_rgw_vinyl_sources
     test_rgw_vinyl.cc
     test_rgw_vinyl_vmod.cc
+    test_rgw_vinyl_bridge.cc
     test_vcl_config.cc
 )
 

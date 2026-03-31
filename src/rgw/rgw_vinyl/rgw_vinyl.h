@@ -196,4 +196,83 @@ private:
  */
 std::string get_default_vcl();
 
+/**
+ * RGW 桥接层函数声明
+ * 用于 VinylCache 与 RGW 之间的通信
+ */
+
+class RGWREST;
+class RGWHandler;
+struct req_state;
+
+/**
+ * 初始化 RGW 与 VinylCache 的桥接
+ * 由 RGWMain 在 VinylCache::init() 之前调用
+ * @return 0 成功, 负数 失败
+ */
+int rgw_vinyl_bridge_init();
+
+/**
+ * 清理 RGW 与 VinylCache 的桥接
+ */
+void rgw_vinyl_bridge_shutdown();
+
+/**
+ * 设置 REST 处理器
+ * @param rest RGWREST 指针
+ */
+void rgw_vinyl_set_rest_handler(RGWREST* rest);
+
+/**
+ * 设置 SAL Driver
+ * @param drv Driver 指针
+ */
+void rgw_vinyl_set_driver(rgw::sal::Driver* drv);
+
+/**
+ * 处理 VinylCache 接收的请求
+ * @param method HTTP 方法
+ * @param uri 请求 URI
+ * @param host 主机名
+ * @param vhost_len 虚拟主机长度
+ * @param headers 请求头
+ * @param headers_len 请求头长度
+ * @param req_body 请求体
+ * @param req_body_len 请求体长度
+ * @param resp_headers 响应头（输出）
+ * @param resp_body 响应体（输出）
+ * @param status HTTP 状态码（输出）
+ * @return 0 成功, 负数 失败
+ */
+int rgw_vinyl_handle_request(
+    const char* method,
+    const char* uri,
+    const char* host,
+    uint16_t vhost_len,
+    const char* headers,
+    size_t headers_len,
+    char* req_body,
+    size_t req_body_len,
+    std::string& resp_headers,
+    std::string& resp_body,
+    int& status);
+
+/**
+ * 处理 VinylCache 发送的响应
+ * @param status HTTP 状态码
+ * @param status_msg 状态消息
+ * @param headers 响应头
+ * @param headers_len 响应头长度
+ * @param resp_body 响应体
+ * @param resp_body_len 响应体长度
+ * @return 0 成功, 负数 失败
+ */
+int rgw_vinyl_send_response(
+    int status,
+    const char* status_msg,
+    const char* headers,
+    size_t headers_len,
+    const char* resp_body,
+    size_t resp_body_len);
+
 } // namespace rgw
