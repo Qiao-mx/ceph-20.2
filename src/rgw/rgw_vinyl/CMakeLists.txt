@@ -28,4 +28,4 @@ target_link_libraries(rgw_vinyl
 
 # Install
 install(TARGETS rgw_vinyl DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(FILES rgw_vinyl_vmod.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rgw)
+install(FILES rgw_vinyl_vmod.h rgw_vinyl.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rgw)
