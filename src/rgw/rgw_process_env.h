@@ -29,6 +29,10 @@ namespace rgw::sal {
   class LuaManager;
 }
 
+namespace rgw {
+  class VinylCache;
+}
+
 #ifdef WITH_ARROW_FLIGHT
 namespace rgw::flight {
   class FlightServer;
@@ -50,6 +54,10 @@ struct RGWProcessEnv {
   std::unique_ptr<OpsLogSink> olog;
   std::unique_ptr<rgw::auth::StrategyRegistry> auth_registry;
   ActiveRateLimiter* ratelimiting = nullptr;
+
+#ifdef WITH_RGW_VINYL
+  rgw::VinylCache* vinyl_cache = nullptr;
+#endif
 
 #ifdef WITH_ARROW_FLIGHT
   // managed by rgw:flight::FlightFrontend in rgw_flight_frontend.cc

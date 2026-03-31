@@ -32,6 +32,10 @@
 #include "rgw_dmclock_scheduler_ctx.h"
 #include "rgw_ratelimit.h"
 
+#ifdef WITH_RGW_VINYL
+#include "rgw_vinyl/rgw_vinyl.h"
+#endif
+
 
 class RGWPauser : public RGWRealmReloader::Pauser {
   std::vector<Pauser*> pausers;
@@ -59,6 +63,7 @@ namespace dedup{ class Background; }
 namespace sal { class ConfigStore; }
 
 class RGWLib;
+class VinylCache;
 class AppMain {
   /* several components should be initalized only if librgw is
     * also serving HTTP */
@@ -84,6 +89,9 @@ class AppMain {
   std::unique_ptr<RGWPauser> rgw_pauser;
   std::unique_ptr<sal::ConfigStore> cfgstore;
   SiteConfig site;
+#ifdef WITH_RGW_VINYL
+  std::unique_ptr<rgw::VinylCache> vinyl_cache;
+#endif
   const DoutPrefixProvider* dpp;
   RGWProcessEnv env;
   void need_context_pool();
@@ -106,6 +114,12 @@ public:
     return ldh.get();
   }
 
+#ifdef WITH_RGW_VINYL
+  rgw::VinylCache* get_vinyl_cache() {
+    return vinyl_cache.get();
+  }
+#endif
+
   void init_frontends1(bool nfs = false);
   void init_numa();
   int init_storage();
@@ -118,6 +132,10 @@ public:
   void init_tracepoints();
   void init_lua();
   void init_dedup();
+#ifdef WITH_RGW_VINYL
+  int init_vinyl_cache();
+  void shutdown_vinyl_cache();
+#endif
 
   bool have_http() {
     return have_http_frontend;

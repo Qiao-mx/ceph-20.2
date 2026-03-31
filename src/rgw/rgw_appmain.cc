@@ -28,6 +28,10 @@
 #include "rgw_main.h"
 #include "rgw_asio_thread.h"
 #include "rgw_common.h"
+
+#ifdef WITH_RGW_VINYL
+#include "rgw_vinyl/rgw_vinyl.h"
+#endif
 #include "rgw_sal.h"
 #include "rgw_sal_config.h"
 #include "rgw_period_pusher.h"
@@ -604,6 +608,62 @@ void rgw::AppMain::init_dedup()
     }
   }
 }
+#endif /* WITH_RGW_VINYL */
+
+#ifdef WITH_RGW_VINYL
+int rgw::AppMain::init_vinyl_cache()
+{
+  rgw::sal::Driver* driver = env.driver;
+  if (!driver) {
+    ldpp_dout(dpp, 0) << __func__ << ":: driver is null" << dendl;
+    return -EINVAL;
+  }
+
+  VinylCacheConfig config;
+  config.config_dir = g_conf().get_val<std::string>("rgw_vinyl_config_dir");
+  config.http2_enabled = g_conf().get_val<bool>("rgw_vinyl_http2_enabled");
+  config.cache_enabled = g_conf().get_val<bool>("rgw_vinyl_cache_enabled");
+  config.max_connections = g_conf().get_val<int>("rgw_vinyl_max_connections");
+  config.connect_timeout_ms = g_conf().get_val<int>("rgw_vinyl_connect_timeout_ms");
+  config.backend_timeout_ms = g_conf().get_val<int>("rgw_vinyl_backend_timeout_ms");
+  config.max_object_size = g_conf().get_val<size_t>("rgw_vinyl_max_object_size");
+
+  vinyl_cache = std::make_unique<rgw::VinylCache>();
+  int r = vinyl_cache->init(config);
+  if (r < 0) {
+    ldpp_dout(dpp, 0) << __func__ << "::failed to init vinyl cache, r=" << r << dendl;
+    vinyl_cache.reset();
+    return r;
+  }
+
+  env.vinyl_cache = vinyl_cache.get();
+  rgw_vinyl_set_driver(driver);
+
+  r = vinyl_cache->start();
+  if (r < 0) {
+    ldpp_dout(dpp, 0) << __func__ << "::failed to start vinyl cache, r=" << r << dendl;
+    vinyl_cache->shutdown();
+    vinyl_cache.reset();
+    env.vinyl_cache = nullptr;
+    return r;
+  }
+
+  ldpp_dout(dpp, 1) << "VinylCache initialized successfully" << dendl;
+  return 0;
+}
+
+void rgw::AppMain::shutdown_vinyl_cache()
+{
+  if (vinyl_cache) {
+    ldpp_dout(dpp, 1) << "Shutting down VinylCache..." << dendl;
+    vinyl_cache->shutdown();
+    vinyl_cache.reset();
+    env.vinyl_cache = nullptr;
+    rgw_vinyl_bridge_shutdown();
+    ldpp_dout(dpp, 1) << "VinylCache shutdown complete" << dendl;
+  }
+}
+#endif /* WITH_RGW_VINYL */
 
 void rgw::AppMain::shutdown(std::function<void(void)> finalize_async_signals)
 {
@@ -632,6 +692,10 @@ void rgw::AppMain::shutdown(std::function<void(void)> finalize_async_signals)
   if (lua_background) {
     lua_background->shutdown();
   }
+
+#ifdef WITH_RGW_VINYL
+  shutdown_vinyl_cache();
+#endif
 
   env.driver->shutdown();
   // Do this before closing storage so requests don't try to call into

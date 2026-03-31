@@ -15,6 +15,10 @@
 #include "rgw_lib.h"
 #include "rgw_log.h"
 
+#ifdef WITH_RGW_VINYL
+#include "rgw_vinyl/rgw_vinyl.h"
+#endif
+
 #ifdef HAVE_SYS_PRCTL_H
 #include <sys/prctl.h>
 #endif
@@ -163,6 +167,16 @@ int main(int argc, char *argv[])
   main.init_tracepoints();
   main.init_lua();
   main.init_dedup();
+
+#ifdef WITH_RGW_VINYL
+  r = main.init_vinyl_cache();
+  if (r < 0) {
+    derr << "ERROR: unable to initialize VinylCache, r = " << r << dendl;
+    main.shutdown();
+    return r;
+  }
+#endif
+
   r = main.init_frontends2(nullptr /* RGWLib */);
   if (r != 0) {
     derr << "ERROR:  initialize frontend fail, r = " << r << dendl;
