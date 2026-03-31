@@ -5,6 +5,8 @@
 #include <atomic>
 #include <vector>
 #include <chrono>
+#include <unordered_map>
+#include <optional>
 
 namespace rgw {
 
@@ -106,6 +108,146 @@ private:
     VCLConfig config_;
     std::string config_dir_;
     std::chrono::time_point<std::chrono::steady_clock> last_load_;
+};
+
+/**
+ * RGW 请求信息结构
+ */
+struct RGWRequestInfo {
+    std::string method;
+    std::string uri;
+    std::string host;
+    std::string headers;
+    std::optional<std::string> range;  // Range 请求头
+
+    RGWRequestInfo() = default;
+    RGWRequestInfo(const std::string& m, const std::string& u,
+                   const std::string& h = "", const std::string& hdr = "")
+        : method(m), uri(u), host(h), headers(hdr) {}
+};
+
+/**
+ * RGW 响应信息结构
+ */
+struct RGWResponseInfo {
+    int status{0};
+    std::string headers;
+    std::string content_type;
+    uint64_t content_length{0};
+
+    RGWResponseInfo() = default;
+    explicit RGWResponseInfo(int s) : status(s) {}
+};
+
+/**
+ * 缓存策略基类
+ * 定义哪些请求/响应可以被缓存的接口
+ */
+class CachePolicy {
+public:
+    virtual ~CachePolicy() = default;
+
+    /**
+     * 判断请求是否可以被缓存
+     * @param req 请求信息
+     * @return true 可以缓存, false 不可缓存
+     */
+    virtual bool can_cache_request(const RGWRequestInfo& req) const = 0;
+
+    /**
+     * 判断响应是否可以被缓存
+     * @param req 请求信息（用于参考）
+     * @param resp 响应信息
+     * @return true 可以缓存, false 不可缓存
+     */
+    virtual bool can_cache_response(const RGWRequestInfo& req,
+                                    const RGWResponseInfo& resp) const = 0;
+
+    /**
+     * 获取缓存 TTL（秒）
+     * @param req 请求信息
+     * @param resp 响应信息
+     * @return TTL 秒数, 0 表示不缓存
+     */
+    virtual uint32_t get_ttl(const RGWRequestInfo& req,
+                              const RGWResponseInfo& resp) const = 0;
+
+    /**
+     * 获取缓存 key
+     * @param req 请求信息
+     * @return 缓存 key
+     */
+    virtual std::string get_cache_key(const RGWRequestInfo& req) const = 0;
+};
+
+/**
+ * 默认缓存策略
+ * 实现标准 HTTP 缓存规则
+ */
+class DefaultCachePolicy : public CachePolicy {
+public:
+    DefaultCachePolicy();
+    ~DefaultCachePolicy() override = default;
+
+    bool can_cache_request(const RGWRequestInfo& req) const override;
+    bool can_cache_response(const RGWRequestInfo& req,
+                            const RGWResponseInfo& resp) const override;
+    uint32_t get_ttl(const RGWRequestInfo& req,
+                     const RGWResponseInfo& resp) const override;
+    std::string get_cache_key(const RGWRequestInfo& req) const override;
+
+    /**
+     * 获取默认策略单例
+     */
+    static const DefaultCachePolicy& instance();
+
+private:
+    /**
+     * 检查 HTTP 方法是否可缓存
+     */
+    bool is_cacheable_method(const std::string& method) const;
+
+    /**
+     * 检查 URI 模式是否可缓存
+     */
+    bool is_cacheable_uri(const std::string& uri) const;
+
+    /**
+     * 检查响应状态码是否可缓存
+     */
+    bool is_cacheable_status(int status) const;
+
+    /**
+     * 检查 Cache-Control 是否允许缓存
+     */
+    bool check_cache_control(const std::string& headers) const;
+
+    /**
+     * 检查是否存在 Set-Cookie
+     */
+    bool has_set_cookie(const std::string& headers) const;
+
+    /**
+     * 根据 Content-Type 获取 TTL
+     */
+    uint32_t get_ttl_by_content_type(const std::string& content_type) const;
+
+    /**
+     * 从 headers 中提取指定头部的值
+     */
+    std::string get_header_value(const std::string& headers,
+                                 const std::string& header_name) const;
+
+    /**
+     * 管理接口前缀列表
+     */
+    static const std::vector<std::string>& admin_uri_prefixes();
+
+    /**
+     * 可缓存的状态码
+     */
+    static const int CACHEABLE_STATUS_CODES[];
+    static const size_t CACHEABLE_STATUS_COUNT;
 };
 
 /**
