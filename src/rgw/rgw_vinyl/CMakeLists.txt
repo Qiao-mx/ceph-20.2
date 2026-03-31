@@ -5,6 +5,7 @@ set(rgw_vinyl_sources
     rgw_vinyl_bridge.cc
     rgw_vinyl_config.cc
     rgw_vinyl_cache.cc
+    rgw_vinyl_vmod.cc
 )
 
 add_library(rgw_vinyl STATIC ${rgw_vinyl_sources})

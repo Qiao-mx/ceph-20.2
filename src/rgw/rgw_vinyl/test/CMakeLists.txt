@@ -1,5 +1,6 @@
 set(test_rgw_vinyl_sources
     test_rgw_vinyl.cc
+    test_rgw_vinyl_vmod.cc
 )
 
 add_executable(test_rgw_vinyl ${test_rgw_vinyl_sources})
