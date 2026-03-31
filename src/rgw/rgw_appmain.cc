@@ -638,10 +638,12 @@ int rgw::AppMain::init_vinyl_cache()
 
   env.vinyl_cache = vinyl_cache.get();
   rgw_vinyl_set_driver(driver);
+  rgw_vinyl_bridge_init();
 
   r = vinyl_cache->start();
   if (r < 0) {
     ldpp_dout(dpp, 0) << __func__ << "::failed to start vinyl cache, r=" << r << dendl;
+    rgw_vinyl_bridge_shutdown();
     vinyl_cache->shutdown();
     vinyl_cache.reset();
     env.vinyl_cache = nullptr;
