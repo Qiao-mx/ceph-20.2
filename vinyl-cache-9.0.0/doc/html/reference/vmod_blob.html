@@ -1,0 +1,941 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VMOD cookie - Vinyl Cache Cookie Module" href="vmod_cookie.html"><link rel="prev" title="Vinyl Cache Processing States" href="states.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VMOD blob - Utilities for the VCL blob type, encoding and decoding - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vmod-blob-utilities-for-the-vcl-blob-type-encoding-and-decoding">
+<span id="vmod-blob-3"></span><h1>VMOD blob - Utilities for the VCL blob type, encoding and decoding<a class="headerlink" href="#vmod-blob-utilities-for-the-vcl-blob-type-encoding-and-decoding" title="Link to this heading">¶</a></h1>
+<section id="synopsis">
+<h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Link to this heading">¶</a></h2>
+<pre class="literal-block">import blob [as name] [from &quot;path&quot;]
+
+<a class="reference internal" href="#blob-decode"><span class="std std-ref">BLOB decode(ENUM decoding, INT length, STRING encoded)</span></a>
+
+<a class="reference internal" href="#blob-encode"><span class="std std-ref">STRING encode(ENUM encoding, ENUM case, BLOB blob)</span></a>
+
+<a class="reference internal" href="#blob-transcode"><span class="std std-ref">STRING transcode(ENUM decoding, ENUM encoding, ENUM case, INT length, STRING encoded)</span></a>
+
+<a class="reference internal" href="#blob-same"><span class="std std-ref">BOOL same(BLOB, BLOB)</span></a>
+
+<a class="reference internal" href="#blob-equal"><span class="std std-ref">BOOL equal(BLOB, BLOB)</span></a>
+
+<a class="reference internal" href="#blob-length"><span class="std std-ref">INT length(BLOB)</span></a>
+
+<a class="reference internal" href="#blob-sub"><span class="std std-ref">BLOB sub(BLOB, BYTES length, BYTES offset=0)</span></a>
+
+<a class="reference internal" href="#blob-blob"><span class="std std-ref">new xblob = blob.blob(ENUM decoding, STRING encoded)</span></a>
+
+    <a class="reference internal" href="#xblob-get"><span class="std std-ref">BLOB xblob.get()</span></a>
+
+    <a class="reference internal" href="#xblob-encode"><span class="std std-ref">STRING xblob.encode(ENUM encoding, ENUM case)</span></a></pre>
+</section>
+<section id="description">
+<h2>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This VMOD provides utility functions and an object for the VCL data
+type <code class="docutils literal notranslate"><span class="pre">BLOB</span></code>, which may contain arbitrary data of any length.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">vcl_init</span> <span class="p">{</span>
+    <span class="c1"># Create blob objects from encodings such as base64 or hex.</span>
+    <span class="n">new</span> <span class="n">myblob</span>   <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span><span class="n">BASE64</span><span class="p">,</span> <span class="s2">&quot;Zm9vYmFy&quot;</span><span class="p">);</span>
+    <span class="n">new</span> <span class="n">yourblob</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;666F6F&quot;</span><span class="p">,</span> <span class="n">decoding</span><span class="o">=</span><span class="n">HEX</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">sub</span> <span class="n">vcl_deliver</span> <span class="p">{</span>
+    <span class="c1"># The .get() method retrieves the BLOB from an object.</span>
+    <span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">MyBlob</span><span class="o">-</span><span class="n">As</span><span class="o">-</span><span class="n">Hex</span>
+        <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">blob</span><span class="o">=</span><span class="n">myblob</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">encoding</span><span class="o">=</span><span class="n">HEX</span><span class="p">);</span>
+
+    <span class="c1"># The .encode() method efficiently retrieves an encoding.</span>
+    <span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">YourBlob</span><span class="o">-</span><span class="n">As</span><span class="o">-</span><span class="n">Base64</span> <span class="o">=</span> <span class="n">yourblob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">BASE64</span><span class="p">);</span>
+
+    <span class="c1"># decode() and encode() functions convert blobs to text and</span>
+    <span class="c1"># vice versa at runtime.</span>
+    <span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Base64</span><span class="o">-</span><span class="n">Encoded</span>
+        <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">BASE64</span><span class="p">,</span>
+                      <span class="n">blob</span><span class="o">=</span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">HEX</span><span class="p">,</span>
+                                       <span class="n">encoded</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Hex</span><span class="o">-</span><span class="n">Encoded</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="n">sub</span> <span class="n">vcl_recv</span> <span class="p">{</span>
+    <span class="c1"># transcode() converts from one encoding to another.</span>
+    <span class="c1"># case=UPPER specifies upper-case hex digits A-F.</span>
+    <span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Hex</span><span class="o">-</span><span class="n">Encoded</span>
+        <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">transcode</span><span class="p">(</span><span class="n">decoding</span><span class="o">=</span><span class="n">BASE64</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">HEX</span><span class="p">,</span>
+                         <span class="n">case</span><span class="o">=</span><span class="n">UPPER</span><span class="p">,</span> <span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;YmF6&quot;</span><span class="p">);</span>
+
+    <span class="c1"># transcode() from URL to IDENTITY effects a URL decode.</span>
+    <span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">transcode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">decoding</span><span class="o">=</span><span class="n">URL</span><span class="p">);</span>
+
+    <span class="c1"># transcode() from IDENTITY to URL effects a URL encode.</span>
+    <span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">url_urlcoded</span>
+        <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">transcode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">URL</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="encoding-schemes">
+<h3>ENCODING SCHEMES<a class="headerlink" href="#encoding-schemes" title="Link to this heading">¶</a></h3>
+<p>Binary-to-text encoding schemes are specified by ENUMs in the VMOD’s
+constructor, methods and functions. Decodings convert a (possibly
+concatenated) string into a blob, while encodings convert a blob into
+a string.</p>
+<p>ENUM values for an encoding scheme can be one of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BASE64</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BASE64URL</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BASE64URLNOPAD</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BASE64CF</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HEX</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">URL</span></code></p></li>
+</ul>
+<p>Empty strings are decoded into a “null blob” (of length 0), and
+conversely a null blob is encoded as the empty string.</p>
+<p>For encodings with <code class="docutils literal notranslate"><span class="pre">HEX</span></code> or <code class="docutils literal notranslate"><span class="pre">URL</span></code>, you may also specify a <em>case</em>
+ENUM with one of the values <code class="docutils literal notranslate"><span class="pre">LOWER</span></code>, <code class="docutils literal notranslate"><span class="pre">UPPER</span></code> or <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> to
+produce a string with lower- or uppercase hex digits (in <code class="docutils literal notranslate"><span class="pre">[a-f]</span></code> or
+<code class="docutils literal notranslate"><span class="pre">[A-F]</span></code>). The default value for <em>case</em> is <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>, which for
+<code class="docutils literal notranslate"><span class="pre">HEX</span></code> and <code class="docutils literal notranslate"><span class="pre">URL</span></code> means the same as <code class="docutils literal notranslate"><span class="pre">LOWER</span></code>.</p>
+<p>The <em>case</em> ENUM is not relevant for decodings; <code class="docutils literal notranslate"><span class="pre">HEX</span></code> or <code class="docutils literal notranslate"><span class="pre">URL</span></code>
+strings to be decoded as BLOBs may have hex digits in either case, or
+in mixed case.</p>
+<p>The <em>case</em> ENUM MUST be set to <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> for the other encodings
+(<code class="docutils literal notranslate"><span class="pre">BASE64*</span></code> and <code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code>).  You cannot, for example, produce an
+uppercase string by using the <code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code> scheme with
+<code class="docutils literal notranslate"><span class="pre">case=UPPER</span></code>. To change the case of a string, use the <code class="docutils literal notranslate"><span class="pre">std.toupper()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">std.tolower()</span></code> functions from <a class="reference internal" href="vmod_std.html#vmod-std-3"><span class="std std-ref">VMOD std - Vinyl Cache Standard Module</span></a>.</p>
+<section id="identity">
+<h4>IDENTITY<a class="headerlink" href="#identity" title="Link to this heading">¶</a></h4>
+<p>The simplest encoding converts between the BLOB and STRING data types,
+leaving the contents byte-identical.</p>
+<p>Note that a BLOB may contain a null byte at any position before its
+end; if such a BLOB is decoded with <code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code>, the resulting STRING
+will have a null byte at that position. Since VCL strings, like C
+strings, are represented with a terminating null byte, the string will
+be truncated, appearing to contain less data than the original
+blob. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decode from the hex encoding for &quot;foo\0bar&quot;.</span>
+<span class="c1"># The header will be seen as &quot;foo&quot;.</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Trunced</span><span class="o">-</span><span class="n">Foo1</span>
+    <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">blob</span><span class="o">=</span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">HEX</span><span class="p">,</span>
+                                             <span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;666f6f00626172&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code> is the default encoding and decoding. So the above can
+also be written as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decode from the hex encoding for &quot;foo\0bar&quot;.</span>
+<span class="c1"># The header will be seen as &quot;foo&quot;.</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Trunced</span><span class="o">-</span><span class="n">Foo2</span>
+  <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">blob</span><span class="o">=</span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">HEX</span><span class="p">,</span> <span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;666f6f00626172&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>The <em>case</em> ENUM MUST be set to <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> for <code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code> encodings.</p>
+</section>
+<section id="base64">
+<span id="vmod-blob-base64"></span><h4>BASE64*<a class="headerlink" href="#base64" title="Link to this heading">¶</a></h4>
+<p>The base64 encoding schemes use 4 characters to encode 3 bytes. There
+are no newlines or maximal line lengths – whitespace is not
+permitted.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">BASE64</span></code> encoding uses the alphanumeric characters, <code class="docutils literal notranslate"><span class="pre">+</span></code> and
+<code class="docutils literal notranslate"><span class="pre">/</span></code>; and encoded strings are padded with the <code class="docutils literal notranslate"><span class="pre">=</span></code> character so that
+their length is always a multiple of four.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">BASE64URL</span></code> encoding also uses the alphanumeric characters, but
+<code class="docutils literal notranslate"><span class="pre">-</span></code> and <code class="docutils literal notranslate"><span class="pre">_</span></code> instead of <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">/</span></code>, so that an encoded string
+can be used safely in a URL. This scheme also uses the padding
+character <code class="docutils literal notranslate"><span class="pre">=</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">BASE64URLNOPAD</span></code> encoding uses the same alphabet as
+<code class="docutils literal notranslate"><span class="pre">BASE6URL</span></code>, but leaves out the padding. Thus the length of an
+encoding with this scheme is not necessarily a multiple of four.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">BASE64CF`</span> <span class="pre">is</span> <span class="pre">similar</span> <span class="pre">to</span> <span class="pre">``BASE64URL</span></code>, with the following
+changes to <code class="docutils literal notranslate"><span class="pre">BASE64</span></code>: <code class="docutils literal notranslate"><span class="pre">+</span></code> replaced with <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code> replaced with
+<code class="docutils literal notranslate"><span class="pre">~</span></code> and <code class="docutils literal notranslate"><span class="pre">_</span></code> as the padding character. It is used by a certain CDN
+provider who also inspired the name.</p>
+<p>The <em>case</em> ENUM MUST be set to <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> for all of the
+<code class="docutils literal notranslate"><span class="pre">BASE64*</span></code> encodings.</p>
+</section>
+<section id="hex">
+<h4>HEX<a class="headerlink" href="#hex" title="Link to this heading">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">HEX</span></code> encoding scheme converts hex strings into blobs and vice
+versa. For encodings, you may use the <em>case</em> ENUM to specify upper-
+or lowercase hex digits <code class="docutils literal notranslate"><span class="pre">A</span></code> through <code class="docutils literal notranslate"><span class="pre">f</span></code> (default <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>,
+which means the same as <code class="docutils literal notranslate"><span class="pre">LOWER</span></code>).  A prefix such as <code class="docutils literal notranslate"><span class="pre">0x</span></code> is not
+used for an encoding and is illegal for a decoding.</p>
+<p>If a hex string to be decoded has an odd number of digits, it is
+decoded as if a <code class="docutils literal notranslate"><span class="pre">0</span></code> is prepended to it; that is, the first digit is
+interpreted as representing the least significant nibble of the first
+byte. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The concatenated string is &quot;abcdef0&quot;, and is decoded as &quot;0abcdef0&quot;.</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">First</span> <span class="o">=</span> <span class="s2">&quot;abc&quot;</span><span class="p">;</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Second</span> <span class="o">=</span> <span class="s2">&quot;def0&quot;</span><span class="p">;</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Hex</span><span class="o">-</span><span class="n">Decoded</span>
+    <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">HEX</span><span class="p">,</span> <span class="n">blob</span><span class="o">=</span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">HEX</span><span class="p">,</span>
+                       <span class="n">encoded</span><span class="o">=</span><span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">First</span> <span class="o">+</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Second</span><span class="p">));</span>
+</pre></div>
+</div>
+</section>
+<section id="url">
+<h4>URL<a class="headerlink" href="#url" title="Link to this heading">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">URL</span></code> decoding replaces any <code class="docutils literal notranslate"><span class="pre">%&lt;2-hex-digits&gt;</span></code> substrings with
+the binary value of the hexadecimal number after the <code class="docutils literal notranslate"><span class="pre">%</span></code> sign.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">URL</span></code> encoding implements “percent encoding” as per RFC3986. The
+<em>case</em> ENUM determines the case of the hex digits, but does not
+affect alphabetic characters that are not percent-encoded.</p>
+</section>
+</section>
+<section id="blob-decode-enum-decoding-int-length-string-encoded">
+<span id="blob-decode"></span><h3>BLOB decode(ENUM decoding, INT length, STRING encoded)<a class="headerlink" href="#blob-decode-enum-decoding-int-length-string-encoded" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BLOB</span> <span class="n">decode</span><span class="p">(</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">BASE64</span><span class="p">,</span> <span class="n">BASE64URL</span><span class="p">,</span> <span class="n">BASE64URLNOPAD</span><span class="p">,</span> <span class="n">BASE64CF</span><span class="p">,</span> <span class="n">HEX</span><span class="p">,</span> <span class="n">URL</span><span class="p">}</span> <span class="n">decoding</span><span class="o">=</span><span class="n">IDENTITY</span><span class="p">,</span>
+   <span class="n">INT</span> <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+   <span class="n">STRING</span> <span class="n">encoded</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns the BLOB derived from the string <em>encoded</em> according to the
+scheme specified by <em>decoding</em>.</p>
+<p>If <em>length</em> &gt; 0, only decode the first <em>length</em> characters of the
+encoded string. If <em>length</em> &lt;= 0 or greater than the length of the
+string, then decode the entire string. The default value of <em>length</em>
+is 0.</p>
+<p><em>decoding</em> defaults to IDENTITY.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">BASE64</span><span class="p">,</span> <span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;Zm9vYmFyYmF6&quot;</span><span class="p">);</span>
+
+<span class="c1"># same with named parameters</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;Zm9vYmFyYmF6&quot;</span><span class="p">,</span> <span class="n">decoding</span><span class="o">=</span><span class="n">BASE64</span><span class="p">);</span>
+
+<span class="c1"># convert string to blob</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="string-encode-enum-encoding-enum-case-blob-blob">
+<span id="blob-encode"></span><h3>STRING encode(ENUM encoding, ENUM case, BLOB blob)<a class="headerlink" href="#string-encode-enum-encoding-enum-case-blob-blob" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STRING</span> <span class="n">encode</span><span class="p">(</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">BASE64</span><span class="p">,</span> <span class="n">BASE64URL</span><span class="p">,</span> <span class="n">BASE64URLNOPAD</span><span class="p">,</span> <span class="n">BASE64CF</span><span class="p">,</span> <span class="n">HEX</span><span class="p">,</span> <span class="n">URL</span><span class="p">}</span> <span class="n">encoding</span><span class="o">=</span><span class="n">IDENTITY</span><span class="p">,</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">UPPER</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">}</span> <span class="n">case</span><span class="o">=</span><span class="n">DEFAULT</span><span class="p">,</span>
+   <span class="n">BLOB</span> <span class="n">blob</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns a string representation of the BLOB <em>blob</em> as specified by
+<em>encoding</em>. <em>case</em> determines the case of hex digits for the <code class="docutils literal notranslate"><span class="pre">HEX</span></code>
+and <code class="docutils literal notranslate"><span class="pre">URL</span></code> encodings, and is ignored for the other encodings.</p>
+<p><em>encoding</em> defaults to <code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code>, and <em>case</em> defaults to
+<code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>.  <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> is interpreted as <code class="docutils literal notranslate"><span class="pre">LOWER</span></code> for the <code class="docutils literal notranslate"><span class="pre">HEX</span></code>
+and <code class="docutils literal notranslate"><span class="pre">URL</span></code> encodings, and is the required value for the other
+encodings.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">encode1</span>
+    <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">HEX</span><span class="p">,</span>
+                  <span class="n">blob</span><span class="o">=</span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">BASE64</span><span class="p">,</span> <span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;Zm9vYmFyYmF6&quot;</span><span class="p">));</span>
+
+<span class="c1"># same with named parameters</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">encode2</span>
+    <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">blob</span><span class="o">=</span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;Zm9vYmFyYmF6&quot;</span><span class="p">,</span>
+                                           <span class="n">decoding</span><span class="o">=</span><span class="n">BASE64</span><span class="p">),</span>
+                      <span class="n">encoding</span><span class="o">=</span><span class="n">HEX</span><span class="p">);</span>
+
+<span class="c1"># convert blob to string</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">encode3</span>
+    <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">blob</span><span class="o">=</span><span class="n">blob</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+</section>
+<section id="string-transcode-enum-decoding-enum-encoding-enum-case-int-length-string-encoded">
+<span id="blob-transcode"></span><h3>STRING transcode(ENUM decoding, ENUM encoding, ENUM case, INT length, STRING encoded)<a class="headerlink" href="#string-transcode-enum-decoding-enum-encoding-enum-case-int-length-string-encoded" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STRING</span> <span class="n">transcode</span><span class="p">(</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">BASE64</span><span class="p">,</span> <span class="n">BASE64URL</span><span class="p">,</span> <span class="n">BASE64URLNOPAD</span><span class="p">,</span> <span class="n">BASE64CF</span><span class="p">,</span> <span class="n">HEX</span><span class="p">,</span> <span class="n">URL</span><span class="p">}</span> <span class="n">decoding</span><span class="o">=</span><span class="n">IDENTITY</span><span class="p">,</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">BASE64</span><span class="p">,</span> <span class="n">BASE64URL</span><span class="p">,</span> <span class="n">BASE64URLNOPAD</span><span class="p">,</span> <span class="n">BASE64CF</span><span class="p">,</span> <span class="n">HEX</span><span class="p">,</span> <span class="n">URL</span><span class="p">}</span> <span class="n">encoding</span><span class="o">=</span><span class="n">IDENTITY</span><span class="p">,</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">UPPER</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">}</span> <span class="n">case</span><span class="o">=</span><span class="n">DEFAULT</span><span class="p">,</span>
+   <span class="n">INT</span> <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+   <span class="n">STRING</span> <span class="n">encoded</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Translates from one encoding to another, by first decoding the string
+<em>encoded</em> according to the scheme <em>decoding</em>, and then returning
+the encoding of the resulting blob according to the scheme
+<em>encoding</em>. <em>case</em> determines the case of hex digits for the
+<code class="docutils literal notranslate"><span class="pre">HEX</span></code> and <code class="docutils literal notranslate"><span class="pre">URL</span></code> encodings, and is ignored for other encodings.</p>
+<p>As with <a class="reference internal" href="#blob-decode">blob.decode()</a>: If <em>length</em> &gt; 0, only decode the first
+<em>length</em> characters of the encoded string, otherwise decode the
+entire string. The default value of <em>length</em> is 0.</p>
+<p><em>decoding</em> and <em>encoding</em> default to IDENTITY, and <em>case</em> defaults to
+<code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>. <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> is interpreted as <code class="docutils literal notranslate"><span class="pre">LOWER</span></code> for the <code class="docutils literal notranslate"><span class="pre">HEX</span></code>
+and <code class="docutils literal notranslate"><span class="pre">URL</span></code> encodings, and is the required value for the other
+encodings.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Hex2Base64</span><span class="o">-</span><span class="mi">1</span>
+     <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">transcode</span><span class="p">(</span><span class="n">HEX</span><span class="p">,</span> <span class="n">BASE64</span><span class="p">,</span> <span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;666f6f&quot;</span><span class="p">);</span>
+
+ <span class="c1"># same with named parameters</span>
+ <span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">Hex2Base64</span><span class="o">-</span><span class="mi">2</span>
+    <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">transcode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;666f6f&quot;</span><span class="p">,</span>
+                          <span class="n">encoding</span><span class="o">=</span><span class="n">BASE64</span><span class="p">,</span> <span class="n">decoding</span><span class="o">=</span><span class="n">HEX</span><span class="p">);</span>
+
+ <span class="c1"># URL decode -- recall that IDENTITY is the default encoding.</span>
+ <span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">urldecoded</span>
+    <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">transcode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;foo%20bar&quot;</span><span class="p">,</span> <span class="n">decoding</span><span class="o">=</span><span class="n">URL</span><span class="p">);</span>
+
+ <span class="c1"># URL encode</span>
+ <span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">urlencoded</span>
+     <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">transcode</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;foo bar&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">URL</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="bool-same-blob-blob">
+<span id="blob-same"></span><h3>BOOL same(BLOB, BLOB)<a class="headerlink" href="#bool-same-blob-blob" title="Link to this heading">¶</a></h3>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if and only if the two BLOB arguments are the same
+object, i.e. they specify exactly the same region of memory, or both
+are empty.</p>
+<p>If the BLOBs are both empty (length is 0 and/or the internal pointer
+is <code class="docutils literal notranslate"><span class="pre">NULL</span></code>), then <a class="reference internal" href="#blob-same">blob.same()</a> returns <code class="docutils literal notranslate"><span class="pre">true</span></code>. If any
+non-empty BLOB is compared to an empty BLOB, then <a class="reference internal" href="#blob-same">blob.same()</a>
+returns <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</section>
+<section id="bool-equal-blob-blob">
+<span id="blob-equal"></span><h3>BOOL equal(BLOB, BLOB)<a class="headerlink" href="#bool-equal-blob-blob" title="Link to this heading">¶</a></h3>
+<p>Returns true if and only if the two BLOB arguments have equal contents
+(possibly in different memory regions).</p>
+<p>As with <a class="reference internal" href="#blob-same">blob.same()</a>: If the BLOBs are both empty, then <a class="reference internal" href="#blob-equal">blob.equal()</a>
+returns <code class="docutils literal notranslate"><span class="pre">true</span></code>. If any non-empty BLOB is compared to an empty BLOB,
+then <a class="reference internal" href="#blob-equal">blob.equal()</a> returns <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</section>
+<section id="int-length-blob">
+<span id="blob-length"></span><h3>INT length(BLOB)<a class="headerlink" href="#int-length-blob" title="Link to this heading">¶</a></h3>
+<p>Returns the length of the BLOB.</p>
+</section>
+<section id="blob-sub-blob-bytes-length-bytes-offset-0">
+<span id="blob-sub"></span><h3>BLOB sub(BLOB, BYTES length, BYTES offset=0)<a class="headerlink" href="#blob-sub-blob-bytes-length-bytes-offset-0" title="Link to this heading">¶</a></h3>
+<p>Returns a new BLOB formed from <em>length</em> bytes of the BLOB argument
+starting at <em>offset</em> bytes from the start of its memory region. The
+default value of <em>offset</em> is <code class="docutils literal notranslate"><span class="pre">0B</span></code>.</p>
+<p><a class="reference internal" href="#blob-sub">blob.sub()</a> fails and returns NULL if the BLOB argument is empty, or if
+<code class="docutils literal notranslate"><span class="pre">offset</span> <span class="pre">+</span> <span class="pre">length</span></code> requires more bytes than are available in the
+BLOB.</p>
+</section>
+<section id="new-xblob-blob-blob-enum-decoding-string-encoded">
+<span id="blob-blob"></span><h3>new xblob = blob.blob(ENUM decoding, STRING encoded)<a class="headerlink" href="#new-xblob-blob-blob-enum-decoding-string-encoded" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">xblob</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">BASE64</span><span class="p">,</span> <span class="n">BASE64URL</span><span class="p">,</span> <span class="n">BASE64URLNOPAD</span><span class="p">,</span> <span class="n">BASE64CF</span><span class="p">,</span> <span class="n">HEX</span><span class="p">,</span> <span class="n">URL</span><span class="p">}</span> <span class="n">decoding</span><span class="o">=</span><span class="n">IDENTITY</span><span class="p">,</span>
+   <span class="n">STRING</span> <span class="n">encoded</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Creates an object that contains the BLOB derived from the string
+<em>encoded</em> according to the scheme <em>decoding</em>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">theblob1</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span><span class="n">BASE64</span><span class="p">,</span> <span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;YmxvYg==&quot;</span><span class="p">);</span>
+
+<span class="c1"># same with named arguments</span>
+<span class="n">new</span> <span class="n">theblob2</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;YmxvYg==&quot;</span><span class="p">,</span> <span class="n">decoding</span><span class="o">=</span><span class="n">BASE64</span><span class="p">);</span>
+
+<span class="c1"># string as a blob</span>
+<span class="n">new</span> <span class="n">stringblob</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="s2">&quot;bazz&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="blob-xblob-get">
+<span id="xblob-get"></span><h3>BLOB xblob.get()<a class="headerlink" href="#blob-xblob-get" title="Link to this heading">¶</a></h3>
+<p>Returns the BLOB created by the constructor.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">The</span><span class="o">-</span><span class="n">Blob1</span> <span class="o">=</span>
+    <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">blob</span><span class="o">=</span><span class="n">theblob1</span><span class="o">.</span><span class="n">get</span><span class="p">());</span>
+
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">The</span><span class="o">-</span><span class="n">Blob2</span> <span class="o">=</span>
+    <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">blob</span><span class="o">=</span><span class="n">theblob2</span><span class="o">.</span><span class="n">get</span><span class="p">());</span>
+
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">The</span><span class="o">-</span><span class="n">Stringblob</span> <span class="o">=</span>
+    <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">blob</span><span class="o">=</span><span class="n">stringblob</span><span class="o">.</span><span class="n">get</span><span class="p">());</span>
+</pre></div>
+</div>
+</section>
+<section id="string-xblob-encode-enum-encoding-enum-case">
+<span id="xblob-encode"></span><h3>STRING xblob.encode(ENUM encoding, ENUM case)<a class="headerlink" href="#string-xblob-encode-enum-encoding-enum-case" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STRING</span> <span class="n">xblob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+      <span class="n">ENUM</span> <span class="p">{</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">BASE64</span><span class="p">,</span> <span class="n">BASE64URL</span><span class="p">,</span> <span class="n">BASE64URLNOPAD</span><span class="p">,</span> <span class="n">BASE64CF</span><span class="p">,</span> <span class="n">HEX</span><span class="p">,</span> <span class="n">URL</span><span class="p">}</span> <span class="n">encoding</span><span class="o">=</span><span class="n">IDENTITY</span><span class="p">,</span>
+      <span class="n">ENUM</span> <span class="p">{</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">UPPER</span><span class="p">,</span> <span class="n">DEFAULT</span><span class="p">}</span> <span class="n">case</span><span class="o">=</span><span class="n">DEFAULT</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns an encoding of BLOB created by the constructor, according to
+the scheme <em>encoding</em>. <em>case</em> determines the case of hex digits
+for the <code class="docutils literal notranslate"><span class="pre">HEX</span></code> and <code class="docutils literal notranslate"><span class="pre">URL</span></code> encodings, and MUST be set to <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>
+for the other encodings.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># blob as text</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">The</span><span class="o">-</span><span class="n">Blob</span> <span class="o">=</span> <span class="n">theblob1</span><span class="o">.</span><span class="n">encode</span><span class="p">();</span>
+
+<span class="c1"># blob as base64</span>
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">The</span><span class="o">-</span><span class="n">Blob</span><span class="o">-</span><span class="n">b64</span> <span class="o">=</span> <span class="n">theblob1</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">BASE64</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>For any <a class="reference internal" href="#blob-blob">blob.blob()</a> object, <cite>encoding</cite> and <cite>case</cite>, encodings via
+the <a class="reference internal" href="#xblob-encode">xblob.encode()</a> method and the <a class="reference internal" href="#blob-encode">blob.encode()</a>
+function are equal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Always true:</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">ENC</span><span class="p">,</span> <span class="n">CASE</span><span class="p">,</span> <span class="n">blob</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="o">==</span> <span class="n">blob</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">ENC</span><span class="p">,</span> <span class="n">CASE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But the <a class="reference internal" href="#xblob-encode">xblob.encode()</a> object method is more efficient –
+the encoding is computed once and cached (with allocation in heap
+memory), and the cached encoding is retrieved on every subsequent
+call. The <a class="reference internal" href="#blob-encode">blob.encode()</a> function computes the encoding on every
+call, allocating space for the string in Vinyl Cache workspaces.</p>
+<p>So if the data in a BLOB are fixed at VCL initialization time, so that
+its encodings will always be the same, it is better to create a
+<a class="reference internal" href="#blob-blob">blob.blob()</a> object. The VMOD’s functions should be used for data that are
+not known until runtime.</p>
+</section>
+</section>
+<section id="errors">
+<h2>ERRORS<a class="headerlink" href="#errors" title="Link to this heading">¶</a></h2>
+<p>The encoders, decoders and <a class="reference internal" href="#blob-sub">blob.sub()</a> may fail if there is
+insufficient space to create the new blob or string. Decoders may also
+fail if the encoded string is an illegal format for the decoding
+scheme. Encoders will fail for the <code class="docutils literal notranslate"><span class="pre">IDENTITY</span></code> and <code class="docutils literal notranslate"><span class="pre">BASE64*</span></code>
+encoding schemes if the <em>case</em> ENUM is not set to <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>.</p>
+<p>If any of the VMOD’s methods, functions or constructor fail, then VCL
+failure is invoked, just as if <code class="docutils literal notranslate"><span class="pre">return(fail)</span></code> had been called in the
+VCL source. This means that:</p>
+<ul class="simple">
+<li><p>If the <a class="reference internal" href="#blob-blob">blob.blob()</a> object constructor fails, or if any methods or
+functions fail during <code class="docutils literal notranslate"><span class="pre">vcl_init{}</span></code>, then the VCL program will fail
+to load, and the VCC compiler will emit an error message.</p></li>
+<li><p>If a method or function fails in any other VCL subroutine besides
+<code class="docutils literal notranslate"><span class="pre">vcl_synth{}</span></code>, then control is directed to <code class="docutils literal notranslate"><span class="pre">vcl_synth{}</span></code>. The
+response status is set to 503 with the reason string <code class="docutils literal notranslate"><span class="pre">&quot;VCL</span>
+<span class="pre">failed&quot;</span></code>, and an error message will be written to the <a class="reference internal" href="vsl.html#vsl-7"><span class="std std-ref">VSL</span></a>
+using the tag <code class="docutils literal notranslate"><span class="pre">VCL_Error</span></code>.</p></li>
+<li><p>If the failure occurs during <code class="docutils literal notranslate"><span class="pre">vcl_synth{}</span></code>, then <code class="docutils literal notranslate"><span class="pre">vcl_synth{}</span></code>
+is aborted. The response line <code class="docutils literal notranslate"><span class="pre">&quot;503</span> <span class="pre">VCL</span> <span class="pre">failed&quot;</span></code> is returned, and
+the <code class="docutils literal notranslate"><span class="pre">VCL_Error</span></code> message is written to the log.</p></li>
+</ul>
+</section>
+<section id="limitations">
+<h2>LIMITATIONS<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
+<p>The VMOD allocates memory in various ways for new blobs and
+strings. The <a class="reference internal" href="#blob-blob">blob.blob()</a> object and its methods allocate memory
+from the heap, and hence they are only limited by available virtual
+memory.</p>
+<p>The <a class="reference internal" href="#blob-encode">blob.encode()</a>, <a class="reference internal" href="#blob-decode">blob.decode()</a> and
+<a class="reference internal" href="#blob-transcode">blob.transcode()</a> functions allocate Vinyl Cache workspace, as does
+<a class="reference internal" href="#blob-sub">blob.sub()</a> for the newly created BLOB.  If these functions are
+failing, as indicated by “out of space” messages in the Vinyl Cache log
+(with the <code class="docutils literal notranslate"><span class="pre">VCL_Error</span></code> tag), then you will need to increase the
+<cite>vinyld</cite> parameters <code class="docutils literal notranslate"><span class="pre">workspace_client</span></code> and/or <code class="docutils literal notranslate"><span class="pre">workspace_backend</span></code>.</p>
+<p>The <a class="reference internal" href="#blob-transcode">blob.transcode()</a> function also allocates space on the stack
+for a temporary BLOB. If this function causes stack overflow, you may
+need to increase the <cite>vinyld</cite> parameter <code class="docutils literal notranslate"><span class="pre">thread_pool_stack</span></code>.</p>
+</section>
+<section id="see-also">
+<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p></li>
+<li><p><a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a></p></li>
+<li><p><a class="reference internal" href="vsl.html#vsl-7"><span class="std std-ref">VSL</span></a></p></li>
+<li><p><a class="reference internal" href="vmod_std.html#vmod-std-3"><span class="std std-ref">VMOD std - Vinyl Cache Standard Module</span></a></p></li>
+</ul>
+</section>
+<section id="copyright">
+<h2>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="n">document</span> <span class="ow">is</span> <span class="n">licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">same</span> <span class="n">conditions</span> <span class="k">as</span> <span class="n">Vinyl</span> <span class="n">Cache</span> <span class="n">itself</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">LICENSE</span> <span class="k">for</span> <span class="n">details</span><span class="o">.</span>
+
+<span class="n">SPDX</span><span class="o">-</span><span class="n">License</span><span class="o">-</span><span class="n">Identifier</span><span class="p">:</span> <span class="n">BSD</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">Clause</span>
+
+<span class="n">Authors</span><span class="p">:</span> <span class="n">Nils</span> <span class="n">Goroll</span> <span class="o">&lt;</span><span class="n">nils</span><span class="o">.</span><span class="n">goroll</span><span class="nd">@uplex</span><span class="o">.</span><span class="n">de</span><span class="o">&gt;</span>
+         <span class="n">Geoffrey</span> <span class="n">Simmons</span> <span class="o">&lt;</span><span class="n">geoffrey</span><span class="o">.</span><span class="n">simmons</span><span class="nd">@uplex</span><span class="o">.</span><span class="n">de</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vmod_cookie.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VMOD cookie - Vinyl Cache Cookie Module</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="states.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Vinyl Cache Processing States</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

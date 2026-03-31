@@ -1,0 +1,13 @@
+vtest "Pass probe definitions to VMODs"
+
+vinyl v1 -vcl {
+	import debug;
+
+	backend be { .host = "${localhost}"; }
+	probe pb { }
+
+	sub vcl_init {
+		debug.test_probe(pb);
+		debug.test_probe(pb, pb);
+	}
+}

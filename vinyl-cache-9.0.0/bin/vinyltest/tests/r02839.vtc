@@ -1,0 +1,32 @@
+vtest "Test uninitialized vmod objects"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend "" -start
+
+vinyl v1 -errvcl "Object nullobj not initialized" {
+	import debug;
+
+	backend default { .host = "${localhost}"; }
+
+	sub vcl_init {
+		if (false) {
+			new nullobj = debug.obj();
+		}
+	}
+}
+
+vinyl v1 -vcl {
+	import debug;
+
+	backend default { .host = "${localhost}"; }
+
+	sub vcl_init {
+		if (false) {
+			new null = debug.obj_opt();
+		}
+	}
+}

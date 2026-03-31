@@ -1,0 +1,72 @@
+vtest "range requests on streamed response"
+
+barrier b1 cond 2 -cyclic
+
+server s0 {
+	rxreq
+	txresp -nolen \
+	    -hdr "Transfer-Encoding: chunked" \
+	    -hdr "Connection: close"
+	send "11\r\n0_23456789abcdef\n\n"
+	send "11\r\n1_23456789abcdef\n\n"
+	send "11\r\n2_23456789abcdef\n\n"
+	send "11\r\n3_23456789abcdef\n\n"
+	barrier b1 sync
+	send "11\r\n4_23456789abcdef\n\n"
+	send "11\r\n5_23456789abcdef\n\n"
+	send "11\r\n6_23456789abcdef\n\n"
+	send "11\r\n7_23456789abcdef\n\n"
+	chunkedlen 0
+
+} -dispatch
+
+vinyl v1 -vcl+backend {} -start
+
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+client c1 {
+	txreq -url /1 -hdr "Range: bytes=17-101"
+	rxresphdrs
+	expect resp.status == 206
+	barrier b1 sync
+	rxrespbody
+	expect resp.bodylen == 85
+
+	# We cannot do tail-ranges when streaming
+	txreq -url /2 -hdr "Range: bytes=-10"
+	rxresphdrs
+	expect resp.status == 200
+	expect resp.http.Transfer-Encoding == chunked
+	barrier b1 sync
+	rxrespbody
+	expect resp.bodylen == 136
+
+	# We cannot do open-ranges when streaming
+	txreq -url /3 -hdr "Range: bytes=17-"
+	rxresphdrs
+	expect resp.status == 200
+	expect resp.http.Transfer-Encoding == chunked
+	barrier b1 sync
+	rxrespbody
+	expect resp.bodylen == 136
+
+	# Handles out of bounds range
+	txreq -url /4 -hdr "Range: bytes=102-200"
+	rxresphdrs
+	expect resp.status == 206
+	barrier b1 sync
+	rxrespbody
+	expect resp.bodylen == 34
+
+	# Keeps working after short response
+	txreq -url /5 -hdr "Range: bytes=17-101"
+	rxresphdrs
+	expect resp.status == 206
+	barrier b1 sync
+	rxrespbody
+	expect resp.bodylen == 85
+} -run
+
+vinyl v1 -expect sc_range_short == 0
+vinyl v1 -stop
+server s1 -wait

@@ -1,0 +1,60 @@
+vtest "The cache_hit_grace counter"
+
+server s1 {
+	rxreq
+	expect req.url == "/1"
+	expect req.http.bgfetch == false
+	txresp -hdr "Age: 1" -hdr "Cache-Control: max-age=2" -body "1"
+
+	rxreq
+	expect req.url == "/1"
+	expect req.http.bgfetch == true
+	txresp -body "2"
+
+	rxreq
+	expect req.url == "/2"
+	expect req.http.bgfetch == false
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_fetch {
+		set bereq.http.bgfetch = bereq.is_bgfetch;
+	}
+} -start
+
+client c1 {
+	txreq -url "/1"
+	rxresp
+	expect resp.body == "1"
+} -run
+
+delay 2
+
+# Get a grace hit, will trigger a background fetch
+
+client c2 {
+	txreq -url "/1"
+	rxresp
+	expect resp.body == "1"
+} -run
+
+vinyl v1 -expect cache_hit >= cache_hit_grace
+
+delay 2
+
+client c3 {
+	txreq -url "/2"
+	rxresp
+	txreq -url "/1"
+	rxresp
+	expect resp.body == "2"
+} -run
+
+vinyl v1 -expect cache_hit >= cache_hit_grace
+
+# Check that counters are correct:
+
+vinyl v1 -expect cache_hit == 2
+vinyl v1 -expect cache_hit_grace == 1
+vinyl v1 -expect cache_miss == 2

@@ -1,0 +1,1252 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VMOD h2 - Module to control the built-in HTTP2 transport" href="vmod_h2.html"><link rel="prev" title="VMOD cookie - Vinyl Cache Cookie Module" href="vmod_cookie.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VMOD directors - Vinyl Cache Directors Module - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vmod-directors-vinyl-cache-directors-module">
+<span id="vmod-directors-3"></span><h1>VMOD directors - Vinyl Cache Directors Module<a class="headerlink" href="#vmod-directors-vinyl-cache-directors-module" title="Link to this heading">¶</a></h1>
+<section id="synopsis">
+<h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Link to this heading">¶</a></h2>
+<pre class="literal-block">import directors [as name] [from &quot;path&quot;]
+
+<a class="reference internal" href="#directors-round-robin"><span class="std std-ref">new xround_robin = directors.round_robin()</span></a>
+
+    <a class="reference internal" href="#xround-robin-add-backend"><span class="std std-ref">VOID xround_robin.add_backend(BACKEND)</span></a>
+
+    <a class="reference internal" href="#xround-robin-remove-backend"><span class="std std-ref">VOID xround_robin.remove_backend(BACKEND)</span></a>
+
+    <a class="reference internal" href="#xround-robin-backend"><span class="std std-ref">BACKEND xround_robin.backend()</span></a>
+
+<a class="reference internal" href="#directors-fallback"><span class="std std-ref">new xfallback = directors.fallback(BOOL sticky=0)</span></a>
+
+    <a class="reference internal" href="#xfallback-add-backend"><span class="std std-ref">VOID xfallback.add_backend(BACKEND)</span></a>
+
+    <a class="reference internal" href="#xfallback-remove-backend"><span class="std std-ref">VOID xfallback.remove_backend(BACKEND)</span></a>
+
+    <a class="reference internal" href="#xfallback-backend"><span class="std std-ref">BACKEND xfallback.backend()</span></a>
+
+<a class="reference internal" href="#directors-random"><span class="std std-ref">new xrandom = directors.random()</span></a>
+
+    <a class="reference internal" href="#xrandom-add-backend"><span class="std std-ref">VOID xrandom.add_backend(BACKEND, REAL)</span></a>
+
+    <a class="reference internal" href="#xrandom-remove-backend"><span class="std std-ref">VOID xrandom.remove_backend(BACKEND)</span></a>
+
+    <a class="reference internal" href="#xrandom-backend"><span class="std std-ref">BACKEND xrandom.backend()</span></a>
+
+<a class="reference internal" href="#directors-hash"><span class="std std-ref">new xhash = directors.hash()</span></a>
+
+    <a class="reference internal" href="#xhash-add-backend"><span class="std std-ref">VOID xhash.add_backend(BACKEND, REAL weight=1.0)</span></a>
+
+    <a class="reference internal" href="#xhash-remove-backend"><span class="std std-ref">VOID xhash.remove_backend(BACKEND)</span></a>
+
+    <a class="reference internal" href="#xhash-backend"><span class="std std-ref">BACKEND xhash.backend(STRING)</span></a>
+
+<a class="reference internal" href="#directors-shard"><span class="std std-ref">new xshard = directors.shard()</span></a>
+
+    <a class="reference internal" href="#xshard-set-warmup"><span class="std std-ref">VOID xshard.set_warmup(REAL probability=0.0)</span></a>
+
+    <a class="reference internal" href="#xshard-set-rampup"><span class="std std-ref">VOID xshard.set_rampup(DURATION duration=0)</span></a>
+
+    <a class="reference internal" href="#xshard-associate"><span class="std std-ref">VOID xshard.associate(BLOB param=0)</span></a>
+
+    <a class="reference internal" href="#xshard-add-backend"><span class="std std-ref">BOOL xshard.add_backend(BACKEND backend, [STRING ident], [DURATION rampup], [REAL weight])</span></a>
+
+    <a class="reference internal" href="#xshard-remove-backend"><span class="std std-ref">BOOL xshard.remove_backend([BACKEND backend], [STRING ident])</span></a>
+
+    <a class="reference internal" href="#xshard-clear"><span class="std std-ref">BOOL xshard.clear()</span></a>
+
+    <a class="reference internal" href="#xshard-reconfigure"><span class="std std-ref">BOOL xshard.reconfigure(INT replicas=67)</span></a>
+
+    <a class="reference internal" href="#xshard-key"><span class="std std-ref">INT xshard.key(STRING)</span></a>
+
+    <a class="reference internal" href="#xshard-backend"><span class="std std-ref">BACKEND xshard.backend([ENUM by], [INT key], [BLOB key_blob], [INT alt], [REAL warmup], [BOOL rampup], [ENUM healthy], [BLOB param], [ENUM resolve])</span></a>
+
+    <a class="reference internal" href="#xshard-debug"><span class="std std-ref">VOID xshard.debug(INT)</span></a>
+
+<a class="reference internal" href="#directors-shard-param"><span class="std std-ref">new xshard_param = directors.shard_param()</span></a>
+
+    <a class="reference internal" href="#xshard-param-clear"><span class="std std-ref">VOID xshard_param.clear()</span></a>
+
+    <a class="reference internal" href="#xshard-param-set"><span class="std std-ref">VOID xshard_param.set([ENUM by], [INT key], [BLOB key_blob], [INT alt], [REAL warmup], [BOOL rampup], [ENUM healthy])</span></a>
+
+    <a class="reference internal" href="#xshard-param-get-by"><span class="std std-ref">STRING xshard_param.get_by()</span></a>
+
+    <a class="reference internal" href="#xshard-param-get-key"><span class="std std-ref">INT xshard_param.get_key()</span></a>
+
+    <a class="reference internal" href="#xshard-param-get-alt"><span class="std std-ref">INT xshard_param.get_alt()</span></a>
+
+    <a class="reference internal" href="#xshard-param-get-warmup"><span class="std std-ref">REAL xshard_param.get_warmup()</span></a>
+
+    <a class="reference internal" href="#xshard-param-get-rampup"><span class="std std-ref">BOOL xshard_param.get_rampup()</span></a>
+
+    <a class="reference internal" href="#xshard-param-get-healthy"><span class="std std-ref">STRING xshard_param.get_healthy()</span></a>
+
+    <a class="reference internal" href="#xshard-param-use"><span class="std std-ref">BLOB xshard_param.use()</span></a>
+
+<a class="reference internal" href="#directors-lookup"><span class="std std-ref">BACKEND lookup(STRING)</span></a></pre>
+</section>
+<section id="description">
+<h2>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p><em>vmod_directors</em> enables backend load balancing in Vinyl Cache.</p>
+<p>The module implements load balancing techniques, and also serves as an
+example on how one could extend the load balancing capabilities of
+Vinyl Cache.</p>
+<p>To enable load balancing you must import this vmod (directors).</p>
+<p>Then you define your backends. Once you have the backends declared you
+can add them to a director. This happens in executed VCL code.</p>
+<p>As you can see there is nothing keeping you from manipulating the
+directors elsewhere in VCL. So, you could have VCL code that would add
+more backends to a director when a certain URL is called.</p>
+<p>Note that directors can use other directors as backends.</p>
+<section id="new-xround-robin-directors-round-robin">
+<span id="directors-round-robin"></span><h3>new xround_robin = directors.round_robin()<a class="headerlink" href="#new-xround-robin-directors-round-robin" title="Link to this heading">¶</a></h3>
+<p>Create a round robin director.</p>
+<p>This director will pick backends in a round robin fashion.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">vdir</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">round_robin</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xround-robin-add-backend-backend">
+<span id="xround-robin-add-backend"></span><h3>VOID xround_robin.add_backend(BACKEND)<a class="headerlink" href="#void-xround-robin-add-backend-backend" title="Link to this heading">¶</a></h3>
+<p>Add a backend to the round-robin director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vdir</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="n">backend1</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xround-robin-remove-backend-backend">
+<span id="xround-robin-remove-backend"></span><h3>VOID xround_robin.remove_backend(BACKEND)<a class="headerlink" href="#void-xround-robin-remove-backend-backend" title="Link to this heading">¶</a></h3>
+<p>Remove a backend from the round-robin director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vdir</span><span class="o">.</span><span class="n">remove_backend</span><span class="p">(</span><span class="n">backend1</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="backend-xround-robin-backend">
+<span id="xround-robin-backend"></span><h3>BACKEND xround_robin.backend()<a class="headerlink" href="#backend-xround-robin-backend" title="Link to this heading">¶</a></h3>
+<p>Pick a backend from the director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">backend_hint</span> <span class="o">=</span> <span class="n">vdir</span><span class="o">.</span><span class="n">backend</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="new-xfallback-directors-fallback-bool-sticky-0">
+<span id="directors-fallback"></span><h3>new xfallback = directors.fallback(BOOL sticky=0)<a class="headerlink" href="#new-xfallback-directors-fallback-bool-sticky-0" title="Link to this heading">¶</a></h3>
+<p>Create a fallback director.</p>
+<p>A fallback director will try each of the added backends in turn, and
+return the first one that is healthy.</p>
+<p>If <em>sticky</em> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the director will keep using the
+healthy backend, even if a higher-priority backend becomes
+available. Once the whole backend list is exhausted, it’ll start over
+at the beginning.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">vdir</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">fallback</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xfallback-add-backend-backend">
+<span id="xfallback-add-backend"></span><h3>VOID xfallback.add_backend(BACKEND)<a class="headerlink" href="#void-xfallback-add-backend-backend" title="Link to this heading">¶</a></h3>
+<p>Add a backend to the director.</p>
+<p>Note that the order in which this is done matters for the fallback
+director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vdir</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="n">backend1</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xfallback-remove-backend-backend">
+<span id="xfallback-remove-backend"></span><h3>VOID xfallback.remove_backend(BACKEND)<a class="headerlink" href="#void-xfallback-remove-backend-backend" title="Link to this heading">¶</a></h3>
+<p>Remove a backend from the director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vdir</span><span class="o">.</span><span class="n">remove_backend</span><span class="p">(</span><span class="n">backend1</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="backend-xfallback-backend">
+<span id="xfallback-backend"></span><h3>BACKEND xfallback.backend()<a class="headerlink" href="#backend-xfallback-backend" title="Link to this heading">¶</a></h3>
+<p>Pick a backend from the director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">backend_hint</span> <span class="o">=</span> <span class="n">vdir</span><span class="o">.</span><span class="n">backend</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="new-xrandom-directors-random">
+<span id="directors-random"></span><h3>new xrandom = directors.random()<a class="headerlink" href="#new-xrandom-directors-random" title="Link to this heading">¶</a></h3>
+<p>Create a random backend director.</p>
+<p>The random director distributes load over the backends using a
+weighted random probability distribution.</p>
+<p>The “testable” random generator in <cite>vinyld</cite> is used, which enables
+deterministic tests to be run (See: <code class="docutils literal notranslate"><span class="pre">d00004.vtc</span></code>).</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">vdir</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">random</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xrandom-add-backend-backend-real">
+<span id="xrandom-add-backend"></span><h3>VOID xrandom.add_backend(BACKEND, REAL)<a class="headerlink" href="#void-xrandom-add-backend-backend-real" title="Link to this heading">¶</a></h3>
+<p>Add a backend to the director with a given weight.</p>
+<p>Each backend will receive approximately 100 * (weight /
+(sum(all_added_weights))) per cent of the traffic sent to this
+director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2/3 to backend1, 1/3 to backend2.</span>
+<span class="n">vdir</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="n">backend1</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">);</span>
+<span class="n">vdir</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="n">backend2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xrandom-remove-backend-backend">
+<span id="xrandom-remove-backend"></span><h3>VOID xrandom.remove_backend(BACKEND)<a class="headerlink" href="#void-xrandom-remove-backend-backend" title="Link to this heading">¶</a></h3>
+<p>Remove a backend from the director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vdir</span><span class="o">.</span><span class="n">remove_backend</span><span class="p">(</span><span class="n">backend1</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="backend-xrandom-backend">
+<span id="xrandom-backend"></span><h3>BACKEND xrandom.backend()<a class="headerlink" href="#backend-xrandom-backend" title="Link to this heading">¶</a></h3>
+<p>Pick a backend from the director.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">backend_hint</span> <span class="o">=</span> <span class="n">vdir</span><span class="o">.</span><span class="n">backend</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="new-xhash-directors-hash">
+<span id="directors-hash"></span><h3>new xhash = directors.hash()<a class="headerlink" href="#new-xhash-directors-hash" title="Link to this heading">¶</a></h3>
+<p>Create a hashing backend director.</p>
+<p>The director chooses the backend server by computing a hash/digest of
+the string given to <a class="reference internal" href="#xhash-backend">xhash.backend()</a>.</p>
+<p>Commonly used with <code class="docutils literal notranslate"><span class="pre">client.ip</span></code> or a session cookie to get sticky
+sessions.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new</span> <span class="n">vdir</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">hash</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xhash-add-backend-backend-real-weight-1-0">
+<span id="xhash-add-backend"></span><h3>VOID xhash.add_backend(BACKEND, REAL weight=1.0)<a class="headerlink" href="#void-xhash-add-backend-backend-real-weight-1-0" title="Link to this heading">¶</a></h3>
+<p>Add a backend to the director with a certain weight.</p>
+<p>Weight is used as in the random director. Recommended and default value
+is 1.0 unless you have special needs.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vdir</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="n">normal_backend</span><span class="p">);</span>
+<span class="n">vdir</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="n">larger_backend</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xhash-remove-backend-backend">
+<span id="xhash-remove-backend"></span><h3>VOID xhash.remove_backend(BACKEND)<a class="headerlink" href="#void-xhash-remove-backend-backend" title="Link to this heading">¶</a></h3>
+<p>Remove a backend from the director.</p>
+<dl class="simple">
+<dt>Example::</dt><dd><p>vdir.remove_backend(larger_backend);</p>
+</dd>
+</dl>
+</section>
+<section id="backend-xhash-backend-string">
+<span id="xhash-backend"></span><h3>BACKEND xhash.backend(STRING)<a class="headerlink" href="#backend-xhash-backend-string" title="Link to this heading">¶</a></h3>
+<p>Pick a backend from the hash director.</p>
+<p>Use the string or list of strings provided to pick the backend.</p>
+<dl class="simple">
+<dt>Example::</dt><dd><p># pick a backend based on the cookie header from the client
+set req.backend_hint = vdir.backend(req.http.cookie);</p>
+</dd>
+</dl>
+</section>
+<section id="new-xshard-directors-shard">
+<span id="directors-shard"></span><h3>new xshard = directors.shard()<a class="headerlink" href="#new-xshard-directors-shard" title="Link to this heading">¶</a></h3>
+<p>Create a shard director.</p>
+<section id="introduction">
+<h4>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h4>
+<p>The shard director selects backends by a key, which can be provided
+directly or derived from strings. For the same key, the shard director
+will always return the same backend, unless the backend configuration
+or health state changes. Conversely, for differing keys, the shard
+director will likely choose different backends. In the default
+configuration, unhealthy backends are not selected.</p>
+<p>The shard director resembles the hash director, but its main advantage
+is that, when the backend configuration or health states change, the
+association of keys to backends remains as stable as possible.</p>
+<p>In addition, the rampup and warmup features can help to further
+improve user-perceived response times.</p>
+</section>
+<section id="sharding">
+<h4>Sharding<a class="headerlink" href="#sharding" title="Link to this heading">¶</a></h4>
+<p>This basic technique allows for numerous applications like optimizing
+backend server cache efficiency, Vinyl Cache clustering or persisting
+sessions to servers without keeping any state, and, in particular,
+without the need to synchronize state between nodes of a cluster of
+Vinyl Cache servers:</p>
+<ul>
+<li><p>Many applications use caches for data objects, so, in a cluster of
+application servers, requesting similar objects from the same server
+may help to optimize efficiency of such caches.</p>
+<p>For example, sharding by URL or some <em>id</em> component of the url has
+been shown to drastically improve the efficiency of many content
+management systems.</p>
+</li>
+<li><p>As special case of the previous example, in clusters of Vinyl Cache
+servers without additional request distribution logic, each cache
+will need store all hot objects, so the effective cache size is
+approximately the smallest cache size of any server in the cluster.</p>
+<p>Sharding allows to segregate objects within the cluster such that
+each object is only cached on one of the servers (or on one primary
+and one backup, on a primary for long and others for short
+etc…). Effectively, this will lead to a cache size in the order of
+the sum of all individual caches, with the potential to drastically
+increase efficiency (scales by the number of servers).</p>
+</li>
+<li><p>Another application is to implement persistence of backend requests,
+such that all requests sharing a certain criterion (such as an IP
+address or session ID) get forwarded to the same backend server.</p></li>
+</ul>
+<p>When used with clusters of Vinyl Cache servers, the shard director will,
+if otherwise configured equally, make the same decision on all
+servers. In other words, requests sharing a common criterion used as
+the shard key will be balanced onto the same backend server(s) no
+matter which Vinyl Cache server handles the request.</p>
+<p>The drawbacks are:</p>
+<ul class="simple">
+<li><p>the distribution of requests depends on the number of requests per
+key and the uniformity of the distribution of key values. In short,
+while this technique may lead to much better efficiency overall, it
+may also lead to less good load balancing for specific cases.</p></li>
+<li><p>When a backend server becomes unavailable, every persistence
+technique has to reselect a new backend server, but this technique
+will also switch back to the preferred server once it becomes
+healthy again, so when used for persistence, it is generally less
+stable compared to stateful techniques (which would continue to use
+a selected server for as long as possible (or dictated by a TTL)).</p></li>
+</ul>
+</section>
+<section id="method">
+<h4>Method<a class="headerlink" href="#method" title="Link to this heading">¶</a></h4>
+<p>When <a class="reference internal" href="#xshard-reconfigure">xshard.reconfigure()</a> is called explicitly (or implicitly at
+the end of any task containing reconfigurations like
+<a class="reference internal" href="#xshard-add-backend">xshard.add_backend()</a>), a consistent hashing circular data structure
+gets built from the last 32 bits of SHA256 hash values of <em>&lt;ident&gt;</em><em>&lt;n&gt;</em> (default <em>ident</em> being the backend name) for each backend and
+for a running number <em>n</em> from 1 to the <em>replicas</em> argument to
+<a class="reference internal" href="#xshard-reconfigure">xshard.reconfigure()</a>. Hashing creates the seemingly random order
+for placement of backends on the consistent hashing ring. When
+<a class="reference internal" href="#xshard-add-backend">xshard.add_backend()</a> was called with a <em>weight</em> argument,
+<em>replicas</em> is scaled by that weight to add proportionally more copies
+of the that backend on the ring.</p>
+<p>When <a class="reference internal" href="#xshard-backend">xshard.backend()</a> is called, a load balancing key
+gets generated unless provided. The smallest hash value in the circle
+is looked up that is larger than the key (searching clockwise and
+wrapping around as necessary). The backend for this hash value is the
+preferred backend for the given key.</p>
+<p>If a healthy backend is requested, the search is continued linearly on
+the ring as long as backends found are unhealthy or all backends have
+been checked. The order of these “alternative backends” on the ring is
+likely to differ for different keys. Alternative backends can also be
+selected explicitly.</p>
+<p>On consistent hashing see:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www8.org/w8-papers/2a-webserver/caching/paper2.html">http://www8.org/w8-papers/2a-webserver/caching/paper2.html</a></p></li>
+<li><p><a class="reference external" href="http://www.audioscrobbler.net/development/ketama/">http://www.audioscrobbler.net/development/ketama/</a></p></li>
+<li><p>svn://svn.audioscrobbler.net/misc/ketama</p></li>
+<li><p><a class="reference external" href="http://en.wikipedia.org/wiki/Consistent_hashing">http://en.wikipedia.org/wiki/Consistent_hashing</a></p></li>
+</ul>
+</section>
+<section id="error-reporting">
+<h4>Error Reporting<a class="headerlink" href="#error-reporting" title="Link to this heading">¶</a></h4>
+<p>Failing methods should report errors to VSL with the Error tag, so
+when configuring the shard director, you are advised to check:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vinyllog</span> <span class="o">-</span><span class="n">I</span> <span class="n">Error</span><span class="p">:</span><span class="o">^</span><span class="n">vmod_directors</span><span class="o">.</span><span class="n">shard</span>
+</pre></div>
+</div>
+<p>Additional information may be provided as Notices, which can be
+checked using</p>
+<blockquote>
+<div><p>vinyllog -I Notice:^vmod_directors.shard</p>
+</div></blockquote>
+</section>
+</section>
+<section id="void-xshard-set-warmup-real-probability-0-0">
+<span id="xshard-set-warmup"></span><h3>VOID xshard.set_warmup(REAL probability=0.0)<a class="headerlink" href="#void-xshard-set-warmup-real-probability-0-0" title="Link to this heading">¶</a></h3>
+<p>Set the default warmup probability. See the <em>warmup</em> parameter of
+<a class="reference internal" href="#xshard-backend">xshard.backend()</a>. If <em>probability</em> is 0.0 (default),
+warmup is disabled.</p>
+</section>
+<section id="void-xshard-set-rampup-duration-duration-0">
+<span id="xshard-set-rampup"></span><h3>VOID xshard.set_rampup(DURATION duration=0)<a class="headerlink" href="#void-xshard-set-rampup-duration-duration-0" title="Link to this heading">¶</a></h3>
+<p>Set the default rampup duration. See <em>rampup</em> parameter of
+<a class="reference internal" href="#xshard-backend">xshard.backend()</a>. If <em>duration</em> is 0 (default), rampup
+is disabled.</p>
+</section>
+<section id="void-xshard-associate-blob-param-0">
+<span id="xshard-associate"></span><h3>VOID xshard.associate(BLOB param=0)<a class="headerlink" href="#void-xshard-associate-blob-param-0" title="Link to this heading">¶</a></h3>
+<p>Associate a default <a class="reference internal" href="#directors-shard-param">directors.shard_param()</a> object or clear an
+association.</p>
+<p>The value of the <em>param</em> argument must be a call to the
+<a class="reference internal" href="#xshard-param-use">xshard_param.use()</a> method. No argument clears the
+association.</p>
+<p>The association can be changed per backend request using the <em>param</em>
+argument of <a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+</section>
+<section id="bool-xshard-add-backend-backend-backend-string-ident-duration-rampup-real-weight">
+<span id="xshard-add-backend"></span><h3>BOOL xshard.add_backend(BACKEND backend, [STRING ident], [DURATION rampup], [REAL weight])<a class="headerlink" href="#bool-xshard-add-backend-backend-backend-string-ident-duration-rampup-real-weight" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BOOL</span> <span class="n">xshard</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span>
+      <span class="n">BACKEND</span> <span class="n">backend</span><span class="p">,</span>
+      <span class="p">[</span><span class="n">STRING</span> <span class="n">ident</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">DURATION</span> <span class="n">rampup</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">REAL</span> <span class="n">weight</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Add a backend <em>backend</em> to the director.</p>
+<p><em>ident</em>: Optionally specify an identification string for this backend,
+which will be hashed by <a class="reference internal" href="#xshard-reconfigure">xshard.reconfigure()</a> to
+construct the consistent hashing ring. The identification string
+defaults to the backend name.</p>
+<p><em>ident</em> allows to add multiple instances of the same backend.</p>
+<p><em>rampup</em>: Optionally specify a specific rampup time for this
+backend. Otherwise, the per-director rampup time is used (see
+<a class="reference internal" href="#xshard-set-rampup">xshard.set_rampup()</a>).</p>
+<p><em>weight</em>: Optionally specify a weight to scale the
+<a class="reference internal" href="#xshard-reconfigure">xshard.reconfigure()</a> <em>replicas</em> parameter. <em>weight</em> is limited to
+at least 1. Values above 10 probably do not make much sense. The
+effect of <em>weight</em> is also capped such that the total number of
+replicas does not exceed <cite>UINT32_MAX</cite>.</p>
+</section>
+<section id="bool-xshard-remove-backend-backend-backend-string-ident">
+<span id="xshard-remove-backend"></span><h3>BOOL xshard.remove_backend([BACKEND backend], [STRING ident])<a class="headerlink" href="#bool-xshard-remove-backend-backend-backend-string-ident" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BOOL</span> <span class="n">xshard</span><span class="o">.</span><span class="n">remove_backend</span><span class="p">(</span>
+      <span class="p">[</span><span class="n">BACKEND</span> <span class="n">backend</span><span class="o">=</span><span class="mi">0</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">STRING</span> <span class="n">ident</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Remove backend(s) from the director. Either <em>backend</em> or <em>ident</em> must
+be specified. <em>ident</em> removes a specific instance. If <em>backend</em> is
+given without <em>ident</em>, all instances of this backend are removed.</p>
+</section>
+<section id="bool-xshard-clear">
+<span id="xshard-clear"></span><h3>BOOL xshard.clear()<a class="headerlink" href="#bool-xshard-clear" title="Link to this heading">¶</a></h3>
+<p>Remove all backends from the director.</p>
+</section>
+<section id="bool-xshard-reconfigure-int-replicas-67">
+<span id="xshard-reconfigure"></span><h3>BOOL xshard.reconfigure(INT replicas=67)<a class="headerlink" href="#bool-xshard-reconfigure-int-replicas-67" title="Link to this heading">¶</a></h3>
+<p>Explicitly reconfigure the consistent hashing ring to reflect backend
+changes to become effective immediately.</p>
+<p>If this method is not called explicitly, reconfiguration happens at
+the end of the current task (after <code class="docutils literal notranslate"><span class="pre">vcl_init</span> <span class="pre">{}</span></code> or when the current
+client or backend task is finished).</p>
+</section>
+<section id="int-xshard-key-string">
+<span id="xshard-key"></span><h3>INT xshard.key(STRING)<a class="headerlink" href="#int-xshard-key-string" title="Link to this heading">¶</a></h3>
+<p>Convenience method to generate a sharding key for use with the <em>key</em>
+argument to the <a class="reference internal" href="#xshard-backend">xshard.backend()</a> method by hashing the
+given string with SHA256.</p>
+<p>To generate sharding keys using other hashes, use a custom vmod like
+<a class="reference external" href="https://code.uplex.de/uplex-varnish/libvmod-blobdigest/blob/master/README.rst">vmod blobdigest</a> with the <em>key_blob</em> argument of the
+<a class="reference internal" href="#xshard-backend">xshard.backend()</a> method.</p>
+</section>
+<section id="backend-xshard-backend-enum-by-int-key-blob-key-blob-int-alt-real-warmup-bool-rampup-enum-healthy-blob-param-enum-resolve">
+<span id="xshard-backend"></span><h3>BACKEND xshard.backend([ENUM by], [INT key], [BLOB key_blob], [INT alt], [REAL warmup], [BOOL rampup], [ENUM healthy], [BLOB param], [ENUM resolve])<a class="headerlink" href="#backend-xshard-backend-enum-by-int-key-blob-key-blob-int-alt-real-warmup-bool-rampup-enum-healthy-blob-param-enum-resolve" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BACKEND</span> <span class="n">xshard</span><span class="o">.</span><span class="n">backend</span><span class="p">(</span>
+      <span class="p">[</span><span class="n">ENUM</span> <span class="p">{</span><span class="n">HASH</span><span class="p">,</span> <span class="n">URL</span><span class="p">,</span> <span class="n">KEY</span><span class="p">,</span> <span class="n">BLOB</span><span class="p">}</span> <span class="n">by</span><span class="o">=</span><span class="n">HASH</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">INT</span> <span class="n">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">BLOB</span> <span class="n">key_blob</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">INT</span> <span class="n">alt</span><span class="o">=</span><span class="mi">0</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">REAL</span> <span class="n">warmup</span><span class="o">=-</span><span class="mi">1</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">BOOL</span> <span class="n">rampup</span><span class="o">=</span><span class="mi">1</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">ENUM</span> <span class="p">{</span><span class="n">CHOSEN</span><span class="p">,</span> <span class="n">IGNORE</span><span class="p">,</span> <span class="n">ALL</span><span class="p">}</span> <span class="n">healthy</span><span class="o">=</span><span class="n">CHOSEN</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">BLOB</span> <span class="n">param</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">ENUM</span> <span class="p">{</span><span class="n">NOW</span><span class="p">,</span> <span class="n">LAZY</span><span class="p">}</span> <span class="n">resolve</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Lookup a backend on the consistent hashing ring.</p>
+<p>This documentation uses the notion of an order of backends for a
+particular shard key. This order is deterministic but seemingly random
+as determined by the consistent hashing algorithm and is likely to
+differ for different keys, depending on the number of backends and the
+number of replicas. In particular, the backend order referred to here
+is _not_ the order given when backends are added.</p>
+<ul>
+<li><p><em>by</em> how to determine the sharding key</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HASH</span></code>:</p>
+<ul>
+<li><p>when called in backend context and in <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span> <span class="pre">{}</span></code>: Use the
+vinyl hash value as set by <code class="docutils literal notranslate"><span class="pre">vcl_hash{}</span></code></p></li>
+<li><p>when called in client context other than <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span> <span class="pre">{}</span></code>: hash
+<code class="docutils literal notranslate"><span class="pre">req.url</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">URL</span></code>: hash req.url / bereq.url</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KEY</span></code>: use the <em>key</em> argument</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BLOB</span></code>: use the <em>key_blob</em> argument</p></li>
+</ul>
+</li>
+<li><p><em>key</em> lookup key with <code class="docutils literal notranslate"><span class="pre">by=KEY</span></code></p>
+<p>the <a class="reference internal" href="#xshard-key">xshard.key()</a> method may come handy to generate a
+sharding key from custom strings.</p>
+</li>
+<li><p><em>key_blob</em> lookup key with <code class="docutils literal notranslate"><span class="pre">by=BLOB</span></code></p>
+<p>Currently, this uses the first 4 bytes from the given blob in
+network byte order (big endian), left-padded with zeros for blobs
+smaller than 4 bytes.</p>
+</li>
+<li><p><em>alt</em> alternative backend selection</p>
+<p>Select the <em>alt</em>-th alternative backend for the given <em>key</em>.</p>
+<p>This is particularly useful for retries / restarts due to backend
+errors: By setting <code class="docutils literal notranslate"><span class="pre">alt=req.restarts</span></code> or <code class="docutils literal notranslate"><span class="pre">alt=bereq.retries</span></code> with
+healthy=ALL, another server gets selected.</p>
+<p>The rampup and warmup features are only active for <code class="docutils literal notranslate"><span class="pre">alt==0</span></code></p>
+</li>
+<li><p><em>rampup</em> slow start for servers which just went healthy</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">alt==0</span></code> and the chosen backend is in its rampup period, with a
+probability proportional to the fraction of time since the backup
+became healthy to the rampup period, return the next alternative
+backend, unless this is also in its rampup period.</p>
+<p>The default rampup interval can be set per shard director using the
+<a class="reference internal" href="#xshard-set-rampup">xshard.set_rampup()</a> method or specifically per
+backend with the <a class="reference internal" href="#xshard-add-backend">xshard.add_backend()</a> method.</p>
+</li>
+<li><p><em>warmup</em> probabilistic alternative server selection</p>
+<p>possible values: -1, 0..1</p>
+<p><code class="docutils literal notranslate"><span class="pre">-1</span></code>: use the warmup probability from the director definition</p>
+<p>Only used for <code class="docutils literal notranslate"><span class="pre">alt==0</span></code>: Sets the ratio of requests (0.0 to 1.0)
+that goes to the next alternate backend to warm it up when the
+preferred backend is healthy. Not active if any of the preferred or
+alternative backend are in rampup.</p>
+<p><code class="docutils literal notranslate"><span class="pre">warmup=0.5</span></code> is a convenient way to spread the load for each key
+over two backends under normal operating conditions.</p>
+</li>
+<li><p><em>healthy</em></p>
+<ul>
+<li><p>CHOSEN: Return a healthy backend if possible.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">alt==0</span></code>, return the first healthy backend or none.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>, ignore the health state of backends skipped for
+alternative backend selection, then return the next healthy
+backend. If this does not exist, return the last healthy backend
+of those skipped or none.</p>
+</li>
+<li><p>IGNORE: Completely ignore backend health state</p>
+<p>Just return the first or <em>alt</em>-th alternative backend, ignoring
+health state, <em>rampup</em> and <em>warmup</em>.</p>
+</li>
+<li><p>ALL: Check health state also for alternative backend selection</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>, return the <em>alt</em>-th alternative backend of all
+those healthy, the last healthy backend found or none.</p>
+</li>
+</ul>
+</li>
+<li><p><em>resolve</em></p>
+<p>default: <code class="docutils literal notranslate"><span class="pre">LAZY</span></code> in <code class="docutils literal notranslate"><span class="pre">vcl_init{}</span></code>, <code class="docutils literal notranslate"><span class="pre">NOW</span></code> otherwise</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">NOW</span></code>: look up a backend and return it.</p>
+<p>Cannot be used in <code class="docutils literal notranslate"><span class="pre">vcl_init{}</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LAZY</span></code>: return an instance of this director for later backend resolution.</p>
+<p><code class="docutils literal notranslate"><span class="pre">LAZY</span></code> mode is required for referencing shard director instances,
+for example as backends for other directors (director layering).</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">vcl_init{}</span></code> and on the client side, <code class="docutils literal notranslate"><span class="pre">LAZY</span></code> mode cannot be
+used with any other argument.</p>
+<p>On the backend side and in <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span> <span class="pre">{}</span></code>, parameters from
+arguments or an associated parameter set affect the shard director
+instance for the backend request irrespective of where it is
+referenced.</p>
+</li>
+</ul>
+</li>
+<li><p><em>param</em></p>
+<p>Use or associate a parameter set. The value of the <em>param</em> argument
+must be a call to the <a class="reference internal" href="#xshard-param-use">xshard_param.use()</a> method.</p>
+<p>default: as set by <a class="reference internal" href="#xshard-associate">xshard.associate()</a> or unset.</p>
+<ul>
+<li><p>for <code class="docutils literal notranslate"><span class="pre">resolve=NOW</span></code> take parameter defaults from the
+<a class="reference internal" href="#directors-shard-param">directors.shard_param()</a> parameter set</p></li>
+<li><p>for <code class="docutils literal notranslate"><span class="pre">resolve=LAZY</span></code> associate the <a class="reference internal" href="#directors-shard-param">directors.shard_param()</a>
+parameter set for this backend request</p>
+<p>Implementation notes for use of parameter sets with
+<code class="docutils literal notranslate"><span class="pre">resolve=LAZY</span></code>:</p>
+<ul class="simple">
+<li><p>A <em>param</em> argument remains associated and any changes to the
+associated parameter set affect the sharding decision once the
+director resolves to an actual backend.</p></li>
+<li><p>If other parameter arguments are also given, they have
+preference and are kept even if the parameter set given by the
+<em>param</em> argument is subsequently changed within the same backend
+request.</p></li>
+<li><p>Each call to <a class="reference internal" href="#xshard-backend">xshard.backend()</a> overrides any
+previous call.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="void-xshard-debug-int">
+<span id="xshard-debug"></span><h3>VOID xshard.debug(INT)<a class="headerlink" href="#void-xshard-debug-int" title="Link to this heading">¶</a></h3>
+<p><em>intentionally undocumented</em></p>
+</section>
+<section id="new-xshard-param-directors-shard-param">
+<span id="directors-shard-param"></span><h3>new xshard_param = directors.shard_param()<a class="headerlink" href="#new-xshard-param-directors-shard-param" title="Link to this heading">¶</a></h3>
+<p>Create a shard parameter set.</p>
+<p>A parameter set allows for re-use of <a class="reference internal" href="#xshard-backend">xshard.backend()</a>
+arguments across many shard director instances and simplifies advanced
+use cases (e.g. shard director with custom parameters layered below
+other directors).</p>
+<p>Parameter sets have two scopes:</p>
+<ul class="simple">
+<li><p>per-VCL scope defined in <code class="docutils literal notranslate"><span class="pre">vcl_init{}</span></code></p></li>
+<li><p>per backend request scope</p></li>
+</ul>
+<p>The per-VCL scope defines defaults for the per backend scope. Any
+changes to a parameter set in backend context and in <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span> <span class="pre">{}</span></code>
+only affect the respective backend request.</p>
+<p>Parameter sets cannot be used in client context except for
+<code class="docutils literal notranslate"><span class="pre">vcl_pipe</span> <span class="pre">{}</span></code>.</p>
+<p>The following example is a typical use case: A parameter set is
+associated with several directors. Director choice happens on the
+client side and parameters are changed on the backend side to
+implement retries on alternative backends:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">vcl_init</span> <span class="p">{</span>
+  <span class="n">new</span> <span class="n">shard_param</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">shard_param</span><span class="p">();</span>
+
+  <span class="n">new</span> <span class="n">dir_A</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">shard</span><span class="p">();</span>
+  <span class="n">dir_A</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="o">...</span><span class="p">);</span>
+  <span class="n">dir_A</span><span class="o">.</span><span class="n">reconfigure</span><span class="p">();</span>
+  <span class="n">dir_A</span><span class="o">.</span><span class="n">associate</span><span class="p">(</span><span class="n">shard_param</span><span class="o">.</span><span class="n">use</span><span class="p">());</span> <span class="c1"># &lt;-- !</span>
+
+  <span class="n">new</span> <span class="n">dir_B</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">shard</span><span class="p">();</span>
+  <span class="n">dir_B</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="o">...</span><span class="p">);</span>
+  <span class="n">dir_B</span><span class="o">.</span><span class="n">reconfigure</span><span class="p">();</span>
+  <span class="n">dir_B</span><span class="o">.</span><span class="n">associate</span><span class="p">(</span><span class="n">shard_param</span><span class="o">.</span><span class="n">use</span><span class="p">());</span> <span class="c1"># &lt;-- !</span>
+<span class="p">}</span>
+
+<span class="n">sub</span> <span class="n">vcl_recv</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">backend_hint</span> <span class="o">=</span> <span class="n">dir_A</span><span class="o">.</span><span class="n">backend</span><span class="p">(</span><span class="n">resolve</span><span class="o">=</span><span class="n">LAZY</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">backend_hint</span> <span class="o">=</span> <span class="n">dir_B</span><span class="o">.</span><span class="n">backend</span><span class="p">(</span><span class="n">resolve</span><span class="o">=</span><span class="n">LAZY</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">sub</span> <span class="n">vcl_backend_fetch</span> <span class="p">{</span>
+  <span class="c1"># changes dir_A and dir_B behaviour</span>
+  <span class="n">shard_param</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">bereq</span><span class="o">.</span><span class="n">retries</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">URL</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="void-xshard-param-clear">
+<span id="xshard-param-clear"></span><h3>VOID xshard_param.clear()<a class="headerlink" href="#void-xshard-param-clear" title="Link to this heading">¶</a></h3>
+<p>Reset the parameter set to default values as documented for
+<a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+<ul class="simple">
+<li><p>in <code class="docutils literal notranslate"><span class="pre">vcl_init{}</span></code>, resets the parameter set default for this VCL in</p></li>
+<li><p>backend context and in <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span> <span class="pre">{}</span></code>, resets the parameter set for
+this backend request to the VCL defaults</p></li>
+</ul>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">backend</span></code>, <code class="docutils literal notranslate"><span class="pre">housekeeping</span></code>.</p>
+</section>
+<section id="void-xshard-param-set-enum-by-int-key-blob-key-blob-int-alt-real-warmup-bool-rampup-enum-healthy">
+<span id="xshard-param-set"></span><h3>VOID xshard_param.set([ENUM by], [INT key], [BLOB key_blob], [INT alt], [REAL warmup], [BOOL rampup], [ENUM healthy])<a class="headerlink" href="#void-xshard-param-set-enum-by-int-key-blob-key-blob-int-alt-real-warmup-bool-rampup-enum-healthy" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VOID</span> <span class="n">xshard_param</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+      <span class="p">[</span><span class="n">ENUM</span> <span class="p">{</span><span class="n">HASH</span><span class="p">,</span> <span class="n">URL</span><span class="p">,</span> <span class="n">KEY</span><span class="p">,</span> <span class="n">BLOB</span><span class="p">}</span> <span class="n">by</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">INT</span> <span class="n">key</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">BLOB</span> <span class="n">key_blob</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">INT</span> <span class="n">alt</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">REAL</span> <span class="n">warmup</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">BOOL</span> <span class="n">rampup</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">ENUM</span> <span class="p">{</span><span class="n">CHOSEN</span><span class="p">,</span> <span class="n">IGNORE</span><span class="p">,</span> <span class="n">ALL</span><span class="p">}</span> <span class="n">healthy</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Change the given parameters of a parameter set as documented for
+<a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+<ul class="simple">
+<li><p>in <code class="docutils literal notranslate"><span class="pre">vcl_init{}</span></code>, changes the parameter set default for this VCL</p></li>
+<li><p>in backend context and in <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span> <span class="pre">{}</span></code>, changes the parameter set
+for this backend request, keeping the defaults set for this VCL for
+unspecified arguments.</p></li>
+</ul>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">backend</span></code>, <code class="docutils literal notranslate"><span class="pre">housekeeping</span></code>.</p>
+</section>
+<section id="string-xshard-param-get-by">
+<span id="xshard-param-get-by"></span><h3>STRING xshard_param.get_by()<a class="headerlink" href="#string-xshard-param-get-by" title="Link to this heading">¶</a></h3>
+<p>Get a string representation of the <em>by</em> enum argument which denotes
+how a shard director using this parameter object would derive the
+shard key. See <a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+</section>
+<section id="int-xshard-param-get-key">
+<span id="xshard-param-get-key"></span><h3>INT xshard_param.get_key()<a class="headerlink" href="#int-xshard-param-get-key" title="Link to this heading">¶</a></h3>
+<p>Get the key which a shard director using this parameter object would
+use. See <a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+</section>
+<section id="int-xshard-param-get-alt">
+<span id="xshard-param-get-alt"></span><h3>INT xshard_param.get_alt()<a class="headerlink" href="#int-xshard-param-get-alt" title="Link to this heading">¶</a></h3>
+<p>Get the <em>alt</em> parameter which a shard director using this parameter
+object would use. See <a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+</section>
+<section id="real-xshard-param-get-warmup">
+<span id="xshard-param-get-warmup"></span><h3>REAL xshard_param.get_warmup()<a class="headerlink" href="#real-xshard-param-get-warmup" title="Link to this heading">¶</a></h3>
+<p>Get the <em>warmup</em> parameter which a shard director using this parameter
+object would use. See <a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+</section>
+<section id="bool-xshard-param-get-rampup">
+<span id="xshard-param-get-rampup"></span><h3>BOOL xshard_param.get_rampup()<a class="headerlink" href="#bool-xshard-param-get-rampup" title="Link to this heading">¶</a></h3>
+<p>Get the <em>rampup</em> parameter which a shard director using this parameter
+object would use. See <a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+</section>
+<section id="string-xshard-param-get-healthy">
+<span id="xshard-param-get-healthy"></span><h3>STRING xshard_param.get_healthy()<a class="headerlink" href="#string-xshard-param-get-healthy" title="Link to this heading">¶</a></h3>
+<p>Get a string representation of the <em>healthy</em> enum argument which a
+shard director using this parameter object would use. See
+<a class="reference internal" href="#xshard-backend">xshard.backend()</a>.</p>
+</section>
+<section id="blob-xshard-param-use">
+<span id="xshard-param-use"></span><h3>BLOB xshard_param.use()<a class="headerlink" href="#blob-xshard-param-use" title="Link to this heading">¶</a></h3>
+<p>For use with the <em>param</em> argument of <a class="reference internal" href="#xshard-backend">xshard.backend()</a>
+to associate this shard parameter set with a shard director.</p>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">vcl_pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">backend</span></code>, <code class="docutils literal notranslate"><span class="pre">housekeeping</span></code>.</p>
+</section>
+<section id="backend-lookup-string">
+<span id="directors-lookup"></span><h3>BACKEND lookup(STRING)<a class="headerlink" href="#backend-lookup-string" title="Link to this heading">¶</a></h3>
+<p>Lookup a backend by its name.</p>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">housekeeping</span></code>.</p>
+</section>
+</section>
+<section id="acknowledgements">
+<h2>ACKNOWLEDGEMENTS<a class="headerlink" href="#acknowledgements" title="Link to this heading">¶</a></h2>
+<p>Development of a previous version of the shard director was partly
+sponsored by Deutsche Telekom AG - Products &amp; Innovation.</p>
+<p>Development of a previous version of the shard director was partly
+sponsored by BILD GmbH &amp; Co KG.</p>
+</section>
+<section id="copyright">
+<h2>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>This document is licensed under the same licence as Vinyl Cache
+itself. See LICENCE for details.
+
+SPDX-License-Identifier: BSD-2-Clause
+
+Copyright (c) 2013-2015 Varnish Software AS
+Copyright 2009-2020 UPLEX - Nils Goroll Systemoptimierung
+All rights reserved.
+
+Authors: Poul-Henning Kamp &lt;phk@FreeBSD.org&gt;
+         Julian Wiesener &lt;jw@uplex.de&gt;
+         Nils Goroll &lt;slink@uplex.de&gt;
+         Geoffrey Simmons &lt;geoff@uplex.de&gt;
+
+SPDX-License-Identifier: BSD-2-Clause
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS&#39;&#39; AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vmod_h2.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VMOD h2 - Module to control the built-in HTTP2 transport</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vmod_cookie.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">VMOD cookie - Vinyl Cache Cookie Module</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

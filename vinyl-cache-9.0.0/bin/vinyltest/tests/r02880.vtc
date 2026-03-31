@@ -1,0 +1,13 @@
+vtest "Long VMOD object names"
+
+vinyl v1 -vcl {
+	import debug;
+	backend b None;
+
+	sub vcl_init {
+		new l234567890123456789012345678901234567890123456789012345678
+			= debug.obj();
+		new l2345678901234567890123456789012345678901234567890123456789
+			= debug.obj();
+	}
+}

@@ -1,0 +1,67 @@
+vtest "-a sub-args user, group and mode; and warn if stat(EACCES) fails for UDS"
+
+feature user_vcache
+feature group_vinyl
+feature root
+
+shell -err -expect "Too many user sub-args" {
+	vinyld -a ${tmpdir}/vtc.sock,user=vcache,user=vcache -d
+}
+
+shell -err -expect "Too many group sub-args" {
+	vinyld -a ${tmpdir}/vtc.sock,group=vinyl,group=vinyl -d
+}
+
+# Assuming that empty user and group names always fail getpwnam and getgrnam
+shell -err -expect "Unknown user " {
+	vinyld -a ${tmpdir}/vtc.sock,user= -d
+}
+
+shell -err -expect "Unknown group " {
+	vinyld -a ${tmpdir}/vtc.sock,group= -d
+}
+
+server s1 {} -start
+
+vinyl v1 -arg "-a ${tmpdir}/v1.sock,user=vcache,group=vinyl,mode=660" \
+	-vcl+backend {}
+
+shell -match "rw-rw----.+vcache.+vinyl" { ls -l ${tmpdir}/v1.sock }
+
+vinyl v2 -arg "-a ${tmpdir}/v2.sock,user=vcache,mode=600" -vcl+backend {}
+
+shell -match "rw-------.+vcache" { ls -l ${tmpdir}/v2.sock }
+
+vinyl v3 -arg "-a ${tmpdir}/v3.sock,group=vinyl,mode=660" -vcl+backend {}
+
+shell -match "rw---- .+root.+vinyl" { ls -l ${tmpdir}/v3.sock }
+
+vinyl v4 -arg "-a ${tmpdir}/v4.sock,mode=666" -vcl+backend {}
+
+shell -match "rw-rw-rw-.+root" { ls -l ${tmpdir}/v4.sock }
+
+vinyl v5 -arg "-a ${tmpdir}/v5.sock,user=vcache,group=vinyl" -vcl+backend {}
+
+shell -match "vcache.+vinyl" { ls -l ${tmpdir}/v5.sock }
+
+vinyl v6 -arg "-a ${tmpdir}/v6.sock,user=vcache" -vcl+backend {}
+
+shell -match "vcache" { ls -l ${tmpdir}/v6.sock }
+
+vinyl v7 -arg "-a ${tmpdir}/v7.sock,group=vinyl" -vcl+backend {}
+
+shell -match "root.+vinyl" { ls -l ${tmpdir}/v7.sock }
+
+# VCC warns, but does not fail, if stat(UDS) fails with EACCES.
+shell { mkdir ${tmpdir}/dir }
+server s2 -listen ${tmpdir}/dir/s1.sock {} -start
+
+shell { chmod go-rx ${tmpdir}/dir }
+
+vinyl v8 \
+	-jail "-junix,user=vinyl,ccgroup=vinyl,workuser=vcache" \
+	-vcl { backend b None;
+}
+
+vinyl v8 -cliexpect "(?s)Cannot stat:.+That was just a warning" \
+	{vcl.inline test "vcl 4.1; backend b {.path=\"${tmpdir}/dir/s1.sock\";}"}

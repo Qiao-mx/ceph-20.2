@@ -1,0 +1,74 @@
+vtest "h2 rapid reset"
+
+barrier b1 sock 2 -cyclic
+barrier b2 sock 5 -cyclic
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -cliok "param.set debug +syncvsl"
+vinyl v1 -cliok "param.set h2_rapid_reset_limit 3"
+vinyl v1 -cliok "param.set h2_rapid_reset 5"
+
+vinyl v1 -vcl+backend {
+	import vtc;
+
+	sub vcl_recv {
+		vtc.sleep(0.5s);
+		if (req.http.barrier) {
+			vtc.barrier_sync(req.http.barrier);
+		}
+		vtc.barrier_sync("${b2_sock}");
+	}
+
+} -start
+
+vinyl v1 -vsl_catchup
+
+client c1 {
+	stream 0 {
+		rxgoaway
+		expect goaway.err == ENHANCE_YOUR_CALM
+	} -start
+
+	loop 4 {
+		stream next {
+			txreq -hdr barrier ${b1_sock}
+			barrier b1 sync
+			txrst
+		} -run
+	}
+
+	barrier b2 sync
+	stream 0 -wait
+} -run
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -expect sc_rapid_reset == 1
+
+vinyl v1 -cliok "param.set feature -vcl_req_reset"
+
+client c2 {
+	stream 0 {
+		rxgoaway
+		expect goaway.err == ENHANCE_YOUR_CALM
+	} -start
+
+	loop 4 {
+		stream next {
+			txreq
+			txrst
+		} -run
+	}
+
+	barrier b2 sync
+	stream 0 -wait
+} -run
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -expect sc_rapid_reset == 2

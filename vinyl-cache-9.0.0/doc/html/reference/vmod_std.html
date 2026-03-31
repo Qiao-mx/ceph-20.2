@@ -1,0 +1,1261 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VMOD unix - Utilities for Unix domain sockets" href="vmod_unix.html"><link rel="prev" title="VMOD purge - Vinyl Cache Purge Module" href="vmod_purge.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VMOD std - Vinyl Cache Standard Module - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vmod-std-vinyl-cache-standard-module">
+<span id="vmod-std-3"></span><h1>VMOD std - Vinyl Cache Standard Module<a class="headerlink" href="#vmod-std-vinyl-cache-standard-module" title="Link to this heading">¶</a></h1>
+<section id="synopsis">
+<h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Link to this heading">¶</a></h2>
+<pre class="literal-block">import std [as name] [from &quot;path&quot;]
+
+<a class="reference internal" href="#std-random"><span class="std std-ref">REAL random(REAL lo, REAL hi)</span></a>
+
+<a class="reference internal" href="#std-round"><span class="std std-ref">REAL round(REAL r)</span></a>
+
+<a class="reference internal" href="#std-collect"><span class="std std-ref">VOID collect(HEADER hdr, STRING sep=”, “)</span></a>
+
+<a class="reference internal" href="#std-querysort"><span class="std std-ref">STRING querysort(STRING)</span></a>
+
+<a class="reference internal" href="#std-toupper"><span class="std std-ref">STRING toupper(STRING s)</span></a>
+
+<a class="reference internal" href="#std-tolower"><span class="std std-ref">STRING tolower(STRING s)</span></a>
+
+<a class="reference internal" href="#std-strstr"><span class="std std-ref">STRING strstr(STRING s1, STRING s2)</span></a>
+
+<a class="reference internal" href="#std-fnmatch"><span class="std std-ref">BOOL fnmatch(STRING pattern, STRING subject, BOOL pathname, BOOL noescape, BOOL period)</span></a>
+
+<a class="reference internal" href="#std-fileread"><span class="std std-ref">STRING fileread(STRING)</span></a>
+
+<a class="reference internal" href="#std-blobread"><span class="std std-ref">BLOB blobread(STRING)</span></a>
+
+<a class="reference internal" href="#std-file-exists"><span class="std std-ref">BOOL file_exists(STRING path)</span></a>
+
+<a class="reference internal" href="#std-healthy"><span class="std std-ref">BOOL healthy(BACKEND be)</span></a>
+
+<a class="reference internal" href="#std-port"><span class="std std-ref">INT port(IP ip)</span></a>
+
+<a class="reference internal" href="#std-duration"><span class="std std-ref">DURATION duration([STRING s], [DURATION fallback], [REAL real], [INT integer])</span></a>
+
+<a class="reference internal" href="#std-bytes"><span class="std std-ref">BYTES bytes([STRING s], [BYTES fallback], [REAL real], [INT integer])</span></a>
+
+<a class="reference internal" href="#std-integer"><span class="std std-ref">INT integer([STRING s], [INT fallback], [BOOL bool], [BYTES bytes], [DURATION duration], [REAL real], [TIME time])</span></a>
+
+<a class="reference internal" href="#std-ip"><span class="std std-ref">IP ip(STRING s, [IP fallback], BOOL resolve=1, [STRING p])</span></a>
+
+<a class="reference internal" href="#std-real"><span class="std std-ref">REAL real([STRING s], [REAL fallback], [INT integer], [BOOL bool], [BYTES bytes], [DURATION duration], [TIME time])</span></a>
+
+<a class="reference internal" href="#std-time"><span class="std std-ref">TIME time([STRING s], [TIME fallback], [REAL real], [INT integer])</span></a>
+
+<a class="reference internal" href="#std-strftime"><span class="std std-ref">STRING strftime(TIME time, STRING format)</span></a>
+
+<a class="reference internal" href="#std-log"><span class="std std-ref">VOID log(STRING s)</span></a>
+
+<a class="reference internal" href="#std-syslog"><span class="std std-ref">VOID syslog(INT priority, STRING s)</span></a>
+
+<a class="reference internal" href="#std-timestamp"><span class="std std-ref">VOID timestamp(STRING s)</span></a>
+
+<a class="reference internal" href="#std-syntax"><span class="std std-ref">BOOL syntax(REAL)</span></a>
+
+<a class="reference internal" href="#std-getenv"><span class="std std-ref">STRING getenv(STRING name)</span></a>
+
+<a class="reference internal" href="#std-cache-req-body"><span class="std std-ref">BOOL cache_req_body(BYTES size)</span></a>
+
+<a class="reference internal" href="#std-late-100-continue"><span class="std std-ref">VOID late_100_continue(BOOL late)</span></a>
+
+<a class="reference internal" href="#std-set-ip-tos"><span class="std std-ref">VOID set_ip_tos(INT tos)</span></a>
+
+<a class="reference internal" href="#std-rollback"><span class="std std-ref">VOID rollback(HTTP h)</span></a>
+
+<a class="reference internal" href="#std-ban"><span class="std std-ref">BOOL ban(STRING)</span></a>
+
+<a class="reference internal" href="#std-ban-error"><span class="std std-ref">STRING ban_error()</span></a>
+
+<a class="reference internal" href="#std-now"><span class="std std-ref">TIME now()</span></a>
+
+<a class="reference internal" href="#std-timed-call"><span class="std std-ref">DURATION timed_call(SUB)</span></a>
+
+<a class="reference internal" href="#std-rfc-ttl"><span class="std std-ref">VOID rfc_ttl()</span></a></pre>
+</section>
+<section id="description">
+<h2>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p><em>vmod_std</em> contains basic functions which are part and parcel of
+Vinyl Cache, but which for reasons of architecture fit better in a VMOD.</p>
+</section>
+<section id="numeric-functions">
+<h2>Numeric functions<a class="headerlink" href="#numeric-functions" title="Link to this heading">¶</a></h2>
+<section id="real-random-real-lo-real-hi">
+<span id="std-random"></span><h3>REAL random(REAL lo, REAL hi)<a class="headerlink" href="#real-random-real-lo-real-hi" title="Link to this heading">¶</a></h3>
+<p>Returns a random real number between <em>lo</em> and <em>hi</em>.</p>
+<p>This function uses the “testable” random generator in <cite>vinyld</cite> which
+enables deterministic tests to be run (See <code class="docutils literal notranslate"><span class="pre">debug.srandom</span></code> CLI
+command).  This function should not be used for cryptographic
+applications.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">random</span><span class="o">-</span><span class="n">number</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="real-round-real-r">
+<span id="std-round"></span><h3>REAL round(REAL r)<a class="headerlink" href="#real-round-real-r" title="Link to this heading">¶</a></h3>
+<p>Rounds the real <em>r</em> to the nearest integer, but round halfway cases
+away from zero (see <cite>round(3)</cite>).</p>
+</section>
+</section>
+<section id="string-functions">
+<h2>String functions<a class="headerlink" href="#string-functions" title="Link to this heading">¶</a></h2>
+<section id="void-collect-header-hdr-string-sep">
+<span id="std-collect"></span><h3>VOID collect(HEADER hdr, STRING sep=”, “)<a class="headerlink" href="#void-collect-header-hdr-string-sep" title="Link to this heading">¶</a></h3>
+<p>Collapses multiple <em>hdr</em> headers into one long header. The default
+separator <em>sep</em> is the standard comma separator to use when collapsing
+headers, with an additional whitespace for pretty printing.</p>
+<p>Care should be taken when collapsing headers. In particular collapsing
+<code class="docutils literal notranslate"><span class="pre">Set-Cookie</span></code> will lead to unexpected results on the browser side.</p>
+<p>Using <em>hdr</em> from <code class="docutils literal notranslate"><span class="pre">obj.http</span></code> triggers a VCL failure.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">accept</span><span class="p">);</span>
+<span class="n">std</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">cookie</span><span class="p">,</span> <span class="s2">&quot;; &quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="string-querysort-string">
+<span id="std-querysort"></span><h3>STRING querysort(STRING)<a class="headerlink" href="#string-querysort-string" title="Link to this heading">¶</a></h3>
+<p>Sorts the query string for cache normalization purposes.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">querysort</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="string-toupper-string-s">
+<span id="std-toupper"></span><h3>STRING toupper(STRING s)<a class="headerlink" href="#string-toupper-string-s" title="Link to this heading">¶</a></h3>
+<p>Converts the string <em>s</em> to uppercase.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">scream</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">toupper</span><span class="p">(</span><span class="s2">&quot;yes!&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="string-tolower-string-s">
+<span id="std-tolower"></span><h3>STRING tolower(STRING s)<a class="headerlink" href="#string-tolower-string-s" title="Link to this heading">¶</a></h3>
+<p>Converts the string <em>s</em> to lowercase.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">nice</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">tolower</span><span class="p">(</span><span class="s2">&quot;VerY&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="string-strstr-string-s1-string-s2">
+<span id="std-strstr"></span><h3>STRING strstr(STRING s1, STRING s2)<a class="headerlink" href="#string-strstr-string-s1-string-s2" title="Link to this heading">¶</a></h3>
+<p>Returns a string beginning at the first occurrence of the string <em>s2</em>
+in the string <em>s1</em>, or an empty string if <em>s2</em> is not found.</p>
+<p>Note that the comparison is case-sensitive.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">strstr</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">restrict</span><span class="p">))</span> <span class="p">{</span>
+        <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will check if the content of <code class="docutils literal notranslate"><span class="pre">req.http.restrict</span></code> occurs
+anywhere in <code class="docutils literal notranslate"><span class="pre">req.url</span></code>.</p>
+</section>
+<section id="bool-fnmatch-string-pattern-string-subject-bool-pathname-bool-noescape-bool-period">
+<span id="std-fnmatch"></span><h3>BOOL fnmatch(STRING pattern, STRING subject, BOOL pathname, BOOL noescape, BOOL period)<a class="headerlink" href="#bool-fnmatch-string-pattern-string-subject-bool-pathname-bool-noescape-bool-period" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BOOL</span> <span class="n">fnmatch</span><span class="p">(</span>
+   <span class="n">STRING</span> <span class="n">pattern</span><span class="p">,</span>
+   <span class="n">STRING</span> <span class="n">subject</span><span class="p">,</span>
+   <span class="n">BOOL</span> <span class="n">pathname</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+   <span class="n">BOOL</span> <span class="n">noescape</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+   <span class="n">BOOL</span> <span class="n">period</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Shell-style pattern matching; returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if <em>subject</em> matches
+<em>pattern</em>, where <em>pattern</em> may contain wildcard characters such as <code class="docutils literal notranslate"><span class="pre">*</span></code>
+or <code class="docutils literal notranslate"><span class="pre">?</span></code>.</p>
+<p>The match is executed by the implementation of <cite>fnmatch(3)</cite> on your
+system. The rules for pattern matching on most systems include the
+following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> matches any sequence of characters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">?</span></code> matches a single character</p></li>
+<li><p>a bracket expression such as <code class="docutils literal notranslate"><span class="pre">[abc]</span></code> or <code class="docutils literal notranslate"><span class="pre">[!0-9]</span></code> is interpreted
+as a character class according to the rules of basic regular
+expressions (<em>not</em> <cite>pcre2(3)</cite> regexen), except that <code class="docutils literal notranslate"><span class="pre">!</span></code> is used for
+character class negation instead of <code class="docutils literal notranslate"><span class="pre">^</span></code>.</p></li>
+</ul>
+<p>If <em>pathname</em> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, then the forward slash character <code class="docutils literal notranslate"><span class="pre">/</span></code> is
+only matched literally, and never matches <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">?</span></code> or a bracket
+expression. Otherwise, <code class="docutils literal notranslate"><span class="pre">/</span></code> may match one of those patterns.  By
+default, <em>pathname</em> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p>If <em>noescape</em> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, then the backslash character <code class="docutils literal notranslate"><span class="pre">\</span></code> is
+matched as an ordinary character. Otherwise, <code class="docutils literal notranslate"><span class="pre">\</span></code> is an escape
+character, and matches the character that follows it in the
+<em>pattern</em>. For example, <code class="docutils literal notranslate"><span class="pre">\\</span></code> matches <code class="docutils literal notranslate"><span class="pre">\</span></code> when <em>noescape</em> is
+<code class="docutils literal notranslate"><span class="pre">true</span></code>, and <code class="docutils literal notranslate"><span class="pre">\\</span></code> when <code class="docutils literal notranslate"><span class="pre">false</span></code>. By default, <em>noescape</em> is
+<code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>If <em>period</em> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, then a leading period character <code class="docutils literal notranslate"><span class="pre">.</span></code> only
+matches literally, and never matches <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">?</span></code> or a bracket
+expression. A period is leading if it is the first character in
+<em>subject</em>; if <em>pathname</em> is also <code class="docutils literal notranslate"><span class="pre">true</span></code>, then a period that
+immediately follows a <code class="docutils literal notranslate"><span class="pre">/</span></code> is also leading (as in <code class="docutils literal notranslate"><span class="pre">/.</span></code>).  By
+default, <em>period</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p><a class="reference internal" href="#std-fnmatch">std.fnmatch()</a> invokes VCL failure and returns <code class="docutils literal notranslate"><span class="pre">false</span></code> if
+either of <em>pattern</em> or <em>subject</em> is <code class="docutils literal notranslate"><span class="pre">NULL</span></code> – for example, if an
+unset header is specified.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Matches URLs such as /foo/bar and /foo/baz</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="s2">&quot;/foo/\*&quot;</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">))</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+<span class="c1"># Matches URLs such as /foo/bar/baz and /foo/baz/quux</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="s2">&quot;/foo/\*/\*&quot;</span><span class="p">,</span> <span class="n">bereq</span><span class="o">.</span><span class="n">url</span><span class="p">))</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+<span class="c1"># Matches /foo/bar/quux, but not /foo/bar/baz/quux</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="s2">&quot;/foo/\*/quux&quot;</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">))</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+<span class="c1"># Matches /foo/bar/quux and /foo/bar/baz/quux</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="s2">&quot;/foo/\*/quux&quot;</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">pathname</span><span class="o">=</span><span class="n">false</span><span class="p">))</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+<span class="c1"># Matches /foo/bar, /foo/car and /foo/far</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="s2">&quot;/foo/?ar&quot;</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">))</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+
+<span class="c1"># Matches /foo/ followed by a non-digit</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="s2">&quot;/foo/[!0-9]&quot;</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">))</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="file-system-functions">
+<h2>File(system) functions<a class="headerlink" href="#file-system-functions" title="Link to this heading">¶</a></h2>
+<section id="string-fileread-string">
+<span id="std-fileread"></span><h3>STRING fileread(STRING)<a class="headerlink" href="#string-fileread-string" title="Link to this heading">¶</a></h3>
+<p>Reads a text file and returns a string with the content.</p>
+<p>The entire file is cached on the first call, and subsequent calls
+will return this cached contents, even if the file has changed in
+the meantime.</p>
+<p>For binary files, use std.blobread() instead.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">synthetic</span><span class="p">(</span><span class="s2">&quot;Response was served by &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">.</span><span class="n">fileread</span><span class="p">(</span><span class="s2">&quot;/etc/hostname&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Consider that the entire contents of the file appear in the string
+that is returned, including newlines that may result in invalid
+headers if <a class="reference internal" href="#std-fileread">std.fileread()</a> is used to form a header. In that
+case, you may need to modify the string, for example with
+<code class="docutils literal notranslate"><span class="pre">regsub()</span></code> (see <a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">served</span><span class="o">-</span><span class="n">by</span> <span class="o">=</span> <span class="n">regsub</span><span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">fileread</span><span class="p">(</span><span class="s2">&quot;/etc/hostname&quot;</span><span class="p">),</span> <span class="s2">&quot;\R$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="blob-blobread-string">
+<span id="std-blobread"></span><h3>BLOB blobread(STRING)<a class="headerlink" href="#blob-blobread-string" title="Link to this heading">¶</a></h3>
+<p>Reads any file and returns a blob with the content.</p>
+<p>The entire file is cached on the first call, and subsequent calls
+will return this cached contents, even if the file has changed in
+the meantime.</p>
+</section>
+<section id="bool-file-exists-string-path">
+<span id="std-file-exists"></span><h3>BOOL file_exists(STRING path)<a class="headerlink" href="#bool-file-exists-string-path" title="Link to this heading">¶</a></h3>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if path or the file pointed to by path exists,
+<code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">file_exists</span><span class="p">(</span><span class="s2">&quot;/etc/return_503&quot;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">synth</span><span class="p">(</span><span class="mi">503</span><span class="p">,</span> <span class="s2">&quot;Vinyl Cache is in maintenance&quot;</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="type-inspection-functions">
+<h2>Type Inspection functions<a class="headerlink" href="#type-inspection-functions" title="Link to this heading">¶</a></h2>
+<section id="bool-healthy-backend-be">
+<span id="std-healthy"></span><h3>BOOL healthy(BACKEND be)<a class="headerlink" href="#bool-healthy-backend-be" title="Link to this heading">¶</a></h3>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the backend <em>be</em> is healthy.</p>
+</section>
+<section id="int-port-ip-ip">
+<span id="std-port"></span><h3>INT port(IP ip)<a class="headerlink" href="#int-port-ip-ip" title="Link to this heading">¶</a></h3>
+<p>Returns the port number of the IP address <em>ip</em>. Always returns <code class="docutils literal notranslate"><span class="pre">0</span></code>
+for a <code class="docutils literal notranslate"><span class="pre">*.ip</span></code> variable when the address is a Unix domain socket.</p>
+</section>
+</section>
+<section id="type-conversion-functions">
+<h2>Type Conversion functions<a class="headerlink" href="#type-conversion-functions" title="Link to this heading">¶</a></h2>
+<p>These functions all have the same form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="nb">type</span><span class="p">([</span><span class="n">arguments</span><span class="p">],</span> <span class="p">[</span><span class="n">fallback</span> <span class="n">TYPE</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Precisely one of the <em>arguments</em> must be provided (besides the
+optional <em>fallback</em>), and it will be converted to <em>TYPE</em>.</p>
+<p>If conversion fails, <em>fallback</em> will be returned and if no
+fallback was specified, the VCL will be failed.</p>
+<section id="duration-duration-string-s-duration-fallback-real-real-int-integer">
+<span id="std-duration"></span><h3>DURATION duration([STRING s], [DURATION fallback], [REAL real], [INT integer])<a class="headerlink" href="#duration-duration-string-s-duration-fallback-real-real-int-integer" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DURATION</span> <span class="n">duration</span><span class="p">(</span>
+   <span class="p">[</span><span class="n">STRING</span> <span class="n">s</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">DURATION</span> <span class="n">fallback</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">REAL</span> <span class="n">real</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">INT</span> <span class="n">integer</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns a DURATION from a STRING, REAL or INT argument.</p>
+<p>For a STRING <em>s</em> argument, <em>s</em> must be quantified by <code class="docutils literal notranslate"><span class="pre">ms</span></code>
+(milliseconds), <code class="docutils literal notranslate"><span class="pre">s</span></code> (seconds), <code class="docutils literal notranslate"><span class="pre">m</span></code> (minutes), <code class="docutils literal notranslate"><span class="pre">h</span></code> (hours),``d``
+(days), <code class="docutils literal notranslate"><span class="pre">w</span></code> (weeks) or <code class="docutils literal notranslate"><span class="pre">y</span></code> (years) units.</p>
+<p><em>real</em> and <em>integer</em> arguments are taken as seconds.</p>
+<p>If the conversion of an <em>s</em> argument fails, <em>fallback</em> will be
+returned if provided, or a VCL failure will be triggered.</p>
+<p>Conversions from <em>real</em> and <em>integer</em> arguments never fail.</p>
+<p>Only one of the <em>s</em>, <em>real</em> or <em>integer</em> arguments may be given or a VCL
+failure will be triggered.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">ttl</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">duration</span><span class="p">(</span><span class="s2">&quot;1w&quot;</span><span class="p">,</span> <span class="mi">3600</span><span class="n">s</span><span class="p">);</span>
+<span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">ttl</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">duration</span><span class="p">(</span><span class="n">real</span><span class="o">=</span><span class="mf">1.5</span><span class="p">);</span>
+<span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">ttl</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">duration</span><span class="p">(</span><span class="n">integer</span><span class="o">=</span><span class="mi">10</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="bytes-bytes-string-s-bytes-fallback-real-real-int-integer">
+<span id="std-bytes"></span><h3>BYTES bytes([STRING s], [BYTES fallback], [REAL real], [INT integer])<a class="headerlink" href="#bytes-bytes-string-s-bytes-fallback-real-real-int-integer" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BYTES</span> <span class="nb">bytes</span><span class="p">(</span>
+   <span class="p">[</span><span class="n">STRING</span> <span class="n">s</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">BYTES</span> <span class="n">fallback</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">REAL</span> <span class="n">real</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">INT</span> <span class="n">integer</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns BYTES from a STRING, REAL or INT argument.</p>
+<p>A STRING <em>s</em> argument can be quantified with a multiplier (<code class="docutils literal notranslate"><span class="pre">k</span></code>
+(kilo), <code class="docutils literal notranslate"><span class="pre">m</span></code> (mega), <code class="docutils literal notranslate"><span class="pre">g</span></code> (giga), <code class="docutils literal notranslate"><span class="pre">t</span></code> (tera) or <code class="docutils literal notranslate"><span class="pre">p</span></code> (peta)).</p>
+<p><em>real</em> and <em>integer</em> arguments are taken as bytes.</p>
+<p>If the conversion of an <em>s</em> argument fails, <em>fallback</em> will be
+returned if provided, or a VCL failure will be triggered.</p>
+<p>Other conversions may fail if the argument cannot be represented,
+because it is negative, too small or too large. Again, <em>fallback</em> will
+be returned if provided, or a VCL failure will be triggered.</p>
+<p><em>real</em> arguments will be rounded down.</p>
+<p>Only one of the <em>s</em>, <em>real</em> or <em>integer</em> arguments may be given or a VCL
+failure will be triggered.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">.</span><span class="n">cache_req_body</span><span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">bytes</span><span class="p">(</span><span class="n">something</span><span class="o">.</span><span class="n">somewhere</span><span class="p">,</span> <span class="mi">10</span><span class="n">K</span><span class="p">));</span>
+<span class="n">std</span><span class="o">.</span><span class="n">cache_req_body</span><span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">bytes</span><span class="p">(</span><span class="n">integer</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
+<span class="n">std</span><span class="o">.</span><span class="n">cache_req_body</span><span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">bytes</span><span class="p">(</span><span class="n">real</span><span class="o">=</span><span class="mf">10.0</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
+</pre></div>
+</div>
+</section>
+<section id="int-integer-string-s-int-fallback-bool-bool-bytes-bytes-duration-duration-real-real-time-time">
+<span id="std-integer"></span><h3>INT integer([STRING s], [INT fallback], [BOOL bool], [BYTES bytes], [DURATION duration], [REAL real], [TIME time])<a class="headerlink" href="#int-integer-string-s-int-fallback-bool-bool-bytes-bytes-duration-duration-real-real-time-time" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INT</span> <span class="n">integer</span><span class="p">(</span>
+   <span class="p">[</span><span class="n">STRING</span> <span class="n">s</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">INT</span> <span class="n">fallback</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">BOOL</span> <span class="nb">bool</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">BYTES</span> <span class="nb">bytes</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">DURATION</span> <span class="n">duration</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">REAL</span> <span class="n">real</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">TIME</span> <span class="n">time</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns an INT from a STRING, BOOL or other quantity.</p>
+<p>If the conversion of an <em>s</em> argument fails, <em>fallback</em> will be
+returned if provided, or a VCL failure will be triggered.</p>
+<p>A <em>bool</em> argument will be returned as 0 for <code class="docutils literal notranslate"><span class="pre">false</span></code> and 1 for
+<code class="docutils literal notranslate"><span class="pre">true</span></code>. This conversion will never fail.</p>
+<p>For a <em>bytes</em> argument, the number of bytes will be returned.  This
+conversion will never fail.</p>
+<p>A <em>duration</em> argument will be rounded down to the number of seconds
+and returned.</p>
+<p>A <em>real</em> argument will be rounded down and returned.</p>
+<p>For a <em>time</em> argument, the number of seconds since the UNIX epoch
+(1970-01-01 00:00:00 UTC) will be returned.</p>
+<p><em>duration</em>, <em>real</em> and <em>time</em> conversions may fail if the argument can
+not be represented because it is too small or too large. If so,
+<em>fallback</em> will be returned if provided, or a VCL failure will be
+triggered.</p>
+<p>Only one of the <em>s</em>, <em>bool</em>, <em>bytes</em>, <em>duration</em>, <em>real</em> or <em>time</em>
+arguments may be given or a VCL failure will be triggered.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">integer</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="nb">set</span> <span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">integer</span><span class="p">(</span><span class="n">real</span><span class="o">=</span><span class="mf">126.42</span><span class="o">/</span><span class="mi">3</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="ip-ip-string-s-ip-fallback-bool-resolve-1-string-p">
+<span id="std-ip"></span><h3>IP ip(STRING s, [IP fallback], BOOL resolve=1, [STRING p])<a class="headerlink" href="#ip-ip-string-s-ip-fallback-bool-resolve-1-string-p" title="Link to this heading">¶</a></h3>
+<p>Converts the string <em>s</em> to the first IP number returned by the system
+library function <cite>getaddrinfo(3)</cite>. If conversion fails, <em>fallback</em> will
+be returned or VCL failure will happen.</p>
+<p>The IP address includes a port number that can be found with <code class="docutils literal notranslate"><span class="pre">std.port()</span></code>
+that defaults to 80. The default port can be set to a different value with
+the <em>p</em> argument. It will be overridden if <em>s</em> contains both an IP address
+and a port number or service name.</p>
+<p>When <em>s</em> contains both, the syntax is either <code class="docutils literal notranslate"><span class="pre">address:port</span></code> or
+<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">port</span></code>. If the address is a numerical IPv6 address it must be
+enclosed between brackets, for example <code class="docutils literal notranslate"><span class="pre">[::1]</span> <span class="pre">80</span></code> or <code class="docutils literal notranslate"><span class="pre">[::1]:http</span></code>.
+The <em>fallback</em> may also contain both an address and a port, but its default
+port is always 80.</p>
+<p>If <em>resolve</em> is false, <cite>getaddrinfo(3)</cite> is called using <code class="docutils literal notranslate"><span class="pre">AI_NUMERICHOST</span></code>
+and <code class="docutils literal notranslate"><span class="pre">AI_NUMERICSERV</span></code> to avoid network lookups depending on the system’s
+<cite>getaddrinfo(3)</cite> or nsswitch configuration. This makes “numerical” IP
+strings and services cheaper to convert.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">X</span><span class="o">-</span><span class="n">forwarded</span><span class="o">-</span><span class="k">for</span><span class="p">,</span> <span class="s2">&quot;0.0.0.0&quot;</span><span class="p">)</span> <span class="o">~</span> <span class="n">my_acl</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="real-real-string-s-real-fallback-int-integer-bool-bool-bytes-bytes-duration-duration-time-time">
+<span id="std-real"></span><h3>REAL real([STRING s], [REAL fallback], [INT integer], [BOOL bool], [BYTES bytes], [DURATION duration], [TIME time])<a class="headerlink" href="#real-real-string-s-real-fallback-int-integer-bool-bool-bytes-bytes-duration-duration-time-time" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REAL</span> <span class="n">real</span><span class="p">(</span>
+   <span class="p">[</span><span class="n">STRING</span> <span class="n">s</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">REAL</span> <span class="n">fallback</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">INT</span> <span class="n">integer</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">BOOL</span> <span class="nb">bool</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">BYTES</span> <span class="nb">bytes</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">DURATION</span> <span class="n">duration</span><span class="p">],</span>
+   <span class="p">[</span><span class="n">TIME</span> <span class="n">time</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns a REAL from a STRING, BOOL or other quantity.</p>
+<p>If the conversion of an <em>s</em> argument fails, <em>fallback</em> will be
+returned if provided, or a VCL failure will be triggered.</p>
+<p>A <em>bool</em> argument will be returned as 0.0 for <code class="docutils literal notranslate"><span class="pre">false</span></code> and 1.0 for
+<code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p>For a <em>bytes</em> argument, the number of bytes will be returned.</p>
+<p>For a <em>duration</em> argument, the number of seconds will be returned.</p>
+<p>An <em>integer</em> argument will be returned as a REAL.</p>
+<p>For a <em>time</em> argument, the number of seconds since the UNIX epoch
+(1970-01-01 00:00:00 UTC) will be returned.</p>
+<p>None of these conversions other than <em>s</em> will fail.</p>
+<p>Only one of the <em>s</em>, <em>integer</em>, <em>bool</em>, <em>bytes</em>, <em>duration</em> or <em>time</em>
+arguments may be given or a VCL failure will be triggered.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">5.5</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="time-time-string-s-time-fallback-real-real-int-integer">
+<span id="std-time"></span><h3>TIME time([STRING s], [TIME fallback], [REAL real], [INT integer])<a class="headerlink" href="#time-time-string-s-time-fallback-real-real-int-integer" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TIME</span> <span class="n">time</span><span class="p">([</span><span class="n">STRING</span> <span class="n">s</span><span class="p">],</span> <span class="p">[</span><span class="n">TIME</span> <span class="n">fallback</span><span class="p">],</span> <span class="p">[</span><span class="n">REAL</span> <span class="n">real</span><span class="p">],</span> <span class="p">[</span><span class="n">INT</span> <span class="n">integer</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Returns a TIME from a STRING, REAL or INT argument.</p>
+<p>For a STRING <em>s</em> argument, the following formats are supported:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Sun, 06 Nov 1994 08:49:37 GMT&quot;</span>
+<span class="s2">&quot;Sunday, 06-Nov-94 08:49:37 GMT&quot;</span>
+<span class="s2">&quot;Sun Nov  6 08:49:37 1994&quot;</span>
+<span class="s2">&quot;1994-11-06T08:49:37&quot;</span>
+<span class="s2">&quot;784111777.00&quot;</span>
+<span class="s2">&quot;784111777&quot;</span>
+</pre></div>
+</div>
+<p><em>real</em> and <em>integer</em> arguments are taken as seconds since the epoch.</p>
+<p>If the conversion of an <em>s</em> argument fails or a negative <em>real</em> or
+<em>integer</em> argument is given, <em>fallback</em> will be returned if provided,
+or a VCL failure will be triggered.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">last</span><span class="o">-</span><span class="n">modified</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">now</span> <span class="o">-</span> <span class="mi">1</span><span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="nb">int</span><span class="o">=</span><span class="mi">2147483647</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">now</span> <span class="o">-</span> <span class="mi">1</span><span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="string-strftime-time-time-string-format">
+<span id="std-strftime"></span><h3>STRING strftime(TIME time, STRING format)<a class="headerlink" href="#string-strftime-time-time-string-format" title="Link to this heading">¶</a></h3>
+<p>Format the <em>time</em> argument with the <em>format</em> argument using
+<cite>strftime(3)</cite> and return the result for the UTC (historically GMT)
+timezone.</p>
+<p>The empty string is returned if formatting fails, but may also be
+returned as a valid result.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">iso</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">T%H%M%SZ&quot;</span><span class="p">);</span>
+<span class="c1"># e.g. 20210521T175241Z</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="logging-functions">
+<h2>LOGGING functions<a class="headerlink" href="#logging-functions" title="Link to this heading">¶</a></h2>
+<section id="void-log-string-s">
+<span id="std-log"></span><h3>VOID log(STRING s)<a class="headerlink" href="#void-log-string-s" title="Link to this heading">¶</a></h3>
+<p>Logs the string <em>s</em> to the shared memory log, using <a class="reference internal" href="vsl.html#vsl-7"><span class="std std-ref">VSL</span></a> tag
+<code class="docutils literal notranslate"><span class="pre">SLT_VCL_Log</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;Something fishy is going on with the vhost &quot;</span> <span class="o">+</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">host</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="void-syslog-int-priority-string-s">
+<span id="std-syslog"></span><h3>VOID syslog(INT priority, STRING s)<a class="headerlink" href="#void-syslog-int-priority-string-s" title="Link to this heading">¶</a></h3>
+<p>Logs the string <em>s</em> to syslog tagged with <em>priority</em>. <em>priority</em> is
+formed by ORing the facility and level values. See your system’s
+<code class="docutils literal notranslate"><span class="pre">syslog.h</span></code> file for possible values.</p>
+<p>Notice: Unlike VCL and other functions in the std vmod, this function
+will not fail VCL processing for workspace overflows: For an out of
+workspace condition, the <a class="reference internal" href="#std-syslog">std.syslog()</a> function has no effect.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="s2">&quot;Something is wrong&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This will send a message to syslog using <code class="docutils literal notranslate"><span class="pre">LOG_USER</span> <span class="pre">|</span> <span class="pre">LOG_ALERT</span></code>.</p>
+</section>
+<section id="void-timestamp-string-s">
+<span id="std-timestamp"></span><h3>VOID timestamp(STRING s)<a class="headerlink" href="#void-timestamp-string-s" title="Link to this heading">¶</a></h3>
+<p>Introduces a timestamp in the log with the current time, using the
+string <em>s</em> as the label. This is useful to time the execution of lengthy
+VCL subroutines, and makes the timestamps inserted automatically by
+Vinyl Cache more accurate.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="s2">&quot;curl-request&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="control-and-information-functions">
+<h2>CONTROL and INFORMATION functions<a class="headerlink" href="#control-and-information-functions" title="Link to this heading">¶</a></h2>
+<section id="bool-syntax-real">
+<span id="std-syntax"></span><h3>BOOL syntax(REAL)<a class="headerlink" href="#bool-syntax-real" title="Link to this heading">¶</a></h3>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if VCL version is at least <em>REAL</em>.</p>
+</section>
+<section id="string-getenv-string-name">
+<span id="std-getenv"></span><h3>STRING getenv(STRING name)<a class="headerlink" href="#string-getenv-string-name" title="Link to this heading">¶</a></h3>
+<p>Return environment variable <em>name</em> or the empty string. See <cite>getenv(3)</cite>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">My</span><span class="o">-</span><span class="n">Env</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MY_ENV&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="bool-cache-req-body-bytes-size">
+<span id="std-cache-req-body"></span><h3>BOOL cache_req_body(BYTES size)<a class="headerlink" href="#bool-cache-req-body-bytes-size" title="Link to this heading">¶</a></h3>
+<p>Caches the request body if it is smaller than <em>size</em>.  Returns
+<code class="docutils literal notranslate"><span class="pre">true</span></code> if the body was cached, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+<p>Normally the request body can only be sent once. Caching it enables
+retrying backend requests with a request body, as usually the case
+with <code class="docutils literal notranslate"><span class="pre">POST</span></code> and <code class="docutils literal notranslate"><span class="pre">PUT</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">.</span><span class="n">cache_req_body</span><span class="p">(</span><span class="mi">1</span><span class="n">KB</span><span class="p">))</span> <span class="p">{</span>
+        <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">vcl_recv</span></code>.</p>
+</section>
+<section id="void-late-100-continue-bool-late">
+<span id="std-late-100-continue"></span><h3>VOID late_100_continue(BOOL late)<a class="headerlink" href="#void-late-100-continue-bool-late" title="Link to this heading">¶</a></h3>
+<p>Controls when <cite>vinyld</cite> reacts to an <code class="docutils literal notranslate"><span class="pre">Expect:</span> <span class="pre">100-continue</span></code> client
+request header.</p>
+<p>Vinyl Cache always generates a <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">Continue</span></code> response if requested by
+the client trough the <code class="docutils literal notranslate"><span class="pre">Expect:</span> <span class="pre">100-continue</span></code> header when waiting for
+request body data.</p>
+<p>But, by default, the <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">Continue</span></code> response is already generated
+immediately after <code class="docutils literal notranslate"><span class="pre">vcl_recv</span></code> returns to reduce latencies under the
+assumption that the request body will be read eventually.</p>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">std.late_100_continue(true)</span></code> in <code class="docutils literal notranslate"><span class="pre">vcl_recv</span></code> will cause the
+<code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">Continue</span></code> response to only be sent when needed. This may cause
+additional latencies for processing request bodies, but is the correct
+behavior by strict interpretation of RFC7231.</p>
+<p>This function has no effect outside <code class="docutils literal notranslate"><span class="pre">vcl_recv</span></code> and after calling
+<code class="docutils literal notranslate"><span class="pre">std.cache_req_body()</span></code> or any other function consuming the request
+body.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcl_recv</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">.</span><span class="n">late_100_continue</span><span class="p">(</span><span class="n">true</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">std</span><span class="o">.</span><span class="n">late_100_continue</span><span class="p">(</span><span class="n">false</span><span class="p">);</span>
+                <span class="k">return</span> <span class="p">(</span><span class="k">pass</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="o">...</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">vcl_recv</span></code>.</p>
+</section>
+<section id="void-set-ip-tos-int-tos">
+<span id="std-set-ip-tos"></span><h3>VOID set_ip_tos(INT tos)<a class="headerlink" href="#void-set-ip-tos-int-tos" title="Link to this heading">¶</a></h3>
+<p>Sets the Differentiated Services Codepoint (DSCP) / IPv4 Type of
+Service (TOS) / IPv6 Traffic Class (TCLASS) byte for the current
+session to <em>tos</em>. Silently ignored if the listen address is a Unix
+domain socket.</p>
+<p>Please note that setting the traffic class affects all requests on the
+same http1.1 / http2 TCP connection and, in particular, is not removed
+at the end of the request.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="o">~</span> <span class="s2">&quot;^/slow/&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">.</span><span class="n">set_ip_tos</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">client</span></code>.</p>
+</section>
+<section id="void-rollback-http-h">
+<span id="std-rollback"></span><h3>VOID rollback(HTTP h)<a class="headerlink" href="#void-rollback-http-h" title="Link to this heading">¶</a></h3>
+<p>Restores the <em>h</em> HTTP headers to their original state.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">.</span><span class="n">rollback</span><span class="p">(</span><span class="n">bereq</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">backend</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_recv</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_pass</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_hash</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_purge</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_miss</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_hit</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_deliver</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_synth</span></code>.</p>
+</section>
+<section id="bool-ban-string">
+<span id="std-ban"></span><h3>BOOL ban(STRING)<a class="headerlink" href="#bool-ban-string" title="Link to this heading">¶</a></h3>
+<p>Invalidates all objects in cache that match the given expression with
+the ban mechanism. Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the ban succeeded and <code class="docutils literal notranslate"><span class="pre">false</span></code>
+otherwise. Error details are available via <a class="reference internal" href="#std-ban-error">std.ban_error()</a>.</p>
+<p>The format of <em>STRING</em> is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">field</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">operator</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">arg</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&amp;&amp;</span> <span class="o">&lt;</span><span class="n">field</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">oper</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">arg</span><span class="o">&gt;</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul>
+<li><p><em>&lt;field&gt;</em>:</p>
+<ul>
+<li><p>string fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">req.url</span></code>: The request url</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">req.http.*</span></code>: Any request header</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.status</span></code>: The cache object status</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.http.*</span></code>: Any cache object header</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">obj.status</span></code> is treated as a string despite the fact that it
+is actually an integer.</p>
+</li>
+<li><p>duration fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.ttl</span></code>: Remaining ttl</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.age</span></code>: Object age</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.grace</span></code>: The grace time of the object</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.keep</span></code>: The keep time of the object</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj.last_hit</span></code>: Time since the last hit</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">obj.ttl</span></code>, <code class="docutils literal notranslate"><span class="pre">obj.age</span></code> and <code class="docutils literal notranslate"><span class="pre">obj.last_hit</span></code> are relative to the submission
+time of the ban, such that they represent a fixed point in time despite
+being specified as a duration.</p>
+</li>
+</ul>
+</li>
+<li><p><em>&lt;operator&gt;</em>:</p>
+<ul>
+<li><p>for all fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">==</span></code>: <em>&lt;field&gt;</em> and <em>&lt;arg&gt;</em> are equal</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!=</span></code>: <em>&lt;field&gt;</em> and <em>&lt;arg&gt;</em> are unequal</p></li>
+</ul>
+<p>strings are compared case-sensitively</p>
+</li>
+<li><p>for string fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">~</span></code>: <em>&lt;field&gt;</em> matches the regular expression <em>&lt;arg&gt;</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!~</span></code>:<em>&lt;field&gt;</em> does not match the regular expression <em>&lt;arg&gt;</em></p></li>
+</ul>
+</li>
+<li><p>for duration fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code>: <em>&lt;field&gt;</em> is greater than <em>&lt;arg&gt;</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>: <em>&lt;field&gt;</em> is greater than or equal to <em>&lt;arg&gt;</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code>: <em>&lt;field&gt;</em> is less than <em>&lt;arg&gt;</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>: <em>&lt;field&gt;</em> is less than or equal to <em>&lt;arg&gt;</em></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><em>&lt;arg&gt;</em>:</p>
+<ul>
+<li><p>for string fields:</p>
+<p>Either a literal string or a regular expression. Note that
+<em>&lt;arg&gt;</em> does not use any of the string delimiters like <code class="docutils literal notranslate"><span class="pre">&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">{&quot;</span></code><em>…</em><code class="docutils literal notranslate"><span class="pre">&quot;}</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;&quot;&quot;</span></code><em>…</em><code class="docutils literal notranslate"><span class="pre">&quot;&quot;&quot;</span></code> used elsewhere
+in Vinyl Cache. To match against strings containing whitespace,
+regular expressions containing <code class="docutils literal notranslate"><span class="pre">\s</span></code> can be used.</p>
+</li>
+<li><p>for duration fields:</p>
+<p>A VCL duration like <code class="docutils literal notranslate"><span class="pre">10s</span></code>, <code class="docutils literal notranslate"><span class="pre">5m</span></code> or <code class="docutils literal notranslate"><span class="pre">1h</span></code>, see <a class="reference internal" href="vcl.html#vcl-7-durations"><span class="std std-ref">Durations</span></a></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Expressions can be chained using the <em>and</em> operator <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code>. For <em>or</em>
+semantics, use several bans.</p>
+<p>The unset <em>&lt;field&gt;</em> is not equal to any string, such that, for a
+non-existing header, the operators <code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">~</span></code> always evaluate as
+false, while the operators <code class="docutils literal notranslate"><span class="pre">!=</span></code> and <code class="docutils literal notranslate"><span class="pre">!~</span></code> always evaluate as true,
+respectively, for any value of <em>&lt;arg&gt;</em>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">obj.last_hit</span></code> can be used almost as a “last accessed” time, so, for example,
+<code class="docutils literal notranslate"><span class="pre">ban</span> <span class="pre">obj.last_hit</span> <span class="pre">&gt;</span> <span class="pre">1d</span></code> removes all objects which were last accessed more than
+one day ago. Also, it can be used to remove objects stuck at request bans by
+issuing <code class="docutils literal notranslate"><span class="pre">ban</span> <span class="pre">obj.last_hit</span> <span class="pre">&gt;</span> <span class="pre">X</span></code>, with X being slightly less than the time since
+the request ban.</p>
+<p><code class="docutils literal notranslate"><span class="pre">obj.last_hit</span></code> is based on an internal last LRU time, which might not be
+implemented by all storage engines. Where it is not available, ban expressions
+using <code class="docutils literal notranslate"><span class="pre">obj.last_hit</span></code> evaluate to <code class="docutils literal notranslate"><span class="pre">false</span></code>, which means that the respective
+ban behaves as if it was not present. Where implemented, the last LRU time might
+only get updated by the <code class="docutils literal notranslate"><span class="pre">lru_interval</span></code> parameter, which therefore is the
+maximum precision of <code class="docutils literal notranslate"><span class="pre">obj.last_hit</span></code> bans.</p>
+</section>
+<section id="string-ban-error">
+<span id="std-ban-error"></span><h3>STRING ban_error()<a class="headerlink" href="#string-ban-error" title="Link to this heading">¶</a></h3>
+<p>Returns a textual error description of the last <a class="reference internal" href="#std-ban">std.ban()</a> call from
+the same task or the empty string if there either was no error or no
+<a class="reference internal" href="#std-ban">std.ban()</a> call.</p>
+</section>
+<section id="time-now">
+<span id="std-now"></span><h3>TIME now()<a class="headerlink" href="#time-now" title="Link to this heading">¶</a></h3>
+<p>Returns the current time. In contrast to the <code class="docutils literal notranslate"><span class="pre">now</span></code> built-in
+variable, every call returns a new value.</p>
+</section>
+<section id="duration-timed-call-sub">
+<span id="std-timed-call"></span><h3>DURATION timed_call(SUB)<a class="headerlink" href="#duration-timed-call-sub" title="Link to this heading">¶</a></h3>
+<p>Call the given SUB and return a high precision measurement of the
+execution time.</p>
+</section>
+<section id="void-rfc-ttl">
+<span id="std-rfc-ttl"></span><h3>VOID rfc_ttl()<a class="headerlink" href="#void-rfc-ttl" title="Link to this heading">¶</a></h3>
+<p>Restricted to: <code class="docutils literal notranslate"><span class="pre">vcl_backend_response</span></code>, <code class="docutils literal notranslate"><span class="pre">vcl_backend_refresh</span></code>.</p>
+<p>Re-calculate the object timers (<code class="docutils literal notranslate"><span class="pre">beresp.ttl</span></code>, <code class="docutils literal notranslate"><span class="pre">beresp.grace</span></code> and
+<code class="docutils literal notranslate"><span class="pre">beresp.keep</span></code>) based on the current state of <code class="docutils literal notranslate"><span class="pre">beresp</span></code> as if it had been
+processed by core code before <code class="docutils literal notranslate"><span class="pre">vcl_backend_response</span></code> was called. This does not
+change <code class="docutils literal notranslate"><span class="pre">beresp.uncacheable</span></code>.</p>
+<p>This is useful to get the default ttl calculations after modifications of
+relevant properties like <code class="docutils literal notranslate"><span class="pre">beresp.status</span></code>, <code class="docutils literal notranslate"><span class="pre">beresp.http.Date</span></code>,
+<code class="docutils literal notranslate"><span class="pre">beresp.http.Age</span></code> or <code class="docutils literal notranslate"><span class="pre">beresp.http.Cache-Control</span></code>.</p>
+</section>
+</section>
+<section id="see-also">
+<h2>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p></li>
+<li><p><a class="reference internal" href="vsl.html#vsl-7"><span class="std std-ref">VSL</span></a></p></li>
+<li><p><cite>fnmatch(3)</cite></p></li>
+<li><p><cite>strftime(3)</cite></p></li>
+</ul>
+</section>
+<section id="copyright">
+<h2>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Copyright (c) 2010-2017 Varnish Software AS
+All rights reserved.
+
+Author: Poul-Henning Kamp &lt;phk@FreeBSD.org&gt;
+
+SPDX-License-Identifier: BSD-2-Clause
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS&#39;&#39; AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vmod_unix.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VMOD unix - Utilities for Unix domain sockets</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vmod_purge.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">VMOD purge - Vinyl Cache Purge Module</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

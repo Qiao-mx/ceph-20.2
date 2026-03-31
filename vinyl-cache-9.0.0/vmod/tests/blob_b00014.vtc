@@ -1,0 +1,69 @@
+vtest "VMOD blob blob object interface coverage"
+
+vinyl v1 -vcl {
+	backend proforma none;
+} -start
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob err, illegal encoding beginning with "g"} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new err = blob.blob(HEX, "g");
+	}
+}
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob bad64, illegal encoding beginning with "-_-_"} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new bad64 = blob.blob(BASE64, "-_-_");
+	}
+}
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob badurl, illegal encoding beginning with "+/+/"} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new badurl = blob.blob(BASE64URL, "+/+/");
+	}
+}
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob badpad, illegal encoding beginning with "YWI="} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new badpad = blob.blob(BASE64URLNOPAD, "YWI=");
+	}
+}
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob badurl, illegal encoding beginning with "%"} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new badurl = blob.blob(URL, "%");
+	}
+}
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob badurl, illegal encoding beginning with "%2"} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new badurl = blob.blob(URL, "%2");
+	}
+}
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob badurl, illegal encoding beginning with "%q"} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new badurl = blob.blob(URL, "%q");
+	}
+}
+
+vinyl v1 -errvcl {vmod blob error: cannot create blob badurl, illegal encoding beginning with "%2q"} {
+	import blob;
+	backend b None;
+	sub vcl_init {
+	  new badurl = blob.blob(URL, "%2q");
+	}
+}

@@ -1,0 +1,19 @@
+vtest "Test/coverage of vinyl master signal handling"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend { } -start
+
+client c1 {
+	txreq
+	rxresp
+} -run
+
+server s1 -wait
+
+shell "kill -15 ${v1_pid}"
+
+vinyl v1 -cleanup

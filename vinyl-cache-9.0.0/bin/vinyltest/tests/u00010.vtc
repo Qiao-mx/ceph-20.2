@@ -1,0 +1,41 @@
+vtest	"trivial run of vinyltop in curses mode"
+
+server s1 {
+	rxreq
+	txresp -hdr "Connection: close"
+} -start
+
+vinyl v1 -vcl+backend {} -start
+
+process p1 -dump {vinyltop -n ${v1_name}} -start
+process p2 -dump {vinyltop -n ${v1_name}} -start
+process p3 -dump {vinyltop -n ${v1_name}} -start
+
+process p1 -expect-text 1 1 {list length}
+
+delay 1
+
+client c1 {
+	txreq
+	rxresp
+} -run
+
+vinyl v1 -vsl_catchup
+
+process p1 -expect-text 1 1 {list length 7}
+
+process p1 -writehex 0c
+
+process p1 -need-bytes +1
+
+process p1 -writehex 0b
+
+process p1 -need-bytes +1
+
+process p1 -winsz 30 80
+
+process p1 -need-bytes +1
+
+process p1 -screen_dump -write {q} -wait
+process p2 -screen_dump -kill TERM -wait
+process p3 -screen_dump -kill HUP -wait

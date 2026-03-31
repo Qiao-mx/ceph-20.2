@@ -1,0 +1,38 @@
+vtest "bgfetch_no_thread"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -cliok "param.set thread_pools 1"
+vinyl v1 -cliok "param.set thread_pool_min 5"
+vinyl v1 -cliok "param.set thread_pool_max 5"
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.ttl = 1ms;
+		set beresp.grace = 1h;
+	}
+} -start
+
+logexpect l1 -v v1 {
+	expect * * FetchError "No thread available for bgfetch"
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+
+	delay 0.1
+
+	# At this point the thread reserve is too low to
+	# allow a low-priority task like a bgfetch.
+	txreq
+	rxresp
+	expect resp.status == 200
+} -start
+
+logexpect l1 -wait
+
+vinyl v1 -expect MAIN.bgfetch_no_thread == 1

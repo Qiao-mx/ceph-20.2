@@ -1,0 +1,20 @@
+..
+	Copyright (c) 2021 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+#
+.. vinyl_vsc_begin::	debug
+	:oneliner:	Example Counters
+	:order:		70
+
+	Test counters from vmod_debug
+
+.. vinyl_vsc:: count
+	:type:		counter
+	:level:		debug
+	:oneliner:	arbitrary counter
+
+	Just counting something
+
+.. vinyl_vsc_end::	debug

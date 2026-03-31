@@ -1,0 +1,78 @@
+vtest "Can't schedule stream"
+
+barrier b1 sock 3
+barrier b2 sock 3
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+# We need to confirm that a refused stream doesn't harm other streams, so we
+# want a round trip to the backend to ensure that. This requires 3 threads to
+# be busy simultaneously before a stream can be refused:
+#
+# - one for c1's session
+# - one for stream 1
+# - one for the backend request
+#
+# thread priorities ensure that there is exactly one thread per class
+# at this point, so when we try to get a second stream, we fail.
+
+vinyl v1 -cliok "param.set thread_pools 1"
+vinyl v1 -cliok "param.set thread_pool_min 6"
+vinyl v1 -cliok "param.set thread_pool_max 6"
+vinyl v1 -cliok "param.set thread_queue_limit 0"
+vinyl v1 -cliok "param.set thread_stats_rate 1"
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+vinyl v1 -vcl+backend {
+	import vtc;
+
+	sub vcl_recv {
+		if (req.http.should == "reset") {
+			vtc.panic("Expected stream reset REFUSED_STREAM");
+		}
+	}
+
+	sub vcl_backend_fetch {
+		vtc.barrier_sync("${b1_sock}");
+		vtc.barrier_sync("${b2_sock}");
+	}
+} -start
+
+client c1 {
+	txpri
+	stream 0 rxsettings -run
+
+	stream 1 {
+		txreq -hdr should sync
+		barrier b1 sync
+		barrier b2 sync
+		rxresp
+		expect resp.status == 200
+	} -start
+
+	barrier b1 sync
+
+	stream 3 {
+		txreq -hdr should reset
+		rxrst
+		expect rst.err == REFUSED_STREAM
+	} -run
+
+	barrier b2 sync
+} -run
+
+# trigger an update of the stats
+vinyl v1 -cliok "param.set thread_pool_max 7"
+vinyl v1 -cliok "param.set thread_pool_min 7"
+delay 1
+vinyl v1 -cliok "param.set thread_pool_min 6"
+delay 1
+vinyl v1 -vsl_catchup
+vinyl v1 -expect sess_dropped == 0
+vinyl v1 -expect req_dropped == 1
+vinyl v1 -expect MEMPOOL.req0.live == 0
+vinyl v1 -expect MEMPOOL.sess0.live == 0

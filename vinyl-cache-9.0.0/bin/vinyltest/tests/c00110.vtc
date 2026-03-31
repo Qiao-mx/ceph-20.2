@@ -1,0 +1,22 @@
+vtest "Transit buffering with early close"
+
+feature cmd {test $(uname) != SunOS}
+
+server s1 {
+	non_fatal
+	rxreq
+	txresp -bodylen 2000000
+} -start
+
+vinyl v1 -cliok "param.set transit_buffer 1k"
+vinyl v1 -vcl+backend { } -start
+
+client c1 -rcvbuf 128 {
+	txreq -method POST
+	rxresphdrs
+	expect resp.status == 200
+	recv 100
+} -run
+
+vinyl v1 -expect VBE.vcl1.s1.conn == 0
+vinyl v1 -expect VBE.vcl1.s1.busy == 0

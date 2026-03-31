@@ -1,0 +1,47 @@
+vtest "std.ip(), .port() and .set_ip_tos() don't work for UDS addresses"
+
+vinyl v1 -arg "-a ${tmpdir}/v1.sock -b '${bad_backend}'" -start
+
+vinyl v2 -arg "-a ${tmpdir}/v2.sock" -vcl {
+	import std;
+	backend default None;
+
+	sub vcl_recv {
+		return(synth(200));
+	}
+
+	sub vcl_synth {
+		set resp.http.v1_addr = std.ip("${v1_sock}", client.ip);
+	}
+} -start
+
+client c1 -connect "${v2_sock}" {
+	txreq
+	rxresp
+	expect resp.http.v1_addr == "0.0.0.0"
+} -run
+
+vinyl v2 -errvcl {Cannot convert to an IP address: '"${v1_sock}"'} {
+	import std;
+
+	sub vcl_recv {
+		set resp.http.v1_port = std.port("${v1_sock}");
+	}
+}
+
+vinyl v2 -vcl {
+	import std;
+	backend default None;
+
+	sub vcl_recv {
+	    # Silently ignored for a UDS
+	    std.set_ip_tos(0);
+	    return(synth(200));
+	}
+}
+
+client c1 -connect "${v2_sock}" {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run

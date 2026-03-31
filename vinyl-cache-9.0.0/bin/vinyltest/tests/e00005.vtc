@@ -1,0 +1,37 @@
+vtest "ESI relative include"
+
+
+server s1 {
+	rxreq
+	expect req.url == "/foo/bar"
+	txresp -body {
+		<html>
+		Before include
+		<!--esi <esi:include src="body"/> -->
+		After include
+	}
+	rxreq
+	expect req.url == "/foo/body"
+	txresp -body {
+		Included file
+	}
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		if (bereq.url != "/foo/body") {
+			set beresp.do_esi = true;
+		}
+	}
+} -start
+
+client c1 {
+	txreq -url /foo/bar
+	rxresp
+	expect resp.status == 200
+	expect resp.bodylen == 67
+}
+
+client c1 -run
+vinyl v1 -expect esi_errors == 0
+vinyl v1 -expect MAIN.s_resp_bodybytes == 67

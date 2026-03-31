@@ -1,0 +1,510 @@
+#
+# Copyright (c) 2010-2019 Varnish Software AS
+# All rights reserved.
+#
+# Author: Poul-Henning Kamp <phk@FreeBSD.org>
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+#
+# NB: We use this vmod to test "$ABI vrt" handling.
+
+$ABI vrt
+$Prefix xyzzy
+$Module debug 3 "Development, test and debug"
+$Synopsis auto
+DESCRIPTION
+===========
+
+This vmod is used to develop, test and debug the various aspects
+of VMOD handling in Vinyl Cache.
+
+
+$Event event_function
+
+You are not supposed to be able to see this text in the .RST
+
+$Function STRING author(ENUM { phk, des, kristian, mithrandir } person="phk",
+			ENUM { phk, slink, geoff } someone='phk')
+
+Test function for ENUM arguments
+
+$Function VOID test_priv_call(PRIV_CALL)
+
+Test function for call private pointers
+
+$Function VOID test_priv_vcl(PRIV_VCL)
+
+Test function for VCL private pointers
+
+$Function VOID test_priv_task_get()
+
+Assert that the priv_task for the NULL pointer is NULL.
+
+$Function STRING test_priv_task(PRIV_TASK, STRING s="")
+
+Test function for TASK private pointers
+
+$Function STRING test_priv_top(PRIV_TOP, STRING)
+
+Test function for TOP private pointers
+
+$Function VOID test_default_bool(BOOL test=true)
+
+Test function for default bool parameters
+
+$Object obj(STRING string="default", ENUM { one, two, three } number=one)
+
+Test object
+
+Fail for string="fail".
+
+.. NOTE: .enum before .foo as part of test r01332.vtc
+$Method VOID .enum(ENUM { phk, des, kristian, mithrandir, martin })
+
+Testing that enums work as part of object and that the parser isn't
+(too) buggy.
+
+$Method VOID .obj()
+
+Covering the fact that a method can be named like the constructor.
+
+$Method STRING .string()
+
+getter for string
+
+$Method STRING .number()
+
+getter for number
+
+$Method STRING .foo(STRING why)
+
+Foo indeed.
+
+$Method TIME .date()
+
+You never know when you need a date.
+
+$Method VOID .test_priv_call(PRIV_CALL)
+
+Test method for call private pointers
+
+Objects share the ``PRIV_*`` state with other objects and methods from
+the same vmod - IOW the ``PRIV_*`` state is per vmod, not per object.
+
+$Method VOID .test_priv_vcl(PRIV_VCL)
+
+Test method for VCL private pointers
+
+Objects share the ``PRIV_*`` state with other objects and methods from
+the same vmod - IOW the ``PRIV_*`` state is per vmod, not per object.
+
+$Method STRING .test_priv_task(STRING s="")
+
+Test per-object priv_task via VRT_priv_task() / VRT_priv_get()
+
+$Method STRING .test_priv_top(STRING s="")
+
+Test per-object priv_top via VRT_priv_top()
+
+$Restrict client
+
+$Function VOID rot104()
+
+Try to register the rot52 filter again. This should always fail
+the vcl.
+
+$Function VOID rot52(HTTP hdr)
+
+Encrypt the HTTP header with quad-ROT13 encryption,
+(this is approx 33% better than triple-DES).
+
+$Function STRING argtest(
+	  STRING one, REAL two =2, STRING three= "3",
+	  STRING comma=",", INT four = 4,
+	  [ ACL acl],
+	  [ BACKEND backend],
+	  [ BLOB blob],
+	  [ BODY body],
+	  [ BOOL bool:boolean],
+	  [ BYTES bytes],
+	  [ DURATION duration],
+	  [ ENUM enum:enumeration],
+	  [ HEADER header],
+	  [ HTTP http],
+	  [ INT int:integer],
+	  [ IP ip],
+	  [ PROBE probe],
+	  [ REAL real],
+	  [ REGEX regex],
+	  [ STEVEDORE stevedore],
+	  [ STRANDS strands],
+	  [ STRING string],
+	  [ SUB sub],
+	  [ TIME time])
+
+$Function INT vre_limit()
+
+$Function VOID register_obj_events(PRIV_VCL)
+
+Register the vmod to receive expiry callbacks
+
+$Function VOID fail()
+
+Function to fail vcl code.  (See also: RFC748)
+
+$Function BOOL fail2()
+
+Function to fail vcl code. Always returns true.
+
+$Object dyn(STRING addr, STRING port, PROBE probe=0, BACKEND via=0)
+
+Dynamically create a single-backend director, addr and port must not be empty.
+
+$Method BACKEND .backend()
+
+Return the dynamic backend.
+
+$Method VOID .refresh(STRING addr, STRING port, PROBE probe=0, BACKEND via=0)
+
+Dynamically refresh & (always!) replace the backend by a new one.
+
+$Object dyn_uds(STRING path)
+
+Dynamically create a single-backend director listening at a Unix
+domain socket, path must not be empty.
+
+$Method BACKEND .backend()
+
+Return the dynamic UDS backend.
+
+$Method VOID .refresh(STRING path)
+
+Dynamically refresh & (always!) replace the backend by a new UDS backend.
+
+$Function VOID vcl_discard_delay(PRIV_VCL, DURATION)
+
+Hold a reference to the VCL when it goes cold preventing
+discard for the given delay.
+
+$Function ACL null_acl()
+
+Return no acl.
+
+$Function ACL acl(ACL acl)
+
+Return the argument.
+
+$Function BOOL match_acl(ACL acl, IP ip)
+
+Perform an IP match against a named ACL.
+
+$Function BLOB sweep_acl(ACL acl, IP ip0, IP ip1, INT step = 1)
+
+Sweep `acl` through IP#s `ip0` ... `ip1` and return a hash-signature
+of the results.
+
+VSL_Debug lines will be emitted for every 64 addresses (you probably want:
+`-p vsl_mask=+Debug,-VCL_acl`
+
+Only the lower 64 bits of IPv4 addresses are stepped.
+
+$Function DURATION time_acl(ACL acl, IP ip0, IP ip1, INT step = 1, INT rounds = 1000)
+
+Time `rounds` sweeps from `ip0` to `ip1` through `acl`.
+
+Consider: `-p vsl_mask=-VCL_acl`
+
+$Object aclobj(ACL)
+
+$Method ACL .get()
+
+$Function VOID test_probe(PROBE probe, PROBE same = 0)
+
+Only here to make sure probe definitions are passed properly.
+
+$Function VOID vsc_new()
+
+Add a vsc
+
+$Function VOID vsc_count(INT val = 1)
+
+Update counter
+
+$Function VOID vsc_destroy()
+
+Remove a vsc
+
+$Object concat(STRANDS)
+
+Create an object that returns the string formed by concatenating the
+given strings.
+
+$Method STRING .get()
+
+Return the string formed from the concatenation in the constructor.
+
+$Function STRING concatenate(STRANDS)
+
+Return the string formed by concatenating the given strings.
+(Uses ``VRT_StrandsWS()``.)
+
+$Function STRING collect(STRANDS)
+
+Return the string formed by concatenating the given strings.
+(Uses ``VRT_CollectStrands()``.)
+
+$Function VOID sethdr(HEADER, STRANDS)
+
+Set the given header with the concatenation of the given strings.
+
+$Function DURATION priv_perf(INT size, INT rounds=10000)
+
+Benchmark ``VRT_priv_task()`` with `size` elements, iterating `rounds`
+times.
+
+Returns the average time taken for each call scaled up from
+nanoseconds to seconds - iow the value given as seconds is actually
+the duration in nanoseconds.
+
+For comparable results, a higher size run should called first and
+discarded.
+
+$Object NULL_OK obj_opt(PRIV_CALL, PRIV_VCL, PRIV_TASK,
+		[STRING s], [BOOL b])
+
+Test object constructor with all the fancy stuff.
+
+$Method STRING .meth_opt(PRIV_CALL, PRIV_VCL, PRIV_TASK,
+			 [STRING s], [BOOL b])
+
+Test object method with all the fancy stuff.
+
+$Function STRANDS return_strands(STRANDS strand)
+
+$Function STRANDS return_null_strands()
+
+$Function BOOL is_null_strands(STRANDS strand)
+
+$Function VOID vsl_flush()
+
+call VSL_Flush(ctx->cts, 0)
+
+$Function VOID catflap(ENUM {miss, first, last} type)
+
+Test the HSH_Lookup catflap
+
+$Restrict client
+
+$Function BYTES stk()
+
+Return an approximation of the amount of stack used.
+
+This function is by no means guaranteed to work cross platform and
+should now only be used for diagnostic purposes.
+
+0B is returned if no sensible value can be determined.
+
+$Restrict client
+
+$Function VOID vcl_prevent_cold(PRIV_VCL)
+
+Prevent VCL from going cold.
+
+$Function VOID vcl_allow_cold(PRIV_VCL)
+
+Allow VCL to go cold.
+
+$Function VOID cold_backend(PRIV_VCL)
+
+Schedule a backend creation attempt when the VCL is COLD, panic guaranteed.
+
+$Function VOID cooling_backend(PRIV_VCL)
+
+Schedule a backend creation attempt when the VCL is COOLING, failure guaranteed.
+
+$Function VOID sndbuf(BYTES sndbuf)
+
+Set the client socket' send buffer size to *sndbuf*. The previous, desired
+and actual values appear in the logs. Not currently implemented for backend
+transactions.
+
+$Restrict client backend
+
+$Function VOID store_ip(IP)
+
+Store an IP address to be later found by ``debug.get_ip()`` in the same
+transaction.
+
+$Function IP get_ip()
+
+Get the IP address previously stored by ``debug.store_ip()`` in the same
+transaction.
+
+$Object director()
+
+$Method BACKEND .fail()
+
+Return a backend which fails in director context
+
+$Function STRING client_ip()
+
+Get the stringified client ip from the session attr
+
+$Restrict client backend
+
+$Function STRING client_port()
+
+Get the stringified client port from the session attr
+
+$Restrict client backend
+
+$Function VOID fail_task_fini()
+
+fail any task fini before ok_task_fini() is called
+
+$Function VOID ok_task_fini()
+
+Allow task_fini. Must be called before the end of the task.
+
+$Function STRING re_quote(STRING)
+
+Quote an input string to be usable for an exact match in a regular expression.
+
+$Function STRING priv_task_with_option(PRIV_TASK priv, [STRING opt])
+
+A function mixing a named PRIV_TASK with optional parameters.
+
+$Function BOOL validhdr(STRANDS)
+
+Test if the argument is a valid header according to RFC9110 section 5.5.
+
+$Function REGEX just_return_regex(REGEX)
+
+Take a REGEX argument and return it.
+
+$Function STRING check_call(SUB)
+
+Check if a sub can be called. Returns the NULL string if yes, or a
+string saying why not.
+
+$Function VOID call(SUB)
+
+Call a sub
+
+$Function VOID bad_memory(SUB)
+
+To test *WRONG* behavior
+
+$Function SUB total_recall()
+
+To test *WRONG* behavior
+
+$Object caller(SUB)
+
+$Method VOID .call()
+
+$Method SUB .xsub()
+
+$Function STRING resolve_range(STRING addr, [STRING def_port], [STRING fail_port])
+
+Resolve addr and return the result. If addr has a port range, all successfully
+resolved sockets are retuned in a comma delimited string. If fail_port is
+specified, the resolution callback will fail for that port, and the reason will
+be appended to the return value.
+
+$Function VOID chksha256(BLOB expected, ENUM {log, panic, panic_unless_error} mode)
+
+Configure the expected sha256 checksum and failure mode for the debug.chksha256
+VDP. This function does not push the VDP.
+
+The *expected* blob should be 32 bytes in length. If not, it will either be
+truncated or padded with zeros.
+
+With *mode* ``log``, the VDP emits ``Debug`` VSL like the following for a
+checksum mismatch::
+
+	Debug           c checksum mismatch
+	Debug           c got: 0xe3b0c44298fc1c149afbf4c8996fb924...
+	Debug           c exp: 0x9cbca99698fee7cefd93bc6db1c53226...
+
+With *mode* ``panic``, the VDP triggers a ``WRONG("body checksum")`` for a
+mismatch. The ``panic_unless_error`` *mode* does so only if the filter chain was
+otherwise closed without error. This is useful, for example, to not trigger a
+panic when the client closes the connection.
+
+$Function VOID chkcrc32(INT expected, ENUM {log, panic, panic_unless_error} mode)
+
+Configure the expected crc32 checksum and failure mode for the debug.chkcrc32
+VDP. This function does not push the VDP.
+
+*expected* needs to be in the range ``0 .. UINT32_MAX``. A negative value will
+be hanged to zero. Any larger value will be taken modulo UINT32_MAX.
+
+The *mode* argument behaves as for `debug.chksha256()`_.
+
+$Function VOID chklen(BYTES expected, ENUM {log, panic, panic_unless_error} mode)
+
+Configure the expected length for the debug.chklen VDP. This function does not
+push the VDP.
+
+The *mode* argument behaves as for `debug.chksha256()`_.
+$Function VOID use_reembarking_http1()
+
+$Restrict vcl_deliver
+
+Switch to the reembarking http1 debug transport. Calling it from any other
+transport than http1 results in VCL failure.
+
+$Function VOID log_strands(STRING prefix, STRANDS subject, INT n=4)
+
+For each strands member, emit one ``Debug`` log line as formatted using
+``printf()`` with prefix as ``%s``, the strands member index as ``[%d]:``, the
+*origin* as ``(%s)``, addresses of each strands as ``%p`` and at most the first
+*n* characters of each strand, with truncations marked by "...".
+
+*origin* can be one of:
+
+* ``ws`` if from ``ctx->ws``
+* ``aws`` if from ``wrk->aws``
+* ``oc`` if from ``OA_HEADERS`` of ``req->objcore`` or ``bo->fetch_objcore``
+* ``stale_oc`` if from ``OA_HEADERS`` of ``req->stale_oc`` or bo->stale_oc``
+* ``?`` otherwise
+
+Example::
+
+	Debug		c prefix[0]: (ws) 0x7fe69ef80420 abcd...
+
+$Function VOID use_vai_http1()
+
+$Restrict vcl_deliver
+
+Switch to the VAI http1 debug transport. Calling it from any other
+transport than http1 results in VCL failure.
+
+DEPRECATED
+==========
+
+$Alias .bar obj.foo
+
+Bar was wrong, it was definitely foo.

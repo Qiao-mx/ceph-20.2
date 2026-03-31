@@ -1,0 +1,21 @@
+vtest "failure in vcl_recv"
+
+vinyl v1 -vcl {
+	import vtc;
+
+	backend be none;
+
+	sub vcl_recv {
+		return (fail);
+	}
+
+	sub vcl_hash {
+		vtc.panic("unreachable");
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 503
+} -run

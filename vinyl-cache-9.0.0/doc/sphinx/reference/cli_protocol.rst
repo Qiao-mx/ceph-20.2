@@ -1,0 +1,171 @@
+..
+	Copyright (c) 2021 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+.. role:: ref(emphasis)
+
+.. _ref_cli_api:
+
+===========================================
+VCLI protocol - Scripting the CLI interface
+===========================================
+
+The Vinyl Cache CLI has a few bells&whistles when used as an API.
+
+First: `vcli.h` contains magic numbers.
+
+Second: If you use `vinyladm` to connect to `vinyld` for
+API purposes, use the `-p` argument to get "pass" mode.
+
+In "pass" mode, or with direct CLI connections (more below), the
+first line of responses is always exactly 13 bytes long, including
+the NL, and it contains two numbers:  The status code and the count
+of bytes in the "body" of the response::
+
+    200␣19␣␣␣␣␣␣␤
+    PONG␣1613397488␣1.0
+
+This makes parsing the response unambiguous, even in cases like this
+where the response does not end with a NL.
+
+The vinylapi library contains functions to implement the basics of
+the CLI protocol, for more, see the `vcli.h` include file.
+
+.. _ref_remote_cli:
+
+Local and remote CLI connections
+--------------------------------
+
+The ``vinyld`` process receives the CLI commands via TCP connections
+which require PSK authentication (see below), but which provide no secrecy.
+
+"No secrecy" means that if you configure these TCP connections to run
+across a network, anybody who can sniff packets can see your CLI
+commands.  If you need secrecy, use ``ssh`` to run ``vinyladm`` or
+to tunnel the TCP connection.
+
+By default `vinyld` binds to ``localhost`` and ask the kernel to
+assign a random port number.  The resulting listen address is
+stored in the shared memory, where the ``vinyladm`` program finds it.
+
+You can configure ``vinyld`` to listen to a specific address with
+the ``-T`` argument, this will also be written to shared memory, so
+``vinyladm`` keeps working::
+
+	# Bind to internal network
+	vinyld -T 192.168.10.21:3245
+
+You can also configure ``vinyld`` to actively open a TCP connection
+to another "controller" program, with the ``-M`` argument.
+
+Finally, when run in "debug mode" with the ``-d`` argument, ``vinyld``
+will stay in the foreground and turn stdin/stdout into a CLI connection.
+
+.. _ref_psk_auth:
+
+Authentication CLI connections
+------------------------------
+
+CLI connections to `vinyld` are authenticated with a "pre-shared-key"
+authentication scheme, where the other end must prove they know
+*the contents of* the secret file ``vinyld`` uses.
+
+They do not have to read the precise same file on that specific
+computer, they could read an entirely different file on a different
+computer or fetch the secret from a server.
+
+The name of the file can be configured with the ``-S`` option, and
+``vinyld`` records the name in shared memory, so ``vinyladm``
+can find it.
+
+As a bare minimum ``vinyld`` needs to be able to read the file,
+but other than that, it can be restricted any way you want.
+
+Since it is not the file, but only the content of it that matter,
+you can make the file unreadable by everybody, and instead place
+a copy of the file in the home directories of the authorized users.
+
+The file is read only at the moment when the `auth` CLI command is
+issued and the contents is not cached in `vinyld`, so you can
+change it as often as you want.
+
+An authenticated session looks like this:
+
+.. code-block:: text
+
+   critter phk> telnet localhost 1234
+   Trying ::1...
+   Trying 127.0.0.1...
+   Connected to localhost.
+   Escape character is '^]'.
+   107 59
+   ixslvvxrgkjptxmcgnnsdxsvdmvfympg
+
+   Authentication required.
+
+   auth 455ce847f0073c7ab3b1465f74507b75d3dc064c1e7de3b71e00de9092fdc89a
+   200 279
+   -----------------------------
+   Vinyl Cache CLI 1.0
+   -----------------------------
+   FreeBSD,13.0-CURRENT,amd64,-jnone,-sdefault,-sdefault,-hcritbit
+   varnish-trunk revision 89a558e56390d425c52732a6c94087eec9083115
+
+   Type 'help' for command list.
+   Type 'quit' to close CLI session.
+   Type 'start' to launch worker process.
+
+The CLI status of 107 indicates that authentication is necessary. The
+first 32 characters of the response text is the challenge
+"ixsl...mpg". The challenge is randomly generated for each CLI
+connection, and changes each time a 107 is emitted.
+
+The most recently emitted challenge must be used for calculating the
+authenticator "455c…c89a".
+
+The authenticator is calculated by applying the SHA256 function to the
+following byte sequence:
+
+* Challenge string
+* Newline (0x0a) character.
+* Contents of the secret file
+* Challenge string
+* Newline (0x0a) character.
+
+and dumping the resulting digest in lower-case hex.
+
+In the above example, the secret file contains ``foo\n`` and thus:
+
+.. code-block:: text
+
+   critter phk> hexdump secret
+   00000000  66 6f 6f 0a                                       |foo.|
+   00000004
+   critter phk> cat > tmpfile
+   ixslvvxrgkjptxmcgnnsdxsvdmvfympg
+   foo
+   ixslvvxrgkjptxmcgnnsdxsvdmvfympg
+   ^D
+   critter phk> hexdump -C tmpfile
+   00000000  69 78 73 6c 76 76 78 72  67 6b 6a 70 74 78 6d 63  |ixslvvxrgkjptxmc|
+   00000010  67 6e 6e 73 64 78 73 76  64 6d 76 66 79 6d 70 67  |gnnsdxsvdmvfympg|
+   00000020  0a 66 6f 6f 0a 69 78 73  6c 76 76 78 72 67 6b 6a  |.foo.ixslvvxrgkj|
+   00000030  70 74 78 6d 63 67 6e 6e  73 64 78 73 76 64 6d 76  |ptxmcgnnsdxsvdmv|
+   00000040  66 79 6d 70 67 0a                                 |fympg.|
+   00000046
+   critter phk> sha256 tmpfile
+   SHA256 (tmpfile) = 455ce847f0073c7ab3b1465f74507b75d3dc064c1e7de3b71e00de9092fdc89a
+   critter phk> openssl dgst -sha256 < tmpfile
+   455ce847f0073c7ab3b1465f74507b75d3dc064c1e7de3b71e00de9092fdc89a
+
+The sourcefile ``lib/libvinyl/vcli_proto.c`` contains a useful function
+which calculates the response, given an open filedescriptor to the
+secret file, and the challenge string.
+
+See also:
+---------
+
+* :ref:`vinyladm(1)`
+* :ref:`vinyld(1)`
+* :ref:`vcl(7)`

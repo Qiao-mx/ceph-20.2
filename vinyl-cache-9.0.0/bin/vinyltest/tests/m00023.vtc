@@ -1,0 +1,68 @@
+vtest "Test VMOD ACLs (jail-compatible)"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import debug;
+
+	acl loopback {
+		"127"/24;
+	}
+
+	acl locals -pedantic {
+		// We assume c1 and s1 comes from same address
+		"${s1_addr}"/24;
+	}
+
+	sub vcl_init {
+		if (!debug.match_acl(loopback, "127.0.0.127")) {
+			debug.fail();
+		}
+		new o_locals = debug.aclobj(locals);
+		new o_null = debug.aclobj(debug.null_acl());
+	}
+
+	sub vcl_recv {
+		if (req.url == "/null") {
+			if (client.ip ~ debug.null_acl()) {
+				return (synth(200));
+			}
+		}
+		if (req.url == "/nullo") {
+			if (client.ip ~ o_null.get()) {
+				return (synth(200));
+			}
+		}
+		if (! debug.match_acl(ip=client.ip, acl=locals)) {
+			return (synth(500, "match_acl"));
+		}
+		if (client.ip !~ debug.acl(locals)) {
+			return (synth(500, "~"));
+		}
+		if (client.ip !~ o_locals.get()) {
+			return (synth(500, "~"));
+		}
+		return (hash);
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+	txreq -url /null
+	rxresp
+	expect resp.status == 503
+} -start
+
+client c2 {
+	txreq -url /nullo
+	rxresp
+	expect resp.status == 503
+} -start
+
+client c1 -wait
+client c2 -wait

@@ -1,0 +1,341 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "VCL-BACKENDS" "7" "" ""
+.SH NAME
+VCL-backends \- Configuring Backends
+.\" Copyright (c) 2021 Varnish Software AS
+.\" SPDX-License-Identifier: BSD-2-Clause
+.\" See LICENSE file for full text of license
+.
+.SH BACKEND DEFINITION
+.sp
+A backend declaration creates and initialises a named backend object.
+A declaration start with the keyword \fBbackend\fP followed by the name of the
+backend. The actual declaration is in curly brackets, in a key/value fashion.:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+backend name {
+    .attribute1 = value;
+    .attribute2 = value;
+    [...]
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+If there is a backend named \fBdefault\fP it will be used unless another
+backend is explicitly set.  If no backend is named \fBdefault\fP the first
+backend in the VCL program becomes the default.
+.sp
+If you only use dynamic backends created by VMODs, an empty, always failing
+(503) backend can be specified:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+backend default none;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+A backend must be specified with either a \fB\&.host\fP or a \fB\&.path\fP attribute, but
+not both.  All other attributes have default values.
+.SH ATTRIBUTE .HOST
+.sp
+To specify a networked backend \fB\&.host\fP takes either a numeric
+IPv4/IPv6 address or a domain name which resolves to \fIat most\fP
+one IPv4 and one IPv6 address:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.host = \(dq127.0.0.1\(dq;
+
+\&.host = \(dq[::1]:8080\(dq;
+
+\&.host = \(dqexample.com:8081\(dq;
+
+\&.host = \(dqexample.com:http\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .PORT
+.sp
+The TCP port number or service name can be specified as part of
+\fB\&.host\fP as above or separately using the \fB\&.port\fP attribute:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.port = \(dq8081\(dq;
+
+\&.port = \(dqhttp\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .PATH
+.sp
+The absolute path to a Unix(4) domain socket of a local backend:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.path = \(dq/var/run/http.sock\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+or, where available, \fB@\fP followed by the name of an abstract socket
+of a local backend:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.path = \(dq@mybackend\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+A warning will be issued if the uds\-socket does not exist when the
+VCL is loaded.  This makes it possible to start the UDS\-listening peer,
+or set the socket file\(aqs permissions afterwards.
+.sp
+If the uds\-socket socket does not exist or permissions deny access,
+connection attempts will fail.
+.SH ATTRIBUTE .HOST_HEADER
+.sp
+A host header to add to probes and regular backend requests if they have no such header:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.host_header = \(dqexample.com\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.SH TIMEOUT ATTRIBUTES
+.sp
+These attributes control how patient \fIvinyld\fP is during backend fetches:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.connect_timeout = 1.4s;
+\&.first_byte_timeout = 20s;
+\&.between_bytes_timeout = 10s;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The default values comes parameters with the same names, see \fIvinyld(1)\fP\&.
+.SH ATTRIBUTE .MAX_CONNECTIONS
+.sp
+Limit how many simultaneous connections \fBvinyld\fP can open to the backend:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.max_connections = 1000;
+.EE
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .WAIT_LIMIT
+.sp
+Maximum  number  of  transactions that can queue waiting for a backend connection to become available:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.wait_limit = 1000;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Note that this feature must be used with caution, as it can cause threads to pile up and
+increase response times.
+.sp
+Defaults to the \fIvinyld(1)\fP \fIbackend_wait_limit\fP parameter.
+.SH ATTRIBUTE .WAIT_TIMEOUT
+.sp
+When a transaction is queued waiting for a backend connection to become available (see \fI\&.wait_limit\fP),
+this is the time that the transaction will wait before giving up:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.wait_timeout = 1s;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+It is strongly advised to never set this higher than a couple of seconds.
+.sp
+Defaults to the \fIvinyld(1)\fP \fIbackend_wait_timeout\fP parameter.
+.SH ATTRIBUTE .PROXY_HEADER
+.sp
+Send a PROXY protocol header to the backend with the \fBclient.ip\fP and
+\fBserver.ip\fP values:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.proxy_header = 2;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Legal values are one and two, depending which version of the PROXY protocol you want.
+.sp
+\fINotice\fP this setting will lead to backend connections being used
+for a single request only (subject to future improvements). Thus,
+extra care should be taken to avoid running into failing backend
+connections with EADDRNOTAVAIL due to no local ports being
+available. Possible options are:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+Use additional backend connections to extra IP addresses or TCP ports
+.IP \(bu 2
+Increase the number of available ports (Linux sysctl \fBnet.ipv4.ip_local_port_range\fP)
+.IP \(bu 2
+Reuse backend connection ports early (Linux sysctl \fBnet.ipv4.tcp_tw_reuse\fP)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .PREAMBLE
+.sp
+Send a BLOB on all newly opened connections to the backend:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.preamble = :SGVsbG8gV29ybGRcbgo=:;
+.EE
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .VIA
+.sp
+Name of another \fIproxy\fP backend through which to make the connection
+to the \fIdestination\fP backend using the PROXY2 <https://raw.githubusercontent.com/haproxy/haproxy/master/doc/proxy-protocol.txt>
+ protocol, for example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+backend proxy {
+  .path = \(dq/path/to/proxy2_endpoint\(dq;
+}
+backend destination {
+  .host = \(dq1.2.3.4\(dq;
+  .via = proxy;
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The \fIproxy\fP backend can also use a \fB\&.host\fP/\fB\&.port\fP definition
+rather than \fB\&.path\fP\&.
+.sp
+Use of the \fB\&.path\fP attribute for the \fIdestination\fP backend is not
+supported.
+.sp
+The \fB\&.via\fP attribute is unrelated to \fB\&.proxy_header\fP\&. If both are
+used, a second header is sent as per \fB\&.proxy_header\fP specification.
+.sp
+Unless specified for \fIdestination\fP, the \fBconnect_timeout\fP,
+\fBfirst_byte_timeout\fP and \fBbetween_bytes_timeout\fP attributes are
+copied from \fIproxy\fP to \fIdestination\fP\&.
+.sp
+As of this release, the \fIproxy\fP backend used with \fB\&.via\fP cannot be
+a director, it cannot itself use \fB\&.via\fP (error: \fICannot stack .via
+backends\fP) and the protocol is fixed to PROXY2 <https://raw.githubusercontent.com/haproxy/haproxy/master/doc/proxy-protocol.txt>
+\&.
+.sp
+Implementation detail:
+.sp
+If \fB\&.via = <proxy>\fP is used, a PROXY2 <https://raw.githubusercontent.com/haproxy/haproxy/master/doc/proxy-protocol.txt>
+ preamble is created with
+the \fIdestination\fP backend\(aqs address information as \fBdst_addr\fP/\fBdst_port\fP and, optionally, other TLV attributes. The connection is
+then made to the \fIproxy\fP backend\(aqs endpoint (\fBpath\fP or \fBhost\fP/\fBport\fP). This is technically equivalent to specifying a \fBbackend
+destination_via_proxy\fP with a \fB\&.preamble\fP attribute containing the
+appropriate PROXY2 <https://raw.githubusercontent.com/haproxy/haproxy/master/doc/proxy-protocol.txt>
+ preamble for the \fIdestination\fP backend.
+.SH ATTRIBUTE .AUTHORITY
+.sp
+The HTTP authority to use when connecting to this backend. If unset,
+\fB\&.host_header\fP or \fB\&.host\fP are used.
+.sp
+\fB\&.authority = \(dq\(dq\fP disables sending an authority.
+.sp
+\fB\&.authority\fP can not be an IP address.
+.sp
+A colon and anything following (signifying a port) is removed from the authority.
+.sp
+As of this release, the attribute is only used by \fB\&.via\fP connections
+as a \fBPP2_TYPE_AUTHORITY\fP Type\-Length\-Value (TLV) in the PROXY2 <https://raw.githubusercontent.com/haproxy/haproxy/master/doc/proxy-protocol.txt>
+
+preamble.
+.SH ATTRIBUTE .PROBE
+.sp
+Please see \fIvcl\-probe(7)\fP\&.
+.SH SEE ALSO
+.INDENT 0.0
+.IP \(bu 2
+\fIvinyld(1)\fP
+.IP \(bu 2
+\fIvcl(7)\fP
+.IP \(bu 2
+\fIvcl\-probe(7)\fP
+.IP \(bu 2
+\fIvmod_directors(3)\fP
+.IP \(bu 2
+\fIvmod_std(3)\fP
+.UNINDENT
+.SH HISTORY
+.sp
+VCL was developed by Poul\-Henning Kamp in cooperation with Verdens
+Gang AS, Redpill Linpro and Varnish Software.  This manual page is
+written by Per Buer, Poul\-Henning Kamp, Martin Blix Grydeland,
+Kristian Lyngstøl, Lasse Karstensen and others.
+.SH COPYRIGHT
+.sp
+This document is licensed under the same license as Vinyl Cache
+itself. See LICENSE for details.
+.INDENT 0.0
+.IP \(bu 2
+Copyright (c) 2006 Verdens Gang AS
+.IP \(bu 2
+Copyright (c) 2006\-2021 Varnish Software AS
+.UNINDENT
+.\" Generated by docutils manpage writer.
+.

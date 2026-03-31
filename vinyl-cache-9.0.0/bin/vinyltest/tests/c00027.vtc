@@ -1,0 +1,43 @@
+vtest "Test eviction"
+
+server s1 {
+	rxreq
+	expect req.url == "/1"
+	txresp -body "${string,repeat,1024,1}"
+	rxreq
+	expect req.url == "/2"
+	txresp -body "${string,repeat,1024,1}"
+	rxreq
+	expect req.url == "/3"
+	txresp -body "${string,repeat,1024,1}"
+	rxreq
+	expect req.url == "/4"
+	txresp -body "${string,repeat,1024,1}"
+	rxreq
+	expect req.url == "/5"
+	txresp -body "${string,repeat,1024,1}"
+} -start
+
+vinyl v1 -arg "-s default,1M" -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.ttl = 10m;
+	}
+} -start
+
+client c1 {
+	txreq -url "/1"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/2"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/3"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/4"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/5"
+	rxresp
+	expect resp.status == 200
+} -run

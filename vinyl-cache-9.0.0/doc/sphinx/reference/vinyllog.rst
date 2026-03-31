@@ -1,0 +1,71 @@
+..
+	Copyright (c) 2010-2019 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+.. role:: ref(emphasis)
+
+.. _vinyllog(1):
+
+========
+vinyllog
+========
+
+------------------------
+Display Vinyl Cache logs
+------------------------
+
+:Manual section: 1
+
+SYNOPSIS
+========
+
+.. include:: ../include/vinyllog_synopsis.rst
+vinyllog |synopsis|
+
+OPTIONS
+=======
+
+The following options are available:
+
+.. include:: ../include/vinyllog_options.rst
+
+SIGNALS
+=======
+
+* SIGHUP
+
+  Rotate the log file (see -w option) in daemon mode,
+  abort the loop and die gracefully when running in the foreground.
+
+* SIGUSR1
+
+  Flush any outstanding transactions
+
+SEE ALSO
+========
+* :ref:`vinyld(1)`
+* :ref:`vinylhist(1)`
+* :ref:`vinylncsa(1)`
+* :ref:`vinylstat(1)`
+* :ref:`vinyltop(1)`
+* :ref:`vsl(7)`
+* :ref:`vsl-query(7)`
+
+HISTORY
+=======
+
+The vinyllog utility was developed by Poul-Henning Kamp
+<phk@phk.freebsd.dk> in cooperation with Verdens Gang AS and
+Redpill-Linpro. This manual page was initially written by Dag-Erling
+Smørgrav, and later updated by Per Buer and Martin Blix Grydeland.
+
+
+COPYRIGHT
+=========
+
+This document is licensed under the same licence as Vinyl Cache
+itself. See LICENCE for details.
+
+* Copyright (c) 2006 Verdens Gang AS
+* Copyright (c) 2006-2015 Varnish Software AS

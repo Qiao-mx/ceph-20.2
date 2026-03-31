@@ -1,0 +1,103 @@
+vtest "Test esi-include + gzip edgecase with respect to gzip hdr"
+
+server s1 {
+	rxreq
+	expect req.url == "/foo"
+	txresp -gzipbody {<h1>/////<h2>}
+
+	rxreq
+	expect req.url == "/1"
+	expect req.http.accept-encoding == gzip
+	txresp -gzipbody {B<esi:include src="/foo"/>A}
+
+	rxreq
+	expect req.url == "/2"
+	expect req.http.accept-encoding == gzip
+	txresp -gzipbody {B<esi:include src="/foo"/>}
+
+	rxreq
+	expect req.url == "/3"
+	expect req.http.accept-encoding == gzip
+	txresp -gzipbody {<esi:include src="/foo"/>A}
+
+	rxreq
+	expect req.url == "/4"
+	expect req.http.accept-encoding == gzip
+	txresp -gzipbody {<esi:include src="/foo"/>}
+
+	rxreq
+	expect req.url == "/5"
+	expect req.http.accept-encoding == gzip
+	txresp -gzipbody {<esi:include src="/bar"/>}
+
+	rxreq
+	expect req.url == "/bar"
+	txresp -bodylen 500
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		if (bereq.url ~ "^/.$") {
+			set beresp.do_esi = true;
+		} else
+		if (bereq.url ~ "/bar") {
+			set beresp.do_gzip = true;
+		}
+	}
+	sub vcl_deliver {
+		if (req.esi_level > 0 && req.http.r3529) {
+			unset req.http.Accept-Encoding;
+		}
+		set resp.http.filters = resp.filters;
+	}
+} -start
+
+vinyl v1 -cliok "param.set feature +esi_disable_xml_check"
+
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+client c1 {
+	txreq -url /foo -hdr "Accept-Encoding: gzip"
+	rxresp
+	gunzip
+	expect resp.status == 200
+	expect resp.bodylen == 13
+
+	txreq -url /1 -hdr "Accept-Encoding: gzip"
+	rxresp
+	expect resp.http.content-encoding == gzip
+	gunzip
+	expect resp.status == 200
+	expect resp.bodylen == 15
+
+	txreq -url /2 -hdr "Accept-Encoding: gzip"
+	rxresp
+	expect resp.http.content-encoding == gzip
+	gunzip
+	expect resp.status == 200
+	expect resp.bodylen == 14
+
+	txreq -url /3 -hdr "Accept-Encoding: gzip"
+	rxresp
+	expect resp.http.content-encoding == gzip
+	gunzip
+	expect resp.status == 200
+	expect resp.bodylen == 14
+
+	txreq -url /4 -hdr "Accept-Encoding: gzip"
+	rxresp
+	expect resp.http.content-encoding == gzip
+	gunzip
+	expect resp.status == 200
+	expect resp.bodylen == 13
+
+	txreq -url /5 -hdr "Accept-Encoding: gzip" -hdr "r3529: 1"
+	rxresp
+	expect resp.http.content-encoding == gzip
+	gunzip
+	expect resp.status == 200
+	expect resp.bodylen == 500
+}
+
+client c1 -run
+vinyl v1 -expect esi_errors == 0

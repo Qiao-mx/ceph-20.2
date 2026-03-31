@@ -1,0 +1,9 @@
+vtest "invalid header name on RHS"
+
+vinyl v1 -errvcl "Expected ID got '0'" {
+	vcl 4.1;
+	backend default none;
+	sub vcl_recv {
+		if (req.http.0) {}
+	}
+}

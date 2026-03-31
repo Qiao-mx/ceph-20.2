@@ -1,0 +1,1 @@
+/usr/lib64/ccache/cc  -Wall -Wextra -fPIC CMakeFiles/test_rgw_notification.dir/tests/test_rgw_notification.c.o -o test_rgw_notification  librgw_c_common.a 

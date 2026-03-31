@@ -1,0 +1,19 @@
+vtest "Duplicate object names"
+
+vinyl v1 -errvcl {Instance 'first' redefined.} {
+	import debug;
+	sub vcl_init {
+		new first = debug.obj("FOO");
+		new first = debug.obj("BAH");
+	}
+}
+
+vinyl v1 -errvcl {Name 'first' already defined.} {
+	import debug;
+
+	backend first { .host = "${localhost}"; }
+
+	sub vcl_init {
+		new first = debug.obj("FOO");
+	}
+}

@@ -1,0 +1,30 @@
+vtest "#2679: H/2 rxbody vfp drops data"
+
+server s1 {
+	rxreq
+	expect req.http.content-length == "31469"
+	expect req.bodylen == 31469
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import std;
+	sub vcl_recv {
+		std.cache_req_body(100KB);
+	}
+} -start
+
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -cliok "param.set h2_rx_window_low_water 65535"
+vinyl v1 -cliok "param.reset h2_initial_window_size"
+
+client c1 {
+	stream 1 {
+		txreq -req POST -hdr "content-length" "31469" -nostrend
+		txdata -datalen 1550 -nostrend
+		txdata -datalen 16000 -nostrend
+		txdata -datalen 13919
+		rxresp
+		expect resp.status == 200
+	} -run
+} -run

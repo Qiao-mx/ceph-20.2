@@ -1,0 +1,10 @@
+vtest "vinyltest -p"
+
+shell {
+cat >_.vtc <<EOF
+vtest -p
+vinyl v1 -cliexpect 42 "param.show default_ttl"
+EOF
+
+exec vinyltest -v -t 5 -p default_ttl=42 _.vtc
+}

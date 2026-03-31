@@ -1,0 +1,21 @@
+vtest "Check that -s works"
+
+server s1 {
+	rxreq
+	txresp -hdr "Connection: close" -body "012345\n"
+} -start
+
+vinyl v1 \
+	-arg "-s file,${tmpdir}/vinyltest_backing,10M" \
+	-vcl+backend {} -start
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.status == 200
+} -run
+
+server s1 -wait
+
+vinyl v1 -stop
+shell "rm ${tmpdir}/vinyltest_backing"

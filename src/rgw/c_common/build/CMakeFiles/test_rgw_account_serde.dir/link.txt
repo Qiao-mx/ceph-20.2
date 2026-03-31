@@ -1,0 +1,1 @@
+/usr/lib64/ccache/cc  -Wall -Wextra -fPIC CMakeFiles/test_rgw_account_serde.dir/tests/test_rgw_account_serde.c.o -o test_rgw_account_serde  librgw_c_common.a 

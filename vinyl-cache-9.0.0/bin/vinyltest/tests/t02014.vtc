@@ -1,0 +1,147 @@
+vtest "Exercise h/2 sender flow control code"
+
+barrier b1 sock 3
+barrier b2 sock 3
+barrier b3 sock 3
+barrier b4 sock 3
+
+barrier b2_err cond 2
+barrier b3_err cond 2
+
+server s1 {
+	rxreq
+	txresp -bodylen 66300
+} -start
+
+server s2 {
+	non_fatal
+	rxreq
+	txresp -bodylen 66300
+} -start
+
+vinyl v1 -vcl+backend {
+	import vtc;
+
+	sub vcl_backend_fetch {
+		if (bereq.method == "POST") {
+			set bereq.backend = s2;
+		}
+	}
+
+	sub vcl_deliver {
+		if (req.http.barrier) {
+			vtc.barrier_sync(req.http.barrier);
+		}
+	}
+} -start
+
+vinyl v1 -cliok "param.set debug +syncvsl"
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -cliok "param.reset h2_initial_window_size"
+
+client c1 {
+	stream 0 {
+		barrier b1 sync
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+	} -start
+
+	stream 1 {
+		txreq -hdr barrier ${b1_sock}
+		barrier b1 sync
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+		rxresp
+		expect resp.status == 200
+		expect resp.bodylen == 66300
+	} -run
+
+	stream 0 -wait
+} -run
+
+vinyl v1 -vsl_catchup
+
+logexpect l2 -v v1 -g raw {
+	expect * * ReqMethod GET
+	expect * = VCL_call DELIVER
+} -start
+
+client c2 {
+	stream 0 {
+		barrier b2 sync
+	} -start
+
+	stream 1 {
+		txreq -hdr barrier ${b2_sock}
+		barrier b2_err sync
+		txdata -data "fail"
+		rxrst
+		expect rst.err == STREAM_CLOSED
+		barrier b2 sync
+	} -run
+
+	stream 0 -wait
+} -start
+
+logexpect l2 -wait
+barrier b2_err sync
+
+client c2 -wait
+
+logexpect l3 -v v1 -g raw {
+	expect * * ReqMethod POST
+	expect * = VCL_call DELIVER
+} -start
+
+client c3 {
+	stream 0 {
+		barrier b3 sync
+		barrier b4 sync
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+
+	} -start
+
+	stream 1 {
+		txreq -req "POST" -hdr barrier ${b3_sock} -nostrend
+		txdata -data "ok"
+		barrier b3_err sync
+		txdata -data "fail"
+		rxrst
+		expect rst.err == STREAM_CLOSED
+		barrier b3 sync
+	} -run
+
+	stream 3 {
+		txreq -hdr barrier ${b4_sock}
+		barrier b4 sync
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+		delay .5
+		txwinup -size 256
+		rxresp
+		expect resp.status == 200
+		expect resp.bodylen == 66300
+	} -run
+
+	stream 0 -wait
+} -start
+
+logexpect l3 -wait
+barrier b3_err sync
+
+client c3 -wait

@@ -1,0 +1,49 @@
+vtest "Test v4 grace"
+
+barrier b1 cond 2
+
+server s1 {
+	rxreq
+	txresp -hdr "Last-Modified: Mon, 09 Feb 2015 09:32:47 GMT" -bodylen 3
+	rxreq
+	txresp -bodylen 6
+	barrier b1 sync
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.ttl = 0.5s;
+		set beresp.grace = 10s;
+	}
+} -start
+
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.bodylen == 3
+
+	delay 1
+} -run
+
+vinyl v1 -expect n_object == 1
+
+client c1 {
+	# We still get old object
+	txreq
+	rxresp
+	expect resp.bodylen == 3
+
+	# But bg fetch was kicked off
+	barrier b1 sync
+
+	delay .5
+
+	# And now we get the new object
+	txreq
+	rxresp
+	expect resp.bodylen == 6
+} -run
+
+# and the old one has got superseded
+vinyl v1 -expect n_object == 1

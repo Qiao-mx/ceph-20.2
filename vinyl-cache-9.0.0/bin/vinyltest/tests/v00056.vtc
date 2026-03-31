@@ -1,0 +1,87 @@
+vtest "Check req.backend.healthy with UDS backends"
+
+barrier b1 cond 2
+barrier b2 cond 2
+barrier b3 cond 2
+barrier b4 cond 2
+
+server s1 -listen "${tmpdir}/s1.sock" {
+	rxreq
+	barrier b1 sync
+	expect req.url == "/"
+	txresp -body "slash"
+	accept
+	rxreq
+	barrier b2 sync
+	barrier b3 sync
+	expect req.url == "/"
+	txresp -body "slash"
+	accept
+	barrier b4 sync
+} -start
+
+vinyl v1 -vcl {
+
+	import std;
+
+	probe foo {
+		.url = "/";
+		.timeout = 1m;
+		.interval = 1s;
+		.window = 3;
+		.threshold = 2;
+		.initial = 0;
+	}
+
+	backend default {
+		.path = "${s1_sock}";
+		.max_connections = 1;
+		.probe = foo;
+	}
+
+	sub vcl_recv {
+		if (std.healthy(default)) {
+			return(synth(200,"Backend healthy"));
+		} else {
+			return(synth(500,"Backend sick"));
+		}
+	}
+} -start
+
+vinyl v1 -cliok "backend.list -p"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 500
+} -run
+
+logexpect l1 -v v1 -g raw -q Backend_health {
+	expect 0 0 Backend_health "default Still sick"
+} -start
+
+barrier b1 sync
+barrier b2 sync
+
+logexpect l1 -wait
+
+client c2 {
+	txreq
+	rxresp
+	expect resp.status == 500
+} -run
+
+logexpect l2 -v v1 -g raw -q Backend_health {
+	expect 0 0 Backend_health "default Went healthy"
+} -start
+
+barrier b3 sync
+barrier b4 sync
+
+logexpect l2 -wait
+
+client c3 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run

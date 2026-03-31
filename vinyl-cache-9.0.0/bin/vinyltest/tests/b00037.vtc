@@ -1,0 +1,41 @@
+vtest "Error on multiple Host headers"
+
+vinyl v1 -vcl {backend be none;} -start
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+client c1 {
+	txreq -hdr "Host: foo" -hdr "Host: bar"
+	rxresp
+	expect resp.status == 400
+} -run
+
+vinyl v1 -vsl_catchup
+vinyl v1 -expect client_req_400 == 1
+vinyl v1 -expect sc_rx_bad == 1
+
+client c1 {
+	txreq -method POST -hdr "Content-Length: 12" -hdr "Content-Length: 12" -bodylen 12
+	rxresp
+	expect resp.status == 400
+} -run
+
+vinyl v1 -vsl_catchup
+vinyl v1 -expect client_req_400 == 2
+vinyl v1 -expect sc_rx_bad == 2
+
+vinyl v1 -cliok "param.set feature +http2"
+
+client c2 {
+	stream 7 {
+		txreq -hdr host foo -hdr host bar
+		rxresp
+		expect resp.status == 400
+	} -run
+} -run
+
+vinyl v1 -vsl_catchup
+vinyl v1 -expect client_req_400 == 3
+
+# H2 with multiple content-length runs into thread-scheduling differences,
+# and is unnecessary, as we know the check works from H1 and that it
+# will be hit, because H2 with multiple Host: triggered.

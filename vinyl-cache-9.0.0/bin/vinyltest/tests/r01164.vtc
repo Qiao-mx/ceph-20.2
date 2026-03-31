@@ -1,0 +1,23 @@
+vtest "Regression test for #1163: allow backends to be named storage*"
+
+vinyl v1 -vcl {
+	backend storage_foo {
+		.host = "${localhost}";
+	}
+
+	sub vcl_backend_fetch {
+		set bereq.backend = storage_foo;
+	}
+}
+
+vinyl v1 -vcl {
+	backend storagefoo {
+		.host = "${localhost}";
+	}
+
+	sub vcl_backend_fetch {
+		set bereq.backend = storagefoo;
+	}
+}
+
+

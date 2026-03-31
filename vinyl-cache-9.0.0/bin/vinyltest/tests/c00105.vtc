@@ -1,0 +1,63 @@
+vtest "Failed post-streaming revalidation"
+
+barrier b1 cond 3
+barrier b2 sock 2
+
+server s1 {
+	rxreq
+	txresp -nolen -hdr {Etag: "abc"} -hdr "Content-Length: 100"
+	barrier b1 sync
+	barrier b2 sync
+} -start
+
+server s2 {
+	rxreq
+	expect req.http.If-None-Match == {"abc"}
+	txresp -status 304 -nolen -hdr {Etag: "abc"} -hdr "Content-Length: 100"
+} -start
+
+vinyl v1 -cliok "param.set vsl_mask +ExpKill"
+
+vinyl v1 -vcl+backend {
+	import vtc;
+
+	sub vcl_recv {
+		if (req.http.backend == "s2") {
+			set req.backend_hint = s2;
+		}
+	}
+
+	sub vcl_backend_response {
+		if (beresp.was_304) {
+			vtc.barrier_sync("${b2_sock}");
+		}
+		set beresp.ttl = 1ms;
+	}
+} -start
+
+logexpect l1 -v v1 -g raw -q "ExpKill ~ EXP_Inspect" {
+	expect 0 0 ExpKill
+} -start
+
+client c1 {
+	txreq -hdr "backend: s1"
+	rxresphdrs
+	expect resp.status == 200
+	barrier b1 sync
+	expect_close
+} -start
+
+logexpect l1 -wait
+
+vinyl v1 -vsl_catchup
+
+barrier b1 sync
+
+client c2 {
+	txreq -hdr "backend: s2"
+	rxresphdrs
+	expect resp.status == 200
+	expect_close
+} -run
+
+client c1 -wait

@@ -1,0 +1,283 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "VCL-PROBE" "7" "" ""
+.SH NAME
+VCL-probe \- Configuring Backend Health Probes
+.\" Copyright (c) 2021 Varnish Software AS
+.\" SPDX-License-Identifier: BSD-2-Clause
+.\" See LICENSE file for full text of license
+.
+.SH BACKEND HEALTH PROBES
+.sp
+\fBVinyld\fP can be configured to periodically send a request to test if a
+backend is answering and thus \(dqhealthy\(dq.
+.sp
+Probes can be configured per backend:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+backend foo {
+    [...]
+    .probe = {
+        [...]
+    }
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+They can be named and shared between backends:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+probe light {
+    [...]
+}
+
+backend foo {
+    .probe = light;
+}
+
+backend bar {
+    .probe = light;
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Or a \fBdefault\fP probe can be defined, which applies to all backends
+without a specific \fB\&.probe\fP configured:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+probe default {
+    [...]
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The basic syntax is the same as for backends:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+probe name {
+    .attribute1 = value;
+    .attribute2 = \(dqvalue\(dq;
+    [...]
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+There are no mandatory attributes, they all have defaults.
+.SH ATTRIBUTE .URL
+.sp
+The URL to query.  Defaults to \fB/\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.url = \(dq/health\-probe\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .REQUEST
+.sp
+Can be used to specify a full HTTP/1.1 request to be sent:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.request = \(dqGET / HTTP/1.1\(dq
+    \(dqHost: example.com\(dq
+    \(dqX\-Magic: We\(aqre fine with this.\(dq
+    \(dqConnection: close\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Each of the strings will have \fBCRLF\fP appended and a final HTTP
+header block terminating \fBCRLF\fP will be appended as well.
+.sp
+Because connection shutdown is part of the health check,
+\fBConnection: close\fP is mandatory.
+.SH ATTRIBUTE .EXPECTED_RESPONSE
+.sp
+The expected HTTP status, defaults to \fB200\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.expected_response = 418;
+.EE
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .EXPECT_CLOSE
+.sp
+Whether or not to expect the backend to close the underlying connection.
+.sp
+Accepts \fBtrue\fP or \fBfalse\fP, defaults to \fBtrue\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.expect_close = false;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Warning: when the backend does not close the connection,
+setting \fBexpect_close\fP to \fBfalse\fP makes probe tasks wait until
+they time out before inspecting the response.
+.SH ATTRIBUTE .TIMEOUT
+.sp
+How fast the probe must succeed, default is two seconds:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.timeout = 10s;
+.EE
+.UNINDENT
+.UNINDENT
+.SH ATTRIBUTE .INTERVAL
+.sp
+Time between probes, default is five seconds:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.interval = 1m;
+.EE
+.UNINDENT
+.UNINDENT
+.SH THE BACKEND HEALTH SHIFT REGISTER
+.sp
+Backend health probes uses a 64 stage shift register to remember the
+most recent health probes and to evaluate the total health of the backend.
+.sp
+In the CLI, a good backend health status looks like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+vinyl> backend.list \-p boot.backend
+Backend name    Admin    Probe    Health     Last change
+boot.backend    probe    5/5      healthy    Wed, 13 Jan 2021 10:31:50 GMT
+ Current states  good:  5 threshold:  4 window:  5
+  Average response time of good probes: 0.000793
+  Oldest ================================================== Newest
+  4444444444444444444444444444444444444444444444444444444444444444 Good IPv4
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Good Xmit
+  RRRRRRRRRRRRRRRRRRRRRRR\-\-\-\-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR Good Recv
+  HHHHHHHHHHHHHHHHHHHHHHH\-\-\-\-\-\-\-\-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH Happy
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Starting from the bottom, the last line shows that this backend has been
+declared \(dqHappy\(dq for most the 64 health probes, but there were some
+trouble some while ago.
+.sp
+However, in this case the \fB\&.window\fP is configured to five, and the
+\fB\&.threshold\fP is set to four, so at this point in time, the backend
+is considered fully healthy.
+.sp
+An additional \fB\&.initial\fP fills that many \(dqhappy\(dq entries in the
+shift register when the VCL is loaded, so that backends can quickly
+become healthy, even if their health is normally considered over
+many samples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+\&.interval = 1s;
+\&.window = 60;
+\&.threshold = 45;
+\&.initial = 43;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+This backend will be considered healthy if three out of four health
+probes in the last minute were good, but it becomes healthy as soon
+as two good probes have happened after the VCL was loaded.
+.sp
+The default values are:
+.INDENT 0.0
+.IP \(bu 2
+\fB\&.window\fP = 8
+.IP \(bu 2
+\fB\&.threshold\fP = 3
+.IP \(bu 2
+\fB\&.initial\fP = one less than \fB\&.threshold\fP
+.UNINDENT
+.sp
+Note that the default \fB\&.initial\fP means that the backend will be marked
+unhealthy until the first probe response come back successful.
+This means that for backends created on demand (by vmods) cannot use the
+default value for \fB\&.initial\fP, as the freshly created backend would very
+likely still be unhealthy when the backend request happens.
+.SS SEE ALSO
+.INDENT 0.0
+.IP \(bu 2
+\fIvinyld(1)\fP
+.IP \(bu 2
+\fIvcl(7)\fP
+.IP \(bu 2
+\fIvcl\-backend(7)\fP
+.IP \(bu 2
+\fIvmod_directors(3)\fP
+.IP \(bu 2
+\fIvmod_std(3)\fP
+.UNINDENT
+.SS HISTORY
+.sp
+VCL was developed by Poul\-Henning Kamp in cooperation with Verdens
+Gang AS, Redpill Linpro and Varnish Software.  This manual page is
+written by Per Buer, Poul\-Henning Kamp, Martin Blix Grydeland,
+Kristian Lyngstøl, Lasse Karstensen and others.
+.SS COPYRIGHT
+.sp
+This document is licensed under the same license as Vinyl Cache
+itself. See LICENSE for details.
+.INDENT 0.0
+.IP \(bu 2
+Copyright (c) 2006 Verdens Gang AS
+.IP \(bu 2
+Copyright (c) 2006\-2021 Varnish Software AS
+.UNINDENT
+.\" Generated by docutils manpage writer.
+.

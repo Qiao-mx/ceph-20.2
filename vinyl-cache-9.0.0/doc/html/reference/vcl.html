@@ -1,0 +1,1056 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VCL-Variables" href="vcl-var.html"><link rel="prev" title="The Vinyl Cache Reference Manual" href="index.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VCL - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vcl">
+<span id="vcl-7"></span><h1>VCL<a class="headerlink" href="#vcl" title="Link to this heading">¶</a></h1>
+<section id="vinyl-configuration-language">
+<h2>Vinyl Configuration Language<a class="headerlink" href="#vinyl-configuration-language" title="Link to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Manual section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>7</p>
+</dd>
+</dl>
+<section id="description">
+<h3>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h3>
+<p>The VCL language is a small domain-specific language designed to be
+used to describe request handling and document caching policies for
+Vinyl Cache.</p>
+<p>When a new configuration is loaded, the <cite>vinyld</cite> management process
+translates the VCL code to C and compiles it to a shared object which
+is then loaded into the server process.</p>
+<p>This document focuses on the syntax of the VCL language. For a full
+description of syntax and semantics, with ample examples, please see
+the online documentation at <a class="reference external" href="https://www.vinyl-cache.org/docs/">https://www.vinyl-cache.org/docs/</a> .</p>
+<section id="identifiers">
+<span id="id1"></span><h4>Identifiers<a class="headerlink" href="#identifiers" title="Link to this heading">¶</a></h4>
+<p>VCL language elements are generally written in ASCII.</p>
+<p>Identifiers start with an ASCII alphabetic character and continue with any
+combination of alphabetic or numerical character, <code class="docutils literal notranslate"><span class="pre">-</span></code> or <code class="docutils literal notranslate"><span class="pre">_</span></code>.</p>
+<p>To illustrate, <code class="docutils literal notranslate"><span class="pre">e1xam_p-le</span></code> is a valid identifier, <code class="docutils literal notranslate"><span class="pre">1try</span></code> and
+<code class="docutils literal notranslate"><span class="pre">a%remainder</span></code> are not.</p>
+</section>
+<section id="character-sets">
+<h4>Character Sets<a class="headerlink" href="#character-sets" title="Link to this heading">¶</a></h4>
+<p>While identifiers can only consist of this subset of ASCII, <strong>strings</strong> can
+contain any bytes except <em>NUL</em> (zero, 0), which marks the end of the string. The
+Vinyl Configuration Language itself is not concerned with the character
+encoding of strings. VCL code handling strings in different character sets needs
+to track encodings itself. <a class="reference external" href="https://vinyl-cache.org/docs/trunk/reference/vmod.html">VMODs</a> exist to help with such tasks (e.g.
+<code class="docutils literal notranslate"><span class="pre">iconv</span></code>).</p>
+<p>To illustrate, <code class="docutils literal notranslate"><span class="pre">&quot;🥬&quot;</span></code> is a valid <strong>string</strong> which, when interpreted as UTF-8,
+happens to represent code point <code class="docutils literal notranslate"><span class="pre">U+1F96C</span></code> (Leafy Green) but <code class="docutils literal notranslate"><span class="pre">🥬</span></code> is not a
+valid <em>identifier</em>.</p>
+</section>
+<section id="character-sets-in-http">
+<h4>Character Sets in HTTP<a class="headerlink" href="#character-sets-in-http" title="Link to this heading">¶</a></h4>
+<p>Not all valid strings in VCL are valid in HTTP elements other than the body
+(e.g. URLs and headers). For example, HTTP header field values can not contain
+control characters, see also the <code class="docutils literal notranslate"><span class="pre">validate_headers</span></code> <a class="reference internal" href="vinyld.html#ref-param-feature"><span class="std std-ref">feature</span></a>.</p>
+</section>
+<section id="operators">
+<h4>Operators<a class="headerlink" href="#operators" title="Link to this heading">¶</a></h4>
+<p>The following operators are available in VCL:</p>
+<blockquote>
+<div><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">=</span></code></dt><dd><p>Assignment operator.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code></dt><dd><p>Basic math on numerical values.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">+=</span></code>, <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">*=</span></code>, <code class="docutils literal notranslate"><span class="pre">/=</span></code></dt><dd><p>Assign and increment/decrement/multiply/divide operator.</p>
+<p>For strings, <code class="docutils literal notranslate"><span class="pre">+=</span></code> appends.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">)</span></code></dt><dd><p>Evaluate separately.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></dt><dd><p>Comparisons</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">~</span></code>, <code class="docutils literal notranslate"><span class="pre">!~</span></code></dt><dd><p>Match / non-match. Can either be used with regular expressions or ACLs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">!</span></code></dt><dd><p>Negation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> / <code class="docutils literal notranslate"><span class="pre">||</span></code></dt><dd><p>Logical and/or.</p>
+</dd>
+</dl>
+</div></blockquote>
+<section id="on-equality">
+<h5>On Equality<a class="headerlink" href="#on-equality" title="Link to this heading">¶</a></h5>
+<p>In this section, “compare equal” means that the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator returns <code class="docutils literal notranslate"><span class="pre">true</span></code>
+and, conversely, the <code class="docutils literal notranslate"><span class="pre">!=</span></code> operator returns <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>The VCL types <code class="docutils literal notranslate"><span class="pre">INT</span></code>, <code class="docutils literal notranslate"><span class="pre">DURATION</span></code>, <code class="docutils literal notranslate"><span class="pre">BYTES</span></code>, <code class="docutils literal notranslate"><span class="pre">REAL</span></code> and <code class="docutils literal notranslate"><span class="pre">TIME</span></code> compare
+equal if their values compare equal numerically.</p>
+<p>Notice that <code class="docutils literal notranslate"><span class="pre">DURATION</span></code>, <code class="docutils literal notranslate"><span class="pre">REAL</span></code> and <code class="docutils literal notranslate"><span class="pre">TIME</span></code> are represented as floating
+point numbers, and hence testing for (in)equality might be unreliable.</p>
+<p><code class="docutils literal notranslate"><span class="pre">IP</span></code> compares equal for equal address.</p>
+<p><code class="docutils literal notranslate"><span class="pre">STRING</span></code> and <code class="docutils literal notranslate"><span class="pre">STRANDS</span></code> compare equal if the represented strings are equal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">BOOL</span></code> compares equal if the truth value is the same.</p>
+<p>The VCL types <code class="docutils literal notranslate"><span class="pre">BACKEND</span></code>, <code class="docutils literal notranslate"><span class="pre">ACL</span></code>, <code class="docutils literal notranslate"><span class="pre">PROBE</span></code>, <code class="docutils literal notranslate"><span class="pre">STEVEDORE</span></code>, <code class="docutils literal notranslate"><span class="pre">SUB</span></code> and
+<code class="docutils literal notranslate"><span class="pre">INSTANCE</span></code> compare equal if they represent the same object. Different objects
+with the same properties will never compare equal.</p>
+</section>
+</section>
+<section id="conditionals">
+<h4>Conditionals<a class="headerlink" href="#conditionals" title="Link to this heading">¶</a></h4>
+<p>VCL has <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">else</span></code> statements. Nested logic can be
+implemented with the <code class="docutils literal notranslate"><span class="pre">elseif</span></code> statement (<code class="docutils literal notranslate"><span class="pre">elsif</span></code>/<code class="docutils literal notranslate"><span class="pre">elif</span></code>/<code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> are equivalent).</p>
+<p>Note that there are no loops or iterators of any kind in VCL.</p>
+</section>
+<section id="variables">
+<h4>Variables<a class="headerlink" href="#variables" title="Link to this heading">¶</a></h4>
+<p>VCL does most of the work by examining, <code class="docutils literal notranslate"><span class="pre">set</span></code>’ing and <code class="docutils literal notranslate"><span class="pre">unset</span></code>’ing
+variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="o">==</span> <span class="s2">&quot;/mistyped_url.html&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">set</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/correct_url.html&quot;</span><span class="p">;</span>
+    <span class="n">unset</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">cookie</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>There are obvious limitations to what can be done, for instance it
+makes no sense to <code class="docutils literal notranslate"><span class="pre">unset</span> <span class="pre">req.url;</span></code> - a request must have some kind
+of URL to be valid, and likewise trying to manipulate a backend response
+when there is none (yet) makes no sense.
+The VCL compiler will detect such errors.</p>
+<p>Variables have types.  Most of them a STRINGS, and anything in
+VCL can be turned into a STRING, but some variables have types like
+<code class="docutils literal notranslate"><span class="pre">DURATION</span></code>, <code class="docutils literal notranslate"><span class="pre">IP</span></code> etc.</p>
+<p>When setting a such variables, the right hand side of the equal
+sign must have the correct variables type, you cannot assign a
+STRING to a variable of type NUMBER, even if the string is <code class="docutils literal notranslate"><span class="pre">&quot;42&quot;</span></code>.</p>
+<p>Explicit conversion functions are available in <a class="reference internal" href="vmod_std.html#vmod-std-3"><span class="std std-ref">VMOD std - Vinyl Cache Standard Module</span></a>.</p>
+<p>For the complete album of VCL variables see: <a class="reference internal" href="vcl-var.html#vcl-var-7"><span class="std std-ref">VCL-Variables</span></a>.</p>
+<section id="strings">
+<h5>Strings<a class="headerlink" href="#strings" title="Link to this heading">¶</a></h5>
+<p>Basic strings are enclosed in double quotes <code class="docutils literal notranslate"><span class="pre">&quot;</span></code><em>…</em><code class="docutils literal notranslate"><span class="pre">&quot;</span></code>, and
+may not contain newlines. Long strings are enclosed in
+<code class="docutils literal notranslate"><span class="pre">{&quot;</span></code><em>…</em><code class="docutils literal notranslate"><span class="pre">&quot;}</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;&quot;&quot;</span></code><em>…</em><code class="docutils literal notranslate"><span class="pre">&quot;&quot;&quot;</span></code>. They may contain any
+character including single double quotes <code class="docutils literal notranslate"><span class="pre">&quot;</span></code>, newline and other control
+characters except for the <em>NUL</em> (0x00) character.</p>
+</section>
+<section id="booleans">
+<h5>Booleans<a class="headerlink" href="#booleans" title="Link to this heading">¶</a></h5>
+<p>Booleans can be either <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>.  In addition, in a boolean
+context some data types will evaluate to <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code> depending on
+their value.</p>
+<p>String types will evaluate to <code class="docutils literal notranslate"><span class="pre">false</span></code> if they are unset.  This allows
+checks of the type <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(req.http.opthdr)</span> <span class="pre">{}</span></code> to test if a header
+exists, even if it is empty, whereas <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(req.http.opthdr</span> <span class="pre">==</span> <span class="pre">&quot;&quot;)</span> <span class="pre">{}</span></code>
+does not distinguish if the header does not exist or if it is empty.</p>
+<p>Backend types
+will evaluate to <code class="docutils literal notranslate"><span class="pre">false</span></code> if they don’t have a backend assigned; integer
+types will evaluate to <code class="docutils literal notranslate"><span class="pre">false</span></code> if their value is zero; duration types
+will evaluate to <code class="docutils literal notranslate"><span class="pre">false</span></code> if their value is equal or less than zero.</p>
+</section>
+<section id="time">
+<h5>Time<a class="headerlink" href="#time" title="Link to this heading">¶</a></h5>
+<p>VCL has time. A duration can be added to a time to make another time.
+In string context they return a formatted string in RFC1123 format,
+e.g. <code class="docutils literal notranslate"><span class="pre">Sun,</span> <span class="pre">06</span> <span class="pre">Nov</span> <span class="pre">1994</span> <span class="pre">08:49:37</span> <span class="pre">GMT</span></code>.</p>
+<p>The keyword <code class="docutils literal notranslate"><span class="pre">now</span></code> returns a notion of the current time, which is
+kept consistent during VCL subroutine invocations, so during the
+execution of a VCL state subroutine (<code class="docutils literal notranslate"><span class="pre">vcl_*</span> <span class="pre">{}</span></code>), including all
+user-defined subroutines being called, <code class="docutils literal notranslate"><span class="pre">now</span></code> always returns the
+same value.</p>
+</section>
+<section id="durations">
+<span id="vcl-7-durations"></span><h5>Durations<a class="headerlink" href="#durations" title="Link to this heading">¶</a></h5>
+<p>Durations are defined by a number followed by a unit. The number can
+include a fractional part, e.g. <code class="docutils literal notranslate"><span class="pre">1.5s</span></code>. The supported units are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ms</span></code></dt><dd><p>milliseconds</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">s</span></code></dt><dd><p>seconds</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">m</span></code></dt><dd><p>minutes</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">h</span></code></dt><dd><p>hours</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">d</span></code></dt><dd><p>days</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">w</span></code></dt><dd><p>weeks</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">y</span></code></dt><dd><p>years</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>In string context they return a string with their value rounded to
+3 decimal places and excluding the unit, e.g.  <code class="docutils literal notranslate"><span class="pre">1.500</span></code>.</p>
+</section>
+<section id="integers">
+<h5>Integers<a class="headerlink" href="#integers" title="Link to this heading">¶</a></h5>
+<p>Certain fields are integers, used as expected. In string context they
+return a string, e.g. <code class="docutils literal notranslate"><span class="pre">1234</span></code>.</p>
+</section>
+<section id="real-numbers">
+<h5>Real numbers<a class="headerlink" href="#real-numbers" title="Link to this heading">¶</a></h5>
+<p>VCL understands real numbers. In string context they return a string
+with their value rounded to 3 decimal places, e.g. <code class="docutils literal notranslate"><span class="pre">3.142</span></code>.</p>
+</section>
+</section>
+<section id="regular-expressions">
+<h4>Regular Expressions<a class="headerlink" href="#regular-expressions" title="Link to this heading">¶</a></h4>
+<p>Vinyl Cache uses Perl-compatible regular expressions (PCRE). For a
+complete description please see the pcre(3) man page.</p>
+<p>To send flags to the PCRE engine, such as to do case-insensitive matching, add
+the flag within parens following a question mark, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># If host is NOT example dot com..
+if (req.http.host !~ &quot;(?i)example\.com$&quot;) {
+    ...
+}
+</pre></div>
+</div>
+</section>
+<section id="include-statement">
+<span id="vcl-include"></span><h4>Include statement<a class="headerlink" href="#include-statement" title="Link to this heading">¶</a></h4>
+<p>To include a VCL file in another file use the <code class="docutils literal notranslate"><span class="pre">include</span></code> keyword:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">include</span> <span class="s2">&quot;foo.vcl&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The included file can be specified as follows:</p>
+<ul class="simple">
+<li><p>If the path starts with ‘/’, it is an absolute path.</p></li>
+<li><p>If the path starts with ‘./’, it is relative to the including VCL file.</p></li>
+<li><p>Otherwise, it is a relative path searched in one of the <code class="docutils literal notranslate"><span class="pre">vcl_path</span></code> directories.</p></li>
+</ul>
+<p>Optionally, the <code class="docutils literal notranslate"><span class="pre">include</span></code> keyword can take a <code class="docutils literal notranslate"><span class="pre">+glob</span></code> flag to include all
+files matching a glob pattern:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">include</span> <span class="o">+</span><span class="n">glob</span> <span class="s2">&quot;/etc/vinyl-cache/example.org/*.vcl&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">+glob</span></code> option can only be used with absolute paths and
+relative paths starting with ‘./’, which means that <code class="docutils literal notranslate"><span class="pre">+glob</span></code> includes cannot
+be searched in <code class="docutils literal notranslate"><span class="pre">vcl_path</span></code> directories.</p>
+</section>
+<section id="import-statement">
+<h4>Import statement<a class="headerlink" href="#import-statement" title="Link to this heading">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">import</span></code> statement is used to load Vinyl Modules (VMODs.)</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
+<span class="n">sub</span> <span class="n">vcl_recv</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="comments">
+<h4>Comments<a class="headerlink" href="#comments" title="Link to this heading">¶</a></h4>
+<p>Single lines of VCL can be commented out using <code class="docutils literal notranslate"><span class="pre">//</span></code> or
+<code class="docutils literal notranslate"><span class="pre">#</span></code>. Multi-line blocks can be commented out with
+<code class="docutils literal notranslate"><span class="pre">/*</span></code><em>block</em><code class="docutils literal notranslate"><span class="pre">*/</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">vcl_recv</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">Single</span> <span class="n">line</span> <span class="n">of</span> <span class="n">out</span><span class="o">-</span><span class="n">commented</span> <span class="n">VCL</span><span class="o">.</span>
+    <span class="c1"># Another way of commenting out a single line.</span>
+    <span class="o">/*</span>
+        <span class="n">Multi</span><span class="o">-</span><span class="n">line</span> <span class="n">block</span> <span class="n">of</span> <span class="n">commented</span><span class="o">-</span><span class="n">out</span> <span class="n">VCL</span><span class="o">.</span>
+    <span class="o">*/</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="backends-and-health-probes">
+<h4>Backends and health probes<a class="headerlink" href="#backends-and-health-probes" title="Link to this heading">¶</a></h4>
+<p>Please see <a class="reference internal" href="vcl-backend.html#vcl-backend-7"><span class="std std-ref">VCL-backends</span></a> and <a class="reference internal" href="vcl-probe.html#vcl-probe-7"><span class="std std-ref">VCL-probe</span></a></p>
+</section>
+<section id="access-control-list-acl">
+<span id="vcl-acl"></span><h4>Access Control List (ACL)<a class="headerlink" href="#access-control-list-acl" title="Link to this heading">¶</a></h4>
+<p>An Access Control List (ACL) declaration creates and initialises a named access
+control list which can later be used to match client addresses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>acl localnetwork {
+    &quot;localhost&quot;;    # myself
+    &quot;192.0.2.0&quot;/24; # and everyone on the local network
+    ! &quot;192.0.2.23&quot;; # except for the dial-in router
+}
+</pre></div>
+</div>
+<p>If an ACL entry specifies a host name which <cite>vinyld</cite> is unable to
+resolve, it will match any address it is compared to. Consequently,
+if it is preceded by a negation mark, it will reject any address it is
+compared to, which may not be what you intended. If the entry is
+enclosed in parentheses, however, it will simply be ignored if the
+host name cannot be resolved.</p>
+<p>To match an IP address against an ACL, simply use the match operator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">ip</span> <span class="o">~</span> <span class="n">localnetwork</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">pipe</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>ACLs have feature flags which can be set or cleared for each ACL
+individually:</p>
+<ul>
+<li><p><cite>+log</cite> - Emit a <cite>Acl</cite> record in VSL to tell if a match was found
+or not.</p></li>
+<li><p><cite>+table</cite> - Implement the ACL with a table instead of compiled code.
+This runs a little bit slower, but compiles large ACLs much faster.</p></li>
+<li><p><cite>-pedantic</cite> - Allow masks to cover non-zero host-bits.
+This allows the following to work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acl</span> <span class="n">foo</span> <span class="o">-</span><span class="n">pedantic</span> <span class="o">+</span><span class="n">log</span> <span class="p">{</span>
+    <span class="s2">&quot;firewall.example.com&quot;</span> <span class="o">/</span> <span class="mi">24</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>However, if the name resolves to both IPv4 and IPv6 you will still
+get an error.</p>
+</li>
+<li><p><cite>-fold</cite> - Do not fold ACL supernets and adjacent networks.</p>
+<p>With this parameter set to on (default), ACLs are optimized in that subnets
+contained in other entries are skipped (e.g.  if 1.2.3.0/24 is part of the
+ACL, an entry for 1.2.3.128/25 will not be added) and adjacent entries get
+folded (e.g.  if both 1.2.3.0/25 and 1.2.3.128/25 are added, they will be
+folded to 1.2.3.0/24).</p>
+<p>Skip and fold operations on ACL entries are output as warnings
+during VCL compilation as entries from the VCL are processed in
+order unless the <cite>-report</cite> sub-flag is also given (see below).</p>
+<p>Logging under the <code class="docutils literal notranslate"><span class="pre">VCL_acl</span></code> tag can change with this parameter
+enabled: Matches on skipped subnet entries are now logged as matches
+on the respective supernet entry. Matches on folded entries are
+logged with a shorter netmask which might not be contained in the
+original ACL as defined in VCL. Such log entries are marked by
+<code class="docutils literal notranslate"><span class="pre">fixed:</span> <span class="pre">folded</span></code>.</p>
+<p>Negated ACL entries are never folded.</p>
+<p>Exactly one sub-flag is supported following <cite>fold</cite> in parenthesis:</p>
+<ul>
+<li><p><cite>+fold(+report)</cite> - Fold with reporting (default)</p>
+<p>Report about folding as described above</p>
+</li>
+<li><p><cite>+fold(-report)</cite> - Fold without reporting</p>
+<p>Enable folding, but do not output folding-related warnings during VCL
+compilation</p>
+</li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">report</span></code> sub-option is only valid with <code class="docutils literal notranslate"><span class="pre">+fold</span></code>.</p>
+</li>
+</ul>
+</section>
+<section id="vcl-objects">
+<h4>VCL objects<a class="headerlink" href="#vcl-objects" title="Link to this heading">¶</a></h4>
+<p>A VCL object can be instantiated with the <code class="docutils literal notranslate"><span class="pre">new</span></code> keyword:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">vcl_init</span> <span class="p">{</span>
+    <span class="n">new</span> <span class="n">b</span> <span class="o">=</span> <span class="n">directors</span><span class="o">.</span><span class="n">round_robin</span><span class="p">();</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">add_backend</span><span class="p">(</span><span class="n">node1</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The object name (<code class="docutils literal notranslate"><span class="pre">b</span></code> in the example) needs to be a valid <a class="reference internal" href="#identifiers"><span class="std std-ref">Identifier</span></a>.</p>
+<p>This is only available in <code class="docutils literal notranslate"><span class="pre">vcl_init</span></code>.</p>
+</section>
+<section id="subroutines">
+<h4>Subroutines<a class="headerlink" href="#subroutines" title="Link to this heading">¶</a></h4>
+<p>A subroutine is used to group code for legibility or reusability:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">pipe_if_local</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">ip</span> <span class="o">~</span> <span class="n">localnetwork</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pipe</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Subroutines in VCL do not take arguments, nor do they return
+values. The built in subroutines all have names beginning with <code class="docutils literal notranslate"><span class="pre">vcl_</span></code>,
+which is reserved.</p>
+<p>To call a subroutine, use the <code class="docutils literal notranslate"><span class="pre">call</span></code> keyword followed by the
+subroutine’s name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">vcl_recv</span> <span class="p">{</span>
+    <span class="n">call</span> <span class="n">pipe_if_local</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="symbol-references">
+<h4>Symbol references<a class="headerlink" href="#symbol-references" title="Link to this heading">¶</a></h4>
+<p>Some VCL symbols are subject to reference counting, and would trigger a vcl
+compiler error if they were declared but not used. One way to turn these errors
+into warnings is to add <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">vcc_feature=-err_unref</span></code> to your <code class="docutils literal notranslate"><span class="pre">vinyld</span></code>
+command line. This will disable the error globally for all symbols in every VCL
+that is compiled.</p>
+<p>If you only want to disable the error for some specific symbols, the <code class="docutils literal notranslate"><span class="pre">unused</span></code>
+keyword can be used to mark such symbols as intentionally unused:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">backend</span> <span class="n">b1</span> <span class="p">{</span> <span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">;</span> <span class="p">}</span>
+<span class="n">probe</span> <span class="n">p1</span> <span class="p">{</span> <span class="p">}</span>
+<span class="n">acl</span> <span class="n">acl1</span> <span class="p">{</span> <span class="s2">&quot;localhost&quot;</span><span class="p">;</span> <span class="p">}</span>
+<span class="n">sub</span> <span class="n">sb</span> <span class="p">{}</span>
+
+<span class="n">unused</span> <span class="n">b1</span><span class="p">;</span>
+<span class="n">unused</span> <span class="n">p1</span><span class="p">;</span>
+<span class="n">unused</span> <span class="n">acl1</span><span class="p">;</span>
+<span class="n">unused</span> <span class="n">sb</span><span class="p">;</span>
+</pre></div>
+</div>
+<section id="return-statements">
+<h5>Return statements<a class="headerlink" href="#return-statements" title="Link to this heading">¶</a></h5>
+<p>The ongoing <code class="docutils literal notranslate"><span class="pre">vcl_*</span></code> subroutine execution ends when a
+<code class="docutils literal notranslate"><span class="pre">return(</span></code><em>&lt;action&gt;</em><code class="docutils literal notranslate"><span class="pre">)</span></code> statement is made.</p>
+<p>The <em>&lt;action&gt;</em> specifies how execution should proceed. The context
+defines which actions are available.</p>
+<p>It is possible to exit a subroutine that is not part of the built-in ones
+using a simple <code class="docutils literal notranslate"><span class="pre">return</span></code> statement without specifying an action. It exits
+the subroutine without transitioning to a different state:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sub filter_cookies {
+    if (!req.http.cookie) {
+        return;
+    }
+    # complex cookie filtering
+}
+</pre></div>
+</div>
+</section>
+<section id="multiple-subroutines">
+<h5>Multiple subroutines<a class="headerlink" href="#multiple-subroutines" title="Link to this heading">¶</a></h5>
+<p>If multiple subroutines with the name of one of the built-in ones are defined,
+they are concatenated in the order in which they appear in the source.</p>
+<p>The built-in VCL distributed with Vinyl Cach will be implicitly concatenated
+when the VCL is compiled.</p>
+</section>
+</section>
+<section id="functions">
+<h4>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h4>
+<p>The following built-in functions are available:</p>
+<section id="ban-string">
+<span id="vcl-7-ban"></span><h5>ban(STRING)<a class="headerlink" href="#ban-string" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Deprecated. See <a class="reference internal" href="vmod_std.html#std-ban"><span class="std std-ref">BOOL ban(STRING)</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ban()</span></code> function is identical to <a class="reference internal" href="vmod_std.html#std-ban"><span class="std std-ref">BOOL ban(STRING)</span></a>, but does
+not provide error reporting.</p>
+</div></blockquote>
+</section>
+<section id="hash-data-input">
+<h5>hash_data(input)<a class="headerlink" href="#hash-data-input" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Adds an input to the hash input. In the built-in VCL <code class="docutils literal notranslate"><span class="pre">hash_data()</span></code>
+is called on the host and URL of the request. Available in <code class="docutils literal notranslate"><span class="pre">vcl_hash</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="synthetic-string">
+<h5>synthetic(STRING)<a class="headerlink" href="#synthetic-string" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Prepare a synthetic response body containing the <em>STRING</em>. Available
+in <code class="docutils literal notranslate"><span class="pre">vcl_synth</span></code> and <code class="docutils literal notranslate"><span class="pre">vcl_backend_error</span></code>.</p>
+<p>Identical to <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">resp.body</span></code> /  <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">beresp.body</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="regsub-str-regex-sub">
+<h5>regsub(str, regex, sub)<a class="headerlink" href="#regsub-str-regex-sub" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Returns a copy of <em>str</em> with the first occurrence of the regular
+expression <em>regex</em> replaced with <em>sub</em>. Within <em>sub</em>, <code class="docutils literal notranslate"><span class="pre">\0</span></code> (which
+can also be spelled <code class="docutils literal notranslate"><span class="pre">\&amp;</span></code>) is replaced with the entire matched
+string, and <code class="docutils literal notranslate"><span class="pre">\</span></code><em>n</em> is replaced with the contents of subgroup <em>n</em>
+in the matched string.</p>
+</div></blockquote>
+</section>
+<section id="regsuball-str-regex-sub">
+<h5>regsuball(str, regex, sub)<a class="headerlink" href="#regsuball-str-regex-sub" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>As <code class="docutils literal notranslate"><span class="pre">regsub()</span></code>, but this replaces all occurrences.</p>
+</div></blockquote>
+<p>For converting or casting VCL values between data types use the functions
+available in the std VMOD.</p>
+</section>
+</section>
+</section>
+<section id="versioning">
+<h3>Versioning<a class="headerlink" href="#versioning" title="Link to this heading">¶</a></h3>
+<p>Multiple versions of the VCL syntax can coexist within certain
+constraints.</p>
+<p>The VCL syntax version at the start of VCL file specified with <code class="docutils literal notranslate"><span class="pre">-f</span></code>
+sets the hard limit that cannot be exceeded anywhere, and it selects
+the appropriate version of the builtin VCL.</p>
+<p>That means that you can never include <code class="docutils literal notranslate"><span class="pre">vcl</span> <span class="pre">9.1;</span></code> from <code class="docutils literal notranslate"><span class="pre">vcl</span> <span class="pre">8.7;</span></code>,
+but the opposite <em>may</em> be possible, to the extent the compiler
+supports it.</p>
+<p>Files pulled in via <code class="docutils literal notranslate"><span class="pre">include</span></code> do not need to have a
+<code class="docutils literal notranslate"><span class="pre">vcl</span></code> <em>X.Y</em><code class="docutils literal notranslate"><span class="pre">;</span></code> but it may be a good idea to do it anyway, to
+not have surprises in the future.  The syntax version set in an
+included file only applies to that file and any files it includes -
+unless these set their own VCL syntax version.</p>
+<p>The version of Vinyl Cache this file belongs to supports syntax 4.0 and 4.1.</p>
+</section>
+<section id="examples">
+<h3>EXAMPLES<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h3>
+<p>For examples, please see the online documentation.</p>
+</section>
+<section id="see-also">
+<h3>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p></li>
+<li><p><a class="reference internal" href="vcl-backend.html#vcl-backend-7"><span class="std std-ref">VCL-backends</span></a></p></li>
+<li><p><a class="reference internal" href="vcl-probe.html#vcl-probe-7"><span class="std std-ref">VCL-probe</span></a></p></li>
+<li><p><a class="reference internal" href="vcl-step.html#vcl-step-7"><span class="std std-ref">VCL-steps</span></a></p></li>
+<li><p><a class="reference internal" href="vcl-var.html#vcl-var-7"><span class="std std-ref">VCL-Variables</span></a></p></li>
+<li><p><a class="reference internal" href="vmod_directors.html#vmod-directors-3"><span class="std std-ref">VMOD directors - Vinyl Cache Directors Module</span></a></p></li>
+<li><p><a class="reference internal" href="vmod_std.html#vmod-std-3"><span class="std std-ref">VMOD std - Vinyl Cache Standard Module</span></a></p></li>
+</ul>
+</section>
+<section id="history">
+<h3>HISTORY<a class="headerlink" href="#history" title="Link to this heading">¶</a></h3>
+<p>VCL was developed by Poul-Henning Kamp in cooperation with Verdens
+Gang AS, Redpill Linpro and Varnish Software.  This manual page is
+written by Per Buer, Poul-Henning Kamp, Martin Blix Grydeland,
+Kristian Lyngstøl, Lasse Karstensen and others.</p>
+</section>
+<section id="copyright">
+<h3>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h3>
+<p>This document is licensed under the same license as Vinyl Cache
+itself. See LICENSE for details.</p>
+<ul class="simple">
+<li><p>Copyright (c) 2006 Verdens Gang AS</p></li>
+<li><p>Copyright (c) 2006-2015 Varnish Software AS</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vcl-var.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VCL-Variables</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">The Vinyl Cache Reference Manual</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">VCL</a><ul>
+<li><a class="reference internal" href="#vinyl-configuration-language">Vinyl Configuration Language</a><ul>
+<li><a class="reference internal" href="#description">DESCRIPTION</a><ul>
+<li><a class="reference internal" href="#identifiers">Identifiers</a></li>
+<li><a class="reference internal" href="#character-sets">Character Sets</a></li>
+<li><a class="reference internal" href="#character-sets-in-http">Character Sets in HTTP</a></li>
+<li><a class="reference internal" href="#operators">Operators</a><ul>
+<li><a class="reference internal" href="#on-equality">On Equality</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditionals">Conditionals</a></li>
+<li><a class="reference internal" href="#variables">Variables</a><ul>
+<li><a class="reference internal" href="#strings">Strings</a></li>
+<li><a class="reference internal" href="#booleans">Booleans</a></li>
+<li><a class="reference internal" href="#time">Time</a></li>
+<li><a class="reference internal" href="#durations">Durations</a></li>
+<li><a class="reference internal" href="#integers">Integers</a></li>
+<li><a class="reference internal" href="#real-numbers">Real numbers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#regular-expressions">Regular Expressions</a></li>
+<li><a class="reference internal" href="#include-statement">Include statement</a></li>
+<li><a class="reference internal" href="#import-statement">Import statement</a></li>
+<li><a class="reference internal" href="#comments">Comments</a></li>
+<li><a class="reference internal" href="#backends-and-health-probes">Backends and health probes</a></li>
+<li><a class="reference internal" href="#access-control-list-acl">Access Control List (ACL)</a></li>
+<li><a class="reference internal" href="#vcl-objects">VCL objects</a></li>
+<li><a class="reference internal" href="#subroutines">Subroutines</a></li>
+<li><a class="reference internal" href="#symbol-references">Symbol references</a><ul>
+<li><a class="reference internal" href="#return-statements">Return statements</a></li>
+<li><a class="reference internal" href="#multiple-subroutines">Multiple subroutines</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#ban-string">ban(STRING)</a></li>
+<li><a class="reference internal" href="#hash-data-input">hash_data(input)</a></li>
+<li><a class="reference internal" href="#synthetic-string">synthetic(STRING)</a></li>
+<li><a class="reference internal" href="#regsub-str-regex-sub">regsub(str, regex, sub)</a></li>
+<li><a class="reference internal" href="#regsuball-str-regex-sub">regsuball(str, regex, sub)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#versioning">Versioning</a></li>
+<li><a class="reference internal" href="#examples">EXAMPLES</a></li>
+<li><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+<li><a class="reference internal" href="#history">HISTORY</a></li>
+<li><a class="reference internal" href="#copyright">COPYRIGHT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+vtest "symbol lookup order issue"
+
+vinyl v1 -errvcl {Name 'debug' already defined.} {
+	vcl 4.0;
+	import debug;
+
+	backend debug {
+		.host = "${localhost}";
+		.port = "80";
+	}
+
+	sub debug {
+		set req.backend_hint = debug;
+	}
+
+	sub vcl_recv {
+		call debug;
+	}
+}

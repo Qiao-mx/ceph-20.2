@@ -1,0 +1,134 @@
+vtest "client h1 send timeouts - tcp"
+
+# XXX See https://code.vinyl-cache.org/vinyl-cache/vinyl-cache/pulls/2980#issuecomment-52170
+feature cmd {test $(uname) != "SunOS" && test $(uname) != "Darwin"}
+
+barrier b1 cond 2 -cyclic
+barrier b2 cond 2 -cyclic
+
+server s0 {
+	fatal
+	rxreq
+	txresp -nolen -hdr "Transfer-encoding: chunked"
+	chunkedlen 100000
+	# make sure vinyl is stuck in delivery
+	barrier b1 sync
+	non_fatal
+	chunkedlen 0
+} -dispatch
+
+vinyl v1 -cliok "param.set debug +syncvsl"
+vinyl v1 -cliok "param.set thread_pools 1"
+vinyl v1 -cliok "param.set timeout_idle 1"
+vinyl v1 -cliok "param.set idle_send_timeout .1"
+vinyl v1 -cliok "param.set send_timeout .1"
+
+vinyl v1 -vcl+backend {
+	import std;
+	import debug;
+	sub vcl_recv {
+		if (req.http.send_timeout) {
+			set sess.send_timeout =
+			    std.duration(req.http.send_timeout);
+		}
+		if (req.http.idle_send_timeout) {
+			set sess.idle_send_timeout =
+			    std.duration(req.http.idle_send_timeout);
+		}
+		return (pass);
+	}
+	sub vcl_deliver {
+		debug.sndbuf(256b);
+	}
+} -start
+
+# case 1: send_timeout parameter
+
+logexpect l1 -v v1 -g raw {
+	expect * 1001 Debug	"Hit total send timeout"
+	expect * 1000 SessClose	TX_ERROR
+} -start
+
+client c1 -rcvbuf 256 {
+	txreq
+	rxresphdrs
+	# vinyl is stuck sending the chunk
+	barrier b1 sync
+	# wait for the timeout to kick in
+	barrier b2 sync
+	non_fatal
+	rxrespbody
+	expect_close
+} -start
+
+logexpect l1 -wait
+barrier b2 sync
+client c1 -wait
+
+# case 2: send_timeout overridden in VCL
+
+vinyl v1 -cliok "param.reset send_timeout"
+
+logexpect l2 -v v1 -g raw {
+	expect * 1004 Debug	"Hit total send timeout"
+	expect * 1003 SessClose	TX_ERROR
+} -start
+
+client c2 -rcvbuf 256 {
+	txreq -hdr "send_timeout: 100ms"
+	rxresphdrs
+	# vinyl is stuck sending the chunk
+	barrier b1 sync
+	# wait for the timeout to kick in
+	barrier b2 sync
+	# expect the transaction to be interrupted
+	non_fatal
+	rxrespbody
+	expect_close
+} -start
+
+logexpect l2 -wait
+barrier b2 sync
+client c2 -wait
+
+# case 3: idle_send_timeout parameter
+
+logexpect l3 -v v1 -g raw {
+	expect * 1007 Debug "Hit idle send timeout"
+} -start
+
+client c3 -rcvbuf 256 {
+	txreq
+	rxresphdrs
+	# vinyl is stuck sending the chunk
+	barrier b1 sync
+	# wait for the timeout to kick in
+	barrier b2 sync
+	# don't wait for the transaction to complete
+} -start
+
+logexpect l3 -wait
+barrier b2 sync
+client c3 -wait
+
+# case 4: idle_send_timeout overridden in VCL
+
+vinyl v1 -cliok "param.reset idle_send_timeout"
+
+logexpect l4 -v v1 -g raw {
+	expect * 1010 Debug "Hit idle send timeout"
+} -start
+
+client c4 -rcvbuf 256 {
+	txreq -hdr "idle_send_timeout: 100ms"
+	rxresphdrs
+	# vinyl is stuck sending the chunk
+	barrier b1 sync
+	# wait for the timeout to kick in
+	barrier b2 sync
+	# don't wait for the transaction to complete
+} -start
+
+logexpect l4 -wait
+barrier b2 sync
+client c4 -wait

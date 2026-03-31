@@ -1,0 +1,100 @@
+vtest "chunked req.body"
+
+server s1 {
+	rxreq
+	expect req.bodylen == 106
+	txresp -body "ABCD"
+
+	rxreq
+	expect req.url == "/2"
+	expect req.bodylen == 109
+	txresp -body "ABCDE"
+
+	rxreq
+	expect req.url == "/3"
+	expect req.bodylen == 110
+	txresp -body "ABCDEF"
+
+	# the last request fails on the client side and
+	# does not reach the backend
+} -start
+
+vinyl v1 -vcl+backend {
+} -start
+
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+client c1 {
+	txreq -req POST -nolen -hdr "Transfer-encoding: chunked"
+	chunked {BLA}
+	delay .2
+	chunkedlen 100
+	delay .2
+	chunked {FOO}
+	delay .2
+	chunkedlen 0
+	rxresp
+	expect resp.status == 200
+	expect resp.bodylen == 4
+} -run
+
+delay .2
+
+vinyl v1 -vcl+backend {
+	import std;
+
+	sub vcl_recv {
+		if (std.cache_req_body(110B)) {
+		}
+	}
+}
+
+logexpect l2 -v v1 -g vxid -q {ReqURL ~ "^/2"} {
+	expect * * ReqUnset        {^Transfer-encoding: chunked}
+	expect 0 = ReqHeader       {^Content-Length: 109}
+	expect * = ReqAcct         {^\d+ 109 }
+} -start
+
+logexpect l3 -v v1 -g vxid -q {ReqURL ~ "^/3"} {
+	expect * * ReqUnset        {^Transfer-encoding: chunked}
+	expect 0 = ReqHeader       {^Content-Length: 110}
+	expect * = ReqAcct         {^\d+ 110 }
+} -start
+
+logexpect l4 -v v1 -g vxid -q {ReqURL ~ "^/4"} {
+	expect * * FetchError      {^Request body too big to cache}
+	expect * = ReqAcct         {^\d+ 111 }
+} -start
+
+client c1 {
+	txreq -url "/2" -req POST -nolen -hdr "Transfer-encoding: chunked"
+	chunkedlen 50
+	delay .2
+	chunkedlen 59
+	delay .2
+	chunkedlen 0
+	rxresp
+	expect resp.status == 200
+	expect resp.bodylen == 5
+
+	txreq -url "/3" -req POST -nolen -hdr "Transfer-encoding: chunked"
+	chunkedlen 50
+	delay .2
+	chunkedlen 60
+	delay .2
+	chunkedlen 0
+	rxresp
+	expect resp.status == 200
+	expect resp.bodylen == 6
+
+	txreq -url "/4" -req POST -nolen -hdr "Transfer-encoding: chunked"
+	chunked {BLAST}
+	delay .2
+	chunkedlen 106
+	rxresp
+	expect resp.status == 400
+} -run
+
+logexpect l2 -wait
+logexpect l3 -wait
+logexpect l4 -wait

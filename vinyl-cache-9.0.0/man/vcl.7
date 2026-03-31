@@ -1,0 +1,654 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "VCL" "7" "" ""
+.SH NAME
+VCL \- Vinyl Configuration Language
+.\" Copyright (c) 2010-2021 Varnish Software AS
+.\" SPDX-License-Identifier: BSD-2-Clause
+.\" See LICENSE file for full text of license
+.
+.SH DESCRIPTION
+.sp
+The VCL language is a small domain\-specific language designed to be
+used to describe request handling and document caching policies for
+Vinyl Cache.
+.sp
+When a new configuration is loaded, the \fIvinyld\fP management process
+translates the VCL code to C and compiles it to a shared object which
+is then loaded into the server process.
+.sp
+This document focuses on the syntax of the VCL language. For a full
+description of syntax and semantics, with ample examples, please see
+the online documentation at  <https://www.vinyl\-cache.org/docs/>  .
+.SS Identifiers
+.sp
+VCL language elements are generally written in ASCII.
+.sp
+Identifiers start with an ASCII alphabetic character and continue with any
+combination of alphabetic or numerical character, \fB\-\fP or \fB_\fP\&.
+.sp
+To illustrate, \fBe1xam_p\-le\fP is a valid identifier, \fB1try\fP and
+\fBa%remainder\fP are not.
+.SS Character Sets
+.sp
+While identifiers can only consist of this subset of ASCII, \fBstrings\fP can
+contain any bytes except \fINUL\fP (zero, 0), which marks the end of the string. The
+Vinyl Configuration Language itself is not concerned with the character
+encoding of strings. VCL code handling strings in different character sets needs
+to track encodings itself. VMODs <https://vinyl-cache.org/docs/trunk/reference/vmod.html>
+ exist to help with such tasks (e.g.
+\fBiconv\fP).
+.sp
+To illustrate, \fB\(dq🥬\(dq\fP is a valid \fBstring\fP which, when interpreted as UTF\-8,
+happens to represent code point \fBU+1F96C\fP (Leafy Green) but \fB🥬\fP is not a
+valid \fIidentifier\fP\&.
+.SS Character Sets in HTTP
+.sp
+Not all valid strings in VCL are valid in HTTP elements other than the body
+(e.g. URLs and headers). For example, HTTP header field values can not contain
+control characters, see also the \fBvalidate_headers\fP \fIref_param_feature\fP\&.
+.SS Operators
+.sp
+The following operators are available in VCL:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB=\fP
+Assignment operator.
+.TP
+.B \fB+\fP, \fB\-\fP, \fB*\fP, \fB/\fP, \fB%\fP
+Basic math on numerical values.
+.TP
+.B \fB+=\fP, \fB\-=\fP, \fB*=\fP, \fB/=\fP
+Assign and increment/decrement/multiply/divide operator.
+.sp
+For strings, \fB+=\fP appends.
+.TP
+.B \fB(\fP, \fB)\fP
+Evaluate separately.
+.TP
+.B \fB==\fP, \fB!=\fP, \fB<\fP, \fB>\fP, \fB<=\fP, \fB>=\fP
+Comparisons
+.TP
+.B \fB~\fP, \fB!~\fP
+Match / non\-match. Can either be used with regular expressions or ACLs.
+.TP
+.B \fB!\fP
+Negation.
+.TP
+.B \fB&&\fP / \fB||\fP
+Logical and/or.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS On Equality
+.sp
+In this section, \(dqcompare equal\(dq means that the \fB==\fP operator returns \fBtrue\fP
+and, conversely, the \fB!=\fP operator returns \fBfalse\fP\&.
+.sp
+The VCL types \fBINT\fP, \fBDURATION\fP, \fBBYTES\fP, \fBREAL\fP and \fBTIME\fP compare
+equal if their values compare equal numerically.
+.sp
+Notice that \fBDURATION\fP, \fBREAL\fP and \fBTIME\fP are represented as floating
+point numbers, and hence testing for (in)equality might be unreliable.
+.sp
+\fBIP\fP compares equal for equal address.
+.sp
+\fBSTRING\fP and \fBSTRANDS\fP compare equal if the represented strings are equal.
+.sp
+\fBBOOL\fP compares equal if the truth value is the same.
+.sp
+The VCL types \fBBACKEND\fP, \fBACL\fP, \fBPROBE\fP, \fBSTEVEDORE\fP, \fBSUB\fP and
+\fBINSTANCE\fP compare equal if they represent the same object. Different objects
+with the same properties will never compare equal.
+.SS Conditionals
+.sp
+VCL has \fBif\fP and \fBelse\fP statements. Nested logic can be
+implemented with the \fBelseif\fP statement (\fBelsif\fP/\fBelif\fP/\fBelse if\fP are equivalent).
+.sp
+Note that there are no loops or iterators of any kind in VCL.
+.SS Variables
+.sp
+VCL does most of the work by examining, \fBset\fP\(aqing and \fBunset\fP\(aqing
+variables:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+if (req.url == \(dq/mistyped_url.html\(dq) {
+    set req.url = \(dq/correct_url.html\(dq;
+    unset req.http.cookie;
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+There are obvious limitations to what can be done, for instance it
+makes no sense to \fBunset req.url;\fP \- a request must have some kind
+of URL to be valid, and likewise trying to manipulate a backend response
+when there is none (yet) makes no sense.
+The VCL compiler will detect such errors.
+.sp
+Variables have types.  Most of them a STRINGS, and anything in
+VCL can be turned into a STRING, but some variables have types like
+\fBDURATION\fP, \fBIP\fP etc.
+.sp
+When setting a such variables, the right hand side of the equal
+sign must have the correct variables type, you cannot assign a
+STRING to a variable of type NUMBER, even if the string is \fB\(dq42\(dq\fP\&.
+.sp
+Explicit conversion functions are available in \fIvmod_std(3)\fP\&.
+.sp
+For the complete album of VCL variables see: \fIvcl\-var(7)\fP\&.
+.SS Strings
+.sp
+Basic strings are enclosed in double quotes \fB\(dq\fP\fI\&...\fP\fB\(dq\fP, and
+may not contain newlines. Long strings are enclosed in
+\fB{\(dq\fP\fI\&...\fP\fB\(dq}\fP or \fB\(dq\(dq\(dq\fP\fI\&...\fP\fB\(dq\(dq\(dq\fP\&. They may contain any
+character including single double quotes \fB\(dq\fP, newline and other control
+characters except for the \fINUL\fP (0x00) character.
+.SS Booleans
+.sp
+Booleans can be either \fBtrue\fP or \fBfalse\fP\&.  In addition, in a boolean
+context some data types will evaluate to \fBtrue\fP or \fBfalse\fP depending on
+their value.
+.sp
+String types will evaluate to \fBfalse\fP if they are unset.  This allows
+checks of the type \fBif (req.http.opthdr) {}\fP to test if a header
+exists, even if it is empty, whereas \fBif (req.http.opthdr == \(dq\(dq) {}\fP
+does not distinguish if the header does not exist or if it is empty.
+.sp
+Backend types
+will evaluate to \fBfalse\fP if they don\(aqt have a backend assigned; integer
+types will evaluate to \fBfalse\fP if their value is zero; duration types
+will evaluate to \fBfalse\fP if their value is equal or less than zero.
+.SS Time
+.sp
+VCL has time. A duration can be added to a time to make another time.
+In string context they return a formatted string in RFC1123 format,
+e.g. \fBSun, 06 Nov 1994 08:49:37 GMT\fP\&.
+.sp
+The keyword \fBnow\fP returns a notion of the current time, which is
+kept consistent during VCL subroutine invocations, so during the
+execution of a VCL state subroutine (\fBvcl_* {}\fP), including all
+user\-defined subroutines being called, \fBnow\fP always returns the
+same value.
+.SS Durations
+.sp
+Durations are defined by a number followed by a unit. The number can
+include a fractional part, e.g. \fB1.5s\fP\&. The supported units are:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBms\fP
+milliseconds
+.TP
+.B \fBs\fP
+seconds
+.TP
+.B \fBm\fP
+minutes
+.TP
+.B \fBh\fP
+hours
+.TP
+.B \fBd\fP
+days
+.TP
+.B \fBw\fP
+weeks
+.TP
+.B \fBy\fP
+years
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+In string context they return a string with their value rounded to
+3 decimal places and excluding the unit, e.g.  \fB1.500\fP\&.
+.SS Integers
+.sp
+Certain fields are integers, used as expected. In string context they
+return a string, e.g. \fB1234\fP\&.
+.SS Real numbers
+.sp
+VCL understands real numbers. In string context they return a string
+with their value rounded to 3 decimal places, e.g. \fB3.142\fP\&.
+.SS Regular Expressions
+.sp
+Vinyl Cache uses Perl\-compatible regular expressions (PCRE). For a
+complete description please see the pcre(3) man page.
+.sp
+To send flags to the PCRE engine, such as to do case\-insensitive matching, add
+the flag within parens following a question mark, like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+# If host is NOT example dot com..
+if (req.http.host !~ \(dq(?i)example\e.com$\(dq) {
+    ...
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS Include statement
+.sp
+To include a VCL file in another file use the \fBinclude\fP keyword:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+include \(dqfoo.vcl\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The included file can be specified as follows:
+.INDENT 0.0
+.IP \(bu 2
+If the path starts with \(aq/\(aq, it is an absolute path.
+.IP \(bu 2
+If the path starts with \(aq./\(aq, it is relative to the including VCL file.
+.IP \(bu 2
+Otherwise, it is a relative path searched in one of the \fBvcl_path\fP directories.
+.UNINDENT
+.sp
+Optionally, the \fBinclude\fP keyword can take a \fB+glob\fP flag to include all
+files matching a glob pattern:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+include +glob \(dq/etc/vinyl\-cache/example.org/*.vcl\(dq;
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Note that the \fB+glob\fP option can only be used with absolute paths and
+relative paths starting with \(aq./\(aq, which means that \fB+glob\fP includes cannot
+be searched in \fBvcl_path\fP directories.
+.SS Import statement
+.sp
+The \fBimport\fP statement is used to load Vinyl Modules (VMODs.)
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import std;
+sub vcl_recv {
+    std.log(\(dqfoo\(dq);
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS Comments
+.sp
+Single lines of VCL can be commented out using \fB//\fP or
+\fB#\fP\&. Multi\-line blocks can be commented out with
+\fB/*\fP\fIblock\fP\fB*/\fP\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    // Single line of out\-commented VCL.
+    # Another way of commenting out a single line.
+    /*
+        Multi\-line block of commented\-out VCL.
+    */
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS Backends and health probes
+.sp
+Please see \fIvcl\-backend(7)\fP and \fIvcl\-probe(7)\fP
+.SS Access Control List (ACL)
+.sp
+An Access Control List (ACL) declaration creates and initialises a named access
+control list which can later be used to match client addresses:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+acl localnetwork {
+    \(dqlocalhost\(dq;    # myself
+    \(dq192.0.2.0\(dq/24; # and everyone on the local network
+    ! \(dq192.0.2.23\(dq; # except for the dial\-in router
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+If an ACL entry specifies a host name which \fIvinyld\fP is unable to
+resolve, it will match any address it is compared to. Consequently,
+if it is preceded by a negation mark, it will reject any address it is
+compared to, which may not be what you intended. If the entry is
+enclosed in parentheses, however, it will simply be ignored if the
+host name cannot be resolved.
+.sp
+To match an IP address against an ACL, simply use the match operator:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+if (client.ip ~ localnetwork) {
+    return (pipe);
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+ACLs have feature flags which can be set or cleared for each ACL
+individually:
+.INDENT 0.0
+.IP \(bu 2
+\fI+log\fP \- Emit a \fIAcl\fP record in VSL to tell if a match was found
+or not.
+.IP \(bu 2
+\fI+table\fP \- Implement the ACL with a table instead of compiled code.
+This runs a little bit slower, but compiles large ACLs much faster.
+.IP \(bu 2
+\fI\-pedantic\fP \- Allow masks to cover non\-zero host\-bits.
+This allows the following to work:
+.INDENT 2.0
+.INDENT 3.5
+.sp
+.EX
+acl foo \-pedantic +log {
+    \(dqfirewall.example.com\(dq / 24;
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+However, if the name resolves to both IPv4 and IPv6 you will still
+get an error.
+.IP \(bu 2
+\fI\-fold\fP \- Do not fold ACL supernets and adjacent networks.
+.sp
+With this parameter set to on (default), ACLs are optimized in that subnets
+contained in other entries are skipped (e.g.  if 1.2.3.0/24 is part of the
+ACL, an entry for 1.2.3.128/25 will not be added) and adjacent entries get
+folded (e.g.  if both 1.2.3.0/25 and 1.2.3.128/25 are added, they will be
+folded to 1.2.3.0/24).
+.sp
+Skip and fold operations on ACL entries are output as warnings
+during VCL compilation as entries from the VCL are processed in
+order unless the \fI\-report\fP sub\-flag is also given (see below).
+.sp
+Logging under the \fBVCL_acl\fP tag can change with this parameter
+enabled: Matches on skipped subnet entries are now logged as matches
+on the respective supernet entry. Matches on folded entries are
+logged with a shorter netmask which might not be contained in the
+original ACL as defined in VCL. Such log entries are marked by
+\fBfixed: folded\fP\&.
+.sp
+Negated ACL entries are never folded.
+.sp
+Exactly one sub\-flag is supported following \fIfold\fP in parenthesis:
+.INDENT 2.0
+.IP \(bu 2
+\fI+fold(+report)\fP \- Fold with reporting (default)
+.sp
+Report about folding as described above
+.IP \(bu 2
+\fI+fold(\-report)\fP \- Fold without reporting
+.sp
+Enable folding, but do not output folding\-related warnings during VCL
+compilation
+.UNINDENT
+.sp
+The \fBreport\fP sub\-option is only valid with \fB+fold\fP\&.
+.UNINDENT
+.SS VCL objects
+.sp
+A VCL object can be instantiated with the \fBnew\fP keyword:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_init {
+    new b = directors.round_robin();
+    b.add_backend(node1);
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The object name (\fBb\fP in the example) needs to be a valid \fIIdentifier
+<Identifiers>\fP\&.
+.sp
+This is only available in \fBvcl_init\fP\&.
+.SS Subroutines
+.sp
+A subroutine is used to group code for legibility or reusability:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub pipe_if_local {
+    if (client.ip ~ localnetwork) {
+        return (pipe);
+    }
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Subroutines in VCL do not take arguments, nor do they return
+values. The built in subroutines all have names beginning with \fBvcl_\fP,
+which is reserved.
+.sp
+To call a subroutine, use the \fBcall\fP keyword followed by the
+subroutine\(aqs name:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    call pipe_if_local;
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS Symbol references
+.sp
+Some VCL symbols are subject to reference counting, and would trigger a vcl
+compiler error if they were declared but not used. One way to turn these errors
+into warnings is to add \fB\-p vcc_feature=\-err_unref\fP to your \fBvinyld\fP
+command line. This will disable the error globally for all symbols in every VCL
+that is compiled.
+.sp
+If you only want to disable the error for some specific symbols, the \fBunused\fP
+keyword can be used to mark such symbols as intentionally unused:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+backend b1 { .host = \(dqlocalhost\(dq; }
+probe p1 { }
+acl acl1 { \(dqlocalhost\(dq; }
+sub sb {}
+
+unused b1;
+unused p1;
+unused acl1;
+unused sb;
+.EE
+.UNINDENT
+.UNINDENT
+.SS Return statements
+.sp
+The ongoing \fBvcl_*\fP subroutine execution ends when a
+\fBreturn(\fP\fI<action>\fP\fB)\fP statement is made.
+.sp
+The \fI<action>\fP specifies how execution should proceed. The context
+defines which actions are available.
+.sp
+It is possible to exit a subroutine that is not part of the built\-in ones
+using a simple \fBreturn\fP statement without specifying an action. It exits
+the subroutine without transitioning to a different state:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub filter_cookies {
+    if (!req.http.cookie) {
+        return;
+    }
+    # complex cookie filtering
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS Multiple subroutines
+.sp
+If multiple subroutines with the name of one of the built\-in ones are defined,
+they are concatenated in the order in which they appear in the source.
+.sp
+The built\-in VCL distributed with Vinyl Cach will be implicitly concatenated
+when the VCL is compiled.
+.SS Functions
+.sp
+The following built\-in functions are available:
+.SS ban(STRING)
+.INDENT 0.0
+.INDENT 3.5
+Deprecated. See \fIstd.ban()\fP\&.
+.sp
+The \fBban()\fP function is identical to \fIstd.ban()\fP, but does
+not provide error reporting.
+.UNINDENT
+.UNINDENT
+.SS hash_data(input)
+.INDENT 0.0
+.INDENT 3.5
+Adds an input to the hash input. In the built\-in VCL \fBhash_data()\fP
+is called on the host and URL of the request. Available in \fBvcl_hash\fP\&.
+.UNINDENT
+.UNINDENT
+.SS synthetic(STRING)
+.INDENT 0.0
+.INDENT 3.5
+Prepare a synthetic response body containing the \fISTRING\fP\&. Available
+in \fBvcl_synth\fP and \fBvcl_backend_error\fP\&.
+.sp
+Identical to \fBset resp.body\fP /  \fBset beresp.body\fP\&.
+.UNINDENT
+.UNINDENT
+.\" list above comes from struct action_table[] in vcc_action.c.
+.
+.SS regsub(str, regex, sub)
+.INDENT 0.0
+.INDENT 3.5
+Returns a copy of \fIstr\fP with the first occurrence of the regular
+expression \fIregex\fP replaced with \fIsub\fP\&. Within \fIsub\fP, \fB\e0\fP (which
+can also be spelled \fB\e&\fP) is replaced with the entire matched
+string, and \fB\e\fP\fIn\fP is replaced with the contents of subgroup \fIn\fP
+in the matched string.
+.UNINDENT
+.UNINDENT
+.SS regsuball(str, regex, sub)
+.INDENT 0.0
+.INDENT 3.5
+As \fBregsub()\fP, but this replaces all occurrences.
+.UNINDENT
+.UNINDENT
+.\" regsub* is in vcc_expr.c
+.
+.sp
+For converting or casting VCL values between data types use the functions
+available in the std VMOD.
+.SH VERSIONING
+.sp
+Multiple versions of the VCL syntax can coexist within certain
+constraints.
+.sp
+The VCL syntax version at the start of VCL file specified with \fB\-f\fP
+sets the hard limit that cannot be exceeded anywhere, and it selects
+the appropriate version of the builtin VCL.
+.sp
+That means that you can never include \fBvcl 9.1;\fP from \fBvcl 8.7;\fP,
+but the opposite \fImay\fP be possible, to the extent the compiler
+supports it.
+.sp
+Files pulled in via \fBinclude\fP do not need to have a
+\fBvcl\fP \fIX.Y\fP\fB;\fP but it may be a good idea to do it anyway, to
+not have surprises in the future.  The syntax version set in an
+included file only applies to that file and any files it includes \-
+unless these set their own VCL syntax version.
+.sp
+The version of Vinyl Cache this file belongs to supports syntax 4.0 and 4.1.
+.SH EXAMPLES
+.sp
+For examples, please see the online documentation.
+.SH SEE ALSO
+.INDENT 0.0
+.IP \(bu 2
+\fIvinyld(1)\fP
+.IP \(bu 2
+\fIvcl\-backend(7)\fP
+.IP \(bu 2
+\fIvcl\-probe(7)\fP
+.IP \(bu 2
+\fIvcl\-step(7)\fP
+.IP \(bu 2
+\fIvcl\-var(7)\fP
+.IP \(bu 2
+\fIvmod_directors(3)\fP
+.IP \(bu 2
+\fIvmod_std(3)\fP
+.UNINDENT
+.SH HISTORY
+.sp
+VCL was developed by Poul\-Henning Kamp in cooperation with Verdens
+Gang AS, Redpill Linpro and Varnish Software.  This manual page is
+written by Per Buer, Poul\-Henning Kamp, Martin Blix Grydeland,
+Kristian Lyngstøl, Lasse Karstensen and others.
+.SH COPYRIGHT
+.sp
+This document is licensed under the same license as Vinyl Cache
+itself. See LICENSE for details.
+.INDENT 0.0
+.IP \(bu 2
+Copyright (c) 2006 Verdens Gang AS
+.IP \(bu 2
+Copyright (c) 2006\-2015 Varnish Software AS
+.UNINDENT
+.\" Generated by docutils manpage writer.
+.

@@ -1,0 +1,167 @@
+vtest "Test RFC9112 3.2 compliance"
+
+server s1 -repeat 8 {
+	rxreq
+	txresp -hdr "Foo: 1"
+} -start
+
+vinyl v1 -arg "-p vsl_mask=+ReqTarget" -vcl+backend {
+	sub vcl_req_method {
+		if (req.method == "CONNECT") {
+			return (pass);
+		}
+	}
+
+	sub vcl_deliver {
+		set resp.http.rxhost = req.http.host;
+		set resp.http.url = req.url;
+	}
+} -start
+
+logexpect l1001 -v v1 -g vxid -q "vxid == 1001" {
+	fail add *	ReqURL
+	fail add *	End
+	expect 3 *	ReqTarget {^\Qhttp://www.example.com/bar\E$}
+	expect 0 =	ReqUnset  {^\Qhost: another\E$}
+	expect 0 =	ReqHeader {^\QHost: www.example.com\E$}
+        fail clear
+} -start
+
+logexpect l1003 -v v1 -g vxid -q "vxid == 1003" {
+	fail add *	ReqURL
+	fail add *	End
+	expect 3 *	ReqTarget {^\Qhttp://www.example.com/\E$}
+	expect 0 =	ReqUnset  {^\Qhost: another\E$}
+	expect 0 =	ReqHeader {^\QHost: www.example.com\E$}
+        fail clear
+} -start
+
+logexpect l1005 -v v1 -g vxid -q "vxid == 1005" {
+	fail add *	ReqURL
+	fail add *	End
+	expect 3 *	ReqTarget {^\Qhttp://www.example.com\E$}
+	expect 0 =	ReqUnset  {^\Qhost: another\E$}
+	expect 0 =	ReqHeader {^\QHost: www.example.com\E$}
+        fail clear
+} -start
+
+logexpect l1006 -v v1 -g vxid -q "vxid == 1006" {
+	fail add *	ReqURL
+	fail add *	End
+	expect 3 *	ReqTarget {^\Qhttp://www.example.com\E$}
+	expect 0 =	ReqUnset  {^\Qhost: another\E$}
+	expect 0 =	ReqHeader {^\QHost: www.example.com\E$}
+        fail clear
+	fail add *	End
+	expect 3 =	ReqMethod {^OPTIONS$}
+	expect 0 =	ReqURL {^\Q*\E$}
+        fail clear
+} -start
+
+logexpect l1008 -v v1 -g vxid -q "vxid == 1008" {
+	fail add *	End
+	expect 3 *	ReqTarget {^\Qexample.com:80\E$}
+	expect 2 =	ReqMethod {^CONNECT$}
+	expect 0 =	ReqURL {^\Qexample.com:80\E$}
+        fail clear
+} -start
+
+logexpect l1010 -v v1 -g vxid -q "vxid == 1010" {
+	fail add *	End
+	expect 3 *	ReqTarget {^\Q*\E$}
+	expect 2 =	ReqMethod {^OPTIONS$}
+	expect 0 =	ReqURL {^\Q*\E$}
+        fail clear
+} -start
+
+client c1 {
+	# 1001
+	txreq -url http://www.example.com/bar -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == www.example.com
+	expect resp.http.url == /bar
+
+	# 1003
+	txreq -url http://www.example.com/ -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == www.example.com
+	expect resp.http.url == /
+
+	# 1005
+	txreq -url http://www.example.com -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == www.example.com
+	expect resp.http.url == /
+
+	# 1006
+	txreq -method OPTIONS -url http://www.example.com -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == www.example.com
+	expect resp.http.url == *
+
+	# 1008
+	# we do not actually handle CONNECT here
+	txreq -req CONNECT -url example.com:80 -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == "another"
+	expect resp.http.url == "example.com:80"
+
+	# 1010
+	txreq -req OPTIONS -url "*" -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == "another"
+	expect resp.http.url == "*"
+
+	# https, otherwise like 1005
+	txreq -url https://www.example.com -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == www.example.com
+	expect resp.http.url == /
+
+	#
+	txreq -url https://www.example.com?/foo -hdr "host: another"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.Foo == 1
+	expect resp.http.rxhost == www.example.com
+	expect resp.http.url == /?/foo
+
+	txreq -url http:///bar -hdr "host: another"
+	rxresp
+	expect resp.status == 400
+} -run
+
+client c2 {
+	txreq -url http:// -hdr "host: another"
+	rxresp
+	expect resp.status == 400
+} -run
+
+client c3 {
+	txreq -method OPTIONS -url http:// -hdr "host: another"
+	rxresp
+	expect resp.status == 400
+} -run
+
+vinyl v1 -expect MAIN.http1_absolute_form == 9
+
+logexpect l1001 -wait
+logexpect l1003 -wait
+logexpect l1005 -wait
+logexpect l1006 -wait
+logexpect l1008 -wait
+logexpect l1010 -wait

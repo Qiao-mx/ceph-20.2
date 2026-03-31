@@ -1,0 +1,72 @@
+vtest "Check req.backend.healthy"
+
+barrier b1 cond 2
+barrier b2 cond 2
+barrier b3 cond 2
+barrier b4 cond 2
+
+server s1 {
+	rxreq
+	barrier b1 sync
+	expect req.url == "/"
+	txresp -body "slash"
+	accept
+	rxreq
+	barrier b2 sync
+	barrier b3 sync
+	expect req.url == "/"
+	txresp -body "slash"
+	accept
+	barrier b4 sync
+} -start
+
+vinyl v1 -vcl {
+
+	import std;
+
+	probe foo {
+		.url = "/";
+		.timeout = 2s;
+		.interval = 2s;
+		.window = 3;
+		.threshold = 2;
+		.initial = 0;
+	}
+
+	backend default {
+		.host = "${s1_addr}";
+		.port = "${s1_port}";
+		.max_connections = 1;
+		.probe = foo;
+	}
+
+	sub vcl_recv {
+		if (std.healthy(default)) {
+			return(synth(200,"Backend healthy " + req.url));
+		} else {
+			return(synth(500,"Backend sick " + req.url));
+		}
+	}
+} -start
+
+vinyl v1 -cliok "backend.list -p"
+vinyl v1 -clijson "backend.list -j -p"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 500
+
+	barrier b1 sync
+
+	barrier b2 sync
+	txreq
+	rxresp
+	expect resp.status == 500
+
+	barrier b3 sync
+	barrier b4 sync
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run

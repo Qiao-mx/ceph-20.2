@@ -1,0 +1,220 @@
+vtest "PROXY v2 TLV overflow"
+
+# this does not work with IPv6, the workspace overflow test is too brittle
+feature ipv4
+
+vinyl v1 -arg "-p pool_sess=0,0,0" -proto "PROXY" -vcl {
+	backend be none;
+} -start
+
+logexpect l1 -v v1 -g raw {
+	expect * 1000	Begin		"sess 0 PROXY"
+	expect * 1000	ProxyGarbage	"PROXY2: CRC error"
+} -start
+
+client c1 {
+	# PROXY2 with CRC32C TLV and bad checksum
+	sendhex {
+		0d 0a 0d 0a 00 0d 0a 51 55 49 54 0a
+		21 11 00 65
+		d9 46 b5 21
+		5f 8e a8 22
+		ed 96
+		01 bb
+		03 00 04  95 03 ee 74
+		01 00 02  68 32
+		02 00 0a  68 6f 63 64 65 74 2e 6e 65 74
+		20 00 3d
+		01 00 00 00 00
+		21 00 07  54 4c 53 76 31 2e 33
+		25 00 05  45 43 32 35 36
+		24 00 0a  52 53 41 2d 53 48 41 32 35 36
+		23 00 16  41 45 41 44 2d 41 45 53 31 32 38
+			  2d 47 43 4d 2d 53 48 41 32 35 36
+	}
+	txreq
+	expect_close
+} -run
+
+vinyl v1 -vsl_catchup
+
+logexpect l1 -wait
+
+logexpect l1 -v v1 -g raw {
+	expect * 1001	Begin		"sess 0 PROXY"
+	expect * 1001	ProxyGarbage	"PROXY2: TLV Dribble bytes"
+} -start
+
+client c1 {
+	# PROXY2 with CRC32C TLV and bad checksum
+	sendhex {
+		0d 0a 0d 0a 00 0d 0a 51 55 49 54 0a
+		21 11 00 67
+		d9 46 b5 21
+		5f 8e a8 22
+		ed 96
+		01 bb
+		ff 00 04  95 03 ee 74
+		01 00 02  68 32
+		02 00 0a  68 6f 63 64 65 74 2e 6e 65 74
+		20 00 3d
+		01 00 00 00 00
+		21 00 07  54 4c 53 76 31 2e 33
+		25 00 05  45 43 32 35 36
+		24 00 0a  52 53 41 2d 53 48 41 32 35 36
+		23 00 16  41 45 41 44 2d 41 45 53 31 32 38
+			  2d 47 43 4d 2d 53 48 41 32 35 36
+		ff ff
+	}
+	txreq
+	expect_close
+} -run
+
+vinyl v1 -vsl_catchup
+
+logexpect l1 -wait
+
+logexpect l1 -v v1 -g raw {
+	expect * 1002	Begin		"sess 0 PROXY"
+	expect * 1002	ProxyGarbage	"PROXY2: TLV Length Error"
+} -start
+
+client c1 {
+	# PROXY2 with CRC32C TLV and bad checksum
+	sendhex {
+		0d 0a 0d 0a 00 0d 0a 51 55 49 54 0a
+		21 11 00 60
+		d9 46 b5 21
+		5f 8e a8 22
+		ed 96
+		01 bb
+		ff 00 04  95 03 ee 74
+		01 00 02  68 32
+		02 00 0a  68 6f 63 64 65 74 2e 6e 65 74
+		20 00 3d
+		01 00 00 00 00
+		21 00 07  54 4c 53 76 31 2e 33
+		25 00 05  45 43 32 35 36
+		24 00 0a  52 53 41 2d 53 48 41 32 35 36
+		23 00 16  41 45 41 44 2d 41 45 53 31 32 38
+			  2d 47 43 4d 2d 53 48 41 32 35 36
+	}
+	txreq
+	expect_close
+} -run
+
+vinyl v1 -vsl_catchup
+
+logexpect l1 -wait
+
+logexpect l1 -v v1 -g raw {
+	expect * 1003	Begin		"sess 0 PROXY"
+	expect * 1003	ProxyGarbage	"PROXY2: TLV Length Error"
+} -start
+
+client c1 {
+	# PROXY2 with CRC32C TLV and bad checksum
+	sendhex {
+		0d 0a 0d 0a 00 0d 0a 51 55 49 54 0a
+		21 11 00 65
+		d9 46 b5 21
+		5f 8e a8 22
+		ed 96
+		01 bb
+		ff 00 04  95 03 ee 74
+		01 00 02  68 32
+		02 00 0a  68 6f 63 64 65 74 2e 6e 65 74
+		20 00 3c
+		01 00 00 00 00
+		21 00 07  54 4c 53 76 31 2e 33
+		25 00 05  45 43 32 35 36
+		24 00 0a  52 53 41 2d 53 48 41 32 35 36
+		23 00 16  41 45 41 44 2d 41 45 53 31 32 38
+			  2d 47 43 4d 2d 53 48 41 32 35 36
+	}
+	txreq
+	expect_close
+} -run
+
+vinyl v1 -vsl_catchup
+
+logexpect l1 -wait
+
+# workspace overflow handling elsewhere in the proxy code
+#
+# the workspace_session size is chosen to fail as closely as possible
+# below the minimum required value for the vtc to work (= the
+# workspace to overflow) both on 64 and 32 bit.
+#
+# This value is fragile, ideally we would want something like
+# vtc.alloc(-x), yet there is no vcl code being run before we parse
+# proxy headers
+#
+# 20210825: Minimum possible seems to be 364, but param.min is 384 now.
+
+vinyl v1 -cliok "param.set workspace_session 384"
+
+# get rid of the surplus session mpl & zero vsc
+
+vinyl v1 -stop
+vinyl v1 -cliok "param.set pool_sess 1,1,1"
+vinyl v1 -start
+
+client c2 {
+	# PROXY2 with CRC32C TLV
+	sendhex {
+		0d 0a 0d 0a 00 0d 0a 51 55 49 54 0a
+		21 11 00 65
+		d9 46 b5 21
+		5f 8e a8 22
+		ed 96
+		01 bb
+		03 00 04  95 03 ee 75
+		01 00 02  68 32
+		02 00 0a  68 6f 63 64 65 74 2e 6e 65 74
+		20 00 3d
+		01 00 00 00 00
+		21 00 07  54 4c 53 76 31 2e 33
+		25 00 05  45 43 32 35 36
+		24 00 0a  52 53 41 2d 53 48 41 32 35 36
+		23 00 16  41 45 41 44 2d 41 45 53 31 32 38
+			  2d 47 43 4d 2d 53 48 41 32 35 36
+	}
+	txreq
+	expect_close
+} -run
+
+vinyl v1 -expect ws_session_overflow == 1
+
+# increased workspace is being reflected immediately
+
+vinyl v1 -cliok "param.set workspace_session 524"
+
+vinyl v1 -cliok "param.set debug +workspace"
+
+client c1 {
+	# PROXY2 sp->ws overflow
+	sendhex {
+		0d 0a 0d 0a 00 0d 0a 51 55 49 54 0a
+		21 11 01 23
+		d9 46 b5 21
+		5f 8e a8 22
+		ed 96
+		01 bb
+		03 00 04  c5 1b 5b 2b
+		01 00 02  68 32
+		02 00 c8  ${string,repeat,200,"61 "}
+		20 00 3d
+		01 00 00 00 00
+		21 00 07  54 4c 53 76 31 2e 33
+		25 00 05  45 43 32 35 36
+		24 00 0a  52 53 41 2d 53 48 41 32 35 36
+		23 00 16  41 45 41 44 2d 41 45 53 31 32 38
+			  2d 47 43 4d 2d 53 48 41 32 35 36
+	}
+	expect_close
+} -run
+
+delay 1
+
+vinyl v1 -expect ws_session_overflow >= 2

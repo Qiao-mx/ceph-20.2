@@ -1,0 +1,37 @@
+vtest "#1781 gzip checksum with multilevel esi"
+
+server s1 {
+	rxreq
+	txresp -body {<esi:include src="/1"/>Baz}
+
+	rxreq
+	expect req.url == /1
+	txresp -body {<esi:include src="/2"/>Bar}
+
+	rxreq
+	expect req.url == /2
+	txresp -body {Foo}
+} -start
+
+# give enough stack to 32bit systems
+vinyl v1 -cliok "param.set thread_pool_stack 128k"
+vinyl v1 -cliok "param.set feature +esi_disable_xml_check"
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.do_gzip = true;
+		set beresp.do_esi = true;
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.body == "FooBarBaz"
+
+	txreq -hdr "Accept-Encoding: gzip"
+	rxresp
+	expect resp.http.content-encoding == "gzip"
+	gunzip
+	expect resp.body == "FooBarBaz"
+} -run

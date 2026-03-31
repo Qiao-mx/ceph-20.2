@@ -1,0 +1,53 @@
+vtest "Streaming range premature finish"
+
+server s1 {
+	rxreq
+	txresp -nolen -hdr "Content-length: 9"
+	delay 1
+	send "BLA"
+	delay .4
+	send "BLA"
+	delay .3
+	send "BL"
+	delay .3
+} -start
+
+vinyl v1 -vcl+backend { } -start
+
+logexpect l1 -v v1 -g session {
+	expect 0 1000	Begin		sess
+	expect * =	SessClose	RANGE_SHORT
+} -start
+
+client c1 {
+	txreq -hdr "range: bytes=0-16"
+	rxresp -no_obj
+	expect resp.status == 206
+	expect resp.http.content-length == 9
+	recv 8
+	expect_close
+} -run
+
+vinyl v1 -expect MAIN.sc_range_short == 1
+logexpect l1 -wait
+
+delay .3
+
+vinyl v1 -cliok "param.set feature +http2"
+
+server s1 -start
+
+client c2 {
+	stream 1 {
+		txreq -hdr "range" "bytes=0-16"
+		rxhdrs
+		expect resp.status == 206
+		expect resp.http.content-length == 9
+		rxdata -some 3
+		expect resp.body == BLABLABL
+		rxrst
+		expect rst.err == INTERNAL_ERROR
+	} -run
+} -run
+
+vinyl v1 -expect MAIN.sc_range_short == 1

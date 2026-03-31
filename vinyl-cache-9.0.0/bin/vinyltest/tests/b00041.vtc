@@ -1,0 +1,97 @@
+vtest "Test vinyladm and the Telnet CLI"
+
+vinyl v1 -vcl {backend foo { .host = "${localhost}"; } } -start
+
+shell -err -expect {Usage: vinyladm} \
+	"vinyladm -7"
+
+shell -err -expect {Could not get hold of vinyld, is it running?} \
+	"vinyladm -n ${v1_name}/nonexistent"
+
+shell -err -expect {Connection failed} \
+	"vinyladm -t 4 -T ${bad_ip}:1 -S ${v1_name}/_.secret"
+
+server s1 {
+	send "FOO\n"
+} -start
+
+shell -err -expect {Rejected 400} \
+	{vinyladm -T ${s1_sock} -S /etc/group}
+
+server s1 {
+	send "107 59      \n"
+	send "qbvnnftpkgubadqpzznkkazoxlyqbcbj\n\n"
+	send "Authentication required.\n"
+	send "\n"
+} -start
+
+shell -err -expect {Authentication required} \
+	{vinyladm -T ${s1_sock}}
+
+server s1 {
+	send "107 59      \n"
+	send "qbvnnftpkgubadqpzznkkazoxlyqbcbj\n\n"
+	send "Authentication required.\n"
+	send "\n"
+} -start
+
+shell -err -expect {Cannot open } \
+	{vinyladm -T ${s1_sock} -S ${v1_name}/_.nonexistent}
+
+server s1 {
+	send "107 59      \n"
+	send "qbvnnftpkgubadqpzznkkazoxlyqbcbj\n\n"
+	send "Authentication required.\n"
+	send "\n"
+
+	recv 70
+	send "599 0       \n"
+	send "\n"
+} -start
+
+shell -err -expect {Rejected 599} \
+	{vinyladm -T ${s1_sock} -S ${v1_name}/_.secret}
+
+server s1 {
+	send "107 59      \n"
+	send "qbvnnftpkgubadqpzznkkazoxlyqbcbj\n\n"
+	send "Authentication required.\n"
+	send "\n"
+
+	recv 70
+	send "200 0       \n"
+	send "\n"
+
+	recv 5
+} -start
+
+shell -err -expect {No pong received from server} \
+	{vinyladm -T ${s1_sock} -S ${v1_name}/_.secret}
+
+server s1 {
+	send "107 59      \n"
+	send "qbvnnftpkgubadqpzznkkazoxlyqbcbj\n\n"
+	send "Authentication required.\n"
+	send "\n"
+
+	recv 70
+	send "200 0       \n"
+	send "\n"
+
+	recv 5
+	send "200 8       \n"
+	send "PONG 12\n"
+	send "\n"
+
+	recv 5
+	send "200 7       \n"
+	send "Tested\n"
+	send "\n"
+} -start
+
+shell -expect {Tested} \
+	{vinyladm -T ${s1_sock} -S ${v1_name}/_.secret test}
+
+shell "vinyladm -n ${v1_name} help > /dev/null"
+
+shell {VINYL_DEFAULT_N="${v1_name}" vinyladm help > /dev/null}

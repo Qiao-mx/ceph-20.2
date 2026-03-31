@@ -1,0 +1,13 @@
+vtest "mempool param handling"
+
+server s1 {
+} -start
+
+vinyl v1 -vcl+backend {}
+
+vinyl v1 -cliok "param.set pool_req 1,10,1"
+vinyl v1 -clierr 106 "param.set pool_req 10"
+vinyl v1 -clierr 106 "param.set pool_req 10,1,1"
+vinyl v1 -clierr 106 "param.set pool_req a,10,10"
+vinyl v1 -clierr 106 "param.set pool_req 10,a,10"
+vinyl v1 -clierr 106 "param.set pool_req 10,10,a"

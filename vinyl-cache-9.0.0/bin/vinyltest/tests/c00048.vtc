@@ -1,0 +1,105 @@
+vtest "Forcing health of backends"
+
+barrier b1 cond 2
+
+server s1 {
+	# probe
+	rxreq
+	txresp
+
+	# req
+	accept
+	rxreq
+	txresp
+	rxreq
+	txresp -hdr "Connection: close"
+
+	# probe sick
+	accept
+	rxreq
+	txresp -status 500
+	barrier b1 sync
+
+	accept
+	# req
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl {
+	backend s1 {
+		.host = "${s1_addr}";
+		.port = "${s1_port}";
+		.probe = {
+			.window = 8;
+			.initial = 7;
+			.threshold = 8;
+			.interval = 5s;
+		}
+	}
+
+	sub vcl_recv {
+		return(pass);
+	}
+
+} -start
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -cliok "vcl.list"
+vinyl v1 -cliok "backend.list -p"
+vinyl v1 -cliok "backend.set_health s1 auto"
+vinyl v1 -cliok "backend.list -p"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -cliok "backend.list"
+vinyl v1 -cliok "backend.set_health s1 sick"
+vinyl v1 -cliok "backend.list"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 503
+} -run
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -cliok "backend.list"
+vinyl v1 -cliok "backend.set_health s1 healthy"
+vinyl v1 -cliok "backend.list"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+# wait for sick probe
+barrier b1 sync
+
+# healthy overrides probe
+vinyl v1 -cliok "backend.list"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -clierr 106 "backend.set_health s1 foo"
+vinyl v1 -clierr 106 "backend.set_health s2 foo"
+vinyl v1 -clierr 106 "backend.set_health s2 auto"
+vinyl v1 -cliok "vcl.list"
+vinyl v1 -cliok "backend.list *"
+vinyl v1 -cliok "backend.list *.foo"
+vinyl v1 -cliok "backend.list vcl1.*"
+

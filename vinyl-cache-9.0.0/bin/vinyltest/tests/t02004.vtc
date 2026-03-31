@@ -1,0 +1,31 @@
+vtest "H2 panic"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -cliok "param.set feature +no_coredump"
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+vinyl v1 -vcl+backend {
+	import vtc;
+
+	sub vcl_recv {
+		vtc.panic("H2 panic");
+	}
+} -start
+
+client c1 {
+	stream 1 {
+		txreq -hdr :authority foo.bar -pad cotton
+	} -run
+	expect_close
+} -run
+
+delay 2
+
+vinyl v1 -cliok "panic.clear"
+
+vinyl v1 -expectexit 0x40

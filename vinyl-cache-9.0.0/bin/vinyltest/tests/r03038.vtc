@@ -1,0 +1,25 @@
+vtest "vcl.list and cli_limit"
+
+server s1 {
+} -start
+
+vinyl v1 -vcl+backend { } -start
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+vinyl v1 -vcl+backend { }
+
+vinyl v1 -expect n_vcl_avail == 10
+
+vinyl v1 -cliok "param.set cli_limit 128b"
+
+vinyl v1 -clierr 201 "vcl.list"
+
+vinyl v1 -stop
+
+vinyl v1 -clierr 201 "vcl.list"

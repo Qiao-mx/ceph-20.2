@@ -1,0 +1,56 @@
+vtest "Test resp.is_streaming"
+
+barrier b1 sock 2
+barrier b2 sock 2
+
+server s1 {
+	rxreq
+	txresp -nolen -hdr "Content-Length: 10"
+	barrier b1 sync
+	barrier b2 sync
+	send "1234567890"
+} -start
+
+vinyl v1 -vcl+backend {
+	import vtc;
+	sub vcl_recv {
+		if (req.url == "/synth") {
+			return(synth(200, "OK"));
+		}
+	}
+	sub vcl_backend_response {
+		vtc.barrier_sync("${b1_sock}");
+		return (deliver);
+	}
+	sub vcl_synth {
+		set resp.http.streaming = resp.is_streaming;
+	}
+	sub vcl_deliver {
+		set resp.http.streaming = resp.is_streaming;
+		if (obj.hits == 0) {
+			vtc.barrier_sync("${b2_sock}");
+		}
+	}
+} -start
+
+logexpect l1 -v v1 -q "Begin ~ bereq" -i End {
+	expect 0 1002 End
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.http.streaming == true
+} -run
+
+logexpect l1 -wait
+
+client c2 {
+	txreq
+	rxresp
+	expect resp.http.streaming == false
+
+	txreq -url /synth
+	rxresp
+	expect resp.http.streaming == false
+} -run

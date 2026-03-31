@@ -1,0 +1,52 @@
+vtest "#1834 - Buffer overflow in backend workspace"
+
+# This test case checks fetch side for buffer overflow when there is little
+# workspace left. If failing it would be because we tripped the canary
+# at the end of the workspace.
+#
+# status codes are not so important here, we just should not panic
+#
+# XXX almost the same as r02645.vtc
+
+server s1 -repeat 40 {
+	non_fatal
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import std;
+	import vtc;
+
+	sub vcl_recv {
+		return (pass);
+	}
+
+	sub vcl_backend_fetch {
+		# this relies on deterministic xids.
+		# first bereq is xid == 1002
+		vtc.workspace_alloc(backend, -320 +
+		    8 * ((bereq.xid - 1002) / 3));
+	}
+} -start
+
+# Start with enough workspace to receive some good results
+client c1 -repeat 5 {
+	txreq -hdr "Connection: close"
+	rxresp
+	expect resp.status == 200
+} -run
+
+# tolerance region where we do not care about the return code
+# failures should start at around xid 1042 (repeat 10)
+client c1 -repeat 15 {
+	txreq -hdr "Connection: close"
+	rxresp
+} -run
+
+# final must all fail.
+client c1 -repeat 20 {
+	txreq -hdr "Connection: close"
+	rxresp
+	expect resp.status == 503
+} -run

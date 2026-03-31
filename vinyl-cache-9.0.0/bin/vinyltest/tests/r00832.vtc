@@ -1,0 +1,7 @@
+vtest "Regression #832 IPV6 parse bug"
+
+vinyl v1 -vcl {
+	backend default {
+		.host = "[::]";
+	}
+}

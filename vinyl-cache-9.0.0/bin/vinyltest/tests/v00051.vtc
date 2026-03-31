@@ -1,0 +1,349 @@
+vtest "Test VCL failures 1/2"
+
+# part 2 is in v00053.vtc
+
+server s1 {
+	rxreq
+	expect req.url == /hit
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import debug;
+	sub vcl_recv {
+		# vxid 1009, 1018, 1020, 1022
+		if (req.http.foo ~ "^(deliver|hit|miss|hash)") {
+			return(hash);
+		}
+		# vxid 1016
+		if (req.http.foo == "purge") {
+			return(purge);
+		}
+		# vxid 1014
+		if (req.http.foo == "pass") {
+			return(pass);
+		}
+		# vxid 1012
+		if (req.http.foo == "pipe") {
+			return(pipe);
+		}
+		# vxid 1007
+		if (req.http.foo == "synth") {
+			return(synth(748));
+		}
+		# vxid 1001, 1003
+		if (req.restarts == 0) {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+	}
+	sub vcl_hash {
+		# vxid 1009
+		if (req.http.foo == "hash") {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+		# vxid 1018, 1020, 1022 default lookup
+	}
+	sub vcl_hit {
+		# vxid 1020
+		if (req.http.foo == "hit") {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+	}
+	sub vcl_miss {
+		# vxid 1018
+		if (req.http.foo == "miss") {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+	}
+	sub vcl_pass {
+		# vxid 1014
+		if (req.http.foo == "pass") {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+	}
+	sub vcl_pipe {
+		# vxid 1012
+		if (req.http.foo == "pipe") {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+	}
+	sub vcl_purge {
+		# vxid 1016
+		if (req.http.foo == "purge") {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+	}
+	sub vcl_deliver {
+		# vxid 1022
+		if (req.http.foo == "deliver") {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+	}
+	sub vcl_synth {
+		# vxid 1007
+		if (resp.status == 748) {
+			debug.fail();
+			set req.http.not = "Should not happen";
+		}
+		# vxid 1001, 1003
+		if (req.restarts == 0 && req.http.foo == "restart") {
+			return (restart);
+		}
+	}
+} -start
+
+#######################################################################
+# Fail in vcl_recv
+
+logexpect l1001 -v v1 -g raw {
+	expect * 1001	VCL_call	"RECV"
+	expect 0 1001	VCL_Error	"Forced failure"
+	expect 0 1001	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 1
+vinyl v1 -expect sc_vcl_failure == 1
+
+#######################################################################
+# Fail in vcl_recv, vcl_synth restarts successfully
+
+logexpect l1003 -v v1 -g raw {
+	expect * 1003	VCL_call	"RECV"
+	expect 0 1003	VCL_Error	"Forced failure"
+	expect 0 1003	VCL_return	"fail"
+	expect * 1003	VCL_call	"SYNTH"
+	expect 0 1003	VCL_return	"restart"
+} -start
+
+client c1 {
+	txreq -url /hit -hdr "foo: restart"
+	rxresp
+	expect resp.status == 200
+	expect resp.reason == "OK"
+} -run
+
+vinyl v1 -expect vcl_fail == 2
+# NB: This is correct, req->doclose = SC_VCL_FAILURE latches
+vinyl v1 -expect sc_vcl_failure == 2
+
+#######################################################################
+# Fail in vcl_synth
+
+logexpect l1007 -v v1 -g raw {
+	expect * 1007	VCL_call	"SYNTH"
+	expect * 1007	VCL_Error	"Forced failure"
+	expect 0 1007	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq -hdr "foo: synth"
+	rxresp
+	expect resp.status == 500
+	expect_close
+} -run
+
+vinyl v1 -expect vcl_fail == 3
+vinyl v1 -expect sc_vcl_failure == 3
+
+#######################################################################
+# Fail in vcl_hash
+
+logexpect l1009 -v v1 -g raw {
+	expect * 1009	VCL_call	"HASH"
+	expect 0 1009	VCL_Error	"Forced failure"
+	expect 0 1009	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq -hdr "foo: hash"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 4
+vinyl v1 -expect sc_vcl_failure == 4
+
+#######################################################################
+# Fail in vcl_pipe
+
+logexpect l1012 -v v1 -g vxid -q "vxid == 1012" {
+	expect 0 1012	Begin		{^bereq 1011 pipe}
+	expect 0 =	Timestamp	{^Start:}
+	expect 0 =	BereqMethod	{^GET}
+	expect 0 =	BereqURL	{^/}
+	expect 0 =	BereqProtocol	{^HTTP/1.1}
+	expect 0 =	BereqHeader	{^foo: pipe}
+	expect 0 =	BereqHeader	{^Host: }
+	expect 0 =	BereqHeader	{^User-Agent: c1}
+	expect 0 =	BereqHeader	{^X-Forwarded-For: }
+	expect 0 =	BereqHeader	{^Via: }
+	expect 0 =	BereqHeader	{^X-Vinyl: 1011}
+	expect 0 =	BereqHeader	{^Connection: close}
+	expect 0 =	BereqAcct	{^0 0 0 0 0 0}
+	expect 0 =	End
+} -start
+
+logexpect l1011 -v v1 -g vxid -q "vxid == 1011" {
+	expect 0 1011	Begin           {^req 1010 rxreq}
+	expect 0 =	Timestamp       {^Start: }
+	expect 0 =	Timestamp       {^Req: }
+	expect 0 =	VCL_use         {^vcl1}
+	expect 0 =	ReqStart
+	expect 0 =	ReqMethod       {^GET}
+	expect 0 =	ReqURL          {^/}
+	expect 0 =	ReqProtocol     {^HTTP/1.1}
+	expect 0 =	ReqHeader       {^foo: pipe}
+	expect 0 =	ReqHeader       {^Host: }
+	expect 0 =	reqHeader	{^User-Agent: c1}
+	expect 0 =	ReqHeader       {^X-Forwarded-For: }
+	expect 0 =	ReqHeader	{^Via: }
+	expect 0 =	VCL_call        {^RECV}
+	expect 0 =	VCL_return      {^pipe}
+	expect 0 =	VCL_call        {^HASH}
+	expect 0 =	VCL_return      {^lookup}
+	expect 0 =	Link            {^bereq 1012 pipe}
+	expect 0 =	VCL_call	{^PIPE}
+	expect 0 =	VCL_Error	{^Forced failure}
+	expect 0 =	VCL_return	{^fail}
+	expect 0 =	RespProtocol    {^HTTP/1.1}
+	expect 0 =	RespStatus      {^503}
+	expect 0 =	RespReason      {^VCL failed}
+} -start
+
+client c1 {
+	txreq -hdr "foo: pipe"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 5
+vinyl v1 -expect sc_vcl_failure == 5
+
+#######################################################################
+# Fail in vcl_pass, no handling in vcl_synth
+
+logexpect l1014 -v v1 -g raw {
+	expect * 1014	VCL_call	"PASS"
+	expect 0 1014	VCL_Error	"Forced failure"
+	expect 0 1014	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq -hdr "foo: pass"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 6
+vinyl v1 -expect sc_vcl_failure == 6
+
+#######################################################################
+# Fail in vcl_purge
+
+logexpect l1016 -v v1 -g raw {
+	expect * 1016	VCL_call	"PURGE"
+	expect 0 1016	VCL_Error	"Forced failure"
+	expect 0 1016	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq -hdr "foo: purge"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 7
+vinyl v1 -expect sc_vcl_failure == 7
+
+#######################################################################
+# Fail in vcl_miss
+
+logexpect l1018 -v v1 -g raw {
+	expect * 1018	VCL_call	"MISS"
+	expect 0 1018	VCL_Error	"Forced failure"
+	expect 0 1018	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq -url /miss -hdr "foo: miss"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 8
+vinyl v1 -expect sc_vcl_failure == 8
+
+#######################################################################
+# Fail in vcl_hit
+
+logexpect l1020 -v v1 -g raw {
+	expect * 1020	VCL_call	"HIT"
+	expect 0 1020	VCL_Error	"Forced failure"
+	expect 0 1020	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq -url /hit -hdr "foo: hit"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 9
+vinyl v1 -expect sc_vcl_failure == 9
+
+#######################################################################
+# Fail in vcl_deliver
+
+logexpect l1022 -v v1 -g raw {
+	expect * 1022	VCL_call	"DELIVER"
+	expect 0 1022	VCL_Error	"Forced failure"
+	expect 0 1022	VCL_return	"fail"
+} -start
+
+client c1 {
+	txreq -url /hit -hdr "foo: deliver"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+} -run
+
+vinyl v1 -expect vcl_fail == 10
+vinyl v1 -expect sc_vcl_failure == 10
+
+#######################################################################
+#wait for all client side logexpects
+#######################################################################
+
+logexpect l1001 -wait
+logexpect l1003 -wait
+logexpect l1007 -wait
+logexpect l1009 -wait
+logexpect l1012 -wait
+logexpect l1011 -wait
+logexpect l1014 -wait
+logexpect l1016 -wait
+logexpect l1018 -wait
+logexpect l1020 -wait
+logexpect l1022 -wait
+

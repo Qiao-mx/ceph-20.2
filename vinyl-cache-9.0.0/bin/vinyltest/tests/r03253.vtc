@@ -1,0 +1,24 @@
+vtest "ESI: sweep through tight backend workspace conditions"
+
+server s1 -repeat 100 {
+	rxreq
+	txresp -gzipbody "<html>"
+} -start
+
+vinyl v1 -arg "-a ${tmpdir}/v1.sock" -vcl+backend {
+	import vtc;
+	sub vcl_recv {
+		return (pass);
+	}
+	sub vcl_backend_response {
+		vtc.workspace_alloc(backend, -4 * (bereq.xid - 1000) / 2);
+		set beresp.do_esi = true;
+	}
+} -start
+
+client c1 -connect ${tmpdir}/v1.sock -repeat 100 {
+	txreq -url "/"
+	# some responses will fail (503), some won't. All we care
+	# about here is the fact that we don't panic
+	rxresp
+} -run

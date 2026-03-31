@@ -1,0 +1,41 @@
+vtest "range related panic"
+
+barrier b1 cond 2
+barrier b2 cond 2
+
+server s1 {
+	rxreq
+	txresp -nolen -hdr "Transfer-Encoding: chunked"
+	chunkedlen 10
+	chunkedlen 10
+	barrier b1 sync
+	chunkedlen 10
+	chunkedlen 10
+	chunkedlen 10
+	chunkedlen 0
+	delay .1
+	barrier b2 sync
+} -start
+
+vinyl v1 -vcl+backend {
+} -start
+
+client c1 {
+	txreq -hdr "Range: bytes=0-100"
+	rxresphdrs
+	expect resp.status == 206
+	expect resp.http.Content-Range == "bytes 0-100/*"
+} -run
+
+delay .1
+barrier b1 sync
+barrier b2 sync
+delay .4
+
+client c1 {
+	txreq -hdr "Range: bytes=0-100"
+	rxresp
+	expect resp.status == 206
+	expect resp.http.Content-Range == "bytes 0-49/50"
+} -run
+

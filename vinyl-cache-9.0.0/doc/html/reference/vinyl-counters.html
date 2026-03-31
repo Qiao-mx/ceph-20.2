@@ -1,0 +1,1784 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="vinylstat" href="vinylstat.html"><link rel="prev" title="vinyltop" href="vinyltop.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>vinyl-counters - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vinyl-counters">
+<span id="vinyl-counters-7"></span><h1>vinyl-counters<a class="headerlink" href="#vinyl-counters" title="Link to this heading">¶</a></h1>
+<section id="vinyl-cache-counter-field-definitions">
+<h2>Vinyl Cache counter field definitions<a class="headerlink" href="#vinyl-cache-counter-field-definitions" title="Link to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Manual section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>7</p>
+</dd>
+</dl>
+<section id="lck-lock-counters">
+<h3>LCK – Lock Counters<a class="headerlink" href="#lck-lock-counters" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>Counters which track the activity in the different classes
+of mutex-locks.</p>
+<p>The counts may be slightly wrong if there are more than one
+lock instantiated in each class (ie: .creat &gt; 1)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">creat</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Created locks</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">destroy</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Destroyed locks</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">locks</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Lock Operations</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">dbg_busy</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Contended lock operations</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">lck</span></code> debug bit is set: Lock operations which
+returned EBUSY on the first locking attempt.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">lck</span></code> debug bit is unset, this counter will never be
+incremented even if lock operations are contended.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">dbg_try_fail</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Contended trylock operations</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">lck</span></code> debug bit is set: Trylock operations which
+returned EBUSY.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">lck</span></code> debug bit is unset, this counter will never be
+incremented even if lock operations are contended.</p>
+</div></blockquote>
+</section>
+<section id="main-main-counters">
+<h3>MAIN – Main counters<a class="headerlink" href="#main-main-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">summs</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>stat summ operations</p>
+<p>Number of times per-thread statistics were summed into the
+global counters.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">uptime</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Child process uptime</p>
+<p>How long the child process has been running.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_conn</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Sessions accepted</p>
+<p>Count of sessions successfully accepted</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session accept failures</p>
+<p>Count of failures to accept TCP connection.</p>
+<p>This counter is the sum of the sess_fail_* counters, which
+give more detailed information.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_fail_econnaborted</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session accept failures: connection aborted</p>
+<p>Detailed reason for sess_fail: Connection aborted by the
+client, usually harmless.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_fail_eintr</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session accept failures: interrupted system call</p>
+<p>Detailed reason for sess_fail: The accept() call was
+interrupted, usually harmless</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_fail_emfile</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session accept failures: too many open files</p>
+<p>Detailed reason for sess_fail: No file descriptor was
+available. Consider raising RLIMIT_NOFILE (see ulimit -n).</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_fail_ebadf</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session accept failures: bad file descriptor</p>
+<p>Detailed reason for sess_fail: The listen socket file
+descriptor was invalid. Should never happen.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_fail_enomem</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session accept failures: not enough memory</p>
+<p>Detailed reason for sess_fail: Most likely insufficient
+socket buffer memory. Should never happen</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_fail_other</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session accept failures: other</p>
+<p>Detailed reason for sess_fail: neither of the above, see
+SessError log (vinyllog -g raw -i SessError).</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">client_req_400</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Client requests received, subject to 400 errors</p>
+<p>400 means we couldn’t make sense of the request, it was malformed
+in some drastic way.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">client_req_417</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Client requests received, subject to 417 errors</p>
+<p>417 means that something went wrong with an Expect: header.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">client_req</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Good client requests received</p>
+<p>The count of parseable client requests seen.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">esi_req</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>ESI subrequests</p>
+<p>Number of ESI subrequests made.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">cache_hit</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Cache hits</p>
+<p>Count of cache hits.  A cache hit indicates that an object has been
+delivered to a client without fetching it from a backend server.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">cache_hit_grace</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Cache grace hits</p>
+<p>Count of cache hits with grace. A cache hit with grace is a cache
+hit where the object is expired. Note that such hits are also
+included in the cache_hit counter.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">cache_hitpass</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Cache hits for pass.</p>
+<p>Count of hits for pass. A cache hit for pass indicates that
+Vinyl Cache is going to pass the request to the backend and
+this decision has been cached in it self. This counts how
+many times the cached decision is being used.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">cache_hitmiss</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Cache hits for miss.</p>
+<p>Count of hits for miss. A cache hit for miss indicates that
+Vinyl Cache is going to proceed as for a cache miss without
+request coalescing, and this decision has been cached. This
+counts how many times the cached decision is being used.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">cache_miss</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Cache misses</p>
+<p>Count of misses. A cache miss indicates the object was fetched from
+the backend before delivering it to the client.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">beresp_uncacheable</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><blockquote>
+<div><p>Uncacheable backend responses</p>
+</div></blockquote>
+<p>Count of backend responses considered uncacheable.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">beresp_shortlived</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><blockquote>
+<div><p>Shortlived objects</p>
+</div></blockquote>
+<p>Count of objects created with ttl+grace+keep shorter than the ‘shortlived’
+runtime parameter.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_conn</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. success</p>
+<p>How many backend connections have successfully been established.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_unhealthy</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. not attempted</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_busy</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. too many</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. failures</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_reuse</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. reuses</p>
+<p>Count of backend connection reuses. This counter is increased
+whenever we reuse a recycled connection.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_recycle</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. recycles</p>
+<p>Count of backend connection recycles. This counter is increased
+whenever we have a keep-alive connection that is put back into the
+pool of connections. It has not yet been used, but it might be,
+unless the backend closes it.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_retry</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. retry</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_wait</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. waited in queue for a connection</p>
+<p>Count of backend requests that waited in a backend_wait queue for
+a connection to become available.  The size of a backend wait queue
+is defined by the backend wait_limit property.  The wait queue is
+only used when max_connections to the backend are in use.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_wait_fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend conn. waited in queue and did not get a connection</p>
+<p>Count of backend requests that waited in a backend_wait queue for
+a connection to become available and did not get one (timed out).
+The maximum time to wait in the queue is defined by the backend
+wait_timeout property.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_head</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch no body (HEAD)</p>
+<p>beresp with no body because the request is HEAD.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_length</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch with Length</p>
+<p>beresp.body with Content-Length.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_chunked</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch chunked</p>
+<p>beresp.body with Chunked.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_eof</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch EOF</p>
+<p>beresp.body with EOF.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_bad</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch bad T-E</p>
+<p>beresp.body length/fetch could not be determined.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_none</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch no body</p>
+<p>beresp.body empty</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_1xx</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch no body (1xx)</p>
+<p>beresp with no body because of 1XX response.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_204</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch no body (204)</p>
+<p>beresp with no body because of 204 response.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_304</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch no body (304)</p>
+<p>beresp with no body because of 304 response.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fetch_failed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetch failed (all causes)</p>
+<p>beresp fetch failed.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bgfetch_no_thread</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Background fetch failed (no thread)</p>
+<p>A bgfetch triggered by a grace hit failed, no thread available.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">pools</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Number of thread pools</p>
+<p>Number of thread pools. See also parameter thread_pools. NB: Presently
+pools cannot be removed once created.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">threads</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Total number of threads</p>
+<p>Number of threads in all pools. See also parameters thread_pools,
+thread_pool_min and thread_pool_max.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">threads_limited</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Threads hit max</p>
+<p>Number of times more threads were needed, but limit was reached in
+a thread pool. See also parameter thread_pool_max.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">threads_created</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Threads created</p>
+<p>Total number of threads created in all pools.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">threads_destroyed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Threads destroyed</p>
+<p>Total number of threads destroyed in all pools.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">threads_failed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Thread creation failed</p>
+<p>Number of times creating a thread failed. See VSL::Debug for
+diagnostics. See also parameter thread_fail_delay.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">thread_queue_len</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Length of session queue</p>
+<p>Length of session queue waiting for threads. NB: Only updates once
+per second. See also parameter thread_queue_limit.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">busy_sleep</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Number of requests sent to sleep on busy objhdr</p>
+<p>Number of requests sent to sleep without a worker thread because
+they found a busy object.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">busy_wakeup</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Number of requests woken after sleep on busy objhdr</p>
+<p>Number of requests taken off the busy object sleep list and rescheduled.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">busy_killed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Number of requests killed after sleep on busy objhdr</p>
+<p>Number of requests killed from the busy object sleep list due to
+lack of resources.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_queued</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Sessions queued for thread</p>
+<p>Number of times session was queued waiting for a thread. See also
+parameter thread_queue_limit.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_dropped</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Sessions dropped for thread</p>
+<p>Number of times an HTTP/1 session was dropped because the queue was
+too long already. See also parameter thread_queue_limit.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">req_dropped</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Requests dropped</p>
+<p>Number of times an HTTP/2 stream was refused because the queue was
+too long already. See also parameter thread_queue_limit.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">req_reset</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Requests reset</p>
+<p>Number of times a client left before the VCL processing of its
+requests completed. For HTTP/2 sessions, either the stream was
+reset by an RST_STREAM frame from the client, or a stream or
+connection error occurred.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_object</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>object structs made</p>
+<p>Approximate number of HTTP objects (headers + body, if present) in
+the cache.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_vampireobject</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>unresurrected objects</p>
+<p>Number of unresurrected objects</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_objectcore</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>objectcore structs made</p>
+<p>Approximate number of object metadata elements in the cache. Each
+object needs an objectcore, extra objectcores are for hit-for-miss,
+hit-for-pass and busy objects.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_objecthead</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>objecthead structs made</p>
+<p>Approximate number of different hash entries in the cache.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_backend</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Number of backends</p>
+<p>Number of backends known to us.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_expired</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Number of expired objects</p>
+<p>Number of objects that expired from cache because of old age.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_superseded</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Number of superseded objects</p>
+<p>Number of times an object was superseded by a new one.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_lru_nuked</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Number of LRU nuked objects</p>
+<p>How many objects have been forcefully evicted from storage to make
+room for a new object.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_lru_moved</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Number of LRU moved objects</p>
+<p>Number of move operations done on the LRU list.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_lru_limited</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Reached nuke_limit</p>
+<p>Number of times more storage space were needed, but limit was reached in
+a nuke_limit. See also parameter nuke_limit.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">losthdr</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>HTTP header overflows</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_sess</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Total sessions seen</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_pipe</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Number of ongoing pipe sessions</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">pipe_limited</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Pipes hit pipe_sess_max</p>
+<p>Number of times more pipes were needed, but the limit was reached. See
+also parameter pipe_sess_max.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_pipe</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Total pipe sessions seen</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_pass</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Total pass-ed requests seen</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_fetch</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Total backend fetches initiated</p>
+<p>Total backend fetches initiated, including background fetches.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_bgfetch</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Total backend background fetches initiated</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_synth</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Total synthetic responses made</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_req_hdrbytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Request header bytes</p>
+<p>Total request header bytes received</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_req_bodybytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Request body bytes</p>
+<p>Total request body bytes received</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_resp_hdrbytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Response header bytes</p>
+<p>Total response header bytes transmitted</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_resp_bodybytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Response body bytes</p>
+<p>Total response body bytes transmitted</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_pipe_hdrbytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Pipe request header bytes</p>
+<p>Total request bytes received for piped sessions</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_pipe_in</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Piped bytes from client</p>
+<p>Total number of bytes forwarded from clients in pipe sessions</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">s_pipe_out</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Piped bytes to client</p>
+<p>Total number of bytes forwarded to clients in pipe sessions</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">transit_stored</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Stored uncacheable body bytes</p>
+<p>Total number of transient body bytes written to storage as if they
+were reusable like a cacheable backend response. Transient objects
+are stored for a single transaction, this includes uncacheable backend
+responses, synthetic responses and client requests.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">transit_buffered</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Buffered uncacheable response body bytes</p>
+<p>Total number of uncacheable responses body bytes forwarded using a
+fixed buffer allocated from storage. This behavior can be enabled by
+the ‘transit_buffer’ parameter, or the ‘beresp.transit_buffer’ VCL
+variable.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_closed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session Closed</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_closed_err</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session Closed with error</p>
+<p>Total number of sessions closed with errors. See sc_* diag counters
+for detailed breakdown</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_readahead</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Session Read Ahead</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sess_herd</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session herd</p>
+<p>Number of times the timeout_linger triggered</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rem_close</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session OK  REM_CLOSE</p>
+<p>Number of session closes with REM_CLOSE (Client Closed)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_req_close</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session OK  REQ_CLOSE</p>
+<p>Number of session closes with REQ_CLOSE (Client requested close)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_req_http10</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err REQ_HTTP10</p>
+<p>Number of session closes with Error REQ_HTTP10 (Proto &lt; HTTP/1.1)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rx_bad</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err RX_BAD</p>
+<p>Number of session closes with Error RX_BAD (Received bad req/resp)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rx_body</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err RX_BODY</p>
+<p>Number of session closes with Error RX_BODY (Failure receiving req.body)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rx_junk</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err RX_JUNK</p>
+<p>Number of session closes with Error RX_JUNK (Received junk data)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rx_overflow</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err RX_OVERFLOW</p>
+<p>Number of session closes with Error RX_OVERFLOW (Received buffer overflow)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rx_timeout</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err RX_TIMEOUT</p>
+<p>Number of session closes with Error RX_TIMEOUT (Receive timeout)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rx_close_idle</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err RX_CLOSE_IDLE</p>
+<p>Number of session closes with Error RX_CLOSE_IDLE:
+timeout_idle has been exceeded while waiting for a
+client request.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_tx_pipe</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session OK  TX_PIPE</p>
+<p>Number of session closes with TX_PIPE (Piped transaction)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_tx_error</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err TX_ERROR</p>
+<p>Number of session closes with Error TX_ERROR (Error transaction)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_tx_eof</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session OK  TX_EOF</p>
+<p>Number of session closes with TX_EOF (EOF transmission)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_resp_close</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session OK  RESP_CLOSE</p>
+<p>Number of session closes with RESP_CLOSE (Backend/VCL requested close)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_overload</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err OVERLOAD</p>
+<p>Number of session closes with Error OVERLOAD (Out of some resource)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_pipe_overflow</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err PIPE_OVERFLOW</p>
+<p>Number of session closes with Error PIPE_OVERFLOW (Session pipe overflow)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_range_short</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err RANGE_SHORT</p>
+<p>Number of session closes with Error RANGE_SHORT (Insufficient data for range)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_req_http20</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err REQ_HTTP20</p>
+<p>Number of session closes with Error REQ_HTTP20 (HTTP2 not accepted)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_vcl_failure</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err VCL_FAILURE</p>
+<p>Number of session closes with Error VCL_FAILURE (VCL failure)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_rapid_reset</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><blockquote>
+<div><p>Session Err RAPID_RESET</p>
+</div></blockquote>
+<p>Number of times we failed an http/2 session because it hit its
+configured limits for the number of permitted rapid stream
+resets.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sc_bankrupt</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Session Err BANKRUPT</p>
+<p>Number of times we failed an http/2 session because all the streams
+were waiting for their windows to be credited when h2_window_timeout
+triggered.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">client_resp_500</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Delivery failed due to insufficient workspace.</p>
+<p>Number of times we failed a response due to running out of
+workspace memory during delivery.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">ws_backend_overflow</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>workspace_backend overflows</p>
+<p>Number of times we ran out of space in workspace_backend.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">ws_client_overflow</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>workspace_client overflows</p>
+<p>Number of times we ran out of space in workspace_client.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">ws_thread_overflow</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>workspace_thread overflows</p>
+<p>Number of times we ran out of space in workspace_thread.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">ws_session_overflow</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>workspace_session overflows</p>
+<p>Number of times we ran out of space in workspace_session.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">shm_records</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>SHM records</p>
+<p>Number of log records written to the shared memory log.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">shm_writes</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>SHM writes</p>
+<p>Number of individual writes to the shared memory log. A single
+write may batch multiple records for buffered tasks.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">shm_flushes</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>SHM flushes due to overflow</p>
+<p>Number of writes performed before the end of a buffered task
+because adding a record to a batch would exceed vsl_buffer.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">shm_cont</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>SHM lock contention</p>
+<p>Number of times a write had to wait for the lock.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">shm_cycles</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>SHM cycles through VSL space</p>
+<p>Number of times a write of log records would reach past the end
+of the shared memory log, cycling back to the beginning.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">shm_bytes</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>SHM bytes</p>
+<p>Number of bytes written to the shared memory log.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">backend_req</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend requests made</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_vcl</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Number of loaded VCLs in total</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_vcl_avail</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>Number of VCLs available</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_vcl_discard</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>Number of discarded VCLs</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">vcl_fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>VCL failures</p>
+<p>Count of failures which prevented VCL from completing.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Count of bans</p>
+<p>Number of all bans in system, including bans superseded by newer
+bans and bans already checked by the ban-lurker.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_completed</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>Number of bans marked ‘completed’</p>
+<p>Number of bans which are no longer active, either because they got
+checked by the ban-lurker or superseded by newer identical bans.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_obj</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>Number of bans using obj.*</p>
+<p>Number of bans which use obj.* variables.  These bans can possibly
+be washed by the ban-lurker.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_req</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>Number of bans using req.*</p>
+<p>Number of bans which use req.* variables.  These bans cannot be
+washed by the ban-lurker.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_added</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Bans added</p>
+<p>Counter of bans added to ban list.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_deleted</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Bans deleted</p>
+<p>Counter of bans deleted from ban list.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_tested</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Bans tested against objects (lookup)</p>
+<p>Count of how many bans and objects have been tested against each
+other during hash lookup.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_obj_killed</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Objects killed by bans (lookup)</p>
+<p>Number of objects killed by bans during object lookup.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_lurker_tested</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Bans tested against objects (lurker)</p>
+<p>Count of how many bans and objects have been tested against each
+other by the ban-lurker.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_tests_tested</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Ban tests tested against objects (lookup)</p>
+<p>Count of how many tests and objects have been tested against each
+other during lookup. ‘ban req.url == foo &amp;&amp; req.http.host == bar’
+counts as one in ‘bans_tested’ and as two in ‘bans_tests_tested’</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_lurker_tests_tested</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Ban tests tested against objects (lurker)</p>
+<p>Count of how many tests and objects have been tested against each
+other by the ban-lurker. ‘ban req.url == foo &amp;&amp; req.http.host ==
+bar’ counts as one in ‘bans_tested’ and as two in ‘bans_tests_tested’</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_lurker_obj_killed</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Objects killed by bans (lurker)</p>
+<p>Number of objects killed by the ban-lurker.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_lurker_obj_killed_cutoff</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Objects killed by bans for cutoff (lurker)</p>
+<p>Number of objects killed by the ban-lurker to keep the number of
+bans below ban_cutoff.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_dups</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Bans superseded by other bans</p>
+<p>Count of bans replaced by later identical bans.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_lurker_contention</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Lurker gave way for lookup</p>
+<p>Number of times the ban-lurker had to wait for lookups.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_persisted_bytes</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>Bytes used by the persisted ban lists</p>
+<p>Number of bytes used by the persisted ban lists.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bans_persisted_fragmentation</span></code> – <cite>gauge</cite> - diag</p>
+<blockquote>
+<div><p>Extra bytes in persisted ban lists due to fragmentation</p>
+<p>Number of extra bytes accumulated through dropped and completed
+bans in the persistent ban lists.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_purges</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Number of purge operations executed</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_obj_purged</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Number of purged objects</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">exp_mailed</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Number of objects mailed to expiry thread</p>
+<p>Number of objects mailed to expiry thread for handling.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">exp_received</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Number of objects received by expiry thread</p>
+<p>Number of objects received by expiry thread for handling.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">hcb_nolock</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>HCB Lookups without lock</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">hcb_lock</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>HCB Lookups with lock</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">hcb_insert</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>HCB Inserts</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">esi_errors</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>ESI parse errors (unlock)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">esi_warnings</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>ESI parse warnings (unlock)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">vmods</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Loaded VMODs</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_gzip</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Gzip operations</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_gunzip</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Gunzip operations</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">n_test_gunzip</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Test gunzip operations</p>
+<p>Those operations occur when Vinyl Cache receives a compressed
+object from a backend. They are done to verify the gzip
+stream while it’s inserted in storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">http1_iovs_flush</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Premature iovec flushes</p>
+<p>Number of additional writes performed on HTTP1 connections
+because the number of IO vectors was too small to submit all
+possible IO in one go. This number is configured through the
+<code class="docutils literal notranslate"><span class="pre">http1_iovs</span></code> parameter for client connections and implicitly
+defined by the amount of free workspace for backend
+connections.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">http1_absolute_form</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Requests with absolute form request target</p>
+<p>Number of requests for which an absolute form request target (e.g.
+<a class="reference external" href="http://example.com/">http://example.com/</a> or <a class="reference external" href="https://example.com/">https://example.com/</a>) was handled. The <a class="reference external" href="https://">https://</a>
+scheme is handled unless the feature <code class="docutils literal notranslate"><span class="pre">https_scheme</span></code> is disabled (see
+RUN TIME PARAMETERS in <cite>vinyld(1)</cite>).</p>
+<p>See also ReqTarget in <cite>vsl(7)</cite>. This counter is approximately correct.</p>
+</div></blockquote>
+</section>
+<section id="mempool-memory-pool-counters">
+<h3>MEMPOOL – Memory Pool Counters<a class="headerlink" href="#mempool-memory-pool-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">live</span></code> – <cite>gauge</cite> - debug</p>
+<blockquote>
+<div><p>In use</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">pool</span></code> – <cite>gauge</cite> - debug</p>
+<blockquote>
+<div><p>In Pool</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sz_wanted</span></code> – <cite>gauge</cite> - debug</p>
+<blockquote>
+<div><p>Size requested</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">sz_actual</span></code> – <cite>gauge</cite> - debug</p>
+<blockquote>
+<div><p>Size allocated</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">allocs</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Allocations</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">frees</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Frees</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">recycle</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Recycled from pool</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Timed out from pool</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">toosmall</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Too small to recycle</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">surplus</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Too many for pool</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">randry</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Pool ran dry</p>
+</div></blockquote>
+</section>
+<section id="mgt-management-process-counters">
+<h3>MGT – Management Process Counters<a class="headerlink" href="#mgt-management-process-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">uptime</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Management process uptime</p>
+<p>Uptime in seconds of the management process</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">child_start</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Child process started</p>
+<p>Number of times the child process has been started</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">child_exit</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Child process normal exit</p>
+<p>Number of times the child process has been cleanly stopped</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">child_stop</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Child process unexpected exit</p>
+<p>Number of times the child process has exited with an
+unexpected return code</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">child_died</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Child process died (signal)</p>
+<p>Number of times the child process has died due to signals</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">child_dump</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Child process core dumped</p>
+<p>Number of times the child process has produced core dumps</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">child_panic</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Child process panic</p>
+<p>Number of times the management process has caught a child panic</p>
+</div></blockquote>
+</section>
+<section id="sma-malloc-stevedore-counters">
+<h3>SMA – Malloc Stevedore Counters<a class="headerlink" href="#sma-malloc-stevedore-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">c_req</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Allocator requests</p>
+<p>Number of times the storage has been asked to provide a storage segment.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Allocator failures</p>
+<p>Number of times the storage has failed to provide a storage segment.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_bytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Bytes allocated</p>
+<p>Number of total bytes allocated by this storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_freed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Bytes freed</p>
+<p>Number of total bytes returned to this storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_alloc</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Allocations outstanding</p>
+<p>Number of storage allocations outstanding.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_bytes</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Bytes outstanding</p>
+<p>Number of bytes allocated from the storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_space</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Bytes available</p>
+<p>Number of bytes left in the storage.</p>
+</div></blockquote>
+</section>
+<section id="smf-file-stevedore-counters">
+<h3>SMF – File Stevedore Counters<a class="headerlink" href="#smf-file-stevedore-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">c_req</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Allocator requests</p>
+<p>Number of times the storage has been asked to provide a storage segment.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Allocator failures</p>
+<p>Number of times the storage has failed to provide a storage segment.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_bytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Bytes allocated</p>
+<p>Number of total bytes allocated by this storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_freed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Bytes freed</p>
+<p>Number of total bytes returned to this storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_alloc</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Allocations outstanding</p>
+<p>Number of storage allocations outstanding.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_bytes</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Bytes outstanding</p>
+<p>Number of bytes allocated from the storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_space</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Bytes available</p>
+<p>Number of bytes left in the storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_smf</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>N struct smf</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_smf_frag</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>N small free smf</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_smf_large</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>N large free smf</p>
+</div></blockquote>
+</section>
+<section id="smu-umem-stevedore-counters">
+<h3>SMU – Umem Stevedore Counters<a class="headerlink" href="#smu-umem-stevedore-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">c_req</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Allocator requests</p>
+<p>Number of times the storage has been asked to provide a storage segment.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Allocator failures</p>
+<p>Number of times the storage has failed to provide a storage segment.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_bytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Bytes allocated</p>
+<p>Number of total bytes allocated by this storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">c_freed</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Bytes freed</p>
+<p>Number of total bytes returned to this storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_alloc</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Allocations outstanding</p>
+<p>Number of storage allocations outstanding.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_bytes</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Bytes outstanding</p>
+<p>Number of bytes allocated from the storage.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">g_space</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Bytes available</p>
+<p>Number of bytes left in the storage.</p>
+</div></blockquote>
+</section>
+<section id="vbe-backend-counters">
+<h3>VBE – Backend Counters<a class="headerlink" href="#vbe-backend-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">happy</span></code> – <cite>bitmap</cite> - info</p>
+<blockquote>
+<div><p>Happy health probes</p>
+<p>Represents the last probe results as a bitmap. Happy probes are bits set
+to 1, and the unhappy ones are set to 0. The highest bits represent the
+oldest probes.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bereq_hdrbytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Request header bytes</p>
+<p>Total backend request header bytes sent</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">bereq_bodybytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Request body bytes</p>
+<p>Total backend request body bytes sent</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">beresp_hdrbytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Response header bytes</p>
+<p>Total backend response header bytes received</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">beresp_bodybytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Response body bytes</p>
+<p>Total backend response body bytes received</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">pipe_hdrbytes</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Pipe request header bytes</p>
+<p>Total request bytes sent for piped sessions</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">pipe_out</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Piped bytes to backend</p>
+<p>Total number of bytes forwarded to backend in pipe sessions</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">pipe_in</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Piped bytes from backend</p>
+<p>Total number of bytes forwarded from backend in pipe sessions</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">conn</span></code> – <cite>gauge</cite> - info</p>
+<blockquote>
+<div><p>Concurrent connections used</p>
+<p>The number of currently used connections to the backend. This
+number is always less or equal to the number of connections to
+the backend (as, for example shown as ESTABLISHED for TCP
+connections in netstat) due to connection pooling.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">req</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Backend requests sent</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">unhealthy</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetches not attempted due to backend being unhealthy</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">busy</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Fetches not attempted due to backend being busy</p>
+<p>Number of times the max_connections limit was reached</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fail</span></code> – <cite>counter</cite> - info</p>
+<blockquote>
+<div><p>Connections failed</p>
+<p>Counter of failed opens. Detailed reasons are given in the
+fail_* counters (DIAG level) and in the log under the FetchError tag.</p>
+<p>This counter is the sum of all detailed fail_* counters.</p>
+<p>All fail_* counters may be slightly inaccurate for efficiency.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fail_eacces</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Connections failed with EACCES or EPERM</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fail_eaddrnotavail</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Connections failed with EADDRNOTAVAIL</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fail_econnrefused</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Connections failed with ECONNREFUSED</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fail_enetunreach</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Connections failed with ENETUNREACH</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fail_etimedout</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Connections failed ETIMEDOUT</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">fail_other</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Connections failed for other reason</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">helddown</span></code> – <cite>counter</cite> - diag</p>
+<blockquote>
+<div><p>Connection opens not attempted</p>
+<p>Connections not attempted during the backend_local_error_holddown
+or backend_remote_error_holddown interval after a fundamental
+connection issue.</p>
+</div></blockquote>
+</section>
+<section id="vcp-connection-pool-counters">
+<h3>VCP – Connection Pool counters<a class="headerlink" href="#vcp-connection-pool-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ref_hit</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Number of times we have found an existing conn. pool</p>
+<p>Number of times we have found an existing connection pool while creating
+a backend.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">ref_miss</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Number of times we have not found an existing conn. pool</p>
+<p>Number of times we have not found an existing connection pool while
+creating a backend.</p>
+</div></blockquote>
+</section>
+<section id="waiter-waiter-counters">
+<h3>WAITER – Waiter counters<a class="headerlink" href="#waiter-waiter-counters" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">conns</span></code> – <cite>gauge</cite> - debug</p>
+<blockquote>
+<div><p>Number of idle connections</p>
+<p>Number of idle connections being waited over.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">remclose</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Number of idle connections closed by peer</p>
+<p>Number of idle connections that experienced closure by peer while being
+waited for.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">timeout</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Number of idle connections timeout</p>
+<p>Number of idle connections that experienced a timeout event while being
+waited for.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">action</span></code> – <cite>counter</cite> - debug</p>
+<blockquote>
+<div><p>Number of idle connections read events</p>
+<p>Number of idle connections that experienced a read event while being
+waited for.</p>
+</div></blockquote>
+</section>
+<section id="authors">
+<h3>AUTHORS<a class="headerlink" href="#authors" title="Link to this heading">¶</a></h3>
+<p>This man page was written by Lasse Karstensen, using content from vsc2rst
+written by Tollef Fog Heen.</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vinylstat.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">vinylstat</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vinyltop.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">vinyltop</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">vinyl-counters</a><ul>
+<li><a class="reference internal" href="#vinyl-cache-counter-field-definitions">Vinyl Cache counter field definitions</a><ul>
+<li><a class="reference internal" href="#lck-lock-counters">LCK – Lock Counters</a></li>
+<li><a class="reference internal" href="#main-main-counters">MAIN – Main counters</a></li>
+<li><a class="reference internal" href="#mempool-memory-pool-counters">MEMPOOL – Memory Pool Counters</a></li>
+<li><a class="reference internal" href="#mgt-management-process-counters">MGT – Management Process Counters</a></li>
+<li><a class="reference internal" href="#sma-malloc-stevedore-counters">SMA – Malloc Stevedore Counters</a></li>
+<li><a class="reference internal" href="#smf-file-stevedore-counters">SMF – File Stevedore Counters</a></li>
+<li><a class="reference internal" href="#smu-umem-stevedore-counters">SMU – Umem Stevedore Counters</a></li>
+<li><a class="reference internal" href="#vbe-backend-counters">VBE – Backend Counters</a></li>
+<li><a class="reference internal" href="#vcp-connection-pool-counters">VCP – Connection Pool counters</a></li>
+<li><a class="reference internal" href="#waiter-waiter-counters">WAITER – Waiter counters</a></li>
+<li><a class="reference internal" href="#authors">AUTHORS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

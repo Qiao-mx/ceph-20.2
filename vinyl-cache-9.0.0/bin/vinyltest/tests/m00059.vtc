@@ -1,0 +1,98 @@
+vtest "VMOD debug.chk*"
+
+server s1 -repeat 2 {
+	rxreq
+	expect req.url == "/ok"
+	txresp \
+	    -hdr "sha256: 9cbca99698fee7cefd93bc6db1c53226fdecae730197fd793a54e170a30af045" \
+	    -hdr "crc32: 3177021206" \
+	    -hdr "len: 28" \
+	    -hdr "Transfer-Encoding: chunked" -nolen
+	    chunked "Ponto Facto, "
+	    delay 1
+	    chunked "Caesar Transit!"
+	    chunkedlen 0
+
+	rxreq
+	expect req.url == "/wrong"
+	txresp \
+	    -hdr "sha256: 9cbca99698fee7cefd93bc6db1c53226fdecae730197fd793a54e170a30af045" \
+	    -hdr "crc32: 3177021206" \
+	    -hdr "len: 0" \
+	    -body " "
+} -start
+
+vinyl v1 \
+    -arg "-p feature=+no_coredump" \
+    -vcl+backend {
+	import debug;
+	import blob;
+	import std;
+
+	sub vcl_deliver {
+		if (req.http.panic) {
+			debug.chksha256(blob.decode(HEX,
+			    encoded=resp.http.sha256), panic);
+			debug.chkcrc32(std.integer(resp.http.crc32), panic);
+			debug.chklen(std.bytes(resp.http.len), panic);
+		} else {
+			debug.chksha256(blob.decode(HEX,
+			    encoded=resp.http.sha256), log);
+			debug.chkcrc32(std.integer(resp.http.crc32), log);
+			debug.chklen(std.bytes(resp.http.len), log);
+		}
+		set resp.filters += " debug.chksha256 debug.chkcrc32 debug.chklen";
+	}
+} -start
+
+logexpect l1 -v v1 -g vxid -q "vxid == 1001" {
+	fail add *	Debug "checksum mismatch"
+	expect * 1001	Begin
+	expect * =	End
+	fail clear
+} -start
+
+logexpect l2 -v v1 -g vxid -q "vxid == 1003" {
+	fail add *	End
+	expect * 1003	Begin
+	expect * =	Debug	"^sha256 checksum mismatch"
+	expect 0 =	Debug	"^got: 0x36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068"
+	expect 0 =	Debug	"^exp: 0x9cbca99698fee7cefd93bc6db1c53226fdecae730197fd793a54e170a30af045"
+	expect 0 =	Debug	"^crc32 checksum mismatch"
+	expect 0 =	Debug	"^got: e96ccf45"
+	expect 0 =	Debug	"^exp: bd5d7f16"
+	expect 0 =	Debug	"^length mismatch"
+	expect 0 =	Debug	"^got: 1"
+	expect 0 =	Debug	"^exp: 0"
+
+	fail clear
+} -start
+
+client c1 {
+	txreq -url "/ok"
+	rxresp
+	txreq -url "/wrong"
+	rxresp
+} -run
+
+vinyl v1 -vsl_catchup
+
+logexpect l1 -wait
+logexpect l2 -wait
+
+vinyl v1 -stop
+
+vinyl v1 -start
+
+client c2 {
+	txreq -url "/ok"
+	rxresp
+	txreq -url "/wrong" -hdr "panic: yes"
+	rxresp
+} -run
+
+delay 3
+
+vinyl v1 -cliexpect "body checksum" "panic.show"
+vinyl v1 -cliok "panic.clear"
+vinyl v1 -expectexit 0x40

@@ -1,0 +1,106 @@
+vtest "ESI onerror"
+
+server s1 {
+	rxreq
+	expect req.url == "/abort"
+	txresp -hdr {surrogate-control: content="ESI/1.0"} \
+	    -body {before <esi:include src="/fail" onerror="abort"/> after}
+
+	rxreq
+	expect req.url == "/abort0"
+	txresp -hdr {surrogate-control: content="ESI/1.0"} \
+	    -body {before <esi:include src="/fail0" onerror="abort"/> after}
+
+} -start
+
+vinyl v1 -cliok "param.set feature +esi_disable_xml_check"
+vinyl v1 -cliok "param.set feature +esi_include_onerror"
+vinyl v1 -vcl+backend {
+	sub vcl_backend_fetch {
+		if (bereq.url == "/fail") {
+			return (error(604));
+		}
+		if (bereq.url == "/fail0") {
+			return (error(605));
+		}
+	}
+	sub vcl_backend_response {
+		set beresp.do_esi = beresp.http.surrogate-control ~ "ESI/1.0";
+		unset beresp.http.surrogate-control;
+	}
+	sub vcl_backend_error {
+		if (beresp.status == 604) {
+			set beresp.body = "FOOBAR";
+			return(deliver);
+		}
+		if (beresp.status == 605) {
+			set beresp.body = "";
+			return(deliver);
+		}
+	}
+} -start
+
+client c1 {
+	txreq -url "/abort"
+	non_fatal
+	rxresphdrs
+	expect resp.status == 200
+	rxchunk
+	rxchunk
+	expect_close
+	expect resp.body == "before "
+} -run
+
+client c1 {
+	# #4070
+	txreq -url "/abort0"
+	non_fatal
+	rxresphdrs
+	expect resp.status == 200
+	rxchunk
+	rxchunk
+	expect_close
+	expect resp.body == "before "
+} -run
+
+vinyl v1 -cliok "param.set max_esi_depth 0"
+
+client c1 {
+	txreq -url "/abort"
+	non_fatal
+	rxresphdrs
+	expect resp.status == 200
+	rxchunk
+	rxchunk
+	expect_close
+	expect resp.body == "before "
+} -run
+
+vinyl v1 -cliok "param.set max_esi_depth 1"
+
+vinyl v1 -vsl_catchup
+
+server s1 -wait
+
+server s1 {
+	rxreq
+	expect req.url == "/continue"
+	txresp -hdr {surrogate-control: content="ESI/1.0"} \
+	    -body {before <esi:include src="/fail" onerror="continue"/> after}
+} -start
+
+client c1 {
+	fatal
+	txreq -url "/continue"
+	rxresp
+	expect resp.body == "before  after"
+} -run
+
+vinyl v1 -cliok "param.set max_esi_depth 0"
+
+client c1 {
+	fatal
+	txreq -url "/continue"
+	rxresp
+	expect resp.body == "before  after"
+} -run

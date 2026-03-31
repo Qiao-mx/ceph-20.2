@@ -1,0 +1,58 @@
+vtest "Test Basic persistence"
+
+feature persistent_storage
+
+process p1 -dump {
+	vinyld -spersistent -b ${localhost} -n${tmpdir}/v1 -a :0 -d 2>&1
+} -start -expect-exit 1
+
+process p1 -expect-text 0 0 {to launch}
+process p1 -write "start\n"
+process p1 -expect-text 0 0 {-spersistent has been deprecated}
+process p1 -write "quit\n"
+process p1 -expect-exit 0x20 -wait
+
+server s1 {
+	rxreq
+	txresp -body FOO
+	accept
+	rxreq
+	txresp -status 700
+} -start
+
+shell "rm -f ${tmpdir}/_.per"
+
+vinyl v1 \
+	-arg "-pfeature=+wait_silo" \
+	-arg "-sdeprecated_persistent,${tmpdir}/_.per,5m" \
+	-vcl+backend { } -start
+
+vinyl v1 -stop
+
+vinyl v1 -start
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.X-Vinyl == "1001"
+} -run
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -cliok "storage.list"
+vinyl v1 -cliok "debug.persistent s0 dump"
+vinyl v1 -cliok "debug.persistent s0 sync"
+vinyl v1 -stop
+
+vinyl v1 -start
+vinyl v1 -cliok "debug.xid 2000"
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.X-Vinyl == "2001 1002"
+} -run
+
+# shell "rm -f /tmp/__v1/_.per"

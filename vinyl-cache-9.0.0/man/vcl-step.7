@@ -1,0 +1,793 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "VCL-STEPS" "7" "" ""
+.SH NAME
+VCL-steps \- Built-in subroutines
+.\" Copyright (c) 2013-2021 Varnish Software AS
+.\" SPDX-License-Identifier: BSD-2-Clause
+.\" See LICENSE file for full text of license
+.
+.SH DESCRIPTION
+.sp
+Various built\-in subroutines are called during processing of client
+and backend requests as well as upon \fBvcl.load\fP and \fBvcl.discard\fP\&.
+.sp
+See \fIreference\-states\fP for a detailed graphical overview of the
+states and how they relate to core code functions and VCL subroutines.
+.sp
+Built\-in subroutines always terminate with a \fBreturn (<action>)\fP,
+where \fB<action>\fP determines how processing continues in the request
+processing state machine.
+.sp
+The behaviour of actions is identical or at least similar across
+subroutines, so differences are only documented where relevant.
+.sp
+Common actions are documented in
+\fIvcl_actions\fP in the next section. Actions specific
+to only one or some subroutines are documented in \fIvcl_steps\fP\&.
+.sp
+A default behavior is provided for all \fIreference\-states\fP in the
+\fIvcl\-built\-in\-code\fP code.
+.SH VCL ACTIONS
+.sp
+Actions are used with the \fBreturn(<action>)\fP keyword, which returns
+control from subroutines back to \fBvinyld\fP\&. The action determines how
+processing in \fBvinyld\fP continues as shown in \fIreference\-states\fP\&.
+.sp
+Common actions are documented here, while additional actions specific
+to only one or some subroutines are documented in the next section
+\fIvcl_steps\fP as well as which action can be used from which built
+in subroutine.
+.SS Common actions for the client and backend side
+.SS \fBfail(err)\fP
+.INDENT 0.0
+.INDENT 3.5
+Transition to \fIvcl_synth\fP on the client side as for
+\fBreturn(synth(503, \(dqVCL Failed\(dq))\fP, but with any request state
+changes undone as if \fBstd.rollback()\fP was called and forcing a
+connection close. The optional string argument \fIerr\fP is logged to
+VSL under a \fIVCL_Error\fP tag.
+.sp
+Returning \fIfail\fP from \fIvcl_synth\fP sends a minimal response with a 500
+status.
+.sp
+Intended for fatal errors, for which only minimal error handling is
+possible.
+.UNINDENT
+.UNINDENT
+.SS Common actions for the client side
+.SS \fBsynth(status code, reason)\fP
+.INDENT 0.0
+.INDENT 3.5
+Transition to \fIvcl_synth\fP with \fBresp.status\fP and
+\fBresp.reason\fP being preset to the arguments of \fBsynth()\fP\&.
+.UNINDENT
+.UNINDENT
+.SS \fBpass\fP
+.INDENT 0.0
+.INDENT 3.5
+Switch to pass mode, making the current request not use the cache
+and not putting its response into it. Control will eventually pass to
+\fIvcl_pass\fP\&.
+.UNINDENT
+.UNINDENT
+.SS \fBpipe\fP
+.INDENT 0.0
+.INDENT 3.5
+Switch to pipe mode. Control will eventually pass to
+\fIvcl_pipe\fP\&.
+.UNINDENT
+.UNINDENT
+.SS \fBrestart\fP
+.INDENT 0.0
+.INDENT 3.5
+Restart the transaction. Increases the \fBreq.restarts\fP counter.
+.sp
+If the number of restarts is higher than the \fImax_restarts\fP
+parameter, control is passed to \fIvcl_synth\fP as for
+\fBreturn(synth(503, \(dqToo many restarts\(dq))\fP
+.sp
+For a restart, all modifications to \fBreq\fP attributes are
+preserved except for \fBreq.restarts\fP and \fBreq.xid\fP, which need
+to change by design.
+.UNINDENT
+.UNINDENT
+.SS Common actions for the backend side
+.SS \fBabandon\fP
+.INDENT 0.0
+.INDENT 3.5
+Abandon the backend request. Unless the backend request was a
+background fetch, control is passed to \fIvcl_synth\fP on the
+client side with \fBresp.status\fP preset to 503.
+.UNINDENT
+.UNINDENT
+.SH VCL STEPS
+.SS Client side
+.SS vcl_recv
+.sp
+Called at the beginning of a request, after the complete request has
+been received and parsed, after a \fIrestart\fP or as the result of an ESI
+include.
+.sp
+Its purpose is to decide whether or not to serve the request, possibly
+modify it and decide on how to process it further. A backend hint may
+be set as a default for the backend processing side.
+.sp
+The \fIvcl_recv\fP subroutine may terminate with calling \fBreturn()\fP on one
+of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBsynth(status code, reason)\fP
+.in +2
+see \fIsynth\fP section above
+
+.in -2
+\fBrestart\fP
+.in +2
+see \fIrestart\fP section above
+
+.in -2
+\fBpass\fP
+.in +2
+see \fIpass\fP section above
+
+.in -2
+\fBpipe\fP
+.in +2
+see \fIpipe\fP section above
+
+.in -2
+\fBhash\fP
+.in +2
+Continue processing the object as a potential candidate for
+caching. Passes the control over to \fIvcl_hash\fP\&.
+
+.in -2
+\fBpurge\fP
+.in +2
+Purge the object and it\(aqs variants. Control passes through
+\fIvcl_hash\fP to \fIvcl_purge\fP\&.
+
+.in -2
+\fBvcl(label)\fP
+.in +2
+Switch to vcl labelled \fIlabel\fP\&.
+
+This will roll back the request as if \fBstd.rollback(req)\fP was
+called and continue vcl processing in \fIvcl_recv\fP of the vcl
+labelled \fIlabel\fP as if it was the active vcl.
+
+The \fBvcl(label)\fP return is only valid while the \fBreq.restarts\fP
+count is zero and if used from the active vcl.
+
+See the \fIref_cli_vcl_label\fP command in \fIvinyl\-cli(7)\fP\&.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_pipe
+.sp
+Called upon entering pipe mode. In this mode, the request is passed on
+to the backend, and any further data from both the client and backend
+is passed on unaltered until either end closes the
+connection. Basically, Vinyl Cache will degrade into a simple TCP proxy,
+shuffling bytes back and forth. For a connection in pipe mode, no
+other VCL subroutine will ever get called after \fIvcl_pipe\fP\&.
+.sp
+The \fIvcl_pipe\fP subroutine may terminate with calling \fBreturn()\fP with one
+of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBsynth(status code, reason)\fP
+.in +2
+see \fIsynth\fP section above
+
+.in -2
+\fBpipe\fP
+.in +2
+Proceed with pipe mode.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_pass
+.sp
+Called upon entering pass mode. In this mode, the request is passed
+on to the backend, and the backend\(aqs response is passed on to the
+client, but is not entered into the cache. Subsequent requests
+submitted over the same client connection are handled normally.
+.sp
+The \fIvcl_pass\fP subroutine may terminate with calling \fBreturn()\fP with one
+of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBsynth(status code, reason)\fP
+.in +2
+see \fIsynth\fP section above
+
+.in -2
+\fBrestart\fP
+.in +2
+see \fIrestart\fP section above
+
+.in -2
+\fBfetch\fP
+.in +2
+Proceed with pass mode \- initiate a backend request.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_hash
+.sp
+Called after \fIvcl_recv\fP to create a hash value for the request. This is
+used as a key to look up the object in Vinyl Cache.
+.sp
+The \fIvcl_hash\fP subroutine may terminate with calling \fBreturn()\fP with one
+of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see  \fIfail\fP section above
+
+.in -2
+\fBlookup\fP
+.in +2
+Look up the object in cache.
+
+Control passes to \fIvcl_purge\fP when coming from a \fBpurge\fP
+return in \fIvcl_recv\fP\&.
+
+Otherwise control passes to the next subroutine depending on the
+result of the cache lookup:
+
+* a hit: pass to \fIvcl_hit\fP
+
+* a miss or a hit on a hit\-for\-miss object (an object with
+.in +2
+\fBobj.uncacheable == true\fP): pass to \fIvcl_miss\fP
+
+.in -2
+* a hit on a hit\-for\-pass object (for which \fBpass(DURATION)\fP had been
+.in +2
+previously returned from \fBvcl_backend_response\fP): pass to
+\fIvcl_pass\fP
+.in -2
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_purge
+.sp
+Called after the purge has been executed and all its variants have been evicted.
+.sp
+The \fIvcl_purge\fP subroutine may terminate with calling \fBreturn()\fP with one
+of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBsynth(status code, reason)\fP
+.in +2
+see \fIsynth\fP section above
+
+.in -2
+\fBrestart\fP
+.in +2
+see \fIrestart\fP section above
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_miss
+.sp
+Called after a cache lookup if the requested document was not found in
+the cache or if \fIvcl_hit\fP returned \fBfetch\fP\&.
+.sp
+Its purpose is to decide whether or not to attempt to retrieve the
+document from the backend. A backend hint may be set as a default for
+the backend processing side.
+.sp
+The \fIvcl_miss\fP subroutine may terminate with calling \fBreturn()\fP with one
+of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBsynth(status code, reason)\fP
+.in +2
+see \fIsynth\fP section above
+
+.in -2
+\fBrestart\fP
+.in +2
+see \fIrestart\fP section above
+
+.in -2
+\fBpass\fP
+.in +2
+see \fIpass\fP section above
+
+.in -2
+\fBfetch\fP
+.in +2
+Retrieve the requested object from the backend. Control will
+eventually pass to \fIvcl_backend_fetch\fP\&.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_hit
+.sp
+Called when a cache lookup is successful. The object being hit may be
+stale: It can have a zero or negative \fIttl\fP with only \fIgrace\fP or
+\fIkeep\fP time left.
+.sp
+The \fIvcl_hit\fP subroutine may terminate with calling \fBreturn()\fP
+with one of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBsynth(status code, reason)\fP
+.in +2
+see \fIsynth\fP section above
+
+.in -2
+\fBrestart\fP
+.in +2
+see \fIrestart\fP section above
+
+.in -2
+\fBpass\fP
+.in +2
+see \fIpass\fP section above
+
+.in -2
+\fBdeliver\fP
+.in +2
+Deliver the object. If it is stale, a background fetch to refresh
+it is triggered.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_deliver
+.sp
+Called before any object except a \fIvcl_synth\fP result is delivered to the client.
+.sp
+The \fIvcl_deliver\fP subroutine may terminate with calling \fBreturn()\fP with one
+of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBsynth(status code, reason)\fP
+.in +2
+see \fIsynth\fP section above
+
+.in -2
+\fBrestart\fP
+.in +2
+see \fIrestart\fP section above
+
+.in -2
+\fBdeliver\fP
+.in +2
+Deliver the object to the client.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_synth
+.sp
+Called to deliver a synthetic object. A synthetic object is generated
+in VCL, not fetched from the backend. Its body may be constructed using
+the \fBsynthetic()\fP function.
+.sp
+A \fIvcl_synth\fP defined object never enters the cache, contrary to a
+\fIvcl_backend_error\fP defined object, which may end up in cache.
+.sp
+The subroutine may terminate with calling \fBreturn()\fP with one of the
+following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBrestart\fP
+.in +2
+see \fIrestart\fP section above
+
+.in -2
+\fBdeliver\fP
+.in +2
+Directly deliver the object defined by \fIvcl_synth\fP to the client
+without calling \fIvcl_deliver\fP\&.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS Backend Side
+.SS vcl_backend_fetch
+.sp
+Called before sending the backend request. In this subroutine you
+typically alter the request before it gets to the backend.
+.sp
+The \fIvcl_backend_fetch\fP subroutine may terminate with calling
+\fBreturn()\fP with one of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBabandon\fP
+.in +2
+see \fIabandon\fP section above
+
+.in -2
+\fBfetch\fP
+.in +2
+Fetch the object from the backend.
+
+.in -2
+\fBerror(status code, reason)\fP
+.in +2
+Transition to \fIvcl_backend_error\fP with \fBberesp.status\fP and
+\fBberesp.reason\fP being preset to the arguments of \fBerror()\fP if
+arguments are provided.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.\" could add return(retry) if there was a(nother) use case, see also https://code.vinyl-cache.org/vinyl-cache/vinyl-cache/issues/4342
+.
+.sp
+Before calling \fIvcl_backend_fetch\fP, Vinyl Cache core prepares the \fIbereq\fP
+backend request as follows:
+.INDENT 0.0
+.IP \(bu 2
+Unless the request is a \fIpass\fP,
+.INDENT 2.0
+.IP \(bu 2
+set \fBbereq.method\fP to \fBGET\fP and \fBbereq.proto\fP to
+\fBHTTP/1.1\fP and
+.IP \(bu 2
+set \fBbereq.http.Accept_Encoding\fP to \fBgzip\fP if
+\fIref_param_http_gzip_support\fP is enabled.
+.UNINDENT
+.IP \(bu 2
+If there is an existing cache object to be revalidated, set
+\fBbereq.http.If\-Modified\-Since\fP from its \fBLast\-Modified\fP header
+and/or set \fBbereq.http.If\-None\-Match\fP from its \fBEtag\fP header
+.IP \(bu 2
+Set \fBbereq.http.X\-Vinyl\fP to the current transaction id (\fIvxid\fP)
+.UNINDENT
+.sp
+These changes can be undone or modified in \fIvcl_backend_fetch\fP before
+the backend request is issued.
+.sp
+In particular, to cache non\-GET requests, \fBreq.method\fP needs to be
+saved to a header or variable in \fIvcl_recv\fP and restored to
+\fBbereq.method\fP\&. Notice that caching non\-GET requests typically also
+requires changing the cache key in \fIvcl_hash\fP e.g. by also
+hashing the request method and/or request body.
+.sp
+HEAD request can be satisfied from cached GET responses.
+.SS vcl_backend_refresh
+.sp
+This subroutine is called after a legitimate 304 response is received from
+the backend so that you can chose how to handle the object revalidation.
+.sp
+The default is to apply the RFC logic which is to merge the new headers with
+the stale ones.
+.sp
+The returned value only affects response headers, the body that is delivered
+is always the one from the stale object.
+.sp
+See \fIvcl\-built\-in\-refresh\fP for additional explanations.
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBmerge\fP
+.in +2
+Merge the headers we got from the backend response with
+the ones we had in the cached object.
+
+.in -2
+\fBobj_stale\fP
+.in +2
+Return the stale object\(aqs headers without performing the RFC merge logic.
+
+.in -2
+\fBberesp\fP
+.in +2
+Return the beresp headers as they were at the end of this subroutine
+without executing the RFC merge logic. Any content\-length and
+content\-encoding headers present in the 304 beresp will be removed and
+replaced by the stale object ones if available. Etag and Last\-Modified
+headers are also copied from the stale object to allow future revalidations.
+
+.in -2
+\fBfail\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBabandon\fP
+.in +2
+see \fIabandon\fP section above
+
+.in -2
+\fBretry\fP
+.in +2
+Retry the backend transaction. Increases the \fIretries\fP counter.
+If the number of retries is higher than \fImax_retries\fP,
+control will be passed to \fIvcl_backend_error\fP\&.
+
+.in -2
+\fBerror(status code, reason)\fP
+.in +2
+Transition to \fIvcl_backend_error\fP with \fBberesp.status\fP and
+\fBberesp.reason\fP being preset to the arguments of \fBerror()\fP if
+arguments are provided.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_backend_response
+.sp
+Called after the response headers have been successfully retrieved from
+the backend.
+.sp
+The \fIvcl_backend_response\fP subroutine may terminate with calling
+\fBreturn()\fP with one of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBabandon\fP
+.in +2
+see \fIabandon\fP section above
+
+.in -2
+\fBdeliver\fP
+.in +2
+For a 304 response, create an updated cache object.
+Otherwise, fetch the object body from the backend and initiate
+delivery to any waiting client requests, possibly in parallel
+(streaming).
+
+.in -2
+\fBretry\fP
+.in +2
+Retry the backend transaction. Increases the \fIretries\fP counter.
+If the number of retries is higher than \fImax_retries\fP,
+control will be passed to \fIvcl_backend_error\fP\&.
+
+.in -2
+\fBpass(duration)\fP
+.in +2
+Mark the object as a hit\-for\-pass for the given duration. Subsequent
+lookups hitting this object will be turned into passed transactions,
+as if \fBvcl_recv\fP had returned \fBpass\fP\&.
+
+.in -2
+\fBerror(status code, reason)\fP
+.in +2
+Transition to \fIvcl_backend_error\fP with \fBberesp.status\fP and
+\fBberesp.reason\fP being preset to the arguments of \fBerror()\fP if
+arguments are provided.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_backend_error
+.sp
+This subroutine is called if we fail the backend fetch or if
+\fImax_retries\fP has been exceeded.
+.sp
+Returning with \fIabandon\fP does not leave a cache object.
+.sp
+If returning with \fBdeliver\fP and \fBberesp.uncacheable == false\fP, a
+synthetic cache object is generated in VCL, whose body may be constructed
+using the \fBsynthetic()\fP function.
+.sp
+Since these synthetic objects are cached in these special circumstances,
+be cautious with putting private information there. If you really must,
+then you need to explicitly set \fBberesp.uncacheable\fP to \fBtrue\fP in
+\fBvcl_backend_error\fP\&.
+.sp
+The \fIvcl_backend_error\fP subroutine may terminate with calling \fBreturn()\fP
+with one of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBfail(err)\fP
+.in +2
+see \fIfail\fP section above
+
+.in -2
+\fBabandon\fP
+.in +2
+see \fIabandon\fP section above
+
+.in -2
+\fBdeliver\fP
+.in +2
+Deliver and possibly cache the object defined in
+\fIvcl_backend_error\fP \fBas if it was fetched from the backend\fP, also
+referred to as a \(dqbackend synth\(dq.
+
+.in -2
+\fBretry\fP
+.in +2
+Retry the backend transaction. Increases the \fIretries\fP counter.
+If the number of retries is higher than \fImax_retries\fP,
+\fIvcl_synth\fP on the client side is called with \fBresp.status\fP
+preset to 503.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS During vcl.load / vcl.discard
+.SS vcl_init
+.sp
+Called when VCL is loaded, before any requests pass through it.
+Typically used to initialize VMODs.
+.sp
+The \fIvcl_init\fP subroutine may terminate with calling \fBreturn()\fP
+with one of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBok\fP
+.in +2
+Normal return, VCL continues loading.
+
+.in -2
+\fBfail(err)\fP
+.in +2
+Abort loading of this VCL.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SS vcl_fini
+.sp
+Called when VCL is discarded only after all requests have exited the VCL.
+Typically used to clean up VMODs.
+.sp
+The \fIvcl_fini\fP subroutine may terminate with calling \fBreturn()\fP
+with one of the following keywords:
+.INDENT 0.0
+.INDENT 3.5
+.nf
+
+\fBok\fP
+.in +2
+Normal return, VCL will be discarded.
+.in -2
+.fi
+.sp
+.UNINDENT
+.UNINDENT
+.SH SEE ALSO
+.INDENT 0.0
+.IP \(bu 2
+\fIvinyld(1)\fP
+.IP \(bu 2
+\fIvcl(7)\fP
+.UNINDENT
+.SH COPYRIGHT
+.sp
+This document is licensed under the same license as Vinyl Cache
+itself. See LICENSE for details.
+.INDENT 0.0
+.IP \(bu 2
+Copyright (c) 2006 Verdens Gang AS
+.IP \(bu 2
+Copyright (c) 2006\-2021 Varnish Software AS
+.UNINDENT
+.\" Generated by docutils manpage writer.
+.

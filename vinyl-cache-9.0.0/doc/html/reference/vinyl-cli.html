@@ -1,0 +1,1143 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VSL" href="vsl.html"><link rel="prev" title="vinyladm" href="vinyladm.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>vinyl-cli - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vinyl-cli">
+<span id="vinyl-cli-7"></span><h1>vinyl-cli<a class="headerlink" href="#vinyl-cli" title="Link to this heading">¶</a></h1>
+<section id="vinyl-cache-command-line-interface">
+<h2>Vinyl Cache Command Line Interface<a class="headerlink" href="#vinyl-cache-command-line-interface" title="Link to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Manual section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>7</p>
+</dd>
+</dl>
+<section id="description">
+<h3>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h3>
+<p>Vinyl Cache has a command line interface (CLI) which can control and change
+most of the operational parameters and the configuration of Vinyl Cache,
+without interrupting the running service.</p>
+<p>The CLI can be used for the following tasks:</p>
+<dl class="simple">
+<dt>configuration</dt><dd><p>You can upload, change and delete VCL files from the CLI.</p>
+</dd>
+<dt>parameters</dt><dd><p>You can inspect and change the various parameters Vinyl Cache has
+available through the CLI. The individual parameters are
+documented in the vinyld(1) man page.</p>
+</dd>
+<dt>bans</dt><dd><p>Bans are filters that are applied to keep Vinyl Cache from serving
+stale content. When you issue a ban Vinyl Cache will not serve any
+<em>banned</em> object from cache, but rather re-fetch it from its
+backend servers.</p>
+</dd>
+<dt>process management</dt><dd><p>You can stop and start the cache (child) process though the
+CLI. You can also retrieve the latest stack trace if the child
+process has crashed.</p>
+</dd>
+</dl>
+<p>If you invoke vinyld(1) with -T, -M or -d the CLI will be
+available. In debug mode (-d) the CLI will be in the foreground, with
+-T you can connect to it with vinyladm or telnet and with -M
+<code class="docutils literal notranslate"><span class="pre">vinyld</span></code> will connect back to a listening service <em>pushing</em> the CLI to
+that service. Please see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a> for details.</p>
+<section id="syntax">
+<span id="ref-syntax"></span><h4>Syntax<a class="headerlink" href="#syntax" title="Link to this heading">¶</a></h4>
+<p>The Vinyl Cache CLI is similar to another command line interface, the Bourne
+Shell. Commands are usually terminated with a newline, and they may take
+arguments. The command and its arguments are <em>tokenized</em> before parsing,
+and as such arguments containing spaces must be enclosed in double quotes.</p>
+<p>It means that command parsing of</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">help</span> <span class="n">banner</span>
+</pre></div>
+</div>
+<p>is equivalent to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;help&quot;</span> <span class="n">banner</span>
+</pre></div>
+</div>
+<p>because the double quotes only indicate the boundaries of the <code class="docutils literal notranslate"><span class="pre">help</span></code>
+token.</p>
+<p>Within double quotes you can escape characters with \ (backslash). The \n,
+\r, and \t get translated to newlines, carriage returns, an tabs.  Double
+quotes and backslashes themselves can be escaped with \” and \\
+respectively.</p>
+<p>To enter characters in octals use the \nnn syntax. Hexadecimals can
+be entered with the \xnn syntax.</p>
+<p>Commands may not end with a newline when a shell-style <em>here document</em>
+(here-document or heredoc) is used. The format of a here document is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;&lt;</span> <span class="n">word</span>
+     <span class="n">here</span> <span class="n">document</span>
+<span class="n">word</span>
+</pre></div>
+</div>
+<p><em>word</em> can be any continuous string chosen to make sure it doesn’t appear
+naturally in the following <em>here document</em>. Traditionally EOF or END is
+used.</p>
+</section>
+<section id="quoting-pitfalls">
+<h4>Quoting pitfalls<a class="headerlink" href="#quoting-pitfalls" title="Link to this heading">¶</a></h4>
+<p>Integrating with the Vinyl Cache CLI can be sometimes surprising when quoting
+is involved. For instance in Bourne Shell the delimiter used with here
+documents may or may not be separated by spaces from the <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> token:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">&lt;&lt;</span><span class="n">EOF</span>
+<span class="n">hello</span>
+<span class="n">world</span>
+<span class="n">EOF</span>
+<span class="n">hello</span>
+<span class="n">world</span>
+</pre></div>
+</div>
+<p>With the Vinyl Cache CLI, the <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">EOF</span></code> tokens must be separated by
+at least one blank:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcl</span><span class="o">.</span><span class="n">inline</span> <span class="n">boot</span> <span class="o">&lt;&lt;</span><span class="n">EOF</span>
+<span class="mi">106</span> <span class="mi">258</span>
+<span class="n">Message</span> <span class="kn">from</span><span class="w"> </span><span class="nn">VCC</span><span class="o">-</span><span class="n">compiler</span><span class="p">:</span>
+<span class="n">VCL</span> <span class="n">version</span> <span class="n">declaration</span> <span class="n">missing</span>
+<span class="n">Update</span> <span class="n">your</span> <span class="n">VCL</span> <span class="n">to</span> <span class="n">Version</span> <span class="mi">4</span> <span class="n">syntax</span><span class="p">,</span> <span class="ow">and</span> <span class="n">add</span>
+        <span class="n">vcl</span> <span class="mf">4.0</span><span class="p">;</span>
+<span class="n">on</span> <span class="n">the</span> <span class="n">first</span> <span class="n">line</span> <span class="n">of</span> <span class="n">the</span> <span class="n">VCL</span> <span class="n">files</span><span class="o">.</span>
+<span class="p">(</span><span class="s1">&#39;&lt;vcl.inline&gt;&#39;</span> <span class="n">Line</span> <span class="mi">1</span> <span class="n">Pos</span> <span class="mi">1</span><span class="p">)</span>
+<span class="o">&lt;&lt;</span><span class="n">EOF</span>
+<span class="c1">##---</span>
+
+<span class="n">Running</span> <span class="n">VCC</span><span class="o">-</span><span class="n">compiler</span> <span class="n">failed</span><span class="p">,</span> <span class="n">exited</span> <span class="k">with</span> <span class="mi">2</span>
+<span class="n">VCL</span> <span class="n">compilation</span> <span class="n">failed</span>
+</pre></div>
+</div>
+<p>With the missing space, the here document can be added and the actual VCL
+can be loaded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcl</span><span class="o">.</span><span class="n">inline</span> <span class="n">test</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span>
+<span class="n">vcl</span> <span class="mf">4.0</span><span class="p">;</span>
+
+<span class="n">backend</span> <span class="n">be</span> <span class="p">{</span>
+        <span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">EOF</span>
+<span class="mi">200</span> <span class="mi">14</span>
+<span class="n">VCL</span> <span class="n">compiled</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>A big difference with a shell here document is the handling of the <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code>
+token. Just like command names can be quoted, the here document token keeps
+its meaning, even quoted:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcl</span><span class="o">.</span><span class="n">inline</span> <span class="n">test</span> <span class="s2">&quot;&lt;&lt;&quot;</span> <span class="n">EOF</span>
+<span class="n">vcl</span> <span class="mf">4.0</span><span class="p">;</span>
+
+<span class="n">backend</span> <span class="n">be</span> <span class="p">{</span>
+        <span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">EOF</span>
+<span class="mi">200</span> <span class="mi">14</span>
+<span class="n">VCL</span> <span class="n">compiled</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>When using a front-end to the Vinyl Cache CLI like <code class="docutils literal notranslate"><span class="pre">vinyladm</span></code>, one must
+take into account the double expansion happening.  First in the shell
+launching the <code class="docutils literal notranslate"><span class="pre">vinyladm</span></code> command and then in the Vinyl Cache CLI itself.
+When a command’s parameter require spaces, you need to ensure that the
+Vinyl Cache CLI will see the double quotes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vinyladm</span> <span class="n">param</span><span class="o">.</span><span class="n">set</span> <span class="n">cc_command</span> <span class="s1">&#39;&quot;my alternate cc command&quot;&#39;</span>
+
+<span class="n">Change</span> <span class="n">will</span> <span class="n">take</span> <span class="n">effect</span> <span class="n">when</span> <span class="n">VCL</span> <span class="n">script</span> <span class="ow">is</span> <span class="n">reloaded</span>
+</pre></div>
+</div>
+<p>Otherwise if you don’t quote the quotes, you may get a seemingly unrelated
+error message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vinyladm</span> <span class="n">param</span><span class="o">.</span><span class="n">set</span> <span class="n">cc_command</span> <span class="s2">&quot;my alternate cc command&quot;</span>
+<span class="n">Unknown</span> <span class="n">request</span><span class="o">.</span>
+<span class="n">Type</span> <span class="s1">&#39;help&#39;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">info</span><span class="o">.</span>
+<span class="n">Too</span> <span class="n">many</span> <span class="n">parameters</span>
+
+<span class="n">Command</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">error</span> <span class="n">code</span> <span class="mi">105</span>
+</pre></div>
+</div>
+<p>If you are quoting with a here document, you must wrap it inside a shell
+multi-line argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vinyladm</span> <span class="n">vcl</span><span class="o">.</span><span class="n">inline</span> <span class="n">test</span> <span class="s1">&#39;&lt;&lt; EOF</span>
+<span class="n">vcl</span> <span class="mf">4.0</span><span class="p">;</span>
+
+<span class="n">backend</span> <span class="n">be</span> <span class="p">{</span>
+        <span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">EOF</span><span class="s1">&#39;</span>
+<span class="n">VCL</span> <span class="n">compiled</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Another difference with a shell here document is that only one here document
+can be used on a single command line. For example, it is possible to do this
+in a shell script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF1</span> <span class="p">;</span> <span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF2</span>
+<span class="n">hello</span>
+<span class="n">EOF1</span>
+<span class="n">world</span>
+<span class="n">EOF2</span>
+</pre></div>
+</div>
+<p>The expected output is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hello</span>
+<span class="n">world</span>
+</pre></div>
+</div>
+<p>With the Vinyl Cache CLI, only the last parameter may use the here document form,
+which greatly restricts the number of commands that can effectively use them.
+Trying to use multiple here documents only takes the last one into account.</p>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">command</span> <span class="n">argument</span> <span class="o">&lt;&lt;</span> <span class="n">EOF1</span> <span class="o">&lt;&lt;</span> <span class="n">EOF2</span>
+<span class="n">heredoc1</span>
+<span class="n">EOF1</span>
+<span class="n">heredoc2</span>
+<span class="n">EOF2</span>
+</pre></div>
+</div>
+<p>This conceptually results in the following command line:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;command&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;argument&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&lt;&lt;&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOF1&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;heredoc1\nEOF1\nheredoc2\n&quot;</span></code></p></li>
+</ul>
+<p>Other pitfalls include variable expansion of the shell invoking <code class="docutils literal notranslate"><span class="pre">vinyladm</span></code>
+but this is not directly related to the Vinyl Cache CLI. If you get the quoting
+right you should be fine even with complex commands.</p>
+</section>
+<section id="json">
+<h4>JSON<a class="headerlink" href="#json" title="Link to this heading">¶</a></h4>
+<p>A number of commands with informational responses support a <code class="docutils literal notranslate"><span class="pre">-j</span></code> parameter
+for JSON output, as specified below. The top-level structure of the JSON
+response is an array with these first three elements:</p>
+<ul class="simple">
+<li><p>A version number for the JSON format (integer)</p></li>
+<li><p>An array of strings that comprise the CLI command just received</p></li>
+<li><p>The time at which the response was generated, as a Unix epoch time
+in seconds with millisecond precision (floating point)</p></li>
+</ul>
+<p>The remaining elements of the array form the data that are specific to
+the CLI command, and their structure and content depend on the
+command.</p>
+<p>For example, the response to <code class="docutils literal notranslate"><span class="pre">status</span> <span class="pre">-j</span></code> just contains a string in
+the top-level array indicating the state of the child process
+(<code class="docutils literal notranslate"><span class="pre">&quot;running&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;stopped&quot;</span></code> and so forth):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;-j&quot;</span><span class="p">],</span> <span class="mf">1538031732.632</span><span class="p">,</span> <span class="s2">&quot;running&quot;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The JSON responses to other commands may have longer lists of
+elements, which may have simple data types or form structured objects.</p>
+<p>JSON output is only returned if command execution was successful. The
+output for an error response is always the same as it would have been
+for the command without the <code class="docutils literal notranslate"><span class="pre">-j</span></code> parameter.</p>
+</section>
+<section id="commands">
+<h4>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h4>
+<section id="auth-response">
+<span id="ref-cli-auth"></span><h5>auth &lt;response&gt;<a class="headerlink" href="#auth-response" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Authenticate.</p>
+</div></blockquote>
+</section>
+<section id="backend-list-j-p-backend-pattern">
+<span id="ref-cli-backend-list"></span><h5>backend.list [-j] [-p] [&lt;backend_pattern&gt;]<a class="headerlink" href="#backend-list-j-p-backend-pattern" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>List backends.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-p</span></code> also shows probe status.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-j</span></code> specifies JSON output.</p>
+<p>Unless <code class="docutils literal notranslate"><span class="pre">-j</span></code> is specified for JSON output,  the output format is five columns of dynamic width,  separated by white space with the fields:</p>
+<ul>
+<li><p>Backend name</p></li>
+<li><p>Admin: How health state is determined:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">healthy</span></code>: Set <code class="docutils literal notranslate"><span class="pre">healthy</span></code> through <code class="docutils literal notranslate"><span class="pre">backend.set_health</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sick</span></code>: Set <code class="docutils literal notranslate"><span class="pre">sick</span></code> through <code class="docutils literal notranslate"><span class="pre">backend.set_health</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">probe</span></code>: Health state determined by a probe or some other
+dynamic mechanism.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deleted</span></code>: Backend has been deleted, but not yet cleaned
+up.</p></li>
+</ul>
+<p>Admin has precedence over Health</p>
+</li>
+<li><p>Probe <code class="docutils literal notranslate"><span class="pre">X/Y</span></code>: <em>X</em> out of <em>Y</em> checks have succeeded</p>
+<p><em>X</em> and <em>Y</em> are backend specific and may represent probe checks,
+other backends or any other metric.</p>
+<p>If there is no probe or the director does not provide details on
+probe check results, <code class="docutils literal notranslate"><span class="pre">0/0</span></code> is output.</p>
+</li>
+<li><p>Health: Probe health state</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">healthy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sick</span></code></p></li>
+</ul>
+<p>If there is no probe, <code class="docutils literal notranslate"><span class="pre">healthy</span></code> is output.</p>
+</li>
+<li><p>Last change: Timestamp when the health state last changed.</p></li>
+</ul>
+<p>The health state reported here is generic. A backend’s health may also depend on the context it is being used in (e.g. the object’s hash), so the actual health state as visible from VCL (e.g. using <code class="docutils literal notranslate"><span class="pre">std.healthy()</span></code>) may differ.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">-j</span></code>, the object members should be self explanatory,
+matching the fields described above. <code class="docutils literal notranslate"><span class="pre">probe_message</span></code> has the
+format <code class="docutils literal notranslate"><span class="pre">[X,</span> <span class="pre">Y,</span> <span class="pre">&quot;state&quot;]</span></code> as described above for Probe. JSON
+Probe details (<code class="docutils literal notranslate"><span class="pre">-j</span> <span class="pre">-p</span></code> arguments) are director specific.</p>
+</div></blockquote>
+</section>
+<section id="backend-set-health-backend-pattern-auto-healthy-sick">
+<span id="ref-cli-backend-set-health"></span><h5>backend.set_health &lt;backend_pattern&gt; [auto|healthy|sick]<a class="headerlink" href="#backend-set-health-backend-pattern-auto-healthy-sick" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Set health status of backend(s) matching &lt;backend_pattern&gt;.</p>
+<ul class="simple">
+<li><p>With <code class="docutils literal notranslate"><span class="pre">auto</span></code>, the health status is determined by a probe
+or some other dynamic mechanism, if any</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">healthy</span></code> sets the backend as usable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sick</span></code> sets the backend as unusable</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="ban-field-operator-arg-field-oper-arg">
+<span id="ref-cli-ban"></span><h5>ban &lt;field&gt; &lt;operator&gt; &lt;arg&gt; [&amp;&amp; &lt;field&gt; &lt;oper&gt; &lt;arg&gt; …]<a class="headerlink" href="#ban-field-operator-arg-field-oper-arg" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Mark obsolete all objects where all the conditions match.</p>
+<p>See <a class="reference internal" href="vmod_std.html#std-ban"><span class="std std-ref">BOOL ban(STRING)</span></a> for details</p>
+</div></blockquote>
+</section>
+<section id="ban-list-j">
+<span id="ref-cli-ban-list"></span><h5>ban.list [-j]<a class="headerlink" href="#ban-list-j" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>List the active bans.</p>
+<p>Unless <code class="docutils literal notranslate"><span class="pre">-j</span></code> is specified for JSON output,  the output format is:</p>
+<ul class="simple">
+<li><p>Time the ban was issued.</p></li>
+<li><p>Objects referencing this ban.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C</span></code> if ban is completed = no further testing against it.</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">lurker</span></code> debugging is enabled:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span></code> for req.* tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">O</span></code> for obj.* tests</p></li>
+<li><p>Pointer to ban object</p></li>
+</ul>
+</li>
+<li><p>Ban specification</p></li>
+</ul>
+<p>Durations of ban specifications get normalized, for example “7d” gets changed into “1w”.</p>
+</div></blockquote>
+</section>
+<section id="banner">
+<span id="ref-cli-banner"></span><h5>banner<a class="headerlink" href="#banner" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Print welcome banner.</p>
+</div></blockquote>
+</section>
+<section id="help-j-command">
+<span id="ref-cli-help"></span><h5>help [-j|&lt;command&gt;]<a class="headerlink" href="#help-j-command" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Show command/protocol help.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-j</span></code> specifies JSON output.</p>
+</div></blockquote>
+</section>
+<section id="panic-clear-z">
+<span id="ref-cli-panic-clear"></span><h5>panic.clear [-z]<a class="headerlink" href="#panic-clear-z" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Clear the last panic, if any, -z will clear related vinylstat counter(s)</p>
+</div></blockquote>
+</section>
+<section id="panic-show-j">
+<span id="ref-cli-panic-show"></span><h5>panic.show [-j]<a class="headerlink" href="#panic-show-j" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Return the last panic, if any.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-j</span></code> specifies JSON output – the panic message is returned as an unstructured JSON string.</p>
+</div></blockquote>
+</section>
+<section id="param-reset-j-param">
+<span id="ref-cli-param-reset"></span><h5>param.reset [-j] &lt;param&gt;<a class="headerlink" href="#param-reset-j-param" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Reset parameter to default value.</p>
+<p>The JSON output is the same as <code class="docutils literal notranslate"><span class="pre">param.show</span> <span class="pre">-j</span> <span class="pre">&lt;param&gt;</span></code> and contains the updated value as it would be represented by a subsequent execution of <code class="docutils literal notranslate"><span class="pre">param.show</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="param-set-j-param-value">
+<span id="ref-cli-param-set"></span><h5>param.set [-j] &lt;param&gt; &lt;value&gt;<a class="headerlink" href="#param-set-j-param-value" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Set parameter value.</p>
+<p>The JSON output is the same as <code class="docutils literal notranslate"><span class="pre">param.show</span> <span class="pre">-j</span> <span class="pre">&lt;param&gt;</span></code> and contains the updated value as it would be represented by a subsequent execution of <code class="docutils literal notranslate"><span class="pre">param.show</span></code>.</p>
+<p>This can be useful to later verify that a parameter value didn’t change and to use the value from the JSON output to reset the parameter to the desired value.</p>
+</div></blockquote>
+</section>
+<section id="param-show-l-j-param-changed">
+<span id="ref-cli-param-show"></span><h5>param.show [-l|-j] [&lt;param&gt;|changed]<a class="headerlink" href="#param-show-l-j-param-changed" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Show parameters and their values.</p>
+<p>The long form with <code class="docutils literal notranslate"><span class="pre">-l</span></code> shows additional information, including documentation and minimum, maximum and default values, if defined for the parameter. JSON output is specified with <code class="docutils literal notranslate"><span class="pre">-j</span></code>, in which the information for the long form is included; only one of <code class="docutils literal notranslate"><span class="pre">-l</span></code> or <code class="docutils literal notranslate"><span class="pre">-j</span></code> is permitted. If a parameter is specified with <code class="docutils literal notranslate"><span class="pre">&lt;param&gt;</span></code>, show only that parameter. If <code class="docutils literal notranslate"><span class="pre">changed</span></code> is specified, show only those parameters whose values differ from their defaults.</p>
+</div></blockquote>
+</section>
+<section id="pid-j">
+<span id="ref-cli-pid"></span><h5>pid [-j]<a class="headerlink" href="#pid-j" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Show the pid of the master process, and the worker if it’s running.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-j</span></code> specifies JSON output.</p>
+</div></blockquote>
+</section>
+<section id="ping-j-timestamp">
+<span id="ref-cli-ping"></span><h5>ping [-j] [&lt;timestamp&gt;]<a class="headerlink" href="#ping-j-timestamp" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Keep connection alive.</p>
+<p>The response is formatted as JSON if <code class="docutils literal notranslate"><span class="pre">-j</span></code> is specified.</p>
+</div></blockquote>
+</section>
+<section id="quit">
+<span id="ref-cli-quit"></span><h5>quit<a class="headerlink" href="#quit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Close connection.</p>
+</div></blockquote>
+</section>
+<section id="start">
+<span id="ref-cli-start"></span><h5>start<a class="headerlink" href="#start" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Start the Vinyl Cache process.</p>
+</div></blockquote>
+</section>
+<section id="status-j">
+<span id="ref-cli-status"></span><h5>status [-j]<a class="headerlink" href="#status-j" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Check status of Vinyl Cache process.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-j</span></code> specifies JSON output.</p>
+</div></blockquote>
+</section>
+<section id="stop">
+<span id="ref-cli-stop"></span><h5>stop<a class="headerlink" href="#stop" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Stop the Vinyl Cache process.</p>
+</div></blockquote>
+</section>
+<section id="storage-list-j">
+<span id="ref-cli-storage-list"></span><h5>storage.list [-j]<a class="headerlink" href="#storage-list-j" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>List storage devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-j</span></code> specifies JSON output.</p>
+</div></blockquote>
+</section>
+<section id="vcl-deps-j">
+<span id="ref-cli-vcl-deps"></span><h5>vcl.deps [-j]<a class="headerlink" href="#vcl-deps-j" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>List all loaded configuration and their dependencies.</p>
+<p>Unless <code class="docutils literal notranslate"><span class="pre">-j</span></code> is specified for JSON output, the output format is up to two columns of dynamic width separated by white space with the fields:</p>
+<ul class="simple">
+<li><p>VCL: a VCL program</p></li>
+<li><p>Dependency: another VCL program it depends on</p></li>
+</ul>
+<p>Only direct dependencies are listed, and VCLs with multiple dependencies are listed multiple times.</p>
+</div></blockquote>
+</section>
+<section id="vcl-discard-name-pattern">
+<span id="ref-cli-vcl-discard"></span><h5>vcl.discard &lt;name_pattern&gt;…<a class="headerlink" href="#vcl-discard-name-pattern" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Unload the named configurations (when possible).</p>
+<p>Unload the named configurations and labels matching at least one name pattern. All matching configurations and labels are discarded in the correct order with respect to potential dependencies. If one configuration or label could not be discarded because one of its dependencies would remain, nothing is discarded. Each individual name pattern must match at least one named configuration or label.</p>
+</div></blockquote>
+</section>
+<section id="vcl-inline-configname-quoted-vclstring-auto-cold-warm">
+<span id="ref-cli-vcl-inline"></span><h5>vcl.inline &lt;configname&gt; &lt;quoted_VCLstring&gt; [auto|cold|warm]<a class="headerlink" href="#vcl-inline-configname-quoted-vclstring-auto-cold-warm" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Compile and load the VCL data under the name provided.</p>
+<p>Multi-line VCL can be input using the here document <a class="reference internal" href="#ref-syntax"><span class="std std-ref">Syntax</span></a>.</p>
+</div></blockquote>
+</section>
+<section id="vcl-label-label-configname">
+<span id="ref-cli-vcl-label"></span><h5>vcl.label &lt;label&gt; &lt;configname&gt;<a class="headerlink" href="#vcl-label-label-configname" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Apply label to configuration.</p>
+<p>A VCL label is like a UNIX symbolic link,  a name without substance, which points to another VCL.</p>
+<p>Labels are mandatory whenever one VCL references another.</p>
+</div></blockquote>
+</section>
+<section id="vcl-list-j">
+<span id="ref-cli-vcl-list"></span><h5>vcl.list [-j]<a class="headerlink" href="#vcl-list-j" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>List all loaded configuration.</p>
+<p>Unless <code class="docutils literal notranslate"><span class="pre">-j</span></code> is specified for JSON output,  the output format is five or seven columns of dynamic width,  separated by white space with the fields:</p>
+<ul class="simple">
+<li><p>status: active, available or discarded</p></li>
+<li><p>state: label, cold, warm, or auto</p></li>
+<li><p>temperature: init, cold, warm, busy or cooling</p></li>
+<li><p>busy: number of references to this vcl (integer)</p></li>
+<li><p>name: the name given to this vcl or label</p></li>
+<li><p>[ <code class="docutils literal notranslate"><span class="pre">&lt;-</span></code> | <code class="docutils literal notranslate"><span class="pre">-&gt;</span></code> ] and label info last two fields)</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-&gt;</span></code> &lt;vcl&gt; : label “points to” the named &lt;vcl&gt;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;-</span></code> (&lt;n&gt; label[s]): the vcl has &lt;n&gt; label(s)</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</section>
+<section id="vcl-load-configname-filename-auto-cold-warm">
+<span id="ref-cli-vcl-load"></span><h5>vcl.load &lt;configname&gt; &lt;filename&gt; [auto|cold|warm]<a class="headerlink" href="#vcl-load-configname-filename-auto-cold-warm" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Compile and load the VCL file under the name provided.</p>
+</div></blockquote>
+</section>
+<section id="vcl-show-v-configname">
+<span id="ref-cli-vcl-show"></span><h5>vcl.show [-v] [&lt;configname&gt;]<a class="headerlink" href="#vcl-show-v-configname" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Display the source code for the specified configuration.</p>
+</div></blockquote>
+</section>
+<section id="vcl-state-configname-auto-cold-warm">
+<span id="ref-cli-vcl-state"></span><h5>vcl.state &lt;configname&gt; auto|cold|warm<a class="headerlink" href="#vcl-state-configname-auto-cold-warm" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Force the state of the named configuration.</p>
+</div></blockquote>
+</section>
+<section id="vcl-symtab">
+<span id="ref-cli-vcl-symtab"></span><h5>vcl.symtab<a class="headerlink" href="#vcl-symtab" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Dump the VCL symbol-tables.</p>
+</div></blockquote>
+</section>
+<section id="vcl-use-configname-label">
+<span id="ref-cli-vcl-use"></span><h5>vcl.use &lt;configname|label&gt;<a class="headerlink" href="#vcl-use-configname-label" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Switch to the named configuration immediately.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="backend-pattern">
+<h4>Backend Pattern<a class="headerlink" href="#backend-pattern" title="Link to this heading">¶</a></h4>
+<p>A backend pattern can be a backend name or a combination of a VCL name
+and backend name in “VCL.backend” format.  If the VCL name is omitted,
+the active VCL is assumed.  Partial matching on the backend and VCL
+names is supported using shell-style wildcards, e.g. asterisk (*).</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">backend</span><span class="o">.</span><span class="n">list</span> <span class="n">def</span><span class="o">*</span>
+<span class="n">backend</span><span class="o">.</span><span class="n">list</span> <span class="n">b</span><span class="o">*.</span><span class="n">def</span><span class="o">*</span>
+<span class="n">backend</span><span class="o">.</span><span class="n">set_health</span> <span class="n">default</span> <span class="n">sick</span>
+<span class="n">backend</span><span class="o">.</span><span class="n">set_health</span> <span class="n">def</span><span class="o">*</span> <span class="n">healthy</span>
+<span class="n">backend</span><span class="o">.</span><span class="n">set_health</span> <span class="o">*</span> <span class="n">auto</span>
+</pre></div>
+</div>
+</section>
+<section id="ban-expressions">
+<h4>Ban Expressions<a class="headerlink" href="#ban-expressions" title="Link to this heading">¶</a></h4>
+<p>A ban expression consists of one or more conditions.  A condition
+consists of a field, an operator, and an argument.  Conditions can be
+ANDed together with “&amp;&amp;”.</p>
+<p>A field can be any of the variables from VCL, for instance req.url,
+req.http.host or obj.http.set-cookie.</p>
+<p>Operators are “==” for direct comparison, “~” for a regular
+expression match, and “&gt;” or “&lt;” for size comparisons.  Prepending
+an operator with “!” negates the expression.</p>
+<p>The argument could be a quoted string, a regexp, or an integer.
+Integers can have “KB”, “MB”, “GB” or “TB” appended for size related
+fields.</p>
+</section>
+<section id="vcl-temperature">
+<span id="ref-vcl-temperature"></span><h4>VCL Temperature<a class="headerlink" href="#vcl-temperature" title="Link to this heading">¶</a></h4>
+<p>A VCL program goes through several states related to the different
+commands: it can be loaded, used, and later discarded. You can load
+several VCL programs and switch at any time from one to another. There
+is only one active VCL, but the previous active VCL will be maintained
+active until all its transactions are over.</p>
+<p>Over time, if you often refresh your VCL and keep the previous
+versions around, resource consumption will increase, you can’t escape
+that. However, most of the time you want to pay the price only for the
+active VCL and keep older VCLs in case you’d need to rollback to a
+previous version.</p>
+<p>The VCL temperature allows you to minimize the footprint of inactive
+VCLs. Once a VCL becomes cold, Vinyl Cache will release all the resources
+that can be be later reacquired. You can manually set the temperature
+of a VCL or let Vinyl Cache
+automatically handle it.</p>
+</section>
+</section>
+<section id="examples">
+<h3>EXAMPLES<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h3>
+<p>Load a multi-line VCL using shell-style <em>here document</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcl</span><span class="o">.</span><span class="n">inline</span> <span class="n">example</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span>
+<span class="n">vcl</span> <span class="mf">4.0</span><span class="p">;</span>
+
+<span class="n">backend</span> <span class="n">www</span> <span class="p">{</span>
+    <span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">;</span>
+    <span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="s2">&quot;8080&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">EOF</span>
+</pre></div>
+</div>
+<p>Ban all requests where req.url exactly matches the string /news:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ban</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="o">==</span> <span class="s2">&quot;/news&quot;</span>
+</pre></div>
+</div>
+<p>Ban all documents where the serving host is “example.com” or
+“www.example.com”, and where the Set-Cookie header received from the
+backend contains “USERID=1663”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ban</span> <span class="n">req</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">host</span> <span class="o">~</span> <span class="s2">&quot;^(?i)(www</span><span class="se">\\</span><span class="s2">.)?example</span><span class="se">\\</span><span class="s2">.com$&quot;</span> <span class="o">&amp;&amp;</span> <span class="n">obj</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">set</span><span class="o">-</span><span class="n">cookie</span> <span class="o">~</span> <span class="s2">&quot;USERID=1663&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="authors">
+<h3>AUTHORS<a class="headerlink" href="#authors" title="Link to this heading">¶</a></h3>
+<p>This manual page was originally written by Per Buer and later modified
+by Federico G. Schwindt, Dridi Boukelmoune, Lasse Karstensen and
+Poul-Henning Kamp.</p>
+</section>
+<section id="see-also">
+<h3>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinyladm.html#vinyladm-1"><span class="std std-ref">vinyladm</span></a></p></li>
+<li><p><a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p></li>
+<li><p><a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a></p></li>
+<li><p>For API use of the CLI: The Reference Manual.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vsl.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VSL</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vinyladm.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">vinyladm</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">vinyl-cli</a><ul>
+<li><a class="reference internal" href="#vinyl-cache-command-line-interface">Vinyl Cache Command Line Interface</a><ul>
+<li><a class="reference internal" href="#description">DESCRIPTION</a><ul>
+<li><a class="reference internal" href="#syntax">Syntax</a></li>
+<li><a class="reference internal" href="#quoting-pitfalls">Quoting pitfalls</a></li>
+<li><a class="reference internal" href="#json">JSON</a></li>
+<li><a class="reference internal" href="#commands">Commands</a><ul>
+<li><a class="reference internal" href="#auth-response">auth &lt;response&gt;</a></li>
+<li><a class="reference internal" href="#backend-list-j-p-backend-pattern">backend.list [-j] [-p] [&lt;backend_pattern&gt;]</a></li>
+<li><a class="reference internal" href="#backend-set-health-backend-pattern-auto-healthy-sick">backend.set_health &lt;backend_pattern&gt; [auto|healthy|sick]</a></li>
+<li><a class="reference internal" href="#ban-field-operator-arg-field-oper-arg">ban &lt;field&gt; &lt;operator&gt; &lt;arg&gt; [&amp;&amp; &lt;field&gt; &lt;oper&gt; &lt;arg&gt; …]</a></li>
+<li><a class="reference internal" href="#ban-list-j">ban.list [-j]</a></li>
+<li><a class="reference internal" href="#banner">banner</a></li>
+<li><a class="reference internal" href="#help-j-command">help [-j|&lt;command&gt;]</a></li>
+<li><a class="reference internal" href="#panic-clear-z">panic.clear [-z]</a></li>
+<li><a class="reference internal" href="#panic-show-j">panic.show [-j]</a></li>
+<li><a class="reference internal" href="#param-reset-j-param">param.reset [-j] &lt;param&gt;</a></li>
+<li><a class="reference internal" href="#param-set-j-param-value">param.set [-j] &lt;param&gt; &lt;value&gt;</a></li>
+<li><a class="reference internal" href="#param-show-l-j-param-changed">param.show [-l|-j] [&lt;param&gt;|changed]</a></li>
+<li><a class="reference internal" href="#pid-j">pid [-j]</a></li>
+<li><a class="reference internal" href="#ping-j-timestamp">ping [-j] [&lt;timestamp&gt;]</a></li>
+<li><a class="reference internal" href="#quit">quit</a></li>
+<li><a class="reference internal" href="#start">start</a></li>
+<li><a class="reference internal" href="#status-j">status [-j]</a></li>
+<li><a class="reference internal" href="#stop">stop</a></li>
+<li><a class="reference internal" href="#storage-list-j">storage.list [-j]</a></li>
+<li><a class="reference internal" href="#vcl-deps-j">vcl.deps [-j]</a></li>
+<li><a class="reference internal" href="#vcl-discard-name-pattern">vcl.discard &lt;name_pattern&gt;…</a></li>
+<li><a class="reference internal" href="#vcl-inline-configname-quoted-vclstring-auto-cold-warm">vcl.inline &lt;configname&gt; &lt;quoted_VCLstring&gt; [auto|cold|warm]</a></li>
+<li><a class="reference internal" href="#vcl-label-label-configname">vcl.label &lt;label&gt; &lt;configname&gt;</a></li>
+<li><a class="reference internal" href="#vcl-list-j">vcl.list [-j]</a></li>
+<li><a class="reference internal" href="#vcl-load-configname-filename-auto-cold-warm">vcl.load &lt;configname&gt; &lt;filename&gt; [auto|cold|warm]</a></li>
+<li><a class="reference internal" href="#vcl-show-v-configname">vcl.show [-v] [&lt;configname&gt;]</a></li>
+<li><a class="reference internal" href="#vcl-state-configname-auto-cold-warm">vcl.state &lt;configname&gt; auto|cold|warm</a></li>
+<li><a class="reference internal" href="#vcl-symtab">vcl.symtab</a></li>
+<li><a class="reference internal" href="#vcl-use-configname-label">vcl.use &lt;configname|label&gt;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backend-pattern">Backend Pattern</a></li>
+<li><a class="reference internal" href="#ban-expressions">Ban Expressions</a></li>
+<li><a class="reference internal" href="#vcl-temperature">VCL Temperature</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">EXAMPLES</a></li>
+<li><a class="reference internal" href="#authors">AUTHORS</a></li>
+<li><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

@@ -1,0 +1,925 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2" href="vmod_proxy.html"><link rel="prev" title="VMOD h2 - Module to control the built-in HTTP2 transport" href="vmod_h2.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VMOD math - VMOD wrapping math.h - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vmod-math-vmod-wrapping-math-h">
+<span id="vmod-math-3"></span><h1>VMOD math - VMOD wrapping math.h<a class="headerlink" href="#vmod-math-vmod-wrapping-math-h" title="Link to this heading">¶</a></h1>
+<section id="synopsis">
+<h2>SYNOPSIS<a class="headerlink" href="#synopsis" title="Link to this heading">¶</a></h2>
+<pre class="literal-block">import math [as name] [from &quot;path&quot;]
+
+<a class="reference internal" href="#math-approx"><span class="std std-ref">BOOL approx(REAL a, REAL b, REAL maxDiff, REAL maxRelDiff)</span></a>
+
+<a class="reference internal" href="#math-strfromd"><span class="std std-ref">STRING strfromd(STRING format, REAL fp)</span></a>
+
+<a class="reference internal" href="#math-constant"><span class="std std-ref">REAL constant(ENUM name)</span></a>
+
+<a class="reference internal" href="#math-fpclass"><span class="std std-ref">INT fpclass(ENUM name)</span></a>
+
+<a class="reference internal" href="#math-fpclassify"><span class="std std-ref">INT fpclassify(REAL x)</span></a>
+
+<a class="reference internal" href="#math-isfinite"><span class="std std-ref">INT isfinite(REAL x)</span></a>
+
+<a class="reference internal" href="#math-isgreater"><span class="std std-ref">INT isgreater(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-isgreaterequal"><span class="std std-ref">INT isgreaterequal(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-isinf"><span class="std std-ref">INT isinf(REAL x)</span></a>
+
+<a class="reference internal" href="#math-isless"><span class="std std-ref">INT isless(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-islessequal"><span class="std std-ref">INT islessequal(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-islessgreater"><span class="std std-ref">INT islessgreater(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-isnan"><span class="std std-ref">INT isnan(REAL x)</span></a>
+
+<a class="reference internal" href="#math-isnormal"><span class="std std-ref">INT isnormal(REAL x)</span></a>
+
+<a class="reference internal" href="#math-isunordered"><span class="std std-ref">INT isunordered(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-signbit"><span class="std std-ref">INT signbit(REAL x)</span></a>
+
+<a class="reference internal" href="#math-acos"><span class="std std-ref">REAL acos(REAL x)</span></a>
+
+<a class="reference internal" href="#math-acosh"><span class="std std-ref">REAL acosh(REAL x)</span></a>
+
+<a class="reference internal" href="#math-asin"><span class="std std-ref">REAL asin(REAL x)</span></a>
+
+<a class="reference internal" href="#math-asinh"><span class="std std-ref">REAL asinh(REAL x)</span></a>
+
+<a class="reference internal" href="#math-atan"><span class="std std-ref">REAL atan(REAL x)</span></a>
+
+<a class="reference internal" href="#math-atan2"><span class="std std-ref">REAL atan2(REAL y, REAL x)</span></a>
+
+<a class="reference internal" href="#math-atanh"><span class="std std-ref">REAL atanh(REAL x)</span></a>
+
+<a class="reference internal" href="#math-cbrt"><span class="std std-ref">REAL cbrt(REAL x)</span></a>
+
+<a class="reference internal" href="#math-ceil"><span class="std std-ref">REAL ceil(REAL x)</span></a>
+
+<a class="reference internal" href="#math-copysign"><span class="std std-ref">REAL copysign(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-cos"><span class="std std-ref">REAL cos(REAL x)</span></a>
+
+<a class="reference internal" href="#math-cosh"><span class="std std-ref">REAL cosh(REAL x)</span></a>
+
+<a class="reference internal" href="#math-erf"><span class="std std-ref">REAL erf(REAL x)</span></a>
+
+<a class="reference internal" href="#math-erfc"><span class="std std-ref">REAL erfc(REAL x)</span></a>
+
+<a class="reference internal" href="#math-exp"><span class="std std-ref">REAL exp(REAL x)</span></a>
+
+<a class="reference internal" href="#math-exp2"><span class="std std-ref">REAL exp2(REAL x)</span></a>
+
+<a class="reference internal" href="#math-expm1"><span class="std std-ref">REAL expm1(REAL x)</span></a>
+
+<a class="reference internal" href="#math-fabs"><span class="std std-ref">REAL fabs(REAL x)</span></a>
+
+<a class="reference internal" href="#math-fdim"><span class="std std-ref">REAL fdim(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-floor"><span class="std std-ref">REAL floor(REAL x)</span></a>
+
+<a class="reference internal" href="#math-fma"><span class="std std-ref">REAL fma(REAL x, REAL y, REAL z)</span></a>
+
+<a class="reference internal" href="#math-fmax"><span class="std std-ref">REAL fmax(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-fmin"><span class="std std-ref">REAL fmin(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-fmod"><span class="std std-ref">REAL fmod(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-hypot"><span class="std std-ref">REAL hypot(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-ilogb"><span class="std std-ref">INT ilogb(REAL x)</span></a>
+
+<a class="reference internal" href="#math-j0"><span class="std std-ref">REAL j0(REAL x)</span></a>
+
+<a class="reference internal" href="#math-j1"><span class="std std-ref">REAL j1(REAL x)</span></a>
+
+<a class="reference internal" href="#math-jn"><span class="std std-ref">REAL jn(INT x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-ldexp"><span class="std std-ref">REAL ldexp(REAL x, INT e)</span></a>
+
+<a class="reference internal" href="#math-lgamma"><span class="std std-ref">REAL lgamma(REAL x)</span></a>
+
+<a class="reference internal" href="#math-log"><span class="std std-ref">REAL log(REAL x)</span></a>
+
+<a class="reference internal" href="#math-log10"><span class="std std-ref">REAL log10(REAL x)</span></a>
+
+<a class="reference internal" href="#math-log1p"><span class="std std-ref">REAL log1p(REAL x)</span></a>
+
+<a class="reference internal" href="#math-log2"><span class="std std-ref">REAL log2(REAL x)</span></a>
+
+<a class="reference internal" href="#math-logb"><span class="std std-ref">REAL logb(REAL x)</span></a>
+
+<a class="reference internal" href="#math-lrint"><span class="std std-ref">INT lrint(REAL x)</span></a>
+
+<a class="reference internal" href="#math-lround"><span class="std std-ref">INT lround(REAL x)</span></a>
+
+<a class="reference internal" href="#math-nan"><span class="std std-ref">REAL nan(STRING tag)</span></a>
+
+<a class="reference internal" href="#math-nearbyint"><span class="std std-ref">REAL nearbyint(REAL x)</span></a>
+
+<a class="reference internal" href="#math-nextafter"><span class="std std-ref">REAL nextafter(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-pow"><span class="std std-ref">REAL pow(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-remainder"><span class="std std-ref">REAL remainder(REAL x, REAL y)</span></a>
+
+<a class="reference internal" href="#math-rint"><span class="std std-ref">REAL rint(REAL x)</span></a>
+
+<a class="reference internal" href="#math-round"><span class="std std-ref">REAL round(REAL x)</span></a>
+
+<a class="reference internal" href="#math-scalbln"><span class="std std-ref">REAL scalbln(REAL x, INT e)</span></a>
+
+<a class="reference internal" href="#math-scalbn"><span class="std std-ref">REAL scalbn(REAL x, INT y)</span></a>
+
+<a class="reference internal" href="#math-sin"><span class="std std-ref">REAL sin(REAL x)</span></a>
+
+<a class="reference internal" href="#math-sinh"><span class="std std-ref">REAL sinh(REAL x)</span></a>
+
+<a class="reference internal" href="#math-sqrt"><span class="std std-ref">REAL sqrt(REAL x)</span></a>
+
+<a class="reference internal" href="#math-tan"><span class="std std-ref">REAL tan(REAL x)</span></a>
+
+<a class="reference internal" href="#math-tanh"><span class="std std-ref">REAL tanh(REAL x)</span></a>
+
+<a class="reference internal" href="#math-tgamma"><span class="std std-ref">REAL tgamma(REAL x)</span></a>
+
+<a class="reference internal" href="#math-trunc"><span class="std std-ref">REAL trunc(REAL x)</span></a>
+
+<a class="reference internal" href="#math-y0"><span class="std std-ref">REAL y0(REAL x)</span></a>
+
+<a class="reference internal" href="#math-y1"><span class="std std-ref">REAL y1(REAL x)</span></a>
+
+<a class="reference internal" href="#math-yn"><span class="std std-ref">REAL yn(INT n, REAL x)</span></a></pre>
+</section>
+<section id="description">
+<h2>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This VMOD wraps the functions in <cite>math.h(7)</cite>, provides additional utilities and
+includes functions to access macros and constants from <cite>math.h(7)</cite> and
+<cite>float.h(7)</cite>.</p>
+<section id="utility-functions">
+<h3>Utility functions<a class="headerlink" href="#utility-functions" title="Link to this heading">¶</a></h3>
+</section>
+<section id="bool-approx-real-a-real-b-real-maxdiff-real-maxreldiff">
+<span id="math-approx"></span><h3>BOOL approx(REAL a, REAL b, REAL maxDiff, REAL maxRelDiff)<a class="headerlink" href="#bool-approx-real-a-real-b-real-maxdiff-real-maxreldiff" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BOOL</span> <span class="n">approx</span><span class="p">(</span><span class="n">REAL</span> <span class="n">a</span><span class="p">,</span> <span class="n">REAL</span> <span class="n">b</span><span class="p">,</span> <span class="n">REAL</span> <span class="n">maxDiff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">REAL</span> <span class="n">maxRelDiff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Return true if the two numbers <em>a</em> and <em>b</em> are approximately equal per the
+<code class="docutils literal notranslate"><span class="pre">AlmostEqualRelativeAndAbs</span></code> function from <a class="reference external" href="https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/">Comparing Floating Point Numbers,
+2012 Edition</a> given the additional parameters <em>maxDiff</em> and <em>maxRelDiff</em>. Read
+the blog post for details on why the seemingly simple question of two floating
+point numbers being equal has no simple answers.</p>
+<p>For their default values of 0, the two additional parameters are initialized to:</p>
+<ul class="simple">
+<li><p><em>maxDiff</em>: <code class="docutils literal notranslate"><span class="pre">4</span> <span class="pre">*</span> <span class="pre">DBL_EPSILON</span></code></p></li>
+<li><p><em>maxRelDiff</em>: <code class="docutils literal notranslate"><span class="pre">DBL_EPSILON</span></code></p></li>
+</ul>
+</section>
+<section id="string-strfromd-string-format-real-fp">
+<span id="math-strfromd"></span><h3>STRING strfromd(STRING format, REAL fp)<a class="headerlink" href="#string-strfromd-string-format-real-fp" title="Link to this heading">¶</a></h3>
+<p>Convert the value <em>fp</em> into a string using <em>format</em>, see <cite>strfromd(3)</cite>.</p>
+<p>An invalid format string results in a VCL error and the <code class="docutils literal notranslate"><span class="pre">NULL</span></code> invalid string
+returned.</p>
+</section>
+<section id="access-to-macros-and-constants">
+<h3>Access to macros and constants<a class="headerlink" href="#access-to-macros-and-constants" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-constant-enum-name">
+<span id="math-constant"></span><h3>REAL constant(ENUM name)<a class="headerlink" href="#real-constant-enum-name" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REAL</span> <span class="n">constant</span><span class="p">(</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">DBL_MANT_DIG</span><span class="p">,</span> <span class="n">DBL_DIG</span><span class="p">,</span> <span class="n">DBL_MIN_EXP</span><span class="p">,</span> <span class="n">DBL_MIN_10_EXP</span><span class="p">,</span> <span class="n">DBL_MAX_EXP</span><span class="p">,</span> <span class="n">DBL_MAX_10_EXP</span><span class="p">,</span> <span class="n">DBL_MAX</span><span class="p">,</span> <span class="n">DBL_EPSILON</span><span class="p">,</span> <span class="n">DBL_MIN</span><span class="p">,</span> <span class="n">HUGE_VAL</span><span class="p">,</span> <span class="n">M_E</span><span class="p">,</span> <span class="n">M_LOG2E</span><span class="p">,</span> <span class="n">M_LOG10E</span><span class="p">,</span> <span class="n">M_LN2</span><span class="p">,</span> <span class="n">M_LN10</span><span class="p">,</span> <span class="n">M_PI</span><span class="p">,</span> <span class="n">M_PI_2</span><span class="p">,</span> <span class="n">M_PI_4</span><span class="p">,</span> <span class="n">M_1_PI</span><span class="p">,</span> <span class="n">M_2_PI</span><span class="p">,</span> <span class="n">M_2_SQRTPI</span><span class="p">,</span> <span class="n">M_SQRT2</span><span class="p">,</span> <span class="n">M_SQRT1_2</span><span class="p">}</span> <span class="n">name</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Return the value of the named constant. For <code class="docutils literal notranslate"><span class="pre">DBL_*</span></code> see <cite>float.h(7)</cite>,
+otherwise <cite>math.h(7)</cite> for details.</p>
+</section>
+<section id="int-fpclass-enum-name">
+<span id="math-fpclass"></span><h3>INT fpclass(ENUM name)<a class="headerlink" href="#int-fpclass-enum-name" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INT</span> <span class="n">fpclass</span><span class="p">(</span>
+   <span class="n">ENUM</span> <span class="p">{</span><span class="n">FP_INFINITE</span><span class="p">,</span> <span class="n">FP_NAN</span><span class="p">,</span> <span class="n">FP_NORMAL</span><span class="p">,</span> <span class="n">FP_SUBNORMAL</span><span class="p">,</span> <span class="n">FP_ZERO</span><span class="p">}</span> <span class="n">name</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Return the value of the named constant for comparisons of <a class="reference internal" href="#math-fpclassify">math.fpclassify()</a>
+return values.</p>
+</section>
+<section id="math-h-functions">
+<h3>math.h functions<a class="headerlink" href="#math-h-functions" title="Link to this heading">¶</a></h3>
+<p>The semantics of functions mapping directly to <cite>math.h(7)</cite> are not documented
+herein, see the system documentation instead (for example using <code class="docutils literal notranslate"><span class="pre">man</span>
+<span class="pre">&lt;function&gt;</span></code>).</p>
+</section>
+<section id="int-fpclassify-real-x">
+<span id="math-fpclassify"></span><h3>INT fpclassify(REAL x)<a class="headerlink" href="#int-fpclassify-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isfinite-real-x">
+<span id="math-isfinite"></span><h3>INT isfinite(REAL x)<a class="headerlink" href="#int-isfinite-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isgreater-real-x-real-y">
+<span id="math-isgreater"></span><h3>INT isgreater(REAL x, REAL y)<a class="headerlink" href="#int-isgreater-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isgreaterequal-real-x-real-y">
+<span id="math-isgreaterequal"></span><h3>INT isgreaterequal(REAL x, REAL y)<a class="headerlink" href="#int-isgreaterequal-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isinf-real-x">
+<span id="math-isinf"></span><h3>INT isinf(REAL x)<a class="headerlink" href="#int-isinf-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isless-real-x-real-y">
+<span id="math-isless"></span><h3>INT isless(REAL x, REAL y)<a class="headerlink" href="#int-isless-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-islessequal-real-x-real-y">
+<span id="math-islessequal"></span><h3>INT islessequal(REAL x, REAL y)<a class="headerlink" href="#int-islessequal-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-islessgreater-real-x-real-y">
+<span id="math-islessgreater"></span><h3>INT islessgreater(REAL x, REAL y)<a class="headerlink" href="#int-islessgreater-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isnan-real-x">
+<span id="math-isnan"></span><h3>INT isnan(REAL x)<a class="headerlink" href="#int-isnan-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isnormal-real-x">
+<span id="math-isnormal"></span><h3>INT isnormal(REAL x)<a class="headerlink" href="#int-isnormal-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-isunordered-real-x-real-y">
+<span id="math-isunordered"></span><h3>INT isunordered(REAL x, REAL y)<a class="headerlink" href="#int-isunordered-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-signbit-real-x">
+<span id="math-signbit"></span><h3>INT signbit(REAL x)<a class="headerlink" href="#int-signbit-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-acos-real-x">
+<span id="math-acos"></span><h3>REAL acos(REAL x)<a class="headerlink" href="#real-acos-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-acosh-real-x">
+<span id="math-acosh"></span><h3>REAL acosh(REAL x)<a class="headerlink" href="#real-acosh-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-asin-real-x">
+<span id="math-asin"></span><h3>REAL asin(REAL x)<a class="headerlink" href="#real-asin-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-asinh-real-x">
+<span id="math-asinh"></span><h3>REAL asinh(REAL x)<a class="headerlink" href="#real-asinh-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-atan-real-x">
+<span id="math-atan"></span><h3>REAL atan(REAL x)<a class="headerlink" href="#real-atan-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-atan2-real-y-real-x">
+<span id="math-atan2"></span><h3>REAL atan2(REAL y, REAL x)<a class="headerlink" href="#real-atan2-real-y-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-atanh-real-x">
+<span id="math-atanh"></span><h3>REAL atanh(REAL x)<a class="headerlink" href="#real-atanh-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-cbrt-real-x">
+<span id="math-cbrt"></span><h3>REAL cbrt(REAL x)<a class="headerlink" href="#real-cbrt-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-ceil-real-x">
+<span id="math-ceil"></span><h3>REAL ceil(REAL x)<a class="headerlink" href="#real-ceil-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-copysign-real-x-real-y">
+<span id="math-copysign"></span><h3>REAL copysign(REAL x, REAL y)<a class="headerlink" href="#real-copysign-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-cos-real-x">
+<span id="math-cos"></span><h3>REAL cos(REAL x)<a class="headerlink" href="#real-cos-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-cosh-real-x">
+<span id="math-cosh"></span><h3>REAL cosh(REAL x)<a class="headerlink" href="#real-cosh-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-erf-real-x">
+<span id="math-erf"></span><h3>REAL erf(REAL x)<a class="headerlink" href="#real-erf-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-erfc-real-x">
+<span id="math-erfc"></span><h3>REAL erfc(REAL x)<a class="headerlink" href="#real-erfc-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-exp-real-x">
+<span id="math-exp"></span><h3>REAL exp(REAL x)<a class="headerlink" href="#real-exp-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-exp2-real-x">
+<span id="math-exp2"></span><h3>REAL exp2(REAL x)<a class="headerlink" href="#real-exp2-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-expm1-real-x">
+<span id="math-expm1"></span><h3>REAL expm1(REAL x)<a class="headerlink" href="#real-expm1-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-fabs-real-x">
+<span id="math-fabs"></span><h3>REAL fabs(REAL x)<a class="headerlink" href="#real-fabs-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-fdim-real-x-real-y">
+<span id="math-fdim"></span><h3>REAL fdim(REAL x, REAL y)<a class="headerlink" href="#real-fdim-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-floor-real-x">
+<span id="math-floor"></span><h3>REAL floor(REAL x)<a class="headerlink" href="#real-floor-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-fma-real-x-real-y-real-z">
+<span id="math-fma"></span><h3>REAL fma(REAL x, REAL y, REAL z)<a class="headerlink" href="#real-fma-real-x-real-y-real-z" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-fmax-real-x-real-y">
+<span id="math-fmax"></span><h3>REAL fmax(REAL x, REAL y)<a class="headerlink" href="#real-fmax-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-fmin-real-x-real-y">
+<span id="math-fmin"></span><h3>REAL fmin(REAL x, REAL y)<a class="headerlink" href="#real-fmin-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-fmod-real-x-real-y">
+<span id="math-fmod"></span><h3>REAL fmod(REAL x, REAL y)<a class="headerlink" href="#real-fmod-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-hypot-real-x-real-y">
+<span id="math-hypot"></span><h3>REAL hypot(REAL x, REAL y)<a class="headerlink" href="#real-hypot-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-ilogb-real-x">
+<span id="math-ilogb"></span><h3>INT ilogb(REAL x)<a class="headerlink" href="#int-ilogb-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-j0-real-x">
+<span id="math-j0"></span><h3>REAL j0(REAL x)<a class="headerlink" href="#real-j0-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-j1-real-x">
+<span id="math-j1"></span><h3>REAL j1(REAL x)<a class="headerlink" href="#real-j1-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-jn-int-x-real-y">
+<span id="math-jn"></span><h3>REAL jn(INT x, REAL y)<a class="headerlink" href="#real-jn-int-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-ldexp-real-x-int-e">
+<span id="math-ldexp"></span><h3>REAL ldexp(REAL x, INT e)<a class="headerlink" href="#real-ldexp-real-x-int-e" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-lgamma-real-x">
+<span id="math-lgamma"></span><h3>REAL lgamma(REAL x)<a class="headerlink" href="#real-lgamma-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-log-real-x">
+<span id="math-log"></span><h3>REAL log(REAL x)<a class="headerlink" href="#real-log-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-log10-real-x">
+<span id="math-log10"></span><h3>REAL log10(REAL x)<a class="headerlink" href="#real-log10-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-log1p-real-x">
+<span id="math-log1p"></span><h3>REAL log1p(REAL x)<a class="headerlink" href="#real-log1p-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-log2-real-x">
+<span id="math-log2"></span><h3>REAL log2(REAL x)<a class="headerlink" href="#real-log2-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-logb-real-x">
+<span id="math-logb"></span><h3>REAL logb(REAL x)<a class="headerlink" href="#real-logb-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-lrint-real-x">
+<span id="math-lrint"></span><h3>INT lrint(REAL x)<a class="headerlink" href="#int-lrint-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="int-lround-real-x">
+<span id="math-lround"></span><h3>INT lround(REAL x)<a class="headerlink" href="#int-lround-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-nan-string-tag">
+<span id="math-nan"></span><h3>REAL nan(STRING tag)<a class="headerlink" href="#real-nan-string-tag" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-nearbyint-real-x">
+<span id="math-nearbyint"></span><h3>REAL nearbyint(REAL x)<a class="headerlink" href="#real-nearbyint-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-nextafter-real-x-real-y">
+<span id="math-nextafter"></span><h3>REAL nextafter(REAL x, REAL y)<a class="headerlink" href="#real-nextafter-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-pow-real-x-real-y">
+<span id="math-pow"></span><h3>REAL pow(REAL x, REAL y)<a class="headerlink" href="#real-pow-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-remainder-real-x-real-y">
+<span id="math-remainder"></span><h3>REAL remainder(REAL x, REAL y)<a class="headerlink" href="#real-remainder-real-x-real-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-rint-real-x">
+<span id="math-rint"></span><h3>REAL rint(REAL x)<a class="headerlink" href="#real-rint-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-round-real-x">
+<span id="math-round"></span><h3>REAL round(REAL x)<a class="headerlink" href="#real-round-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-scalbln-real-x-int-e">
+<span id="math-scalbln"></span><h3>REAL scalbln(REAL x, INT e)<a class="headerlink" href="#real-scalbln-real-x-int-e" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-scalbn-real-x-int-y">
+<span id="math-scalbn"></span><h3>REAL scalbn(REAL x, INT y)<a class="headerlink" href="#real-scalbn-real-x-int-y" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-sin-real-x">
+<span id="math-sin"></span><h3>REAL sin(REAL x)<a class="headerlink" href="#real-sin-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-sinh-real-x">
+<span id="math-sinh"></span><h3>REAL sinh(REAL x)<a class="headerlink" href="#real-sinh-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-sqrt-real-x">
+<span id="math-sqrt"></span><h3>REAL sqrt(REAL x)<a class="headerlink" href="#real-sqrt-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-tan-real-x">
+<span id="math-tan"></span><h3>REAL tan(REAL x)<a class="headerlink" href="#real-tan-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-tanh-real-x">
+<span id="math-tanh"></span><h3>REAL tanh(REAL x)<a class="headerlink" href="#real-tanh-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-tgamma-real-x">
+<span id="math-tgamma"></span><h3>REAL tgamma(REAL x)<a class="headerlink" href="#real-tgamma-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-trunc-real-x">
+<span id="math-trunc"></span><h3>REAL trunc(REAL x)<a class="headerlink" href="#real-trunc-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-y0-real-x">
+<span id="math-y0"></span><h3>REAL y0(REAL x)<a class="headerlink" href="#real-y0-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-y1-real-x">
+<span id="math-y1"></span><h3>REAL y1(REAL x)<a class="headerlink" href="#real-y1-real-x" title="Link to this heading">¶</a></h3>
+</section>
+<section id="real-yn-int-n-real-x">
+<span id="math-yn"></span><h3>REAL yn(INT n, REAL x)<a class="headerlink" href="#real-yn-int-n-real-x" title="Link to this heading">¶</a></h3>
+</section>
+</section>
+<section id="copyright">
+<h2>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="n">document</span> <span class="ow">is</span> <span class="n">licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">same</span> <span class="n">conditions</span> <span class="k">as</span> <span class="n">Vinyl</span> <span class="n">Cache</span> <span class="n">itself</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">LICENSE</span> <span class="k">for</span> <span class="n">details</span><span class="o">.</span>
+
+<span class="n">SPDX</span><span class="o">-</span><span class="n">License</span><span class="o">-</span><span class="n">Identifier</span><span class="p">:</span> <span class="n">BSD</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">Clause</span>
+
+<span class="n">Author</span><span class="p">:</span> <span class="n">Nils</span> <span class="n">Goroll</span> <span class="o">&lt;</span><span class="n">nils</span><span class="o">.</span><span class="n">goroll</span><span class="nd">@uplex</span><span class="o">.</span><span class="n">de</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vmod_proxy.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vmod_h2.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">VMOD h2 - Module to control the built-in HTTP2 transport</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

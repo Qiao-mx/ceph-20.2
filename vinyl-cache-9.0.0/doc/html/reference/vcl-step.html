@@ -1,0 +1,1271 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VCL-backends" href="vcl-backend.html"><link rel="prev" title="VCL-Variables" href="vcl-var.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VCL-steps - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vcl-steps">
+<span id="vcl-step-7"></span><h1>VCL-steps<a class="headerlink" href="#vcl-steps" title="Link to this heading">¶</a></h1>
+<section id="built-in-subroutines">
+<h2>Built-in subroutines<a class="headerlink" href="#built-in-subroutines" title="Link to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Manual section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>7</p>
+</dd>
+</dl>
+<section id="description">
+<h3>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h3>
+<p>Various built-in subroutines are called during processing of client
+and backend requests as well as upon <code class="docutils literal notranslate"><span class="pre">vcl.load</span></code> and <code class="docutils literal notranslate"><span class="pre">vcl.discard</span></code>.</p>
+<p>See <a class="reference internal" href="states.html#reference-states"><span class="std std-ref">Vinyl Cache Processing States</span></a> for a detailed graphical overview of the
+states and how they relate to core code functions and VCL subroutines.</p>
+<p>Built-in subroutines always terminate with a <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">(&lt;action&gt;)</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">&lt;action&gt;</span></code> determines how processing continues in the request
+processing state machine.</p>
+<p>The behaviour of actions is identical or at least similar across
+subroutines, so differences are only documented where relevant.</p>
+<p>Common actions are documented in
+<a class="reference internal" href="#vcl-actions"><span class="std std-ref">VCL Actions</span></a> in the next section. Actions specific
+to only one or some subroutines are documented in <a class="reference internal" href="#id6"><span class="std std-ref">VCL Steps</span></a>.</p>
+<p>A default behavior is provided for all <a class="reference internal" href="states.html#reference-states"><span class="std std-ref">Vinyl Cache Processing States</span></a> in the
+<a class="reference internal" href="../users-guide/vcl-built-in-code.html#vcl-built-in-code"><span class="std std-ref">Built-in VCL</span></a> code.</p>
+</section>
+<section id="vcl-actions">
+<span id="id1"></span><h3>VCL Actions<a class="headerlink" href="#vcl-actions" title="Link to this heading">¶</a></h3>
+<p>Actions are used with the <code class="docutils literal notranslate"><span class="pre">return(&lt;action&gt;)</span></code> keyword, which returns
+control from subroutines back to <code class="docutils literal notranslate"><span class="pre">vinyld</span></code>. The action determines how
+processing in <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> continues as shown in <a class="reference internal" href="states.html#reference-states"><span class="std std-ref">Vinyl Cache Processing States</span></a>.</p>
+<p>Common actions are documented here, while additional actions specific
+to only one or some subroutines are documented in the next section
+<a class="reference internal" href="#id6"><span class="std std-ref">VCL Steps</span></a> as well as which action can be used from which built
+in subroutine.</p>
+<section id="common-actions-for-the-client-and-backend-side">
+<h4>Common actions for the client and backend side<a class="headerlink" href="#common-actions-for-the-client-and-backend-side" title="Link to this heading">¶</a></h4>
+<section id="fail-err">
+<span id="fail"></span><h5><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code><a class="headerlink" href="#fail-err" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Transition to <a class="reference internal" href="#vcl-synth"><span class="std std-ref">vcl_synth</span></a> on the client side as for
+<code class="docutils literal notranslate"><span class="pre">return(synth(503,</span> <span class="pre">&quot;VCL</span> <span class="pre">Failed&quot;))</span></code>, but with any request state
+changes undone as if <code class="docutils literal notranslate"><span class="pre">std.rollback()</span></code> was called and forcing a
+connection close. The optional string argument <cite>err</cite> is logged to
+VSL under a <cite>VCL_Error</cite> tag.</p>
+<p>Returning <cite>fail</cite> from <cite>vcl_synth</cite> sends a minimal response with a 500
+status.</p>
+<p>Intended for fatal errors, for which only minimal error handling is
+possible.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="common-actions-for-the-client-side">
+<h4>Common actions for the client side<a class="headerlink" href="#common-actions-for-the-client-side" title="Link to this heading">¶</a></h4>
+<section id="synth-status-code-reason">
+<span id="synth"></span><h5><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code><a class="headerlink" href="#synth-status-code-reason" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Transition to <a class="reference internal" href="#vcl-synth"><span class="std std-ref">vcl_synth</span></a> with <code class="docutils literal notranslate"><span class="pre">resp.status</span></code> and
+<code class="docutils literal notranslate"><span class="pre">resp.reason</span></code> being preset to the arguments of <code class="docutils literal notranslate"><span class="pre">synth()</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="pass">
+<span id="id2"></span><h5><code class="docutils literal notranslate"><span class="pre">pass</span></code><a class="headerlink" href="#pass" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Switch to pass mode, making the current request not use the cache
+and not putting its response into it. Control will eventually pass to
+<a class="reference internal" href="#vcl-pass"><span class="std std-ref">vcl_pass</span></a>.</p>
+</div></blockquote>
+</section>
+<section id="pipe">
+<span id="id3"></span><h5><code class="docutils literal notranslate"><span class="pre">pipe</span></code><a class="headerlink" href="#pipe" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Switch to pipe mode. Control will eventually pass to
+<a class="reference internal" href="#vcl-pipe"><span class="std std-ref">vcl_pipe</span></a>.</p>
+</div></blockquote>
+</section>
+<section id="restart">
+<span id="id4"></span><h5><code class="docutils literal notranslate"><span class="pre">restart</span></code><a class="headerlink" href="#restart" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Restart the transaction. Increases the <code class="docutils literal notranslate"><span class="pre">req.restarts</span></code> counter.</p>
+<p>If the number of restarts is higher than the <em>max_restarts</em>
+parameter, control is passed to <a class="reference internal" href="#vcl-synth"><span class="std std-ref">vcl_synth</span></a> as for
+<code class="docutils literal notranslate"><span class="pre">return(synth(503,</span> <span class="pre">&quot;Too</span> <span class="pre">many</span> <span class="pre">restarts&quot;))</span></code></p>
+<p>For a restart, all modifications to <code class="docutils literal notranslate"><span class="pre">req</span></code> attributes are
+preserved except for <code class="docutils literal notranslate"><span class="pre">req.restarts</span></code> and <code class="docutils literal notranslate"><span class="pre">req.xid</span></code>, which need
+to change by design.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="common-actions-for-the-backend-side">
+<h4>Common actions for the backend side<a class="headerlink" href="#common-actions-for-the-backend-side" title="Link to this heading">¶</a></h4>
+<section id="abandon">
+<span id="id5"></span><h5><code class="docutils literal notranslate"><span class="pre">abandon</span></code><a class="headerlink" href="#abandon" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><p>Abandon the backend request. Unless the backend request was a
+background fetch, control is passed to <a class="reference internal" href="#vcl-synth"><span class="std std-ref">vcl_synth</span></a> on the
+client side with <code class="docutils literal notranslate"><span class="pre">resp.status</span></code> preset to 503.</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="id6">
+<span id="id7"></span><h3>VCL Steps<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<section id="client-side">
+<h4>Client side<a class="headerlink" href="#client-side" title="Link to this heading">¶</a></h4>
+<section id="vcl-recv">
+<span id="id8"></span><h5>vcl_recv<a class="headerlink" href="#vcl-recv" title="Link to this heading">¶</a></h5>
+<p>Called at the beginning of a request, after the complete request has
+been received and parsed, after a <cite>restart</cite> or as the result of an ESI
+include.</p>
+<p>Its purpose is to decide whether or not to serve the request, possibly
+modify it and decide on how to process it further. A backend hint may
+be set as a default for the backend processing side.</p>
+<p>The <cite>vcl_recv</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> on one
+of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#synth"><span class="std std-ref">synth(status code, reason)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">restart</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#restart"><span class="std std-ref">restart</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pass</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#pass"><span class="std std-ref">pass</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pipe</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#pipe"><span class="std std-ref">pipe</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">hash</span></code></div>
+<div class="line-block">
+<div class="line">Continue processing the object as a potential candidate for</div>
+<div class="line">caching. Passes the control over to <a class="reference internal" href="#vcl-hash"><span class="std std-ref">vcl_hash</span></a>.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">purge</span></code></div>
+<div class="line-block">
+<div class="line">Purge the object and it’s variants. Control passes through</div>
+<div class="line"><a class="reference internal" href="#vcl-hash"><span class="std std-ref">vcl_hash</span></a> to <a class="reference internal" href="#vcl-purge"><span class="std std-ref">vcl_purge</span></a>.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vcl(label)</span></code></div>
+<div class="line-block">
+<div class="line">Switch to vcl labelled <em>label</em>.</div>
+<div class="line"><br /></div>
+<div class="line">This will roll back the request as if <code class="docutils literal notranslate"><span class="pre">std.rollback(req)</span></code> was</div>
+<div class="line">called and continue vcl processing in <a class="reference internal" href="#vcl-recv"><span class="std std-ref">vcl_recv</span></a> of the vcl</div>
+<div class="line">labelled <em>label</em> as if it was the active vcl.</div>
+<div class="line"><br /></div>
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">vcl(label)</span></code> return is only valid while the <code class="docutils literal notranslate"><span class="pre">req.restarts</span></code></div>
+<div class="line">count is zero and if used from the active vcl.</div>
+<div class="line"><br /></div>
+<div class="line">See the <a class="reference internal" href="vinyl-cli.html#ref-cli-vcl-label"><span class="std std-ref">vcl.label &lt;label&gt; &lt;configname&gt;</span></a> command in <a class="reference internal" href="vinyl-cli.html#vinyl-cli-7"><span class="std std-ref">vinyl-cli</span></a>.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-pipe">
+<span id="id9"></span><h5>vcl_pipe<a class="headerlink" href="#vcl-pipe" title="Link to this heading">¶</a></h5>
+<p>Called upon entering pipe mode. In this mode, the request is passed on
+to the backend, and any further data from both the client and backend
+is passed on unaltered until either end closes the
+connection. Basically, Vinyl Cache will degrade into a simple TCP proxy,
+shuffling bytes back and forth. For a connection in pipe mode, no
+other VCL subroutine will ever get called after <cite>vcl_pipe</cite>.</p>
+<p>The <cite>vcl_pipe</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> with one
+of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#synth"><span class="std std-ref">synth(status code, reason)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pipe</span></code></div>
+<div class="line-block">
+<div class="line">Proceed with pipe mode.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-pass">
+<span id="id10"></span><h5>vcl_pass<a class="headerlink" href="#vcl-pass" title="Link to this heading">¶</a></h5>
+<p>Called upon entering pass mode. In this mode, the request is passed
+on to the backend, and the backend’s response is passed on to the
+client, but is not entered into the cache. Subsequent requests
+submitted over the same client connection are handled normally.</p>
+<p>The <cite>vcl_pass</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> with one
+of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#synth"><span class="std std-ref">synth(status code, reason)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">restart</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#restart"><span class="std std-ref">restart</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fetch</span></code></div>
+<div class="line-block">
+<div class="line">Proceed with pass mode - initiate a backend request.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-hash">
+<span id="id11"></span><h5>vcl_hash<a class="headerlink" href="#vcl-hash" title="Link to this heading">¶</a></h5>
+<p>Called after <cite>vcl_recv</cite> to create a hash value for the request. This is
+used as a key to look up the object in Vinyl Cache.</p>
+<p>The <cite>vcl_hash</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> with one
+of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see  <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">lookup</span></code></div>
+<div class="line-block">
+<div class="line">Look up the object in cache.</div>
+<div class="line"><br /></div>
+<div class="line">Control passes to <a class="reference internal" href="#vcl-purge"><span class="std std-ref">vcl_purge</span></a> when coming from a <code class="docutils literal notranslate"><span class="pre">purge</span></code></div>
+<div class="line">return in <cite>vcl_recv</cite>.</div>
+<div class="line"><br /></div>
+<div class="line">Otherwise control passes to the next subroutine depending on the</div>
+<div class="line">result of the cache lookup:</div>
+<div class="line"><br /></div>
+<div class="line">* a hit: pass to <a class="reference internal" href="#vcl-hit"><span class="std std-ref">vcl_hit</span></a></div>
+<div class="line"><br /></div>
+<div class="line">* a miss or a hit on a hit-for-miss object (an object with</div>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">obj.uncacheable</span> <span class="pre">==</span> <span class="pre">true</span></code>): pass to <a class="reference internal" href="#vcl-miss"><span class="std std-ref">vcl_miss</span></a></div>
+<div class="line"><br /></div>
+</div>
+<div class="line">* a hit on a hit-for-pass object (for which <code class="docutils literal notranslate"><span class="pre">pass(DURATION)</span></code> had been</div>
+<div class="line-block">
+<div class="line">previously returned from <code class="docutils literal notranslate"><span class="pre">vcl_backend_response</span></code>): pass to</div>
+<div class="line"><a class="reference internal" href="#vcl-pass"><span class="std std-ref">vcl_pass</span></a></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-purge">
+<span id="id12"></span><h5>vcl_purge<a class="headerlink" href="#vcl-purge" title="Link to this heading">¶</a></h5>
+<p>Called after the purge has been executed and all its variants have been evicted.</p>
+<p>The <cite>vcl_purge</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> with one
+of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#synth"><span class="std std-ref">synth(status code, reason)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">restart</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#restart"><span class="std std-ref">restart</span></a> section above</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-miss">
+<span id="id13"></span><h5>vcl_miss<a class="headerlink" href="#vcl-miss" title="Link to this heading">¶</a></h5>
+<p>Called after a cache lookup if the requested document was not found in
+the cache or if <a class="reference internal" href="#vcl-hit"><span class="std std-ref">vcl_hit</span></a> returned <code class="docutils literal notranslate"><span class="pre">fetch</span></code>.</p>
+<p>Its purpose is to decide whether or not to attempt to retrieve the
+document from the backend. A backend hint may be set as a default for
+the backend processing side.</p>
+<p>The <cite>vcl_miss</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> with one
+of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#synth"><span class="std std-ref">synth(status code, reason)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">restart</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#restart"><span class="std std-ref">restart</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pass</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#pass"><span class="std std-ref">pass</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fetch</span></code></div>
+<div class="line-block">
+<div class="line">Retrieve the requested object from the backend. Control will</div>
+<div class="line">eventually pass to <cite>vcl_backend_fetch</cite>.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-hit">
+<span id="id14"></span><h5>vcl_hit<a class="headerlink" href="#vcl-hit" title="Link to this heading">¶</a></h5>
+<p>Called when a cache lookup is successful. The object being hit may be
+stale: It can have a zero or negative <cite>ttl</cite> with only <cite>grace</cite> or
+<cite>keep</cite> time left.</p>
+<p>The <cite>vcl_hit</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code>
+with one of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#synth"><span class="std std-ref">synth(status code, reason)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">restart</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#restart"><span class="std std-ref">restart</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pass</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#pass"><span class="std std-ref">pass</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">deliver</span></code></div>
+<div class="line-block">
+<div class="line">Deliver the object. If it is stale, a background fetch to refresh</div>
+<div class="line">it is triggered.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-deliver">
+<span id="id15"></span><h5>vcl_deliver<a class="headerlink" href="#vcl-deliver" title="Link to this heading">¶</a></h5>
+<p>Called before any object except a <cite>vcl_synth</cite> result is delivered to the client.</p>
+<p>The <cite>vcl_deliver</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> with one
+of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#synth"><span class="std std-ref">synth(status code, reason)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">restart</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#restart"><span class="std std-ref">restart</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">deliver</span></code></div>
+<div class="line-block">
+<div class="line">Deliver the object to the client.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-synth">
+<span id="id16"></span><h5>vcl_synth<a class="headerlink" href="#vcl-synth" title="Link to this heading">¶</a></h5>
+<p>Called to deliver a synthetic object. A synthetic object is generated
+in VCL, not fetched from the backend. Its body may be constructed using
+the <code class="docutils literal notranslate"><span class="pre">synthetic()</span></code> function.</p>
+<p>A <cite>vcl_synth</cite> defined object never enters the cache, contrary to a
+<a class="reference internal" href="#vcl-backend-error"><span class="std std-ref">vcl_backend_error</span></a> defined object, which may end up in cache.</p>
+<p>The subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code> with one of the
+following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">restart</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#restart"><span class="std std-ref">restart</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">deliver</span></code></div>
+<div class="line-block">
+<div class="line">Directly deliver the object defined by <cite>vcl_synth</cite> to the client</div>
+<div class="line">without calling <cite>vcl_deliver</cite>.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="backend-side">
+<h4>Backend Side<a class="headerlink" href="#backend-side" title="Link to this heading">¶</a></h4>
+<section id="vcl-backend-fetch">
+<span id="id17"></span><h5>vcl_backend_fetch<a class="headerlink" href="#vcl-backend-fetch" title="Link to this heading">¶</a></h5>
+<p>Called before sending the backend request. In this subroutine you
+typically alter the request before it gets to the backend.</p>
+<p>The <cite>vcl_backend_fetch</cite> subroutine may terminate with calling
+<code class="docutils literal notranslate"><span class="pre">return()</span></code> with one of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">abandon</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#abandon"><span class="std std-ref">abandon</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fetch</span></code></div>
+<div class="line-block">
+<div class="line">Fetch the object from the backend.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">error(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">Transition to <a class="reference internal" href="#vcl-backend-error"><span class="std std-ref">vcl_backend_error</span></a> with <code class="docutils literal notranslate"><span class="pre">beresp.status</span></code> and</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">beresp.reason</span></code> being preset to the arguments of <code class="docutils literal notranslate"><span class="pre">error()</span></code> if</div>
+<div class="line">arguments are provided.</div>
+</div>
+</div>
+</div></blockquote>
+<p>Before calling <cite>vcl_backend_fetch</cite>, Vinyl Cache core prepares the <cite>bereq</cite>
+backend request as follows:</p>
+<ul class="simple">
+<li><p>Unless the request is a <cite>pass</cite>,</p>
+<ul>
+<li><p>set <code class="docutils literal notranslate"><span class="pre">bereq.method</span></code> to <code class="docutils literal notranslate"><span class="pre">GET</span></code> and <code class="docutils literal notranslate"><span class="pre">bereq.proto</span></code> to
+<code class="docutils literal notranslate"><span class="pre">HTTP/1.1</span></code> and</p></li>
+<li><p>set <code class="docutils literal notranslate"><span class="pre">bereq.http.Accept_Encoding</span></code> to <code class="docutils literal notranslate"><span class="pre">gzip</span></code> if
+<a class="reference internal" href="vinyld.html#ref-param-http-gzip-support"><span class="std std-ref">http_gzip_support</span></a> is enabled.</p></li>
+</ul>
+</li>
+<li><p>If there is an existing cache object to be revalidated, set
+<code class="docutils literal notranslate"><span class="pre">bereq.http.If-Modified-Since</span></code> from its <code class="docutils literal notranslate"><span class="pre">Last-Modified</span></code> header
+and/or set <code class="docutils literal notranslate"><span class="pre">bereq.http.If-None-Match</span></code> from its <code class="docutils literal notranslate"><span class="pre">Etag</span></code> header</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">bereq.http.X-Vinyl</span></code> to the current transaction id (<cite>vxid</cite>)</p></li>
+</ul>
+<p>These changes can be undone or modified in <cite>vcl_backend_fetch</cite> before
+the backend request is issued.</p>
+<p>In particular, to cache non-GET requests, <code class="docutils literal notranslate"><span class="pre">req.method</span></code> needs to be
+saved to a header or variable in <a class="reference internal" href="#vcl-recv"><span class="std std-ref">vcl_recv</span></a> and restored to
+<code class="docutils literal notranslate"><span class="pre">bereq.method</span></code>. Notice that caching non-GET requests typically also
+requires changing the cache key in <a class="reference internal" href="#vcl-hash"><span class="std std-ref">vcl_hash</span></a> e.g. by also
+hashing the request method and/or request body.</p>
+<p>HEAD request can be satisfied from cached GET responses.</p>
+</section>
+<section id="vcl-backend-refresh">
+<span id="id18"></span><h5>vcl_backend_refresh<a class="headerlink" href="#vcl-backend-refresh" title="Link to this heading">¶</a></h5>
+<p>This subroutine is called after a legitimate 304 response is received from
+the backend so that you can chose how to handle the object revalidation.</p>
+<p>The default is to apply the RFC logic which is to merge the new headers with
+the stale ones.</p>
+<p>The returned value only affects response headers, the body that is delivered
+is always the one from the stale object.</p>
+<p>See <a class="reference internal" href="../users-guide/vcl-built-in-code.html#vcl-built-in-refresh"><span class="std std-ref">vcl_refresh_*</span></a> for additional explanations.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">merge</span></code></div>
+<div class="line-block">
+<div class="line">Merge the headers we got from the backend response with</div>
+<div class="line">the ones we had in the cached object.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">obj_stale</span></code></div>
+<div class="line-block">
+<div class="line">Return the stale object’s headers without performing the RFC merge logic.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">beresp</span></code></div>
+<div class="line-block">
+<div class="line">Return the beresp headers as they were at the end of this subroutine</div>
+<div class="line">without executing the RFC merge logic. Any content-length and</div>
+<div class="line">content-encoding headers present in the 304 beresp will be removed and</div>
+<div class="line">replaced by the stale object ones if available. Etag and Last-Modified</div>
+<div class="line">headers are also copied from the stale object to allow future revalidations.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">abandon</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#abandon"><span class="std std-ref">abandon</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">retry</span></code></div>
+<div class="line-block">
+<div class="line">Retry the backend transaction. Increases the <cite>retries</cite> counter.</div>
+<div class="line">If the number of retries is higher than <em>max_retries</em>,</div>
+<div class="line">control will be passed to <a class="reference internal" href="#vcl-backend-error"><span class="std std-ref">vcl_backend_error</span></a>.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">error(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">Transition to <a class="reference internal" href="#vcl-backend-error"><span class="std std-ref">vcl_backend_error</span></a> with <code class="docutils literal notranslate"><span class="pre">beresp.status</span></code> and</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">beresp.reason</span></code> being preset to the arguments of <code class="docutils literal notranslate"><span class="pre">error()</span></code> if</div>
+<div class="line">arguments are provided.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-backend-response">
+<span id="id19"></span><h5>vcl_backend_response<a class="headerlink" href="#vcl-backend-response" title="Link to this heading">¶</a></h5>
+<p>Called after the response headers have been successfully retrieved from
+the backend.</p>
+<p>The <cite>vcl_backend_response</cite> subroutine may terminate with calling
+<code class="docutils literal notranslate"><span class="pre">return()</span></code> with one of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">abandon</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#abandon"><span class="std std-ref">abandon</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">deliver</span></code></div>
+<div class="line-block">
+<div class="line">For a 304 response, create an updated cache object.</div>
+<div class="line">Otherwise, fetch the object body from the backend and initiate</div>
+<div class="line">delivery to any waiting client requests, possibly in parallel</div>
+<div class="line">(streaming).</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">retry</span></code></div>
+<div class="line-block">
+<div class="line">Retry the backend transaction. Increases the <cite>retries</cite> counter.</div>
+<div class="line">If the number of retries is higher than <em>max_retries</em>,</div>
+<div class="line">control will be passed to <a class="reference internal" href="#vcl-backend-error"><span class="std std-ref">vcl_backend_error</span></a>.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pass(duration)</span></code></div>
+<div class="line-block">
+<div class="line">Mark the object as a hit-for-pass for the given duration. Subsequent</div>
+<div class="line">lookups hitting this object will be turned into passed transactions,</div>
+<div class="line">as if <code class="docutils literal notranslate"><span class="pre">vcl_recv</span></code> had returned <code class="docutils literal notranslate"><span class="pre">pass</span></code>.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">error(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></div>
+<div class="line-block">
+<div class="line">Transition to <a class="reference internal" href="#vcl-backend-error"><span class="std std-ref">vcl_backend_error</span></a> with <code class="docutils literal notranslate"><span class="pre">beresp.status</span></code> and</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">beresp.reason</span></code> being preset to the arguments of <code class="docutils literal notranslate"><span class="pre">error()</span></code> if</div>
+<div class="line">arguments are provided.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-backend-error">
+<span id="id20"></span><h5>vcl_backend_error<a class="headerlink" href="#vcl-backend-error" title="Link to this heading">¶</a></h5>
+<p>This subroutine is called if we fail the backend fetch or if
+<em>max_retries</em> has been exceeded.</p>
+<p>Returning with <a class="reference internal" href="#abandon"><span class="std std-ref">abandon</span></a> does not leave a cache object.</p>
+<p>If returning with <code class="docutils literal notranslate"><span class="pre">deliver</span></code> and <code class="docutils literal notranslate"><span class="pre">beresp.uncacheable</span> <span class="pre">==</span> <span class="pre">false</span></code>, a
+synthetic cache object is generated in VCL, whose body may be constructed
+using the <code class="docutils literal notranslate"><span class="pre">synthetic()</span></code> function.</p>
+<p>Since these synthetic objects are cached in these special circumstances,
+be cautious with putting private information there. If you really must,
+then you need to explicitly set <code class="docutils literal notranslate"><span class="pre">beresp.uncacheable</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> in
+<code class="docutils literal notranslate"><span class="pre">vcl_backend_error</span></code>.</p>
+<p>The <cite>vcl_backend_error</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code>
+with one of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#fail"><span class="std std-ref">fail(err)</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">abandon</span></code></div>
+<div class="line-block">
+<div class="line">see <a class="reference internal" href="#abandon"><span class="std std-ref">abandon</span></a> section above</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">deliver</span></code></div>
+<div class="line-block">
+<div class="line">Deliver and possibly cache the object defined in</div>
+<div class="line"><cite>vcl_backend_error</cite> <strong>as if it was fetched from the backend</strong>, also</div>
+<div class="line">referred to as a “backend synth”.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">retry</span></code></div>
+<div class="line-block">
+<div class="line">Retry the backend transaction. Increases the <cite>retries</cite> counter.</div>
+<div class="line">If the number of retries is higher than <em>max_retries</em>,</div>
+<div class="line"><a class="reference internal" href="#vcl-synth"><span class="std std-ref">vcl_synth</span></a> on the client side is called with <code class="docutils literal notranslate"><span class="pre">resp.status</span></code></div>
+<div class="line">preset to 503.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="during-vcl-load-vcl-discard">
+<h4>During vcl.load / vcl.discard<a class="headerlink" href="#during-vcl-load-vcl-discard" title="Link to this heading">¶</a></h4>
+<section id="vcl-init">
+<span id="id21"></span><h5>vcl_init<a class="headerlink" href="#vcl-init" title="Link to this heading">¶</a></h5>
+<p>Called when VCL is loaded, before any requests pass through it.
+Typically used to initialize VMODs.</p>
+<p>The <cite>vcl_init</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code>
+with one of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ok</span></code></div>
+<div class="line-block">
+<div class="line">Normal return, VCL continues loading.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></div>
+<div class="line-block">
+<div class="line">Abort loading of this VCL.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="vcl-fini">
+<span id="id22"></span><h5>vcl_fini<a class="headerlink" href="#vcl-fini" title="Link to this heading">¶</a></h5>
+<p>Called when VCL is discarded only after all requests have exited the VCL.
+Typically used to clean up VMODs.</p>
+<p>The <cite>vcl_fini</cite> subroutine may terminate with calling <code class="docutils literal notranslate"><span class="pre">return()</span></code>
+with one of the following keywords:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ok</span></code></div>
+<div class="line-block">
+<div class="line">Normal return, VCL will be discarded.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="see-also">
+<h3>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p></li>
+<li><p><a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a></p></li>
+</ul>
+</section>
+<section id="copyright">
+<h3>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h3>
+<p>This document is licensed under the same license as Vinyl Cache
+itself. See LICENSE for details.</p>
+<ul class="simple">
+<li><p>Copyright (c) 2006 Verdens Gang AS</p></li>
+<li><p>Copyright (c) 2006-2021 Varnish Software AS</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vcl-backend.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VCL-backends</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vcl-var.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">VCL-Variables</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">VCL-steps</a><ul>
+<li><a class="reference internal" href="#built-in-subroutines">Built-in subroutines</a><ul>
+<li><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li><a class="reference internal" href="#vcl-actions">VCL Actions</a><ul>
+<li><a class="reference internal" href="#common-actions-for-the-client-and-backend-side">Common actions for the client and backend side</a><ul>
+<li><a class="reference internal" href="#fail-err"><code class="docutils literal notranslate"><span class="pre">fail(err)</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-actions-for-the-client-side">Common actions for the client side</a><ul>
+<li><a class="reference internal" href="#synth-status-code-reason"><code class="docutils literal notranslate"><span class="pre">synth(status</span> <span class="pre">code,</span> <span class="pre">reason)</span></code></a></li>
+<li><a class="reference internal" href="#pass"><code class="docutils literal notranslate"><span class="pre">pass</span></code></a></li>
+<li><a class="reference internal" href="#pipe"><code class="docutils literal notranslate"><span class="pre">pipe</span></code></a></li>
+<li><a class="reference internal" href="#restart"><code class="docutils literal notranslate"><span class="pre">restart</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-actions-for-the-backend-side">Common actions for the backend side</a><ul>
+<li><a class="reference internal" href="#abandon"><code class="docutils literal notranslate"><span class="pre">abandon</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">VCL Steps</a><ul>
+<li><a class="reference internal" href="#client-side">Client side</a><ul>
+<li><a class="reference internal" href="#vcl-recv">vcl_recv</a></li>
+<li><a class="reference internal" href="#vcl-pipe">vcl_pipe</a></li>
+<li><a class="reference internal" href="#vcl-pass">vcl_pass</a></li>
+<li><a class="reference internal" href="#vcl-hash">vcl_hash</a></li>
+<li><a class="reference internal" href="#vcl-purge">vcl_purge</a></li>
+<li><a class="reference internal" href="#vcl-miss">vcl_miss</a></li>
+<li><a class="reference internal" href="#vcl-hit">vcl_hit</a></li>
+<li><a class="reference internal" href="#vcl-deliver">vcl_deliver</a></li>
+<li><a class="reference internal" href="#vcl-synth">vcl_synth</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backend-side">Backend Side</a><ul>
+<li><a class="reference internal" href="#vcl-backend-fetch">vcl_backend_fetch</a></li>
+<li><a class="reference internal" href="#vcl-backend-refresh">vcl_backend_refresh</a></li>
+<li><a class="reference internal" href="#vcl-backend-response">vcl_backend_response</a></li>
+<li><a class="reference internal" href="#vcl-backend-error">vcl_backend_error</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#during-vcl-load-vcl-discard">During vcl.load / vcl.discard</a><ul>
+<li><a class="reference internal" href="#vcl-init">vcl_init</a></li>
+<li><a class="reference internal" href="#vcl-fini">vcl_fini</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+<li><a class="reference internal" href="#copyright">COPYRIGHT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

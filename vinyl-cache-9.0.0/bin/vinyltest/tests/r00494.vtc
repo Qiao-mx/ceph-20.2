@@ -1,0 +1,30 @@
+vtest "HTTP continuation lines"
+
+server s1 {
+	rxreq
+	txresp -hdr "Foo: bar,\n\tbarf: fail" -body "xxx"
+
+	rxreq
+	txresp -hdr "Foo: bar,\n \t\n\tbarf: fail" -body "xxx"
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.http.bar = beresp.http.foo;
+		unset beresp.http.foo;
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.http.bar == "bar,  barf: fail"
+	expect resp.http.barf == <undef>
+	expect resp.http.foo == <undef>
+
+	txreq -url /2
+	rxresp
+	expect resp.http.bar == "bar,     barf: fail"
+	expect resp.http.barf == <undef>
+	expect resp.http.foo == <undef>
+} -run

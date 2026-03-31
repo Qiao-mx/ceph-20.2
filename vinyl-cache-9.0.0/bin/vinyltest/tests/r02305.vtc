@@ -1,0 +1,67 @@
+vtest "#2305: h/2 reembark with a request body"
+
+barrier b1 cond 2
+barrier b2 cond 2
+barrier b3 cond 2
+
+server s1 {
+	rxreq
+	expect req.url == "/"
+	barrier b1 sync
+	barrier b2 sync
+	txresp
+} -start
+
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -cliok "param.set debug +syncvsl"
+vinyl v1 -cliok "param.set debug +waitinglist"
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		return (hash);
+	}
+} -start
+
+client c1 {
+	stream 1 {
+		txreq
+		rxresp
+		expect resp.status == 200
+		barrier b3 sync
+	} -start
+	stream 3 {
+		barrier b1 sync
+		txreq -req POST -body "foo"
+		barrier b2 sync
+		barrier b3 sync
+		rxresp
+		expect resp.status == 200
+	} -run
+} -run
+
+client c2 {
+	stream 1 {
+		txreq -hdr "content-length" "23"
+	} -run
+	stream 0 {
+		rxgoaway
+		expect goaway.err == PROTOCOL_ERROR
+		expect goaway.laststream == 1
+
+	} -run
+} -run
+
+# Allow content-length: 0
+client c2 {
+	stream 1 {
+		txreq -hdr "content-length" "0"
+		rxresp
+		expect resp.status == 200
+	} -run
+} -run
+
+vinyl v1 -vsl_catchup
+vinyl v1 -expect MEMPOOL.req0.live == 0
+vinyl v1 -expect MEMPOOL.sess0.live == 0
+vinyl v1 -expect MEMPOOL.req1.live == 0
+vinyl v1 -expect MEMPOOL.sess1.live == 0

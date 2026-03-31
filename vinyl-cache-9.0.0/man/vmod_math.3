@@ -1,0 +1,359 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "VMOD_MATH" "3" "" ""
+.SH NAME
+vmod_math \- VMOD wrapping math.h
+.\" 
+.
+.\" NB:  This file is machine generated, DO NOT EDIT!
+.
+.\" 
+.
+.\" Edit vmod_math.vcc and run make instead
+.
+.\" 
+.
+.SH SYNOPSIS
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import math [as name] [from \(dqpath\(dq]
+
+BOOL approx(REAL a, REAL b, REAL maxDiff, REAL maxRelDiff)
+
+STRING strfromd(STRING format, REAL fp)
+
+REAL constant(ENUM name)
+
+INT fpclass(ENUM name)
+
+INT fpclassify(REAL x)
+
+INT isfinite(REAL x)
+
+INT isgreater(REAL x, REAL y)
+
+INT isgreaterequal(REAL x, REAL y)
+
+INT isinf(REAL x)
+
+INT isless(REAL x, REAL y)
+
+INT islessequal(REAL x, REAL y)
+
+INT islessgreater(REAL x, REAL y)
+
+INT isnan(REAL x)
+
+INT isnormal(REAL x)
+
+INT isunordered(REAL x, REAL y)
+
+INT signbit(REAL x)
+
+REAL acos(REAL x)
+
+REAL acosh(REAL x)
+
+REAL asin(REAL x)
+
+REAL asinh(REAL x)
+
+REAL atan(REAL x)
+
+REAL atan2(REAL y, REAL x)
+
+REAL atanh(REAL x)
+
+REAL cbrt(REAL x)
+
+REAL ceil(REAL x)
+
+REAL copysign(REAL x, REAL y)
+
+REAL cos(REAL x)
+
+REAL cosh(REAL x)
+
+REAL erf(REAL x)
+
+REAL erfc(REAL x)
+
+REAL exp(REAL x)
+
+REAL exp2(REAL x)
+
+REAL expm1(REAL x)
+
+REAL fabs(REAL x)
+
+REAL fdim(REAL x, REAL y)
+
+REAL floor(REAL x)
+
+REAL fma(REAL x, REAL y, REAL z)
+
+REAL fmax(REAL x, REAL y)
+
+REAL fmin(REAL x, REAL y)
+
+REAL fmod(REAL x, REAL y)
+
+REAL hypot(REAL x, REAL y)
+
+INT ilogb(REAL x)
+
+REAL j0(REAL x)
+
+REAL j1(REAL x)
+
+REAL jn(INT x, REAL y)
+
+REAL ldexp(REAL x, INT e)
+
+REAL lgamma(REAL x)
+
+REAL log(REAL x)
+
+REAL log10(REAL x)
+
+REAL log1p(REAL x)
+
+REAL log2(REAL x)
+
+REAL logb(REAL x)
+
+INT lrint(REAL x)
+
+INT lround(REAL x)
+
+REAL nan(STRING tag)
+
+REAL nearbyint(REAL x)
+
+REAL nextafter(REAL x, REAL y)
+
+REAL pow(REAL x, REAL y)
+
+REAL remainder(REAL x, REAL y)
+
+REAL rint(REAL x)
+
+REAL round(REAL x)
+
+REAL scalbln(REAL x, INT e)
+
+REAL scalbn(REAL x, INT y)
+
+REAL sin(REAL x)
+
+REAL sinh(REAL x)
+
+REAL sqrt(REAL x)
+
+REAL tan(REAL x)
+
+REAL tanh(REAL x)
+
+REAL tgamma(REAL x)
+
+REAL trunc(REAL x)
+
+REAL y0(REAL x)
+
+REAL y1(REAL x)
+
+REAL yn(INT n, REAL x)
+.EE
+.UNINDENT
+.UNINDENT
+.\" THIS CODE IS AUTO-GENERATED. DO NOT EDIT HERE. see vmod_math_gen.py
+.
+.SH DESCRIPTION
+.sp
+This VMOD wraps the functions in \fImath.h(7)\fP, provides additional utilities and
+includes functions to access macros and constants from \fImath.h(7)\fP and
+\fIfloat.h(7)\fP\&.
+.SS Utility functions
+.\" source is in vmod_math_util.c
+.
+.SS BOOL approx(REAL a, REAL b, REAL maxDiff, REAL maxRelDiff)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+BOOL approx(REAL a, REAL b, REAL maxDiff=0.0, REAL maxRelDiff=0.0)
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Return true if the two numbers \fIa\fP and \fIb\fP are approximately equal per the
+\fBAlmostEqualRelativeAndAbs\fP function from Comparing Floating Point Numbers,
+2012 Edition <https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/>
+ given the additional parameters \fImaxDiff\fP and \fImaxRelDiff\fP\&. Read
+the blog post for details on why the seemingly simple question of two floating
+point numbers being equal has no simple answers.
+.sp
+For their default values of 0, the two additional parameters are initialized to:
+.INDENT 0.0
+.IP \(bu 2
+\fImaxDiff\fP: \fB4 * DBL_EPSILON\fP
+.IP \(bu 2
+\fImaxRelDiff\fP: \fBDBL_EPSILON\fP
+.UNINDENT
+.SS STRING strfromd(STRING format, REAL fp)
+.sp
+Convert the value \fIfp\fP into a string using \fIformat\fP, see \fIstrfromd(3)\fP\&.
+.sp
+An invalid format string results in a VCL error and the \fBNULL\fP invalid string
+returned.
+.\" Internally, vsnprintf() is called via WS_Printf(). The difference to
+.\" VRT_REAL_string() is the free format and missing call to VRT_REAL_is_valid()
+.
+.SS Access to macros and constants
+.SS REAL constant(ENUM name)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+REAL constant(
+   ENUM {DBL_MANT_DIG, DBL_DIG, DBL_MIN_EXP, DBL_MIN_10_EXP, DBL_MAX_EXP, DBL_MAX_10_EXP, DBL_MAX, DBL_EPSILON, DBL_MIN, HUGE_VAL, M_E, M_LOG2E, M_LOG10E, M_LN2, M_LN10, M_PI, M_PI_2, M_PI_4, M_1_PI, M_2_PI, M_2_SQRTPI, M_SQRT2, M_SQRT1_2} name
+)
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Return the value of the named constant. For \fBDBL_*\fP see \fIfloat.h(7)\fP,
+otherwise \fImath.h(7)\fP for details.
+.SS INT fpclass(ENUM name)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+INT fpclass(
+   ENUM {FP_INFINITE, FP_NAN, FP_NORMAL, FP_SUBNORMAL, FP_ZERO} name
+)
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Return the value of the named constant for comparisons of math.fpclassify()
+return values.
+.SS math.h functions
+.sp
+The semantics of functions mapping directly to \fImath.h(7)\fP are not documented
+herein, see the system documentation instead (for example using \fBman
+<function>\fP).
+.SS INT fpclassify(REAL x)
+.SS INT isfinite(REAL x)
+.SS INT isgreater(REAL x, REAL y)
+.SS INT isgreaterequal(REAL x, REAL y)
+.SS INT isinf(REAL x)
+.SS INT isless(REAL x, REAL y)
+.SS INT islessequal(REAL x, REAL y)
+.SS INT islessgreater(REAL x, REAL y)
+.SS INT isnan(REAL x)
+.SS INT isnormal(REAL x)
+.SS INT isunordered(REAL x, REAL y)
+.SS INT signbit(REAL x)
+.SS REAL acos(REAL x)
+.SS REAL acosh(REAL x)
+.SS REAL asin(REAL x)
+.SS REAL asinh(REAL x)
+.SS REAL atan(REAL x)
+.SS REAL atan2(REAL y, REAL x)
+.SS REAL atanh(REAL x)
+.SS REAL cbrt(REAL x)
+.SS REAL ceil(REAL x)
+.SS REAL copysign(REAL x, REAL y)
+.SS REAL cos(REAL x)
+.SS REAL cosh(REAL x)
+.SS REAL erf(REAL x)
+.SS REAL erfc(REAL x)
+.SS REAL exp(REAL x)
+.SS REAL exp2(REAL x)
+.SS REAL expm1(REAL x)
+.SS REAL fabs(REAL x)
+.SS REAL fdim(REAL x, REAL y)
+.SS REAL floor(REAL x)
+.SS REAL fma(REAL x, REAL y, REAL z)
+.SS REAL fmax(REAL x, REAL y)
+.SS REAL fmin(REAL x, REAL y)
+.SS REAL fmod(REAL x, REAL y)
+.SS REAL hypot(REAL x, REAL y)
+.SS INT ilogb(REAL x)
+.SS REAL j0(REAL x)
+.SS REAL j1(REAL x)
+.SS REAL jn(INT x, REAL y)
+.SS REAL ldexp(REAL x, INT e)
+.SS REAL lgamma(REAL x)
+.SS REAL log(REAL x)
+.SS REAL log10(REAL x)
+.SS REAL log1p(REAL x)
+.SS REAL log2(REAL x)
+.SS REAL logb(REAL x)
+.SS INT lrint(REAL x)
+.SS INT lround(REAL x)
+.SS REAL nan(STRING tag)
+.SS REAL nearbyint(REAL x)
+.SS REAL nextafter(REAL x, REAL y)
+.SS REAL pow(REAL x, REAL y)
+.SS REAL remainder(REAL x, REAL y)
+.SS REAL rint(REAL x)
+.SS REAL round(REAL x)
+.SS REAL scalbln(REAL x, INT e)
+.SS REAL scalbn(REAL x, INT y)
+.SS REAL sin(REAL x)
+.SS REAL sinh(REAL x)
+.SS REAL sqrt(REAL x)
+.SS REAL tan(REAL x)
+.SS REAL tanh(REAL x)
+.SS REAL tgamma(REAL x)
+.SS REAL trunc(REAL x)
+.SS REAL y0(REAL x)
+.SS REAL y1(REAL x)
+.SS REAL yn(INT n, REAL x)
+.SH COPYRIGHT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+This document is licensed under the same conditions as Vinyl Cache itself.
+See LICENSE for details.
+
+SPDX\-License\-Identifier: BSD\-2\-Clause
+
+Author: Nils Goroll <nils.goroll@uplex.de>
+.EE
+.UNINDENT
+.UNINDENT
+.\" Generated by docutils manpage writer.
+.

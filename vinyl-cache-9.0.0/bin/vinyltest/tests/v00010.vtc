@@ -1,0 +1,97 @@
+vtest "VCL: check panic and restart"
+
+barrier b1 cond 2
+barrier b2 cond 2
+
+server s1 {
+	rxreq
+	txresp -hdr "Foo: bar" -body "abcdef\n"
+	rxreq
+	txresp -hdr "Panic: fetch" -body "012345\n"
+	close
+
+	barrier b1 sync
+	accept
+	rxreq
+	txresp -hdr "Foo: bar" -body "abcdef\n"
+	rxreq
+	txresp -hdr "Panic: deliver" -body "012345\n"
+	close
+
+	barrier b2 sync
+	accept
+	rxreq
+	txresp -hdr "Foo: foo" -body "abcdef\n"
+} -start
+
+vinyl v1 -arg "-sdefault,1m"
+vinyl v1 -cliok "param.set feature +no_coredump"
+
+vinyl v1 -vcl+backend {
+	import vtc;
+	import debug;
+
+	sub vcl_init {
+		new foo = debug.obj("foo");
+		new bar = debug.concat("bar");
+	}
+
+	sub vcl_backend_response {
+		if (beresp.http.panic == "fetch") {
+			vtc.panic("Had Panic header: " + beresp.http.panic);
+		}
+	}
+	sub vcl_deliver {
+		if (resp.http.panic == "deliver") {
+			vtc.panic("Had Panic header: " + resp.http.panic);
+		}
+	}
+} -start
+
+vinyl v1 -cliok "stop"
+vinyl v1 -cliok "start"
+vinyl v1 -wait-running
+vinyl v1 -expect MGT.child_panic == 0
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	txreq -url "/foo"
+	# Don't expect answer, the server crashed.
+} -run
+
+vinyl v1 -wait-stopped
+vinyl v1 -cliok "panic.show"
+vinyl v1 -clijson "panic.show -j"
+vinyl v1 -cliok "panic.clear"
+vinyl v1 -expect MGT.child_panic == 1
+vinyl v1 -clierr 300 "panic.clear"
+vinyl v1 -cliok "start"
+vinyl v1 -wait-running
+barrier b1 sync
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	txreq -url "/foo"
+	# Don't expect answer, the server crashed.
+} -run
+
+vinyl v1 -wait-stopped
+vinyl v1 -cliok "panic.show"
+vinyl v1 -clijson "panic.show -j"
+vinyl v1 -cliok "panic.clear -z"
+vinyl v1 -expect MGT.child_panic == 0
+vinyl v1 -clierr 300 "panic.clear"
+vinyl v1 -cliok "start"
+vinyl v1 -wait-running
+barrier b2 sync
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.http.foo == "foo"
+} -run
+
+vinyl v1 -cliok "panic.clear -z"
+vinyl v1 -expectexit 0x40

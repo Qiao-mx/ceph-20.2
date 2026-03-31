@@ -1,0 +1,42 @@
+vtest "Listen at a Unix domain socket while in jail"
+
+feature user_vinyl
+feature group_vinyl
+feature root
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -arg "-a ${tmpdir}/v1.sock" \
+	-jail "-junix,user=vinyl,ccgroup=vinyl" \
+	-vcl+backend {
+} -start
+
+# Socket is created as management owner before the child goes to jail
+shell -match "root" { ls -l ${tmpdir}/v1.sock }
+
+client c1 -connect "${tmpdir}/v1.sock" {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v2 -arg "-a ${tmpdir}/v2.sock,user=vinyl,group=vinyl,mode=666" \
+	-jail "-junix,user=vinyl,ccgroup=vinyl" \
+	-vcl+backend {
+} -start
+
+shell -match "rw-rw-rw-.+vinyl.+vinyl" { ls -l ${tmpdir}/v2.sock }
+
+client c1 -connect "${tmpdir}/v2.sock" {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run

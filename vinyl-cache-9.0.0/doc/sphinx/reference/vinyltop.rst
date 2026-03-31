@@ -1,0 +1,79 @@
+..
+	Copyright (c) 2010-2015 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+.. role:: ref(emphasis)
+
+.. _vinyltop(1):
+
+========
+vinyltop
+========
+
+------------------------------------
+Vinyl Cache log entry real-time view
+------------------------------------
+
+:Manual section: 1
+
+SYNOPSIS
+========
+
+.. include:: ../include/vinyltop_synopsis.rst
+vinyltop |synopsis|
+
+DESCRIPTION
+===========
+
+The `vinyltop` utility reads :ref:`vinyld(1)` shared memory logs and
+presents a continuously updated list of the most commonly occurring
+log entries.  With suitable filtering using the ``-I``, ``-i``, ``-X``
+and ``-x`` options, it can be used to display a ranking of requested
+documents, clients, user agents, or any other information which is
+recorded in the log.
+
+The following options are available:
+
+.. include:: ../include/vinyltop_options.rst
+
+EXAMPLES
+========
+
+The following example displays a continuously updated list of the most
+frequently requested URLs::
+
+  vinyltop -i ReqURL
+
+The following example displays a continuously updated list of the most
+commonly used user agents::
+
+  vinyltop -C -I ReqHeader:User-Agent
+
+SEE ALSO
+========
+
+* :ref:`vinyld(1)`
+* :ref:`vinylhist(1)`
+* :ref:`vinyllog(1)`
+* :ref:`vinylncsa(1)`
+* :ref:`vinylstat(1)`
+
+HISTORY
+=======
+
+The `vinyltop` utility was originally developed by Poul-Henning Kamp
+in cooperation with Verdens Gang AS and Redpill-Linpro, and later
+substantially rewritten by Dag-Erling Smørgrav.  This manual page was
+written by Dag-Erling Smørgrav, and later updated by Martin Blix
+Grydeland.
+
+
+COPYRIGHT
+=========
+
+This document is licensed under the same licence as Vinyl Cache
+itself. See LICENCE for details.
+
+* Copyright (c) 2006 Verdens Gang AS
+* Copyright (c) 2006-2015 Varnish Software AS

@@ -1,0 +1,2093 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VCL-steps" href="vcl-step.html"><link rel="prev" title="VCL" href="vcl.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VCL-Variables - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vcl-variables">
+<span id="vcl-var-7"></span><h1>VCL-Variables<a class="headerlink" href="#vcl-variables" title="Link to this heading">¶</a></h1>
+<section id="the-complete-album">
+<h2>The complete album<a class="headerlink" href="#the-complete-album" title="Link to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Manual section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>7</p>
+</dd>
+</dl>
+<section id="description">
+<h3>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h3>
+<p>This is a list of all variables in the VCL language.</p>
+<p>Variable names take the form <code class="docutils literal notranslate"><span class="pre">scope.variable[.index]</span></code>, for instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="n">url</span>
+<span class="n">beresp</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">date</span>
+<span class="n">client</span><span class="o">.</span><span class="n">ip</span>
+</pre></div>
+</div>
+<p>Which operations are possible on each variable is described below,
+often with the shorthand “backend” which covers the <code class="docutils literal notranslate"><span class="pre">vcl_backend_*</span> <span class="pre">{}</span></code>
+subroutines and “client” which covers the rest, except <code class="docutils literal notranslate"><span class="pre">vcl_init</span> <span class="pre">{}</span></code>
+and <code class="docutils literal notranslate"><span class="pre">vcl_fini</span> <span class="pre">{}</span></code>.</p>
+<section id="local-server-remote-and-client">
+<span id="id1"></span><h4>local, server, remote and client<a class="headerlink" href="#local-server-remote-and-client" title="Link to this heading">¶</a></h4>
+<p>These variables describe the network connection between the
+client and <cite>vinyld</cite>.</p>
+<p>Without PROXY protocol:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="n">client</span>    <span class="n">server</span>
+     <span class="n">remote</span>    <span class="n">local</span>
+       <span class="n">v</span>          <span class="n">v</span>
+<span class="n">CLIENT</span> <span class="o">------------</span> <span class="n">VINYLD</span>
+</pre></div>
+</div>
+<p>With PROXY protocol:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="n">client</span>    <span class="n">server</span>   <span class="n">remote</span>     <span class="n">local</span>
+       <span class="n">v</span>          <span class="n">v</span>       <span class="n">v</span>          <span class="n">v</span>
+<span class="n">CLIENT</span> <span class="o">------------</span> <span class="n">PROXY</span> <span class="o">------------</span> <span class="n">VINYLD</span>
+</pre></div>
+</div>
+<p id="client-identity">client.identity</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client, backend</p>
+<p>Writable from: client</p>
+<p>Identification of the client, used to load balance
+in the client director.  Defaults to <code class="docutils literal notranslate"><span class="pre">client.ip</span></code></p>
+<p>This variable can be overwritten with more precise
+information, for instance extracted from a <code class="docutils literal notranslate"><span class="pre">Cookie:</span></code>
+header.</p>
+</div></blockquote>
+<p id="client-ip">client.ip</p>
+<blockquote>
+<div><p>Type: IP</p>
+<p>Readable from: client, backend</p>
+<p>The client’s IP address, either the same as <code class="docutils literal notranslate"><span class="pre">remote.ip</span></code>
+or what the PROXY protocol told us.</p>
+</div></blockquote>
+<p id="server-hostname">server.hostname</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: all</p>
+<p>The host name of the server, as returned by the
+<cite>gethostname(3)</cite> system function.</p>
+</div></blockquote>
+<p id="server-identity">server.identity</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: all</p>
+<p>The identity of the server, as set by the <code class="docutils literal notranslate"><span class="pre">-i</span></code> parameter.</p>
+<p>If an <code class="docutils literal notranslate"><span class="pre">-i</span></code> parameter is not passed to <cite>vinyld</cite>, the return
+value from <cite>gethostname(3)</cite> system function will be used.</p>
+</div></blockquote>
+<p id="server-ip">server.ip</p>
+<blockquote>
+<div><p>Type: IP</p>
+<p>Readable from: client, backend</p>
+<p>The IP address of the socket on which the client
+connection was received, either the same as <code class="docutils literal notranslate"><span class="pre">local.ip</span></code>
+or what the PROXY protocol told us.</p>
+</div></blockquote>
+<p id="remote-ip">remote.ip</p>
+<blockquote>
+<div><p>Type: IP</p>
+<p>Readable from: client, backend</p>
+<p>The IP address of the other end of the TCP connection.
+This can either be the clients IP, or the outgoing IP
+of a proxy server.</p>
+<p>If the connection is a UNIX domain socket, the value
+will be <code class="docutils literal notranslate"><span class="pre">0.0.0.0:0</span></code></p>
+</div></blockquote>
+<p id="local-endpoint">local.endpoint  <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client, backend</p>
+<p>The address of the ‘-a’ socket the session was accepted on.</p>
+<p>If the argument was <code class="docutils literal notranslate"><span class="pre">-a</span> <span class="pre">foo=:81</span></code> this would be “:81”</p>
+</div></blockquote>
+<p id="local-ip">local.ip</p>
+<blockquote>
+<div><p>Type: IP</p>
+<p>Readable from: client, backend</p>
+<p>The IP address (and port number) of the local end of the
+TCP connection, for instance <code class="docutils literal notranslate"><span class="pre">192.168.1.1:81</span></code></p>
+<p>If the connection is a UNIX domain socket, the value
+will be <code class="docutils literal notranslate"><span class="pre">0.0.0.0:0</span></code></p>
+</div></blockquote>
+<p id="local-socket">local.socket    <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client, backend</p>
+<p>The name of the ‘-a’ socket the session was accepted on.</p>
+<p>If the argument was <code class="docutils literal notranslate"><span class="pre">-a</span> <span class="pre">foo=:81</span></code> this would be “foo”.</p>
+<p>Note that all ‘-a’ gets a default name on the form <code class="docutils literal notranslate"><span class="pre">a%d</span></code>
+if no name is provided.</p>
+</div></blockquote>
+</section>
+<section id="req-and-req-top">
+<h4>req and req_top<a class="headerlink" href="#req-and-req-top" title="Link to this heading">¶</a></h4>
+<p>These variables describe the present request, and when ESI:include
+requests are being processed, req_top points to the request received
+from the client.</p>
+<p id="req">req</p>
+<blockquote>
+<div><p>Type: HTTP</p>
+<p>Readable from: client</p>
+<p>The entire request HTTP data structure.
+Mostly useful for passing to VMODs.</p>
+</div></blockquote>
+<p id="req-backend-hint">req.backend_hint</p>
+<blockquote>
+<div><p>Type: BACKEND</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Set bereq.backend to this if we attempt to fetch.
+When set to a director, reading this variable returns
+an actual backend if the director has resolved immediately,
+or the director otherwise.
+When used in string context, returns the name of the director
+or backend, respectively.</p>
+</div></blockquote>
+<p id="req-can-gzip">req.can_gzip</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: client</p>
+<p>True if the client provided <code class="docutils literal notranslate"><span class="pre">gzip</span></code> or <code class="docutils literal notranslate"><span class="pre">x-gzip</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">Accept-Encoding</span></code> header.</p>
+</div></blockquote>
+<p>req.esi <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&lt;=</span> <span class="pre">4.0</span></code></p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">false</span></code> to disable ESI processing
+regardless of any value in beresp.do_esi. Defaults
+to <code class="docutils literal notranslate"><span class="pre">true</span></code>. This variable is replaced by <code class="docutils literal notranslate"><span class="pre">resp.do_esi</span></code>
+in VCL 4.1.</p>
+</div></blockquote>
+<p id="req-esi-level">req.esi_level</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: client</p>
+<p>A count of how many levels of ESI requests we’re currently at.</p>
+</div></blockquote>
+<p id="req-filters">req.filters</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_recv</p>
+<p>Writable from: vcl_recv</p>
+<p>List of Vinyl Fetch Processor (VFP) filters the req.body
+will be pulled through. The order left to right signifies
+processing from client to cache, iow the leftmost filter is
+run first on the body as received from the client after
+decoding of any transfer encodings.</p>
+<p>VFP Filters change the body before potentially being cached
+(e.g. using <code class="docutils literal notranslate"><span class="pre">std.cache_req.body()</span></code>) and/or being handled by
+the backend side, where it may get processed again by
+bereq.filters.</p>
+<p>Trying to set req.filters after processing the request body
+(again, for example with <code class="docutils literal notranslate"><span class="pre">std.cache_req.body()</span></code>) triggers a
+VCL error.</p>
+</div></blockquote>
+<p id="req-grace">req.grace</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>Upper limit on the object grace.</p>
+<p>During lookup the minimum of req.grace and the object’s stored
+grace value will be used as the object’s grace.</p>
+<p>When reading the unset value, it is returned as -1.</p>
+</div></blockquote>
+<p id="req-hash">req.hash</p>
+<blockquote>
+<div><p>Type: BLOB</p>
+<p>Readable from: vcl_hit, vcl_miss, vcl_pass, vcl_purge, vcl_deliver, vcl_synth, vcl_pipe</p>
+<p>The hash key of this request.
+Mostly useful for passing to VMODs, but can also be useful
+for debugging hit/miss status.</p>
+</div></blockquote>
+<p id="req-hash-always-miss">req.hash_always_miss</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Force a cache miss for this request, even if perfectly
+good matching objects are in the cache.</p>
+<p>This is useful to force-update the cache without invalidating
+existing entries in case the fetch fails.</p>
+</div></blockquote>
+<p id="req-hash-ignore-busy">req.hash_ignore_busy</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Ignore any busy object during cache lookup.</p>
+<p>You only want to do this when you have two server looking
+up content sideways from each other to avoid deadlocks.</p>
+</div></blockquote>
+<p id="req-hash-ignore-vary">req.hash_ignore_vary</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Ignore objects vary headers during cache lookup.</p>
+<p>This returns the very first match regardless of the object
+compatibility with the client request. This is useful when
+variants are irrelevant to certain clients, and differences
+in the way the resource is presented don’t change how the
+client will interpret it.</p>
+<p>Use with caution.</p>
+</div></blockquote>
+<p id="req-http">req.http.*</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>The headers of request, things like <code class="docutils literal notranslate"><span class="pre">req.http.date</span></code>.</p>
+<p>The RFCs allow multiple headers with the same name, and both
+<code class="docutils literal notranslate"><span class="pre">set</span></code> and <code class="docutils literal notranslate"><span class="pre">unset</span></code> will remove <em>all</em> headers with the name
+given.</p>
+<p>The header name <code class="docutils literal notranslate"><span class="pre">*</span></code> is a VCL symbol and as such cannot, for
+example, start with a numeral. To work with valid header that
+can’t be represented as VCL symbols it is possible to quote the
+name, like <code class="docutils literal notranslate"><span class="pre">req.http.&quot;grammatically.valid&quot;</span></code>. None of the HTTP
+headers present in IANA registries need to be quoted, so the
+quoted syntax is discouraged but available for interoperability.</p>
+<p>Some headers that cannot be tampered with for proper HTTP fetch
+or delivery are read-only.</p>
+</div></blockquote>
+<p>req.http.content-length</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: client</p>
+<p>The content-length header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p>req.http.transfer-encoding</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: client</p>
+<p>The transfer-encoding header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p id="req-is-hitmiss">req.is_hitmiss</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_miss, vcl_deliver, vcl_pass, vcl_synth</p>
+<p>If this request resulted in a hitmiss</p>
+</div></blockquote>
+<p id="req-is-hitpass">req.is_hitpass</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_pass, vcl_deliver, vcl_synth</p>
+<p>If this request resulted in a hitpass</p>
+</div></blockquote>
+<p id="req-method">req.method</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>The request method (e.g. “GET”, “HEAD”, …)</p>
+</div></blockquote>
+<p>req.proto       <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&lt;=</span> <span class="pre">4.0</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>The HTTP protocol version used by the client, usually “HTTP/1.1”
+or “HTTP/2.0”.</p>
+</div></blockquote>
+<p id="req-proto">req.proto       <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>The HTTP protocol version used by the client, usually “HTTP/1.1”
+or “HTTP/2.0”.</p>
+</div></blockquote>
+<p id="req-restarts">req.restarts</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: client</p>
+<p>A count of how many times this request has been restarted.</p>
+</div></blockquote>
+<p id="req-storage">req.storage</p>
+<blockquote>
+<div><p>Type: STEVEDORE</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>The storage backend to use to save this request body.</p>
+</div></blockquote>
+<p id="req-time">req.time</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: client</p>
+<p>The time when the request was fully received, remains constant
+across restarts.</p>
+</div></blockquote>
+<p id="req-trace">req.trace</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Controls if <code class="docutils literal notranslate"><span class="pre">VCL_trace</span></code> VSL records are emitted for the current
+request, see <a class="reference internal" href="vsl.html#vsl-7"><span class="std std-ref">VSL</span></a>.</p>
+<p>Defaults to the setting of the <code class="docutils literal notranslate"><span class="pre">feature</span> <span class="pre">trace</span></code> parameter,
+see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a>. Does not get reset by a rollback.</p>
+</div></blockquote>
+<p id="req-transport">req.transport</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>The transport protocol which brought this request.</p>
+</div></blockquote>
+<p id="req-max-age">req.max_age</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>Upper limit on the object age for cache lookups to return hit. Matches
+<code class="docutils literal notranslate"><span class="pre">Cache-Control:</span> <span class="pre">max-age</span></code> request header semantics.</p>
+<p>When reading the unset value, it is returned as -1.</p>
+</div></blockquote>
+<p id="req-ttl">req.ttl</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>Deprecated alias of <code class="docutils literal notranslate"><span class="pre">req.max-age</span></code>, which will be removed in a future
+version of Vinyl Cache.</p>
+</div></blockquote>
+<p id="req-url">req.url</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>The requested URL, for instance “/robots.txt”.</p>
+</div></blockquote>
+<p id="req-xid">req.xid</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: client</p>
+<p>Unique ID of this request.</p>
+</div></blockquote>
+<p id="req-top-http">req_top.http.*</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: client</p>
+<p>HTTP headers of the top-level request in a tree of ESI requests.
+Identical to req.http. in non-ESI requests.</p>
+<p>See <a class="reference internal" href="#req-http">req.http</a> for general notes.</p>
+</div></blockquote>
+<p id="req-top-method">req_top.method</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>The request method of the top-level request in a tree
+of ESI requests. (e.g. “GET”, “HEAD”).
+Identical to req.method in non-ESI requests.</p>
+</div></blockquote>
+<p id="req-top-proto">req_top.proto</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>HTTP protocol version of the top-level request in a tree of
+ESI requests.
+Identical to req.proto in non-ESI requests.</p>
+</div></blockquote>
+<p id="req-top-time">req_top.time</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: client</p>
+<p>The time when the top-level request was fully received,
+remains constant across restarts.</p>
+</div></blockquote>
+<p id="req-top-url">req_top.url</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: client</p>
+<p>The requested URL of the top-level request in a tree
+of ESI requests.
+Identical to req.url in non-ESI requests.</p>
+</div></blockquote>
+</section>
+<section id="bereq">
+<h4>bereq<a class="headerlink" href="#bereq" title="Link to this heading">¶</a></h4>
+<p>This is the request we send to the backend, it is built from the
+clients <code class="docutils literal notranslate"><span class="pre">req.*</span></code> fields by filtering out “per-hop” fields which
+should not be passed along (<code class="docutils literal notranslate"><span class="pre">Connection:</span></code>, <code class="docutils literal notranslate"><span class="pre">Range:</span></code> and similar).</p>
+<p>Slightly more fields are allowed through for <code class="docutils literal notranslate"><span class="pre">pass`</span> <span class="pre">fetches</span>
+<span class="pre">than</span> <span class="pre">for</span> <span class="pre">`miss`</span> <span class="pre">fetches,</span> <span class="pre">for</span> <span class="pre">instance</span> <span class="pre">``Range</span></code>.</p>
+<p>bereq</p>
+<blockquote>
+<div><p>Type: HTTP</p>
+<p>Readable from: backend</p>
+<p>The entire backend request HTTP data structure.
+Mostly useful as argument to VMODs.</p>
+</div></blockquote>
+<p id="bereq-backend">bereq.backend</p>
+<blockquote>
+<div><p>Type: BACKEND</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>Writable from: vcl_pipe, backend</p>
+<p>This is the backend or director we attempt to fetch from.
+When set to a director, reading this variable returns
+an actual backend if the director has resolved immediately,
+or the director otherwise.
+When used in string context, returns the name of the director
+or backend, respectively.</p>
+</div></blockquote>
+<p id="bereq-between-bytes-timeout">bereq.between_bytes_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: backend</p>
+<p>Writable from: backend</p>
+<p>Unsettable from: vcl_pipe, backend</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">.between_bytes_timeout</span></code> attribute from the
+<a class="reference internal" href="vcl-backend.html#backend-definition"><span class="std std-ref">Backend definition</span></a>, which defaults to the
+<code class="docutils literal notranslate"><span class="pre">between_bytes_timeout</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a>.</p>
+<p>The time in seconds to wait between each received byte from the
+backend.  Not available in pipe mode.</p>
+</div></blockquote>
+<p id="bereq-body">bereq.body</p>
+<blockquote>
+<div><p>Type: BODY</p>
+<p>Unsettable from: vcl_backend_fetch</p>
+<p>The request body.</p>
+<p>Unset will also remove <a class="reference internal" href="#bereq-http-content-length">bereq.http.content-length</a>.</p>
+</div></blockquote>
+<p id="bereq-connect-timeout">bereq.connect_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>Writable from: vcl_pipe, backend</p>
+<p>Unsettable from: vcl_pipe, backend</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">.connect_timeout</span></code> attribute from the
+<a class="reference internal" href="vcl-backend.html#backend-definition"><span class="std std-ref">Backend definition</span></a>, which defaults to the
+<code class="docutils literal notranslate"><span class="pre">connect_timeout</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a>.</p>
+<p>The time in seconds to wait for a backend connection to be
+established.</p>
+</div></blockquote>
+<p id="bereq-filters">bereq.filters</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_fetch</p>
+<p>Writable from: vcl_backend_fetch</p>
+<p>List of VDP filters the bereq.body will be pushed through when
+sending the body to the backend.</p>
+</div></blockquote>
+<p id="bereq-first-byte-timeout">bereq.first_byte_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: backend</p>
+<p>Writable from: backend</p>
+<p>Unsettable from: vcl_pipe, backend</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">.first_byte_timeout</span></code> attribute from the
+<a class="reference internal" href="vcl-backend.html#backend-definition"><span class="std std-ref">Backend definition</span></a>, which defaults to the
+<code class="docutils literal notranslate"><span class="pre">first_byte_timeout</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a>.</p>
+<p>The time in seconds to wait getting the first byte back
+from the backend.  Not available in pipe mode.</p>
+</div></blockquote>
+<p id="bereq-hash">bereq.hash</p>
+<blockquote>
+<div><p>Type: BLOB</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>The hash key of this request, a copy of <code class="docutils literal notranslate"><span class="pre">req.hash</span></code>.</p>
+</div></blockquote>
+<p id="bereq-http">bereq.http.*</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>Writable from: vcl_pipe, backend</p>
+<p>Unsettable from: vcl_pipe, backend</p>
+<p>The headers to be sent to the backend.</p>
+<p>See <a class="reference internal" href="#req-http">req.http</a> for general notes.</p>
+</div></blockquote>
+<p id="bereq-http-content-length">bereq.http.content-length</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: backend</p>
+<p>The content-length header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p>bereq.http.transfer-encoding</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: backend</p>
+<p>The transfer-encoding header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p id="bereq-is-bgfetch">bereq.is_bgfetch</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: backend</p>
+<p>True for fetches where the client got a hit on an object in
+grace, and this fetch was kicked of in the background to get
+a fresh copy.</p>
+</div></blockquote>
+<p id="bereq-is-hitmiss">bereq.is_hitmiss</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: backend</p>
+<p>If this backend request was caused by a hitmiss.</p>
+</div></blockquote>
+<p id="bereq-is-hitpass">bereq.is_hitpass</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: backend</p>
+<p>If this backend request was caused by a hitpass.</p>
+</div></blockquote>
+<p id="bereq-method">bereq.method</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>Writable from: vcl_pipe, backend</p>
+<p>The request type (e.g. “GET”, “HEAD”).</p>
+<p>Regular (non-pipe, non-pass) fetches are always “GET”</p>
+</div></blockquote>
+<p>bereq.proto     <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&lt;=</span> <span class="pre">4.0</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>Writable from: vcl_pipe, backend</p>
+<p>The HTTP protocol version, “HTTP/1.1” unless a pass or pipe
+request has “HTTP/1.0” in <code class="docutils literal notranslate"><span class="pre">req.proto</span></code></p>
+</div></blockquote>
+<p id="bereq-proto">bereq.proto     <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>The HTTP protocol version, “HTTP/1.1” unless a pass or pipe
+request has “HTTP/1.0” in <code class="docutils literal notranslate"><span class="pre">req.proto</span></code></p>
+</div></blockquote>
+<p id="bereq-retries">bereq.retries</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: backend</p>
+<p>A count of how many times this request has been retried.</p>
+</div></blockquote>
+<p id="bereq-retry-connect">bereq.retry_connect</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: backend</p>
+<p>Writable from: backend</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">true</span></code>.
+Controls whether <cite>vinyld</cite> will make a second attempt to connect to the
+backend if a first connection reuse attempt failed. Setting to <code class="docutils literal notranslate"><span class="pre">false</span></code>
+means that no retries will be made. However, setting this to <code class="docutils literal notranslate"><span class="pre">true</span></code>
+does not guarantee that a retry will always be attempted, as there are
+other factors involved in the decision (ex: a request body not being
+cached).
+Note that this only controls automatic retries due to connection
+failures, and does not affect retries initiated from VCL using
+<code class="docutils literal notranslate"><span class="pre">return(retry);</span></code>.</p>
+</div></blockquote>
+<p id="bereq-task-deadline">bereq.task_deadline</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_pipe</p>
+<p>Writable from: vcl_pipe</p>
+<p>Unsettable from: vcl_pipe</p>
+<p>Deadline for pipe sessions, defaults <code class="docutils literal notranslate"><span class="pre">0s</span></code>, which falls back to the
+<code class="docutils literal notranslate"><span class="pre">pipe_task_deadline</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p>
+</div></blockquote>
+<p id="bereq-time">bereq.time</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>The time when we started preparing the first backend request,
+remains constant across retries.</p>
+</div></blockquote>
+<p id="bereq-trace">bereq.trace</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: backend</p>
+<p>Writable from: backend</p>
+<p>Controls if <code class="docutils literal notranslate"><span class="pre">VCL_trace</span></code> VSL records are emitted for the current
+request, see <a class="reference internal" href="vsl.html#vsl-7"><span class="std std-ref">VSL</span></a>.</p>
+<p>Inherits the value of <code class="docutils literal notranslate"><span class="pre">req.trace</span></code> when the backend request
+is created. Does not get reset by a rollback.</p>
+</div></blockquote>
+<p id="bereq-uncacheable">bereq.uncacheable</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: backend</p>
+<p>Indicates whether this request is uncacheable due to a
+<cite>pass</cite> in the client side or a hit on an hit-for-pass object.</p>
+</div></blockquote>
+<p id="bereq-url">bereq.url</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>Writable from: vcl_pipe, backend</p>
+<p>The requested URL, copied from <code class="docutils literal notranslate"><span class="pre">req.url</span></code></p>
+</div></blockquote>
+<p id="bereq-xid">bereq.xid</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: vcl_pipe, backend</p>
+<p>Unique ID of this request.</p>
+</div></blockquote>
+</section>
+<section id="beresp">
+<h4>beresp<a class="headerlink" href="#beresp" title="Link to this heading">¶</a></h4>
+<p>The response received from the backend, one cache misses, the
+store object is built from <code class="docutils literal notranslate"><span class="pre">beresp</span></code>.</p>
+<p>beresp</p>
+<blockquote>
+<div><p>Type: HTTP</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The entire backend response HTTP data structure, useful as
+argument to VMOD functions.</p>
+</div></blockquote>
+<p id="beresp-age">beresp.age</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: Age header, or zero.</p>
+<p>The age of the object.</p>
+</div></blockquote>
+<p id="beresp-backend">beresp.backend</p>
+<blockquote>
+<div><p>Type: BACKEND</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>This is the backend we fetched from.  If bereq.backend
+was set to a director, this will be the backend selected
+by the director.
+When used in string context, returns its name.</p>
+</div></blockquote>
+<p>beresp.backend.ip       <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&lt;=</span> <span class="pre">4.0</span></code></p>
+<blockquote>
+<div><p>Type: IP</p>
+<p>Readable from: vcl_backend_response</p>
+<p>IP of the backend this response was fetched from.</p>
+</div></blockquote>
+<p id="beresp-backend-name">beresp.backend.name</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Name of the backend this response was fetched from.
+Same as beresp.backend.</p>
+</div></blockquote>
+<p id="beresp-body">beresp.body</p>
+<blockquote>
+<div><p>Type: BODY</p>
+<p>Writable from: vcl_backend_error</p>
+<p>For producing a synthetic body.</p>
+</div></blockquote>
+<p id="beresp-do-esi">beresp.do_esi</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Set it to true to parse the object for ESI directives. This is
+necessary for later ESI processing on the client side. If
+beresp.do_esi is false when an object enters the cache, client
+side ESI processing will not be possible (obj.can_esi will be
+false).</p>
+<p>It is a VCL error to use beresp.do_esi after setting beresp.filters.</p>
+</div></blockquote>
+<p id="beresp-do-gunzip">beresp.do_gunzip</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">true</span></code> to gunzip the object while storing it in the
+cache.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">http_gzip_support</span></code> is disabled, setting this variable
+has no effect.</p>
+<p>It is a VCL error to use beresp.do_gunzip after setting beresp.filters.</p>
+</div></blockquote>
+<p id="beresp-do-gzip">beresp.do_gzip</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">true</span></code> to gzip the object while storing it.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">http_gzip_support</span></code> is disabled, setting this variable
+has no effect.</p>
+<p>It is a VCL error to use beresp.do_gzip after setting beresp.filters.</p>
+</div></blockquote>
+<p id="beresp-do-stream">beresp.do_stream</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p>Deliver the object to the client while fetching the whole
+object into <cite>vinyld</cite>.</p>
+<p>For uncacheable objects, storage for parts of the body which
+have been sent to the client may get freed early, depending
+on the storage engine used.</p>
+<p>This variable has no effect if beresp.do_esi is true or when
+the response body is empty.</p>
+</div></blockquote>
+<p id="beresp-filters">beresp.filters</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_response</p>
+<p>Writable from: vcl_backend_response</p>
+<p>List of Vinyl Fetch Processor (VFP) filters the beresp.body
+will be pulled through. The order left to right signifies
+processing from backend to cache, iow the leftmost filter is
+run first on the body as received from the backend after
+decoding of any transfer encodings.</p>
+<p>VFP Filters change the body before going into the cache and/or
+being handed to the client side, where it may get processed
+again by resp.filters.</p>
+<p>The following VFP filters exist in Vinyl Cache:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">gzip</span></code>: compress a body using gzip</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">testgunzip</span></code>: Test if a body is valid gzip and refuse it
+otherwise</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gunzip</span></code>: Uncompress gzip content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">esi</span></code>: ESI-process plain text content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">esi_gzip</span></code>: Save gzipped snippets for efficient
+ESI-processing</p>
+<p>This filter enables stitching together ESI from individually
+gzipped fragments, saving processing power for
+re-compression on the client side at the expense of some
+compression efficiency.</p>
+</li>
+</ul>
+<p>Additional VFP filters are available from VMODs.</p>
+<p>By default, beresp.filters is constructed as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gunzip</span></code> gets added for gzipped content if
+<code class="docutils literal notranslate"><span class="pre">beresp.do_gunzip</span></code> or <code class="docutils literal notranslate"><span class="pre">beresp.do_esi</span></code> are true.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">esi_gzip</span></code> gets added if <code class="docutils literal notranslate"><span class="pre">beresp.do_esi</span></code> is true
+together with <code class="docutils literal notranslate"><span class="pre">beresp.do_gzip</span></code> or content is already
+compressed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">esi</span></code> gets added if <code class="docutils literal notranslate"><span class="pre">beresp.do_esi</span></code> is true</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gzip</span></code> gets added for uncompressed content if
+<code class="docutils literal notranslate"><span class="pre">beresp.do_gzip</span></code> is true</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">testgunzip</span></code> gets added for compressed content if
+<code class="docutils literal notranslate"><span class="pre">beresp.do_gunzip</span></code> is false.</p></li>
+</ul>
+<p>After beresp.filters is set, using any of the beforementioned
+<code class="docutils literal notranslate"><span class="pre">beresp.do_*</span></code> switches is a VCL error.</p>
+</div></blockquote>
+<p id="beresp-grace">beresp.grace</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: Cache-Control <code class="docutils literal notranslate"><span class="pre">stale-while-revalidate</span></code> directive,
+or <code class="docutils literal notranslate"><span class="pre">default_grace</span></code> parameter.</p>
+<p>Set to a period to enable grace.</p>
+</div></blockquote>
+<p id="beresp-http">beresp.http.*</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Unsettable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The HTTP headers returned from the server.</p>
+<p>See <a class="reference internal" href="#req-http">req.http</a> for general notes.</p>
+</div></blockquote>
+<p>beresp.http.content-length</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The content-length header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p>beresp.http.transfer-encoding</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The transfer-encoding header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p id="beresp-keep">beresp.keep</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">default_keep</span></code> parameter.</p>
+<p>Set to a period to enable conditional backend requests.</p>
+<p>The keep time is cache lifetime in addition to the ttl.</p>
+<p>Objects with ttl expired but with keep time left may be used
+to issue conditional (If-Modified-Since / If-None-Match)
+requests to the backend to refresh them.</p>
+</div></blockquote>
+<p>beresp.proto    <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&lt;=</span> <span class="pre">4.0</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The HTTP protocol version the backend replied with.</p>
+</div></blockquote>
+<p id="beresp-proto">beresp.proto    <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The HTTP protocol version the backend replied with.</p>
+</div></blockquote>
+<p id="beresp-reason">beresp.reason</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The HTTP status message returned by the server.</p>
+</div></blockquote>
+<p id="beresp-status">beresp.status</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The HTTP status code returned by the server.</p>
+<p>More information in the <a class="reference internal" href="#http-response-status">HTTP response status</a> section.</p>
+</div></blockquote>
+<p id="beresp-storage">beresp.storage</p>
+<blockquote>
+<div><p>Type: STEVEDORE</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>The storage backend to use to save this object. If
+none is set, <cite>vinyld</cite> will pick a storage backend in a
+round-robin fashion, or the <cite>Transient</cite> backend if
+the object is short-lived.</p>
+</div></blockquote>
+<p id="beresp-time">beresp.time</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>When the backend headers were fully received just before
+<code class="docutils literal notranslate"><span class="pre">vcl_backend_response</span> <span class="pre">{}</span></code> was entered, or when
+<code class="docutils literal notranslate"><span class="pre">vcl_backend_error</span> <span class="pre">{}</span></code> was entered.</p>
+</div></blockquote>
+<p id="beresp-transit-buffer">beresp.transit_buffer</p>
+<blockquote>
+<div><p>Type: BYTES</p>
+<p>Readable from: vcl_backend_response</p>
+<p>Writable from: vcl_backend_response</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">transit_buffer</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a>.</p>
+<p>The maximum number of bytes the client can be ahead of the
+backend during a streaming pass if <code class="docutils literal notranslate"><span class="pre">beresp</span></code> is
+uncacheable. See also <code class="docutils literal notranslate"><span class="pre">transit_buffer</span></code> parameter
+documentation in <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a>.</p>
+</div></blockquote>
+<p id="beresp-ttl">beresp.ttl</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Default: Cache-Control <code class="docutils literal notranslate"><span class="pre">s-maxage</span></code> or <code class="docutils literal notranslate"><span class="pre">max-age</span></code> directives,
+or a value computed from the Expires header’s deadline, or the
+<code class="docutils literal notranslate"><span class="pre">default_ttl</span></code> parameter.</p>
+<p>The object’s remaining time to live, in seconds.</p>
+</div></blockquote>
+<p id="beresp-uncacheable">beresp.uncacheable</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Writable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>Inherited from bereq.uncacheable, see there.</p>
+<p>Setting this variable makes the object uncacheable.</p>
+<p>This may produce a hit-for-miss object in the cache.</p>
+<p>Clearing the variable has no effect and will log the warning
+“Ignoring attempt to reset beresp.uncacheable”.</p>
+</div></blockquote>
+<p id="beresp-was-304">beresp.was_304</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_response, vcl_backend_error, vcl_backend_refresh</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">true</span></code> this indicates that we got a 304 response
+to our conditional fetch from the backend and turned
+that into <code class="docutils literal notranslate"><span class="pre">beresp.status</span> <span class="pre">=</span> <span class="pre">200</span></code></p>
+</div></blockquote>
+</section>
+<section id="obj-stale">
+<h4>obj_stale<a class="headerlink" href="#obj-stale" title="Link to this heading">¶</a></h4>
+<p>This is the stale object we had in cache. It cannot be modified.</p>
+<p id="obj-stale-age">obj_stale.age</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The age of the stale object.</p>
+</div></blockquote>
+<p id="obj-stale-can-esi">obj_stale.can_esi</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>If the stale object can be ESI processed, that is if setting
+<code class="docutils literal notranslate"><span class="pre">resp.do_esi</span></code> or adding <code class="docutils literal notranslate"><span class="pre">esi</span></code> to <code class="docutils literal notranslate"><span class="pre">resp.filters</span></code> in
+<code class="docutils literal notranslate"><span class="pre">vcl_deliver</span> <span class="pre">{}</span></code> would cause the response body to be ESI
+processed.</p>
+</div></blockquote>
+<p id="obj-stale-grace">obj_stale.grace</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The stale object’s grace period in seconds.</p>
+</div></blockquote>
+<p id="obj-stale-hits">obj_stale.hits</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The count of cache-hits on this stale object.</p>
+<p>In <cite>vcl_deliver</cite> a value of 0 indicates a cache miss.</p>
+</div></blockquote>
+<p id="obj-stale-http">obj_stale.http.*</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The HTTP headers stored in the stale object.</p>
+<p>See <a class="reference internal" href="#req-http">req.http</a> for general notes.</p>
+</div></blockquote>
+<p id="obj-stale-keep">obj_stale.keep</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The stale object’s keep period in seconds.</p>
+</div></blockquote>
+<p id="obj-stale-proto">obj_stale.proto</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The HTTP protocol version stored in the stale object.</p>
+</div></blockquote>
+<p id="obj-stale-reason">obj_stale.reason</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The HTTP reason phrase stored in the stale object.</p>
+</div></blockquote>
+<p id="obj-stale-status">obj_stale.status</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The HTTP status code stored in the stale object.</p>
+<p>More information in the <a class="reference internal" href="#http-response-status">HTTP response status</a> section.</p>
+</div></blockquote>
+<p id="obj-stale-storage">obj_stale.storage</p>
+<blockquote>
+<div><p>Type: STEVEDORE</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The storage backend where this stale object is stored.</p>
+</div></blockquote>
+<p id="obj-stale-time">obj_stale.time</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The time the stale object was created from the perspective of the
+server which generated it. This will roughly be equivalent to
+<code class="docutils literal notranslate"><span class="pre">now</span></code> - <code class="docutils literal notranslate"><span class="pre">obj.age</span></code>.</p>
+</div></blockquote>
+<p id="obj-stale-ttl">obj_stale.ttl</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>The stale object’s time to live, in seconds.</p>
+</div></blockquote>
+<p id="obj-stale-uncacheable">obj_stale.uncacheable</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>Whether the stale object is uncacheable (pass, hit-for-pass or
+hit-for-miss).</p>
+</div></blockquote>
+<p id="obj-stale-is-valid">obj_stale.is_valid</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_backend_refresh</p>
+<p>Whether the stale object is still valid.</p>
+</div></blockquote>
+</section>
+<section id="obj">
+<h4>obj<a class="headerlink" href="#obj" title="Link to this heading">¶</a></h4>
+<p>This is the object we found in cache.  It cannot be modified.</p>
+<p id="obj-age">obj.age</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>The age of the object.</p>
+</div></blockquote>
+<p id="obj-can-esi">obj.can_esi</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>If the object can be ESI processed, that is if setting
+<code class="docutils literal notranslate"><span class="pre">resp.do_esi</span></code> or adding <code class="docutils literal notranslate"><span class="pre">esi</span></code> to <code class="docutils literal notranslate"><span class="pre">resp.filters</span></code> in
+<code class="docutils literal notranslate"><span class="pre">vcl_deliver</span> <span class="pre">{}</span></code> would cause the response body to be ESI
+processed.</p>
+</div></blockquote>
+<p id="obj-grace">obj.grace</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>The object’s grace period in seconds.</p>
+</div></blockquote>
+<p id="obj-hits">obj.hits</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>The count of cache-hits on this object.</p>
+<p>In <cite>vcl_deliver</cite> a value of 0 indicates a cache miss.</p>
+</div></blockquote>
+<p id="obj-http">obj.http.*</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_hit</p>
+<p>The HTTP headers stored in the object.</p>
+<p>See <a class="reference internal" href="#req-http">req.http</a> for general notes.</p>
+</div></blockquote>
+<p id="obj-keep">obj.keep</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>The object’s keep period in seconds.</p>
+</div></blockquote>
+<p id="obj-proto">obj.proto</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_hit</p>
+<p>The HTTP protocol version stored in the object.</p>
+</div></blockquote>
+<p id="obj-reason">obj.reason</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_hit</p>
+<p>The HTTP reason phrase stored in the object.</p>
+</div></blockquote>
+<p id="obj-status">obj.status</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: vcl_hit</p>
+<p>The HTTP status code stored in the object.</p>
+<p>More information in the <a class="reference internal" href="#http-response-status">HTTP response status</a> section.</p>
+</div></blockquote>
+<p id="obj-storage">obj.storage</p>
+<blockquote>
+<div><p>Type: STEVEDORE</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>The storage backend where this object is stored.</p>
+</div></blockquote>
+<p id="obj-time">obj.time</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>The time the object was created from the perspective of the
+server which generated it. This will roughly be equivalent to
+<code class="docutils literal notranslate"><span class="pre">now</span></code> - <code class="docutils literal notranslate"><span class="pre">obj.age</span></code>.</p>
+</div></blockquote>
+<p id="obj-ttl">obj.ttl</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: vcl_hit, vcl_deliver</p>
+<p>The object’s remaining time to live, in seconds.</p>
+</div></blockquote>
+<p id="obj-uncacheable">obj.uncacheable</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_deliver</p>
+<p>Whether the object is uncacheable (pass, hit-for-pass or
+hit-for-miss).</p>
+</div></blockquote>
+</section>
+<section id="resp">
+<h4>resp<a class="headerlink" href="#resp" title="Link to this heading">¶</a></h4>
+<p>This is the response we send to the client, it is built from either
+<code class="docutils literal notranslate"><span class="pre">beresp</span></code> (pass/miss), <code class="docutils literal notranslate"><span class="pre">obj</span></code> (hits) or created from whole cloth (synth).</p>
+<p>With the exception of <code class="docutils literal notranslate"><span class="pre">resp.body</span></code> all <code class="docutils literal notranslate"><span class="pre">resp.*</span></code> variables available
+in both <code class="docutils literal notranslate"><span class="pre">vcl_deliver{}</span></code> and <code class="docutils literal notranslate"><span class="pre">vcl_synth{}</span></code> as a matter of symmetry.</p>
+<p>resp</p>
+<blockquote>
+<div><p>Type: HTTP</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>The entire response HTTP data structure, useful as argument
+to VMODs.</p>
+</div></blockquote>
+<p id="resp-body">resp.body</p>
+<blockquote>
+<div><p>Type: BODY</p>
+<p>Writable from: vcl_synth</p>
+<p>To produce a synthetic response body, for instance for errors.</p>
+</div></blockquote>
+<p id="resp-do-esi">resp.do_esi     <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>Writable from: vcl_deliver, vcl_synth</p>
+<p>Default: obj.can_esi</p>
+<p>This can be used to selectively disable ESI processing, even
+though ESI parsing happened during fetch (see beresp.do_esi).
+This is useful when Vinyl Caches peer with each other.</p>
+<p>It is a VCL error to use resp.do_esi after setting resp.filters.</p>
+</div></blockquote>
+<p id="resp-filters">resp.filters</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>Writable from: vcl_deliver, vcl_synth</p>
+<p>List of VDP filters the resp.body will be pushed through.</p>
+<p>Before resp.filters is set, the value read will be the default
+filter list as determined by <cite>vinyld</cite> based on resp.do_esi and
+request headers.</p>
+<p>After resp.filters is set, changing any of the conditions
+which otherwise determine the filter selection will have no
+effect. Using resp.do_esi is an error once resp.filters is
+set.</p>
+</div></blockquote>
+<p id="resp-http">resp.http.*</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>Writable from: vcl_deliver, vcl_synth</p>
+<p>Unsettable from: vcl_deliver, vcl_synth</p>
+<p>The HTTP headers that will be returned.</p>
+<p>See <a class="reference internal" href="#req-http">req.http</a> for general notes.</p>
+</div></blockquote>
+<p>resp.http.content-length</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>The content-length header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p>resp.http.transfer-encoding</p>
+<blockquote>
+<div><p>Type: HEADER</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>The transfer-encoding header field is protected, see <a class="reference internal" href="#protected-headers">protected_headers</a>.</p>
+</div></blockquote>
+<p id="resp-is-streaming">resp.is_streaming</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>Returns true when the response will be streamed
+while being fetched from the backend.</p>
+</div></blockquote>
+<p>resp.proto      <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&lt;=</span> <span class="pre">4.0</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>Writable from: vcl_deliver, vcl_synth</p>
+<p>The HTTP protocol version to use for the response.</p>
+</div></blockquote>
+<p id="resp-proto">resp.proto      <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>The HTTP protocol version to use for the response.</p>
+</div></blockquote>
+<p id="resp-reason">resp.reason</p>
+<blockquote>
+<div><p>Type: STRING</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>Writable from: vcl_deliver, vcl_synth</p>
+<p>The HTTP status message that will be returned.</p>
+</div></blockquote>
+<p id="resp-status">resp.status</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>Writable from: vcl_deliver, vcl_synth</p>
+<p>The HTTP status code that will be returned.</p>
+<p>More information in the <a class="reference internal" href="#http-response-status">HTTP response status</a> section.</p>
+<p>resp.status 200 will get changed into 304 by core code after
+a return(deliver) from vcl_deliver for conditional requests
+to cached content if validation succeeds.</p>
+<p>For the validation, first <code class="docutils literal notranslate"><span class="pre">req.http.If-None-Match</span></code> is
+compared against <code class="docutils literal notranslate"><span class="pre">resp.http.Etag</span></code>. If they compare equal
+according to the rules for weak validation (see RFC7232), a
+304 is sent.</p>
+<p>Secondly, <code class="docutils literal notranslate"><span class="pre">req.http.If-Modified-Since</span></code> is compared against
+<code class="docutils literal notranslate"><span class="pre">resp.http.Last-Modified</span></code> or, if it is unset or weak, against
+the point in time when the object was last modified based on the
+<code class="docutils literal notranslate"><span class="pre">Date</span></code> and <code class="docutils literal notranslate"><span class="pre">Age</span></code> headers received with the backend
+response which created the object. If the object has not been
+modified based on that comparison, a 304 is sent.</p>
+</div></blockquote>
+<p id="resp-time">resp.time</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: vcl_deliver, vcl_synth</p>
+<p>The time when we started preparing the response, just before
+entering <code class="docutils literal notranslate"><span class="pre">vcl_synth</span> <span class="pre">{}</span></code> or <code class="docutils literal notranslate"><span class="pre">vcl_deliver</span> <span class="pre">{}</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="special-variables">
+<h4>Special variables<a class="headerlink" href="#special-variables" title="Link to this heading">¶</a></h4>
+<p id="now">now</p>
+<blockquote>
+<div><p>Type: TIME</p>
+<p>Readable from: all</p>
+<p>The current time, in seconds since the UNIX epoch.</p>
+<p>When converted to STRING in expressions it returns
+a formatted timestamp like <code class="docutils literal notranslate"><span class="pre">Tue,</span> <span class="pre">20</span> <span class="pre">Feb</span> <span class="pre">2018</span> <span class="pre">09:30:31</span> <span class="pre">GMT</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">now</span></code> remains stable for the duration of any built-in VCL
+subroutine to make time-based calculations predictable and
+avoid edge cases.</p>
+<p>In other words, even if considerable amounts of time are spent
+in VCL, <code class="docutils literal notranslate"><span class="pre">now</span></code> will always represent the point in time when
+the respective built-in VCL subroutine was entered. <code class="docutils literal notranslate"><span class="pre">now</span></code> is
+thus not suitable for any kind of time measurements. See
+<a class="reference internal" href="vmod_std.html#std-timestamp"><span class="std std-ref">VOID timestamp(STRING s)</span></a>, <a class="reference internal" href="vmod_std.html#std-now"><span class="std std-ref">TIME now()</span></a> and
+<a class="reference internal" href="vmod_std.html#std-timed-call"><span class="std std-ref">DURATION timed_call(SUB)</span></a> in <a class="reference internal" href="vmod_std.html#vmod-std-3"><span class="std std-ref">VMOD std - Vinyl Cache Standard Module</span></a>.</p>
+</div></blockquote>
+</section>
+<section id="sess">
+<h4>sess<a class="headerlink" href="#sess" title="Link to this heading">¶</a></h4>
+<p>A session corresponds to the “conversation” that <cite>vinyld</cite> has with a
+single client connection, over which one or more request/response
+transactions may take place. It may comprise the traffic over an
+HTTP/1 keep-alive connection, or the multiplexed traffic over an
+HTTP/2 connection.</p>
+<p id="sess-idle-send-timeout">sess.idle_send_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>Send timeout for individual pieces of data on client
+connections, defaults to the <code class="docutils literal notranslate"><span class="pre">idle_send_timeout</span></code> parameter,
+see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p>
+</div></blockquote>
+<p id="sess-send-timeout">sess.send_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>Total timeout for ordinary HTTP1 responses, defaults to the
+<code class="docutils literal notranslate"><span class="pre">send_timeout</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p>
+</div></blockquote>
+<p id="sess-timeout-idle">sess.timeout_idle</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>Idle timeout for this session, defaults to the
+<code class="docutils literal notranslate"><span class="pre">timeout_idle</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p>
+</div></blockquote>
+<p id="sess-timeout-linger">sess.timeout_linger</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: client</p>
+<p>Writable from: client</p>
+<p>Unsettable from: client</p>
+<p>Linger timeout for this session, defaults to the
+<code class="docutils literal notranslate"><span class="pre">timeout_linger</span></code> parameter, see <a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p>
+</div></blockquote>
+<p id="sess-xid">sess.xid        <code class="docutils literal notranslate"><span class="pre">VCL</span> <span class="pre">&gt;=</span> <span class="pre">4.1</span></code></p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: client, backend</p>
+<p>Unique ID of this session.</p>
+</div></blockquote>
+</section>
+<section id="storage">
+<h4>storage<a class="headerlink" href="#storage" title="Link to this heading">¶</a></h4>
+<p id="storage-free-space">storage.&lt;name&gt;.free_space</p>
+<blockquote>
+<div><p>Type: BYTES</p>
+<p>Readable from: client, backend</p>
+<p>Default: 0</p>
+<p>Free space available in the named stevedore. Only available for
+the malloc stevedore.</p>
+</div></blockquote>
+<p id="storage-happy">storage.&lt;name&gt;.happy</p>
+<blockquote>
+<div><p>Type: BOOL</p>
+<p>Readable from: client, backend</p>
+<p>Default: true</p>
+<p>Health status for the named stevedore. Not available in any of the
+current stevedores.</p>
+</div></blockquote>
+<p id="storage-used-space">storage.&lt;name&gt;.used_space</p>
+<blockquote>
+<div><p>Type: BYTES</p>
+<p>Readable from: client, backend</p>
+<p>Default: 0</p>
+<p>Used space in the named stevedore. Only available for the malloc
+stevedore.</p>
+</div></blockquote>
+</section>
+<section id="runtime-parameters">
+<h4>Runtime parameters<a class="headerlink" href="#runtime-parameters" title="Link to this heading">¶</a></h4>
+<p>Some of the global runtime parameters related to VCL transactions are
+readable anywhere in VCL. The value of a parameter can change between
+accesses, it is not cached for the duration of a VCL task.</p>
+<p>param.backend_idle_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-backend-idle-timeout"><span class="std std-ref">backend_idle_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.backend_wait_limit</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-backend-wait-limit"><span class="std std-ref">backend_wait_limit</span></a>.</p>
+</div></blockquote>
+<p>param.backend_wait_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-backend-wait-timeout"><span class="std std-ref">backend_wait_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.between_bytes_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-between-bytes-timeout"><span class="std std-ref">between_bytes_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.connect_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-connect-timeout"><span class="std std-ref">connect_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.default_grace</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-default-grace"><span class="std std-ref">default_grace</span></a>.</p>
+</div></blockquote>
+<p>param.default_keep</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-default-keep"><span class="std std-ref">default_keep</span></a>.</p>
+</div></blockquote>
+<p>param.default_ttl</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-default-ttl"><span class="std std-ref">default_ttl</span></a>.</p>
+</div></blockquote>
+<p>param.first_byte_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-first-byte-timeout"><span class="std std-ref">first_byte_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.idle_send_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-idle-send-timeout"><span class="std std-ref">idle_send_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.max_esi_depth</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-max-esi-depth"><span class="std std-ref">max_esi_depth</span></a>.</p>
+</div></blockquote>
+<p>param.max_restarts</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-max-restarts"><span class="std std-ref">max_restarts</span></a>.</p>
+</div></blockquote>
+<p>param.max_retries</p>
+<blockquote>
+<div><p>Type: INT</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-max-retries"><span class="std std-ref">max_retries</span></a>.</p>
+</div></blockquote>
+<p>param.pipe_task_deadline</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-pipe-task-deadline"><span class="std std-ref">pipe_task_deadline</span></a>.</p>
+</div></blockquote>
+<p>param.pipe_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-pipe-timeout"><span class="std std-ref">pipe_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.send_timeout</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-send-timeout"><span class="std std-ref">send_timeout</span></a>.</p>
+</div></blockquote>
+<p>param.shortlived</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-shortlived"><span class="std std-ref">shortlived</span></a>.</p>
+</div></blockquote>
+<p>param.timeout_idle</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-timeout-idle"><span class="std std-ref">timeout_idle</span></a>.</p>
+</div></blockquote>
+<p>param.transit_buffer</p>
+<blockquote>
+<div><p>Type: BYTES</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-transit-buffer"><span class="std std-ref">transit_buffer</span></a>.</p>
+</div></blockquote>
+<p>param.uncacheable_ttl</p>
+<blockquote>
+<div><p>Type: DURATION</p>
+<p>Readable from: all</p>
+<p>Global parameter <a class="reference internal" href="vinyld.html#ref-param-uncacheable-ttl"><span class="std std-ref">uncacheable_ttl</span></a>.</p>
+</div></blockquote>
+</section>
+<section id="protected-header-fields">
+<span id="protected-headers"></span><h4>Protected header fields<a class="headerlink" href="#protected-header-fields" title="Link to this heading">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">content-length</span></code> and <code class="docutils literal notranslate"><span class="pre">transfer-encoding</span></code> headers are read-only. They
+must be preserved to ensure HTTP/1 framing remains consistent and maintain a
+proper request and response synchronization with both clients and backends.</p>
+<p>VMODs can still update these headers, when there is a reason to change the
+framing, such as a transformation of a request or response body.</p>
+</section>
+<section id="http-response-status">
+<h4>HTTP response status<a class="headerlink" href="#http-response-status" title="Link to this heading">¶</a></h4>
+<p>A HTTP status code has 3 digits XYZ where X must be between 1 and 5 included.
+Since it is not uncommon to see HTTP clients or servers relying
+on non-standard or even invalid status codes, Vinyl Cache can work
+with any status between 100 and 999.</p>
+<p>Within VCL code it is even possible to use status codes in the form
+VWXYZ as long as the overall value is lower than 65536, but only
+the XYZ part will be sent to the client, by which time the X must
+also have become non-zero.</p>
+<p>The VWXYZ form of status codes can be communicate extra information
+in <code class="docutils literal notranslate"><span class="pre">resp.status</span></code> and <code class="docutils literal notranslate"><span class="pre">beresp.status</span></code> to <code class="docutils literal notranslate"><span class="pre">return(synth(...))</span></code> and
+<code class="docutils literal notranslate"><span class="pre">return(error(...))</span></code>, to indicate which synthetic content to produce:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">vcl_recv</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">([</span><span class="o">...</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">synth</span><span class="p">(</span><span class="mi">12404</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">sub</span> <span class="n">vcl_synth</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">12404</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">[</span><span class="o">...</span><span class="p">]</span>       <span class="o">//</span> <span class="n">this</span> <span class="n">specific</span> <span class="mi">404</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">status</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">404</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">[</span><span class="o">...</span><span class="p">]</span>       <span class="o">//</span> <span class="nb">all</span> <span class="n">other</span> <span class="mi">404</span><span class="s1">&#39;s</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">obj.status</span></code> variable will inherit the VWXYZ form, but in a ban
+expression only the XYZ part will be available. The VWXYZ form is strictly
+limited to VCL execution.</p>
+<p>Assigning an HTTP standardized code to <code class="docutils literal notranslate"><span class="pre">resp.status</span></code> or <code class="docutils literal notranslate"><span class="pre">beresp.status</span></code>
+will also set <code class="docutils literal notranslate"><span class="pre">resp.reason</span></code> or <code class="docutils literal notranslate"><span class="pre">beresp.reason</span></code>  to the corresponding
+status message.</p>
+<section id="handling">
+<h5>304 handling<a class="headerlink" href="#handling" title="Link to this heading">¶</a></h5>
+<p>For a 304 response, <cite>vinyld</cite> core code amends <code class="docutils literal notranslate"><span class="pre">beresp</span></code> before calling
+<cite>vcl_backend_response</cite>:</p>
+<ul class="simple">
+<li><p>If the gzip status changed, <code class="docutils literal notranslate"><span class="pre">Content-Encoding</span></code> is unset and any
+<code class="docutils literal notranslate"><span class="pre">Etag</span></code> is weakened</p></li>
+<li><p>Any headers not present in the 304 response are copied from the
+existing cache object. <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> is copied if present in
+the existing cache object and discarded otherwise.</p></li>
+<li><p>The status gets set to 200.</p></li>
+</ul>
+<p><cite>beresp.was_304</cite> marks that this conditional response processing has
+happened.</p>
+<p>Note: Backend conditional requests are independent of client
+conditional requests, so clients may receive 304 responses no matter
+if a backend request was conditional.</p>
+</section>
+<section id="beresp-ttl-beresp-grace-beresp-keep">
+<h5>beresp.ttl / beresp.grace / beresp.keep<a class="headerlink" href="#beresp-ttl-beresp-grace-beresp-keep" title="Link to this heading">¶</a></h5>
+<p>Before calling <cite>vcl_backend_response</cite>, core code sets <code class="docutils literal notranslate"><span class="pre">beresp.ttl</span></code>
+based on the response status and the response headers <code class="docutils literal notranslate"><span class="pre">Age</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> or <code class="docutils literal notranslate"><span class="pre">Expires</span></code> and <code class="docutils literal notranslate"><span class="pre">Date</span></code> as follows:</p>
+<ul class="simple">
+<li><p>If present and valid, the value of the <code class="docutils literal notranslate"><span class="pre">Age</span></code> header is effectively
+deduced from all ttl calculations.</p></li>
+<li><p>For status codes 200, 203, 204, 300, 301, 304, 404, 410 and 414:</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> contains an <code class="docutils literal notranslate"><span class="pre">s-maxage</span></code> or <code class="docutils literal notranslate"><span class="pre">max-age</span></code> field
+(in that order of preference), the ttl is set to the respective
+non-negative value or 0 if negative.</p></li>
+<li><p>Otherwise, if no <code class="docutils literal notranslate"><span class="pre">Expires</span></code> header exists, the default ttl is
+used.</p></li>
+<li><p>Otherwise, if <code class="docutils literal notranslate"><span class="pre">Expires</span></code> contains a time stamp before <code class="docutils literal notranslate"><span class="pre">Date</span></code>,
+the ttl is set to 0.</p></li>
+<li><p>Otherwise, if no <code class="docutils literal notranslate"><span class="pre">Date</span></code> header is present or the <code class="docutils literal notranslate"><span class="pre">Date</span></code> header
+timestamp differs from the local clock by no more than the
+<cite>clock_skew</cite> parameter, the ttl is set to</p>
+<ul>
+<li><p>0 if <code class="docutils literal notranslate"><span class="pre">Expires</span></code> denotes a past timestamp or</p></li>
+<li><p>the difference between the local clock and the <code class="docutils literal notranslate"><span class="pre">Expires</span></code>
+header otherwise.</p></li>
+</ul>
+</li>
+<li><p>Otherwise, the ttl is set to the difference between <code class="docutils literal notranslate"><span class="pre">Expires</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Date</span></code></p></li>
+</ul>
+</li>
+<li><p>For status codes 302 and 307, the calculation is identical except
+that the default ttl is not used and -1 is returned if neither
+<code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> nor <code class="docutils literal notranslate"><span class="pre">Expires</span></code> exists.</p></li>
+<li><p>For all other status codes, ttl -1 is returned.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">beresp.grace</span></code> defaults to the <cite>default_grace</cite> parameter.</p>
+<p>For a non-negative ttl, if <code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> contains a
+<code class="docutils literal notranslate"><span class="pre">stale-while-revalidate</span></code> field value, <code class="docutils literal notranslate"><span class="pre">beresp.grace</span></code> is
+set to that value if non-negative or 0 otherwise.</p>
+<p><code class="docutils literal notranslate"><span class="pre">beresp.keep</span></code> defaults to the <cite>default_keep</cite> parameter.</p>
+</section>
+</section>
+</section>
+<section id="see-also">
+<h3>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinyld.html#vinyld-1"><span class="std std-ref">vinyld</span></a></p></li>
+<li><p><a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a></p></li>
+</ul>
+</section>
+<section id="history">
+<h3>HISTORY<a class="headerlink" href="#history" title="Link to this heading">¶</a></h3>
+<p>VCL was developed by Poul-Henning Kamp in cooperation with Verdens
+Gang AS, Redpill Linpro and Varnish Software.  This manual page is
+written by Per Buer, Poul-Henning Kamp, Martin Blix Grydeland,
+Kristian Lyngstøl, Lasse Karstensen and others.</p>
+</section>
+<section id="copyright">
+<h3>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h3>
+<p>This document is licensed under the same license as Vinyl Cache
+itself. See LICENSE for details.</p>
+<ul class="simple">
+<li><p>Copyright (c) 2006 Verdens Gang AS</p></li>
+<li><p>Copyright (c) 2006-2021 Varnish Software AS</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vcl-step.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VCL-steps</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vcl.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">VCL</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">VCL-Variables</a><ul>
+<li><a class="reference internal" href="#the-complete-album">The complete album</a><ul>
+<li><a class="reference internal" href="#description">DESCRIPTION</a><ul>
+<li><a class="reference internal" href="#local-server-remote-and-client">local, server, remote and client</a></li>
+<li><a class="reference internal" href="#req-and-req-top">req and req_top</a></li>
+<li><a class="reference internal" href="#bereq">bereq</a></li>
+<li><a class="reference internal" href="#beresp">beresp</a></li>
+<li><a class="reference internal" href="#obj-stale">obj_stale</a></li>
+<li><a class="reference internal" href="#obj">obj</a></li>
+<li><a class="reference internal" href="#resp">resp</a></li>
+<li><a class="reference internal" href="#special-variables">Special variables</a></li>
+<li><a class="reference internal" href="#sess">sess</a></li>
+<li><a class="reference internal" href="#storage">storage</a></li>
+<li><a class="reference internal" href="#runtime-parameters">Runtime parameters</a></li>
+<li><a class="reference internal" href="#protected-header-fields">Protected header fields</a></li>
+<li><a class="reference internal" href="#http-response-status">HTTP response status</a><ul>
+<li><a class="reference internal" href="#handling">304 handling</a></li>
+<li><a class="reference internal" href="#beresp-ttl-beresp-grace-beresp-keep">beresp.ttl / beresp.grace / beresp.keep</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+<li><a class="reference internal" href="#history">HISTORY</a></li>
+<li><a class="reference internal" href="#copyright">COPYRIGHT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

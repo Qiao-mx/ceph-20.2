@@ -1,0 +1,91 @@
+vtest "Abstract UDS backend: change path, drop poll"
+
+feature abstract_uds
+
+server s1 -listen "@${vtcid}.s1.sock" {
+	non_fatal
+	timeout 3
+	loop 40 {
+		rxreq
+		txresp
+		accept
+	}
+} -start
+
+server s2 -listen "@${vtcid}.s2.sock" {
+	non_fatal
+	timeout 3
+	loop 40 {
+		rxreq
+		txresp
+		accept
+	}
+} -start
+
+vinyl v1 -arg "-a @${vtcid}.v1.sock" -vcl {
+	probe default {
+		.window = 8;
+		.initial = 7;
+		.threshold = 8;
+		.interval = 0.1s;
+	}
+	backend s1 {
+		.path = "@${vtcid}.s2.sock";
+	}
+} -start
+
+delay 1
+
+vinyl v1 -vcl {
+	probe default {
+		.window = 8;
+		.initial = 7;
+		.threshold = 8;
+		.interval = 0.1s;
+	}
+	backend s1 {
+		.path = "@${vtcid}.s1.sock";
+	}
+} -cliok "vcl.use vcl2" -cliok "vcl.discard vcl1"
+
+delay 1
+
+vinyl v1 -vcl {
+	backend s1 {
+		.path = "@${vtcid}.s1.sock";
+	}
+} -cliok "vcl.use vcl3" -cliok "vcl.discard vcl2"
+
+delay 1
+
+vinyl v1 -cliok "vcl.list"
+vinyl v1 -cliok "backend.list -p"
+
+server s1 -break {
+	rxreq
+	expect req.url == /foo
+	txresp -bodylen 4
+} -start
+
+delay 1
+
+client c1 -connect "@${vtcid}.v1.sock" {
+	txreq -url /foo
+	rxresp
+	txreq -url /foo
+	rxresp
+	expect resp.status == 200
+	expect resp.bodylen == 4
+} -run
+
+########################################
+# coverage
+
+vinyl v1 -errvcl {Backend path: The empty abstract socket name is not supported} {
+	backend s1 {
+		.path = "@";
+	}
+}
+
+shell -err -expect "Error: Got no socket(s) for a0=@ (The empty abstract socket name is not supported)" \
+	"vinyld -n ${tmpdir}/v0 -a @ -b None"

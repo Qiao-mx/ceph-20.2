@@ -1,0 +1,33 @@
+vtest "Test object initialization failure"
+
+server s1 { } -start
+
+vinyl v1 -vcl+backend { } -start
+
+logexpect l1 -v v1 -g raw {
+	fail add * VCL_Log "Should not happen"
+	expect * 0 VCL_Log "Should happen first"
+	expect 0 0 VCL_Log "Should happen second"
+	fail clear
+} -start
+
+vinyl v1 -errvcl "Missing dynamic backend address or port" {
+	import debug;
+	import std;
+
+	backend be {
+		.host = "${bad_backend}";
+	}
+
+	sub vcl_init {
+		std.log("Should happen first");
+		new objx = debug.dyn("", "");
+		std.log("Should not happen");
+	}
+
+	sub vcl_fini {
+		std.log("Should happen second");
+	}
+}
+
+logexpect l1 -wait

@@ -1,0 +1,114 @@
+vtest "VCL compiler coverage test: vcc_token.c"
+
+vinyl v1 -errvcl {Unterminated inline C source, starting at} " C{ "
+
+vinyl v1 -vcl {
+	backend b { .host = "${localhost}"; }
+	# comment
+	sub vcl_recv { set req.url = "x"; }
+}
+
+vinyl v1 -errvcl {Unterminated /* ... */ comment, starting at} {
+	backend b { .host = "${localhost}"; }
+	/*
+}
+
+vinyl v1 -errvcl {Unterminated long-string, starting at} {
+	backend b { .host = "${localhost}"; }
+	{" }
+}
+
+vinyl v1 -errvcl {Unterminated long-string, starting at} {
+	backend b { .host = "${localhost}"; }
+	""" ""
+}
+
+vinyl v1 -errvcl {Unterminated string, starting at} {
+	backend b { .host = "${localhost}"; }
+	"
+}
+
+vinyl v1 -cliok "param.set vcc_feature +allow_inline_c" -vcl {
+	backend b { .host = "${localhost}"; }
+	sub vcl_recv { C{ int i; (void)i; }C }
+}
+
+vinyl v1 -errvcl {Syntax error at} {
+	backend b { .host = "${localhost}"; }
+	?
+}
+
+vinyl v1 -errvcl {Comparison of different types: STRING '==' INT} {
+	backend b { .host = "${localhost}"; }
+	sub vcl_recv {
+		if ("foo" + "bar" == 777) {
+			set req.http.host = 1;
+		}
+	}
+}
+
+vinyl v1 -errvcl {Comparison of different types: STRING '==' INT} {
+	backend b { .host = "${localhost}"; }
+	sub vcl_recv {
+		if ("foo" + "bar" ==
+		    777) {
+			set req.http.host = 1;
+		}
+	}
+}
+
+vinyl v1 -errvcl {Comparison of different types: STRING '==' INT} {
+	backend b { .host = "${localhost}"; }
+	sub vcl_recv {
+		if ("foo" + "bar" ==
+
+
+		    777) {
+			set req.http.host = 1;
+		}
+	}
+}
+
+vinyl v1 -vcl {
+	import debug;
+	backend be none;
+	sub vcl_init {
+		if ("string" != "string") {
+			return (fail("should load"));
+		}
+		if ("string" != debug.return_strands("string")) {
+			return (fail("should load"));
+		}
+		if (debug.return_strands("string") != "string") {
+			return (fail("should load"));
+		}
+		if (debug.return_strands("string") != debug.return_strands("string")) {
+			return (fail("should load"));
+		}
+		if (! debug.is_null_strands(debug.return_strands(debug.return_null_strands()))) {
+			return (fail("should load"));
+		}
+	}
+} -start
+
+vinyl v1 -errvcl {Symbol not found: 'req.http.req.http.foo'} {
+	backend b { .host = "${localhost}"; }
+	sub vcl_recv {
+		set req.http.req.http.foo = "bar";
+	}
+}
+
+vinyl v1 -errvcl {Unknown token '--' when looking for INT} {
+	backend be none;
+	sub vcl_synth {
+		set resp.status = --200;
+	}
+}
+
+vinyl v1 -errvcl "Syntax error" {
+	import debug;
+	backend be none;
+	sub vcl_init {
+		new _invalid = debug.obj();
+	}
+}

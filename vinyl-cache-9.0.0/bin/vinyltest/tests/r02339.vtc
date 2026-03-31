@@ -1,0 +1,113 @@
+vtest "VMOD purge"
+
+server s1 -repeat 12 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -cliok "param.set thread_pools 1"
+vinyl v1 -cliok "param.set vsl_mask +ExpKill"
+vinyl v1 -vcl+backend {
+	import purge;
+
+	sub vcl_miss {
+		if (req.url == "/miss") { purge.hard(); }
+	}
+	sub vcl_hit {
+		if (req.url == "/hit") { purge.hard(); }
+	}
+} -start
+
+vinyl v1 -cliok "param.set timeout_idle 2"
+
+logexpect l0 -v v1 -g raw {
+	expect * 0 ExpKill	"EXP_Removed x=1002"
+} -start
+
+logexpect l2 -v v1 -g raw {
+	expect * 1002	Begin		"bereq 1001 fetch"
+} -start
+
+logexpect l1 -v v1 {
+
+	expect * 1003	VCL_call	HIT
+	expect 0 =	VCL_return	deliver
+
+	expect * 1004	VCL_call	MISS
+	expect 0 =	VCL_return	fetch
+
+} -start
+
+client c1 {
+	txreq -url /hit
+	rxresp
+	expect resp.status == 200
+
+	txreq -url /hit
+	rxresp
+	expect resp.status == 200
+
+	txreq -url /miss
+	rxresp
+	expect resp.status == 200
+} -run
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_purge'" {
+	import purge;
+
+	sub vcl_purge {
+		if (req.url == "/purge") { purge.hard(); }
+	}
+}
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_pass'" {
+	import purge;
+
+	sub vcl_pass {
+		if (req.url == "/pass") { purge.hard(); }
+	}
+}
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_deliver'" {
+	import purge;
+
+	sub vcl_deliver {
+		if (req.url == "/deliver") { purge.hard(); }
+	}
+}
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_synth'" {
+	import purge;
+
+	sub vcl_synth {
+		if (req.url == "/synth") { purge.hard(); }
+	}
+}
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_backend_fetch'" {
+	import purge;
+
+	sub vcl_backend_fetch {
+		if (bereq.url == "/fetch") { purge.hard(); }
+	}
+}
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_backend_error'" {
+	import purge;
+
+	sub vcl_backend_error {
+		if (bereq.url == "/error") { purge.hard(); }
+	}
+}
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_backend_response'" {
+	import purge;
+
+	sub vcl_backend_response {
+		if (bereq.url == "/response") { purge.hard(); }
+	}
+}
+
+logexpect l0 -wait
+logexpect l1 -wait
+logexpect l2 -wait

@@ -1,0 +1,123 @@
+vtest "Check timeout_linger"
+
+feature !workspace_emulator
+
+# XXX this test exploits the fact that the struct waited is
+# left near the free pointer of the session ws when a session
+# made a tour over the waiter
+#
+# Would we want VSL Info about waiter involvement?
+#
+
+vinyl v1 -arg "-p timeout_linger=1"	\
+	   -arg "-a ${listen_addr}"	\
+	   -arg "-a ${tmpdir}/v1.sock"	\
+	   -vcl {
+	import std;
+	import vtc;
+	import blob;
+
+	backend dummy None;
+
+	sub vcl_recv {
+		std.log(blob.encode(encoding=HEX,
+		    blob=vtc.workspace_dump(session, f)));
+		if (req.url == "/longer") {
+			set sess.timeout_linger = 2s;
+		}
+	}
+	sub vcl_backend_error {
+		set beresp.status = 200;
+		set beresp.ttl = 1h;
+	}
+} -start
+
+logexpect l1 -v v1 -g session -q "SessOpen ~ a0 and ReqURL ~ \"^/$\"" {
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "[1-9a-f]"
+} -start
+
+logexpect l2 -v v1 -g session -q "SessOpen ~ a1 and ReqURL ~ \"^/$\"" {
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "[1-9a-f]"
+} -start
+
+logexpect l3 -v v1 -g session -q "SessOpen ~ a0 and ReqURL ~ \"^/longer\"" {
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "[1-9a-f]"
+} -start
+
+logexpect l4 -v v1 -g session -q "SessOpen ~ a1 and ReqURL ~ \"^/longer\"" {
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "^0{128}$"
+	expect * * VCL_call {^RECV}
+	expect 0 = VCL_Log  "[1-9a-f]"
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	delay 0.2
+	txreq
+	rxresp
+	delay 2.0
+	txreq
+	rxresp
+} -start
+
+client c1u -connect "${tmpdir}/v1.sock" {
+	txreq
+	rxresp
+	delay 0.2
+	txreq
+	rxresp
+	delay 2.0
+	txreq
+	rxresp
+} -start
+
+client c2 {
+	txreq -url /longer
+	rxresp
+	delay 0.2
+	txreq -url /longer
+	rxresp
+	delay 3.0
+	txreq -url /longer
+	rxresp
+} -start
+
+client c2u -connect "${tmpdir}/v1.sock" {
+	txreq -url /longer
+	rxresp
+	delay 0.2
+	txreq -url /longer
+	rxresp
+	delay 3.0
+	txreq -url /longer
+	rxresp
+} -start
+
+client c1 -wait
+client c1u -wait
+client c2 -wait
+client c2u -wait
+
+logexpect l1 -wait
+logexpect l2 -wait
+logexpect l3 -wait
+logexpect l4 -wait

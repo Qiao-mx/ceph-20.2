@@ -1,0 +1,30 @@
+vtest "Torture Vinyl with start/stop commands"
+
+server s1 {
+	rxreq
+} -start
+
+vinyl v1 -vcl+backend { }
+
+vinyl v1 -start
+vinyl v1 -cliexpect "running" status
+vinyl v1 -clijson "status -j"
+vinyl v1 -stop
+vinyl v1 -cliexpect "stopped" status
+vinyl v1 -clijson "status -j"
+
+vinyl v1 -start
+vinyl v1 -stop
+
+vinyl v1 -start
+vinyl v1 -stop
+
+vinyl v1 -cliok start
+vinyl v1 -clierr 300 start
+vinyl v1 -clierr 300 start
+
+vinyl v1 -cliok stop
+vinyl v1 -clierr 300 stop
+vinyl v1 -clierr 300 stop
+
+vinyl v1 -wait

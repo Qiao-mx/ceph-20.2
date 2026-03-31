@@ -1,0 +1,197 @@
+vtest "Test vmod_path param"
+
+feature topbuild
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+shell {
+	echo "vcl 4.1; import std; backend dummy None;" >${tmpdir}/test.vcl
+	vinyld -pvmod_path=${topbuild}/vmod/.libs \
+		 -C -f ${tmpdir}/test.vcl 2>/dev/null
+}
+
+vinyl v1 -arg "-pvmod_path=${topbuild}/vmod/.libs/" -vcl+backend {
+	import std;
+} -start
+
+vinyl v1 -cliok "param.set vmod_path /nonexistent"
+
+vinyl v1 -errvcl {Could not find VMOD std} { import std; }
+
+vinyl v1 -cliok "param.set vmod_path ${topbuild}/vmod/.libs/"
+
+vinyl v1 -vcl+backend { import std; }
+
+vinyl v1 -cliok "param.set vmod_path ${tmpdir}"
+
+shell {
+	cp ${topbuild}/vmod/.libs/libvmod_debug.so \
+	   ${tmpdir}/libvmod_wrong.so
+}
+
+vinyl v1 -errvcl {Wrong file for VMOD wrong} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so ""
+vinyl v1 -errvcl {Error: No VMOD JSON found} { import wrong; }
+
+shell "chmod 000 ${tmpdir}/libvmod_wrong.so"
+vinyl v1 -errvcl {Could not open VMOD wrong} { import wrong; }
+shell "rm -f ${tmpdir}/libvmod_wrong.so"
+
+filewrite ${tmpdir}/libvmod_wrong.so "BLA" "VMOD_JSON_SPEC\x02" "BLA"
+vinyl v1 -errvcl {Truncated VMOD JSON} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02" "BLA" "\x03"
+vinyl v1 -errvcl {VMOD wrong: bad metadata} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02" "0" "\x03"
+vinyl v1 -errvcl {Not array[0]} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02" "[0]" "\x03"
+vinyl v1 -errvcl {Not array[1]} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02" "[[0]]" "\x03"
+vinyl v1 -errvcl {Not string[2]} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02" "[[\"$VBLA\"]]" "\x03"
+vinyl v1 -errvcl {Not $VMOD[3]} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02" "[[\"$VMOD\",\"1.0\"]]" "\x03"
+vinyl v1 -errvcl {Syntax != 2.0} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02"
+filewrite -a ${tmpdir}/libvmod_wrong.so {
+    [
+	[
+	    "$VMOD",
+	    "2.0",
+	    "wrong",
+	    "Vmod_vmod_wrong_Func",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "0",
+	    "0U"
+	]
+    ]
+}
+filewrite -a ${tmpdir}/libvmod_wrong.so "\x03"
+vinyl v1 -errvcl {Incompatible VMOD wrong} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02"
+filewrite -a ${tmpdir}/libvmod_wrong.so {
+    [
+	[
+	    "$VMOD",
+	    "2.0",
+	    "wrong",
+	    "Vmod_vmod_wrong_Func",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "1U",
+	    "0"
+	]
+    ]
+}
+filewrite -a ${tmpdir}/libvmod_wrong.so "\x03"
+vinyl v1 -errvcl {VMOD wants ABI version 1.0} { import wrong; }
+
+#############################################################
+# NB: in the tests below "23" should track VRT_MAJOR_VERSION
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02"
+filewrite -a ${tmpdir}/libvmod_wrong.so {
+    [
+	[
+	    "$VMOD",
+	    "2.0",
+	    "wrong",
+	    "Vmod_vmod_wrong_Func",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "23",
+	    "0"
+	], [
+	    "$FOOBAR"
+	]
+    ]
+}
+filewrite -a ${tmpdir}/libvmod_wrong.so "\x03"
+vinyl v1 -errvcl {Unknown metadata stanza.} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02"
+filewrite -a ${tmpdir}/libvmod_wrong.so {
+    [
+	[
+	    "$VMOD",
+	    "2.0",
+	    "wrong",
+	    "Vmod_vmod_wrong_Func",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "23",
+	    "0"
+	]
+    ]
+}
+filewrite -a ${tmpdir}/libvmod_wrong.so "\x03"
+vinyl v1 -errvcl {Bad cproto stanza} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02"
+filewrite -a ${tmpdir}/libvmod_wrong.so {
+    [
+	[
+	    "$VMOD",
+	    "2.0",
+	    "wrong",
+	    "Vmod_vmod_wrong_Func",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "23",
+	    "0"
+	], [
+	    "$CPROTO"
+	], [
+	    "$VMOD"
+	]
+    ]
+}
+filewrite -a ${tmpdir}/libvmod_wrong.so "\x03"
+vinyl v1 -errvcl {Bad vmod stanza} { import wrong; }
+
+filewrite ${tmpdir}/libvmod_wrong.so "VMOD_JSON_SPEC\x02"
+filewrite -a ${tmpdir}/libvmod_wrong.so {
+    [
+	[
+	    "$VMOD",
+	    "2.0",
+	    "std",
+	    "Vmod_vmod_std_Func",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "0000000000000000000000000000000000000000000000000000000000000000",
+	    "23",
+	    "0"
+	], [
+	    "$CPROTO", "/* blabla */"
+	]
+    ]
+}
+filewrite -a ${tmpdir}/libvmod_wrong.so "\x03"
+
+vinyl v1 -cliok "param.set vmod_path ${topbuild}/vmod/.libs/"
+vinyl v1 -cliok "stop"
+
+filewrite  ${tmpdir}/wrong.vcl {
+	vcl 4.1;
+	import std;
+	import std as foo from "${tmpdir}/libvmod_wrong.so";
+	backend default none;
+}
+
+vinyl v1 -cliexpect {Different version of VMOD std already loaded} {
+	vcl.load dupvmod ${tmpdir}/wrong.vcl
+}
+
+shell "rm -f ${tmpdir}/libvmod_wrong.so ${tmpdir}wrong.vcl"

@@ -1,0 +1,18 @@
+vtest "High-bit chars"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_deliver {
+		set resp.http.foo = "æøå";
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.http.foo == "æøå"
+} -run

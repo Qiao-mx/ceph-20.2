@@ -1,0 +1,412 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "VMOD_COOKIE" "3" "" ""
+.SH NAME
+vmod_cookie \- Vinyl Cache Cookie Module
+.\" 
+.
+.\" NB:  This file is machine generated, DO NOT EDIT!
+.
+.\" 
+.
+.\" Edit vmod_cookie.vcc and run make instead
+.
+.\" 
+.
+.SH SYNOPSIS
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import cookie [as name] [from \(dqpath\(dq]
+
+VOID clean()
+
+VOID delete(STRING cookiename)
+
+VOID filter(STRING filterstring)
+
+VOID filter_re(REGEX expression)
+
+VOID keep(STRING filterstring)
+
+VOID keep_re(REGEX expression)
+
+STRING format_date(TIME now, DURATION timedelta)
+
+STRING get(STRING cookiename)
+
+STRING get_re(REGEX expression)
+
+STRING get_string()
+
+BOOL isset(STRING cookiename)
+
+VOID parse(STRING cookieheader)
+
+VOID set(STRING cookiename, STRING value)
+.EE
+.UNINDENT
+.UNINDENT
+.SH DESCRIPTION
+.sp
+Handle HTTP cookies more easily in Vinyl Cache VCL.
+.sp
+Parses a cookie header into an internal data store, where per\-cookie
+get/set/delete functions are available. A keep() function removes all
+but a set comma\-separated list of cookies. A filter() function removes a comma\-
+separated list of cookies.
+.sp
+Regular expressions can be used for either selecting cookies, deleting matching
+cookies and deleting non\-matching cookie names.
+.sp
+A convenience function for formatting the Set\-Cookie Expires date field
+is also included.
+.sp
+The state loaded with cookie.parse() has a lifetime of the current request
+or backend request context. To pass variables to the backend request, store
+the contents as fake bereq headers.
+.sp
+Filtering example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import cookie;
+
+sub vcl_recv {
+    if (req.http.cookie) {
+        cookie.parse(req.http.cookie);
+        # Either delete the ones you want to get rid of:
+        cookie.delete(\(dqcookie2\(dq);
+        # or delete all but a few:
+        cookie.keep(\(dqSESSIONID,PHPSESSID\(dq);
+
+        # Store it back into req so it will be passed to the backend.
+        set req.http.cookie = cookie.get_string();
+
+        # If empty, unset so the builtin VCL can consider it for caching.
+        if (req.http.cookie == \(dq\(dq) {
+            unset req.http.cookie;
+        }
+    }
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID clean()
+.sp
+Clean up previously parsed cookies. It is not necessary to run clean()
+in normal operations.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.clean();
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID delete(STRING cookiename)
+.sp
+Delete \fBcookiename\fP from internal vmod storage if it exists.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2\(dq);
+    cookie.delete(\(dqcookie2\(dq);
+    # get_string() will now yield \(dqcookie1=value1\(dq
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID filter(STRING filterstring)
+.sp
+Delete all cookies from internal vmod storage that are in the
+comma\-separated argument cookienames.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2; cookie3=value3\(dq);
+    cookie.filter(\(dqcookie1,cookie2\(dq);
+    # get_string() will now yield \(dqcookie3=value3\(dq
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID filter_re(REGEX expression)
+.sp
+Delete all cookies from internal vmod storage that matches the
+regular expression \fBexpression\fP\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2; cookie3=value3\(dq);
+    cookie.filter_re(\(dq^cookie[12]$\(dq);
+    # get_string() will now yield \(dqcookie3=value3\(dq
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID keep(STRING filterstring)
+.sp
+Delete all cookies from internal vmod storage that is not in the
+comma\-separated argument cookienames.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2; cookie3=value3\(dq);
+    cookie.keep(\(dqcookie1,cookie2\(dq);
+    # get_string() will now yield \(dqcookie1=value1; cookie2=value2\(dq
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID keep_re(REGEX expression)
+.sp
+Delete all cookies from internal vmod storage that does not match
+expression \fBexpression\fP\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2; cookie3=value3\(dq);
+    cookie.keep_re(\(dq^cookie[12]$\(dq);
+    # get_string() will now yield \(dqcookie1=value1; cookie2=value2\(dq
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS STRING format_date(TIME now, DURATION timedelta)
+.sp
+Get a RFC1123 formatted date string suitable for inclusion in a
+Set\-Cookie response header.
+.sp
+Care should be taken if the response has multiple Set\-Cookie headers.
+In that case the header vmod should be used.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_deliver {
+    # Set a userid cookie on the client that lives for 5 minutes.
+    set resp.http.Set\-Cookie = \(dquserid=\(dq + req.http.userid +
+        \(dq; Expires=\(dq + cookie.format_date(now, 5m) + \(dq; httpOnly\(dq;
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS STRING get(STRING cookiename)
+.sp
+Get the value of \fBcookiename\fP, as stored in internal vmod storage.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import std;
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2\(dq);
+    std.log(\(dqcookie1 value is: \(dq + cookie.get(\(dqcookie1\(dq));
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+If \fBcookiename\fP does not exist, the \fINULL\fP string is returned. Note
+that a \fINULL\fP string is converted to an empty string when assigned to
+a header. This means that the following is correct:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+if (req.http.Cookie) {
+        cookie.parse(req.http.Cookie);
+        set req.http.X\-tmp = cookie.get(\(dqa_cookie\(dq);
+} else {
+        set req.http.X\-tmp = \(dq\(dq;
+}
+if (req.http.X\-tmp != \(dq\(dq) {
+        // do something with the X\-tmp header...
+} else {
+        // fallback case
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+However, using \fIcookie.isset()\fP is often a better way to check if a
+particular cookie is present, like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+unset req.http.X\-tmp; # unnecessary if no fallback is needed
+if (req.http.Cookie) {
+        cookie.parse(req.http.Cookie);
+        if (cookie.isset(\(dqa_cookie\(dq)) {
+                set req.http.X\-tmp = cookie.get(\(dqa_cookie\(dq);
+                # do something with the X\-tmp header...
+        }
+}
+# if necessary, do something when a_cookie is not there
+if (!req.http.X\-tmp) {
+        # fallback case
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS STRING get_re(REGEX expression)
+.sp
+Get the value of the first cookie in internal vmod storage that matches the
+regular expression \fBexpression\fP\&. If nothing matches, the \fINULL\fP string
+is returned.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import std;
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2\(dq);
+    std.log(\(dqcookie1 value is: \(dq + cookie.get_re(\(dq^cookie1$\(dq));
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS STRING get_string()
+.sp
+Get a Cookie string value with all cookies in internal vmod storage. Does
+not modify internal storage.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.parse(req.http.cookie);
+    cookie.keep(\(dqSESSIONID,PHPSESSID\(dq);
+    set req.http.cookie = cookie.get_string();
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS BOOL isset(STRING cookiename)
+.sp
+Check if \fBcookiename\fP is set in the internal vmod storage.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import std;
+sub vcl_recv {
+    cookie.parse(\(dqcookie1=value1; cookie2=value2\(dq);
+    if (cookie.isset(\(dqcookie2\(dq)) {
+        std.log(\(dqcookie2 is set.\(dq);
+    }
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID parse(STRING cookieheader)
+.sp
+Parse the cookie string in \fBcookieheader\fP\&. If state already exists,
+\fBclean()\fP will be run first.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.parse(req.http.Cookie);
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS VOID set(STRING cookiename, STRING value)
+.sp
+Set the internal vmod storage for \fBcookiename\fP to \fBvalue\fP\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+sub vcl_recv {
+    cookie.set(\(dqcookie1\(dq, \(dqvalue1\(dq);
+    std.log(\(dqcookie1 value is: \(dq + cookie.get(\(dqcookie1\(dq));
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SH COPYRIGHT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+This document is licensed under the same conditions as Vinyl Cache itself.
+See LICENSE for details.
+
+SPDX\-License\-Identifier: BSD\-2\-Clause
+.EE
+.UNINDENT
+.UNINDENT
+.\" Generated by docutils manpage writer.
+.

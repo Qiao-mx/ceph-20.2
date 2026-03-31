@@ -1,0 +1,55 @@
+vtest "Bodybytes is #bytes in bottom VFP"
+
+server s1 {
+	rxreq
+	txresp -hdr "Foo: bar" -bodylen 1000
+	rxreq
+	txresp -nolen -hdr "Transfer-Encoding: chunked"
+	chunkedlen 100
+	chunkedlen 100
+	chunkedlen 100
+	chunkedlen 100
+	chunkedlen 100
+	chunkedlen 0
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.do_gzip = true;
+		if (beresp.http.foo == "bar") {
+			set beresp.do_esi = true;
+		}
+	}
+} -start
+
+vinyl v1 -cliok "param.set vsl_mask +VfpAcct,+VdpAcct"
+
+vinyl v1 -cliok "param.set feature +esi_disable_xml_check"
+
+client c1 {
+	txreq -method POST -url /1 -bodylen 100
+	rxresp
+	expect resp.bodylen == 1000
+} -run
+
+vinyl v1 -expect MAIN.s_req_bodybytes == 100
+vinyl v1 -expect VBE.vcl1.s1.bereq_bodybytes == 100
+vinyl v1 -expect VBE.vcl1.s1.beresp_bodybytes == 1000
+vinyl v1 -expect MAIN.s_resp_bodybytes == 1000
+vinyl v1 -vsc *bodyb*
+
+client c1 {
+	txreq -method POST -url /2 -nolen -hdr "Transfer-encoding: chunked"
+	chunkedlen 100
+	chunkedlen 100
+	chunkedlen 100
+	chunkedlen 0
+	rxresp
+	expect resp.bodylen == 500
+} -run
+
+vinyl v1 -expect MAIN.s_req_bodybytes == 400
+vinyl v1 -expect VBE.vcl1.s1.bereq_bodybytes >= 400
+vinyl v1 -expect VBE.vcl1.s1.beresp_bodybytes == 1500
+vinyl v1 -expect MAIN.s_resp_bodybytes == 1500
+vinyl v1 -vsc *bodyb*

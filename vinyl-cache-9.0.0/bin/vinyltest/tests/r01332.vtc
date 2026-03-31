@@ -1,0 +1,28 @@
+vtest "#1332 - Check enum as argument in vmod object"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import debug;
+
+	sub vcl_init {
+		new objx = debug.obj("don't care");
+	}
+
+	sub vcl_deliver {
+		objx.enum(martin);
+		set resp.http.foo = objx.foo("");
+		set resp.http.bar = objx.bar("");
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+	expect resp.http.foo == "BOO"
+	expect resp.http.bar == "BOO"
+} -run

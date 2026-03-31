@@ -1,0 +1,89 @@
+vtest "VCL: test backend probe syntax"
+
+# Check status definition
+vinyl v1 -vcl {
+	backend b1 {
+		.host = "${localhost}";
+		.probe = {
+			.expected_response = 204;
+		}
+	}
+}
+
+# Check url definition
+vinyl v1 -vcl {
+	backend b1 {
+		.host = "${localhost}";
+		.probe = {
+			.url = "/";
+		}
+	}
+}
+
+# Check request definition
+vinyl v1 -vcl {
+	backend b1 {
+		.host = "${localhost}";
+		.probe = {
+			.request =
+			    "GET / HTTP/1.1"
+			    "Host: foo.bar" ;
+		}
+	}
+}
+
+# Check expect_close definition
+vinyl v1 -errvcl {Expected "true" or "false"} {
+	backend b1 {
+		.host = "${localhost}";
+		.probe = {
+			.url = "/";
+			.expect_close = faux;
+		}
+	}
+}
+
+vinyl v1 -errvcl {Expected "true" or "false"} {
+	backend b1 {
+		.host = "${localhost}";
+		.probe = {
+			.url = "/";
+			.expect_close = 1;
+		}
+	}
+}
+
+# Check redefinition
+vinyl v1 -errvcl {Probe request redefinition at:} {
+	backend b1 {
+		.host = "${localhost}";
+		.probe = {
+			.url = "/";
+			.request =
+			    "GET / HTTP/1.1"
+			    "Host: foo.bar" ;
+		}
+	}
+}
+
+# Check redefinition the other way
+vinyl v1 -errvcl {Probe request redefinition at:} {
+	backend b1 {
+		.host = "${localhost}";
+		.probe = {
+			.request =
+			    "GET / HTTP/1.1"
+			    "Host: foo.bar" ;
+			.url = "/";
+		}
+	}
+}
+
+vinyl v1 -errvcl {Expected CNUM got '"120s"'} {
+	backend default {
+		.host = "${localhost}";
+		.probe = {
+			.timeout = "120s";
+		}
+	}
+}

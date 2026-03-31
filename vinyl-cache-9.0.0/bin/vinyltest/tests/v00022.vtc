@@ -1,0 +1,10 @@
+vtest "Various VCL compiler coverage tests - DNS dependent"
+
+feature dns
+
+vinyl v1 -errvcl {resolves to too many addresses} {
+	backend b none;
+	sub vcl_recv {
+		if (remote.ip == "dns-canary-multi.vinyl-cache.org") {}
+	}
+}

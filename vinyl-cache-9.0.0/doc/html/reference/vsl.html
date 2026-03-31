@@ -1,0 +1,1341 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="vsl-query" href="vsl-query.html"><link rel="prev" title="vinyl-cli" href="vinyl-cli.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>VSL - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyld.html">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vsl">
+<span id="vsl-7"></span><h1>VSL<a class="headerlink" href="#vsl" title="Link to this heading">¶</a></h1>
+<section id="vinyl-cache-shared-memory-logging">
+<h2>Vinyl Cache Shared Memory Logging<a class="headerlink" href="#vinyl-cache-shared-memory-logging" title="Link to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Manual section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>7</p>
+</dd>
+</dl>
+<section id="overview">
+<h3>OVERVIEW<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h3>
+<p>This document describes the format and content of all the Vinyl Cache shared memory
+logging tags. These tags are used by the vinyllog(1), vinyltop(1), etc.
+logging tools supplied with Vinyl Cache.</p>
+<section id="vsl-tags">
+<h4>VSL tags<a class="headerlink" href="#vsl-tags" title="Link to this heading">¶</a></h4>
+<dl>
+<dt>BackendClose - Backend connection closed</dt><dd><p>Logged when a backend connection is closed.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="p">[</span> <span class="o">%</span><span class="n">s</span> <span class="p">]</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">+-</span> <span class="n">Optional</span> <span class="n">reason</span><span class="p">,</span> <span class="n">see</span> <span class="n">SessClose</span> <span class="k">for</span> <span class="n">explanation</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+------</span> <span class="s2">&quot;close&quot;</span> <span class="ow">or</span> <span class="s2">&quot;recycle&quot;</span>
+<span class="o">|</span>  <span class="o">+---------</span> <span class="n">Backend</span> <span class="n">display</span> <span class="n">name</span>
+<span class="o">+------------</span> <span class="n">Connection</span> <span class="n">file</span> <span class="n">descriptor</span>
+</pre></div>
+</div>
+</dd>
+<dt>BackendOpen - Backend connection opened</dt><dd><p>Logged when a new backend connection is opened.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="p">[</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">ld</span> <span class="p">]</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>  <span class="o">+---</span> <span class="n">Connection</span> <span class="n">reuses</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">+------</span> <span class="n">Connection</span> <span class="n">age</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-----------</span> <span class="s2">&quot;connect&quot;</span> <span class="ow">or</span> <span class="s2">&quot;reuse&quot;</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+--------------</span> <span class="n">Local</span> <span class="n">port</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-----------------</span> <span class="n">Local</span> <span class="n">address</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+--------------------</span> <span class="n">Remote</span> <span class="n">port</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-----------------------</span> <span class="n">Remote</span> <span class="n">address</span>
+<span class="o">|</span>  <span class="o">+--------------------------</span> <span class="n">Backend</span> <span class="n">display</span> <span class="n">name</span>
+<span class="o">+-----------------------------</span> <span class="n">Connection</span> <span class="n">file</span> <span class="n">descriptor</span>
+</pre></div>
+</div>
+</dd>
+<dt>Backend_health - Backend health check</dt><dd><p>The result of a backend health probe.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Probe</span> <span class="n">HTTP</span> <span class="n">response</span> <span class="o">/</span> <span class="n">error</span> <span class="n">information</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">Average</span> <span class="n">response</span> <span class="n">time</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">Response</span> <span class="n">time</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------</span> <span class="n">Probe</span> <span class="n">window</span> <span class="n">size</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------------</span> <span class="n">Probe</span> <span class="n">threshold</span> <span class="n">level</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------------</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">good</span> <span class="n">probes</span> <span class="ow">in</span> <span class="n">window</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------------------</span> <span class="n">Probe</span> <span class="n">window</span> <span class="n">bits</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------------------</span> <span class="s2">&quot;healthy&quot;</span> <span class="ow">or</span> <span class="s2">&quot;sick&quot;</span>
+<span class="o">|</span>  <span class="o">+-------------------------</span> <span class="s2">&quot;Back&quot;</span><span class="p">,</span> <span class="s2">&quot;Still&quot;</span> <span class="ow">or</span> <span class="s2">&quot;Went&quot;</span>
+<span class="o">+----------------------------</span> <span class="n">Backend</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>Probe window bits are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">connect</span>
+<span class="s1">&#39;4&#39;</span><span class="p">:</span> <span class="n">Good</span> <span class="n">IPv4</span>
+<span class="s1">&#39;6&#39;</span><span class="p">:</span> <span class="n">Good</span> <span class="n">IPv6</span>
+<span class="s1">&#39;U&#39;</span><span class="p">:</span> <span class="n">Good</span> <span class="n">UNIX</span>
+<span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">Error</span> <span class="n">Xmit</span>
+<span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="n">Good</span> <span class="n">Xmit</span>
+<span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="n">Error</span> <span class="n">Recv</span>
+<span class="s1">&#39;R&#39;</span><span class="p">:</span> <span class="n">Good</span> <span class="n">Recv</span>
+<span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="n">Happy</span>
+</pre></div>
+</div>
+<p>When the backend is just created, the window bits for health check
+slots that haven’t run yet appear as ‘-’ like failures to connect.</p>
+</dd>
+<dt>Begin - Marks the start of a VXID</dt><dd><p>The first record of a VXID transaction.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="p">[</span><span class="o">%</span><span class="n">u</span><span class="p">]</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>   <span class="o">+-</span> <span class="n">Task</span> <span class="n">sub</span><span class="o">-</span><span class="n">level</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-----</span> <span class="n">Reason</span>
+<span class="o">|</span>  <span class="o">+--------</span> <span class="n">Parent</span> <span class="n">vxid</span>
+<span class="o">+-----------</span> <span class="n">Type</span> <span class="p">(</span><span class="s2">&quot;sess&quot;</span><span class="p">,</span> <span class="s2">&quot;req&quot;</span> <span class="ow">or</span> <span class="s2">&quot;bereq&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>BereqAcct - Backend request accounting</dt><dd><p>Contains byte counters from backend request processing.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">received</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">Body</span> <span class="nb">bytes</span> <span class="n">received</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">Header</span> <span class="nb">bytes</span> <span class="n">received</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------</span> <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">transmitted</span>
+<span class="o">|</span>  <span class="o">+-------------</span> <span class="n">Body</span> <span class="nb">bytes</span> <span class="n">transmitted</span>
+<span class="o">+----------------</span> <span class="n">Header</span> <span class="nb">bytes</span> <span class="n">transmitted</span>
+</pre></div>
+</div>
+</dd>
+<dt>BereqHeader - Backend request header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>BereqMethod - Backend request method</dt><dd><p>The HTTP request method used.</p>
+</dd>
+<dt>BereqProtocol - Backend request protocol</dt><dd><p>The HTTP protocol version information.</p>
+</dd>
+<dt>BereqURL - Backend request URL</dt><dd><p>The HTTP request URL.</p>
+</dd>
+<dt>BereqUnset - Backend request unset header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>BerespHeader - Backend response header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>BerespProtocol - Backend response protocol</dt><dd><p>The HTTP protocol version information.</p>
+</dd>
+<dt>BerespReason - Backend response reason</dt><dd><p>The HTTP response reason string.</p>
+</dd>
+<dt>BerespStatus - Backend response status</dt><dd><p>The HTTP response status code.</p>
+</dd>
+<dt>BerespUnset - Backend response unset header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>BogoHeader - Bogus HTTP received</dt><dd><p>Contains the first 20 characters of received HTTP headers we could not make sense of.  Applies to both req.http and beresp.http.</p>
+</dd>
+<dt>CLI - CLI communication</dt><dd><p>CLI communication between vinyld master and child process.</p>
+</dd>
+<dt>Debug - Debug messages</dt><dd><p>Debug messages can normally be ignored, but are sometimes helpful during trouble-shooting.  Most debug messages must be explicitly enabled with parameters.</p>
+<p>Debug messages may be added, changed or removed without prior notice and shouldn’t be considered stable.</p>
+<p>NB: This log record is masked by default.</p>
+</dd>
+<dt>ESI_xmlerror - ESI parser error or warning message</dt><dd><p>An error or warning was generated during parsing of an ESI object. The log record describes the problem encountered.</p>
+</dd>
+<dt>End - Marks the end of a VXID</dt><dd><p>The last record of a VXID transaction.</p>
+</dd>
+<dt>Error - Error messages</dt><dd><p>Error messages are stuff you probably want to know.</p>
+</dd>
+<dt>ExpBan - Object evicted due to ban</dt><dd><p>Logs the VXID when an object is banned.</p>
+</dd>
+<dt>ExpKill - Object expiry event</dt><dd><p>Logs events related to object expiry. The events are:</p>
+<dl class="simple">
+<dt>EXP_Rearm</dt><dd><p>Logged when the expiry time of an object changes.</p>
+</dd>
+<dt>EXP_Inbox</dt><dd><p>Logged when the expiry thread picks an object from the inbox for processing.</p>
+</dd>
+<dt>EXP_Kill</dt><dd><p>Logged when the expiry thread kills an object from the inbox.</p>
+</dd>
+<dt>EXP_When</dt><dd><p>Logged when the expiry thread moves an object on the binheap.</p>
+</dd>
+<dt>EXP_Inspect</dt><dd><p>Logged when the expiry thread inspects the next object scheduled to expire.</p>
+</dd>
+<dt>EXP_Expired</dt><dd><p>Logged when the expiry thread expires an object.</p>
+</dd>
+<dt>EXP_Removed</dt><dd><p>Logged when the expiry thread removes an object before expiry.</p>
+</dd>
+<dt>VBF_Superseded</dt><dd><p>Logged when an object supersedes another.</p>
+</dd>
+<dt>LRU_Cand</dt><dd><p>Logged when an object is evaluated for LRU force expiry.</p>
+</dd>
+<dt>LRU</dt><dd><p>Logged when an object is force expired due to LRU.</p>
+</dd>
+<dt>LRU_Fail</dt><dd><p>Logged when no suitable candidate object is found for LRU force expiry.</p>
+</dd>
+</dl>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EXP_Rearm</span> <span class="n">p</span><span class="o">=%</span><span class="n">p</span> <span class="n">E</span><span class="o">=%</span><span class="n">f</span> <span class="n">e</span><span class="o">=%</span><span class="n">f</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="n">x</span><span class="o">%</span><span class="n">x</span>
+<span class="n">EXP_Inbox</span> <span class="n">p</span><span class="o">=%</span><span class="n">p</span> <span class="n">e</span><span class="o">=%</span><span class="n">f</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="n">x</span><span class="o">%</span><span class="n">x</span>
+<span class="n">EXP_Kill</span> <span class="n">p</span><span class="o">=%</span><span class="n">p</span> <span class="n">e</span><span class="o">=%</span><span class="n">f</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="n">x</span><span class="o">%</span><span class="n">x</span>
+<span class="n">EXP_When</span> <span class="n">p</span><span class="o">=%</span><span class="n">p</span> <span class="n">e</span><span class="o">=%</span><span class="n">f</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="n">x</span><span class="o">%</span><span class="n">x</span>
+<span class="n">EXP_Inspect</span> <span class="n">p</span><span class="o">=%</span><span class="n">p</span> <span class="n">e</span><span class="o">=%</span><span class="n">f</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="n">x</span><span class="o">%</span><span class="n">x</span>
+<span class="n">EXP_Expired</span> <span class="n">x</span><span class="o">=%</span><span class="n">u</span> <span class="n">t</span><span class="o">=%</span><span class="n">f</span> <span class="n">h</span><span class="o">=%</span><span class="n">u</span>
+<span class="n">EXP_Removed</span> <span class="n">x</span><span class="o">=%</span><span class="n">u</span> <span class="n">t</span><span class="o">=%</span><span class="n">f</span> <span class="n">h</span><span class="o">=%</span><span class="n">u</span>
+<span class="n">VBF_Superseded</span> <span class="n">x</span><span class="o">=%</span><span class="n">u</span> <span class="n">n</span><span class="o">=%</span><span class="n">u</span>
+<span class="n">LRU_Cand</span> <span class="n">p</span><span class="o">=%</span><span class="n">p</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="n">x</span><span class="o">%</span><span class="n">x</span> <span class="n">r</span><span class="o">=%</span><span class="n">d</span>
+<span class="n">LRU</span> <span class="n">x</span><span class="o">=%</span><span class="n">u</span>
+<span class="n">LRU_Fail</span>
+
+<span class="n">Legend</span><span class="p">:</span>
+<span class="n">p</span><span class="o">=%</span><span class="n">p</span>         <span class="n">Objcore</span> <span class="n">pointer</span>
+<span class="n">t</span><span class="o">=%</span><span class="n">f</span>         <span class="n">Remaining</span> <span class="n">TTL</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">e</span><span class="o">=%</span><span class="n">f</span>         <span class="n">Expiry</span> <span class="n">time</span> <span class="p">(</span><span class="n">unix</span> <span class="n">epoch</span><span class="p">)</span>
+<span class="n">E</span><span class="o">=%</span><span class="n">f</span>         <span class="n">Old</span> <span class="n">expiry</span> <span class="n">time</span> <span class="p">(</span><span class="n">unix</span> <span class="n">epoch</span><span class="p">)</span>
+<span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="n">x</span><span class="o">%</span><span class="n">x</span>       <span class="n">Objcore</span> <span class="n">flags</span>
+<span class="n">r</span><span class="o">=%</span><span class="n">d</span>         <span class="n">Objcore</span> <span class="n">refcount</span>
+<span class="n">x</span><span class="o">=%</span><span class="n">u</span>         <span class="n">Object</span> <span class="n">VXID</span>
+<span class="n">n</span><span class="o">=%</span><span class="n">u</span>         <span class="n">New</span> <span class="nb">object</span> <span class="n">VXID</span>
+<span class="n">h</span><span class="o">=%</span><span class="n">u</span>         <span class="n">Objcore</span> <span class="n">hits</span>
+</pre></div>
+</div>
+</dd>
+<dt>FetchError - Error while fetching object</dt><dd><p>Logs the error message of a failed fetch operation.</p>
+</dd>
+<dt>Fetch_Body - Body fetched from backend</dt><dd><p>Ready to fetch body from backend.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="s1">&#39;stream&#39;</span> <span class="ow">or</span> <span class="s1">&#39;-&#39;</span>
+<span class="o">|</span>  <span class="o">+-------</span> <span class="n">Text</span> <span class="n">description</span> <span class="n">of</span> <span class="n">body</span> <span class="n">fetch</span> <span class="n">mode</span>
+<span class="o">+----------</span> <span class="n">Body</span> <span class="n">fetch</span> <span class="n">mode</span>
+</pre></div>
+</div>
+</dd>
+<dt>Filters - Body filters</dt><dd><p>List of filters applied to the body</p>
+</dd>
+<dt>Gzip - G(un)zip performed on object</dt><dd><p>A Gzip record is emitted for each instance of gzip or gunzip work performed. Worst case, an ESI transaction stored in gzipped objects but delivered gunzipped, will run into many of these.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">c</span> <span class="o">%</span><span class="n">c</span> <span class="o">%</span><span class="n">c</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Bit</span> <span class="n">length</span> <span class="n">of</span> <span class="n">compressed</span> <span class="n">data</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">Bit</span> <span class="n">location</span> <span class="n">of</span> <span class="s1">&#39;last&#39;</span> <span class="n">bit</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">Bit</span> <span class="n">location</span> <span class="n">of</span> <span class="n">first</span> <span class="n">deflate</span> <span class="n">block</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------</span> <span class="n">Bytes</span> <span class="n">output</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------------</span> <span class="n">Bytes</span> <span class="nb">input</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------------</span> <span class="s1">&#39;E&#39;</span><span class="p">:</span> <span class="n">ESI</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="n">Plain</span> <span class="nb">object</span>
+<span class="o">|</span>  <span class="o">+-------------------</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span> <span class="n">Fetch</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="n">Deliver</span>
+<span class="o">+----------------------</span> <span class="s1">&#39;G&#39;</span><span class="p">:</span> <span class="n">Gzip</span><span class="p">,</span> <span class="s1">&#39;U&#39;</span><span class="p">:</span> <span class="n">Gunzip</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">:</span> <span class="n">Gunzip</span><span class="o">-</span><span class="n">test</span>
+</pre></div>
+</div>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">U</span> <span class="n">F</span> <span class="n">E</span> <span class="mi">182</span> <span class="mi">159</span> <span class="mi">80</span> <span class="mi">80</span> <span class="mi">1392</span>
+<span class="n">G</span> <span class="n">F</span> <span class="n">E</span> <span class="mi">159</span> <span class="mi">173</span> <span class="mi">80</span> <span class="mi">1304</span> <span class="mi">1314</span>
+</pre></div>
+</div>
+</dd>
+<dt>H2RxBody - Received HTTP2 frame body</dt><dd><p>Binary data</p>
+</dd>
+<dt>H2RxHdr - Received HTTP2 frame header</dt><dd><p>Binary data</p>
+</dd>
+<dt>H2TxBody - Transmitted HTTP2 frame body</dt><dd><p>Binary data</p>
+</dd>
+<dt>H2TxHdr - Transmitted HTTP2 frame header</dt><dd><p>Binary data</p>
+</dd>
+<dt>Hash - Value added to hash</dt><dd><p>This value was added to the object lookup hash.</p>
+<p>NB: This log record is masked by default.</p>
+</dd>
+<dt>Hit - Hit object in cache</dt><dd><p>Object looked up in cache.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">f</span> <span class="p">[</span><span class="o">%</span><span class="n">u</span> <span class="p">[</span><span class="o">%</span><span class="n">u</span><span class="p">]]</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>   <span class="o">|</span>   <span class="o">+-</span> <span class="n">Content</span> <span class="n">length</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>   <span class="o">+-----</span> <span class="n">Fetched</span> <span class="n">so</span> <span class="n">far</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+---------</span> <span class="n">Keep</span> <span class="n">period</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+------------</span> <span class="n">Grace</span> <span class="n">period</span>
+<span class="o">|</span>  <span class="o">+---------------</span> <span class="n">Remaining</span> <span class="n">TTL</span>
+<span class="o">+------------------</span> <span class="n">VXID</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">object</span>
+</pre></div>
+</div>
+</dd>
+<dt>HitMiss - Hit for miss object in cache.</dt><dd><p>Hit-for-miss object looked up in cache.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">f</span>
+<span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">+-</span> <span class="n">Remaining</span> <span class="n">TTL</span>
+<span class="o">+----</span> <span class="n">VXID</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">object</span>
+</pre></div>
+</div>
+</dd>
+<dt>HitPass - Hit for pass object in cache.</dt><dd><p>Hit-for-pass object looked up in cache.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">f</span>
+<span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">+-</span> <span class="n">Remaining</span> <span class="n">TTL</span>
+<span class="o">+----</span> <span class="n">VXID</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">object</span>
+</pre></div>
+</div>
+</dd>
+<dt>HttpGarbage - Unparseable HTTP request</dt><dd><p>Logs the content of unparseable HTTP requests.</p>
+</dd>
+<dt>Length - Size of object body</dt><dd><p>Logs the size of a fetch object body.</p>
+</dd>
+<dt>Link - Links to a child VXID</dt><dd><p>Links this VXID to any child VXID it initiates.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="p">[</span><span class="o">%</span><span class="n">u</span><span class="p">]</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>   <span class="o">+-</span> <span class="n">Child</span> <span class="n">task</span> <span class="n">sub</span><span class="o">-</span><span class="n">level</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-----</span> <span class="n">Reason</span>
+<span class="o">|</span>  <span class="o">+--------</span> <span class="n">Child</span> <span class="n">vxid</span>
+<span class="o">+-----------</span> <span class="n">Child</span> <span class="nb">type</span> <span class="p">(</span><span class="s2">&quot;sess&quot;</span><span class="p">,</span> <span class="s2">&quot;req&quot;</span> <span class="ow">or</span> <span class="s2">&quot;bereq&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>LostHeader - Failed attempt to set HTTP header</dt><dd><p>Logs the header name of a failed HTTP header operation due to resource exhaustion or configured limits.</p>
+</dd>
+<dt>Notice - Informational messages about request handling</dt><dd><p>Informational log messages on events occurred during request handling.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Short</span> <span class="n">description</span> <span class="n">of</span> <span class="n">the</span> <span class="n">notice</span> <span class="n">message</span>
+<span class="o">+-----</span> <span class="n">Manual</span> <span class="n">page</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">detailed</span> <span class="n">description</span>
+</pre></div>
+</div>
+<p>See the NOTICE MESSAGES section below or the individual VMOD manual pages for detailed information of notice messages.</p>
+</dd>
+<dt>ObjHeader - Object header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>ObjProtocol - Object protocol</dt><dd><p>The HTTP protocol version information.</p>
+</dd>
+<dt>ObjReason - Object reason</dt><dd><p>The HTTP response reason string.</p>
+</dd>
+<dt>ObjStatus - Object status</dt><dd><p>The HTTP response status code.</p>
+</dd>
+<dt>ObjUnset - Object unset header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>PipeAcct - Pipe byte counts</dt><dd><p>Contains byte counters for pipe sessions.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">Piped</span> <span class="nb">bytes</span> <span class="n">to</span> <span class="n">client</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------</span> <span class="n">Piped</span> <span class="nb">bytes</span> <span class="kn">from</span><span class="w"> </span><span class="nn">client</span>
+<span class="o">|</span>  <span class="o">+-------------</span> <span class="n">Backend</span> <span class="n">request</span> <span class="n">headers</span>
+<span class="o">+----------------</span> <span class="n">Client</span> <span class="n">request</span> <span class="n">headers</span>
+</pre></div>
+</div>
+</dd>
+<dt>Proxy - PROXY protocol information</dt><dd><p>PROXY protocol information.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">server</span> <span class="n">port</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">server</span> <span class="n">ip</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">client</span> <span class="n">port</span>
+<span class="o">|</span>  <span class="o">+----------</span> <span class="n">client</span> <span class="n">ip</span>
+<span class="o">+-------------</span> <span class="n">PROXY</span> <span class="n">protocol</span> <span class="n">version</span>
+
+<span class="n">All</span> <span class="n">fields</span> <span class="n">are</span> <span class="s2">&quot;local&quot;</span> <span class="k">for</span> <span class="n">PROXY</span> <span class="n">local</span> <span class="n">connections</span> <span class="p">(</span><span class="n">command</span> <span class="mh">0x0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>ProxyGarbage - Unparseable PROXY request</dt><dd><p>A PROXY protocol header was unparseable.</p>
+</dd>
+<dt>ReqAcct - Request handling byte counts</dt><dd><p>Contains byte counts for the request handling.
+The body bytes count includes transmission overhead (ie: chunked encoding).
+ESI sub-requests show the body bytes this ESI fragment including any subfragments contributed to the top level request.
+The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">transmitted</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">Body</span> <span class="nb">bytes</span> <span class="n">transmitted</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">Header</span> <span class="nb">bytes</span> <span class="n">transmitted</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------</span> <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">received</span>
+<span class="o">|</span>  <span class="o">+-------------</span> <span class="n">Body</span> <span class="nb">bytes</span> <span class="n">received</span>
+<span class="o">+----------------</span> <span class="n">Header</span> <span class="nb">bytes</span> <span class="n">received</span>
+</pre></div>
+</div>
+</dd>
+<dt>ReqHeader - Client request header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>ReqMethod - Client request method</dt><dd><p>The HTTP request method used.</p>
+</dd>
+<dt>ReqProtocol - Client request protocol</dt><dd><p>The HTTP protocol version information.</p>
+</dd>
+<dt>ReqStart - Client request start</dt><dd><p>Start of request processing. Logs the client address, port number  and listener endpoint name (from the -a command-line argument).</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+--</span> <span class="n">Listener</span> <span class="n">name</span> <span class="p">(</span><span class="kn">from</span><span class="w"> </span><span class="o">-</span><span class="n">a</span><span class="p">)</span>
+<span class="o">|</span>  <span class="o">+-----</span> <span class="n">Client</span> <span class="n">Port</span> <span class="n">number</span> <span class="p">(</span><span class="mi">0</span> <span class="k">for</span> <span class="n">Unix</span> <span class="n">domain</span> <span class="n">sockets</span><span class="p">)</span>
+<span class="o">+--------</span> <span class="n">Client</span> <span class="n">IP4</span><span class="o">/</span><span class="mi">6</span> <span class="n">address</span> <span class="p">(</span><span class="mf">0.0.0.0</span> <span class="k">for</span> <span class="n">UDS</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>ReqTarget - Request target as received</dt><dd><p>For HTTP1 connections, this is the <em>request-target</em> field from the request
+line, which has the format <em>method</em> SP <em>request-target</em> SP <em>HTTP-Version</em>
+(SP for space, 0x20)</p>
+<p>NB: This log record is masked by default.</p>
+</dd>
+<dt>ReqURL - Client request URL</dt><dd><p>The HTTP request URL.</p>
+</dd>
+<dt>ReqUnset - Client request unset header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>RespHeader - Client response header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>RespProtocol - Client response protocol</dt><dd><p>The HTTP protocol version information.</p>
+</dd>
+<dt>RespReason - Client response reason</dt><dd><p>The HTTP response reason string.</p>
+</dd>
+<dt>RespStatus - Client response status</dt><dd><p>The HTTP response status code.</p>
+</dd>
+<dt>RespUnset - Client response unset header</dt><dd><p>HTTP header contents.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>   <span class="o">|</span>
+<span class="o">|</span>   <span class="o">+-</span> <span class="n">Header</span> <span class="n">value</span>
+<span class="o">+-----</span> <span class="n">Header</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>NOTE: HTTP header fields are free form records and not strictly
+made of 2 fields. Accessing a specific header with the prefix
+notation helps treating the header value as a single string.</p>
+</dd>
+<dt>SessClose - Client connection closed</dt><dd><p>SessClose is the last record for any client connection.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">f</span>
+<span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">+-</span> <span class="n">How</span> <span class="n">long</span> <span class="n">the</span> <span class="n">session</span> <span class="n">was</span> <span class="nb">open</span>
+<span class="o">+----</span> <span class="n">Why</span> <span class="n">the</span> <span class="n">connection</span> <span class="n">closed</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Explanation of reasons (first column):</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">REM_CLOSE</span></code>: Client Closed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REQ_CLOSE</span></code>: Client requested close</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REQ_HTTP10</span></code>: Proto &lt; HTTP/1.1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RX_BAD</span></code>: Received bad req/resp</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RX_BODY</span></code>: Failure receiving body</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RX_JUNK</span></code>: Received junk data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RX_OVERFLOW</span></code>: Received buffer overflow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RX_TIMEOUT</span></code>: Receive timeout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RX_CLOSE_IDLE</span></code>: timeout_idle reached</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TX_PIPE</span></code>: Piped transaction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TX_ERROR</span></code>: Error transaction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TX_EOF</span></code>: EOF transmission</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RESP_CLOSE</span></code>: Backend/VCL requested close</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OVERLOAD</span></code>: Out of some resource</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PIPE_OVERFLOW</span></code>: Session pipe overflow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RANGE_SHORT</span></code>: Insufficient data for range</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REQ_HTTP20</span></code>: HTTP2 not accepted</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VCL_FAILURE</span></code>: VCL failure</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAPID_RESET</span></code>: HTTP2 rapid reset</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>SessError - Client connection accept failed</dt><dd><p>Accepting a client connection has failed.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Detailed</span> <span class="n">error</span> <span class="n">message</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">Error</span> <span class="n">Number</span> <span class="p">(</span><span class="n">errno</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">accept</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">File</span> <span class="n">descriptor</span> <span class="n">number</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------</span> <span class="n">Local</span> <span class="n">TCP</span> <span class="n">port</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">UDS</span>
+<span class="o">|</span>  <span class="o">+-------------</span> <span class="n">Local</span> <span class="n">IPv4</span><span class="o">/</span><span class="mi">6</span> <span class="n">address</span> <span class="o">/</span> <span class="mf">0.0.0.0</span> <span class="k">for</span> <span class="n">UDS</span>
+<span class="o">+----------------</span> <span class="n">Socket</span> <span class="n">name</span> <span class="p">(</span><span class="kn">from</span><span class="w"> </span><span class="o">-</span><span class="n">a</span> <span class="n">argument</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>SessOpen - Client connection opened</dt><dd><p>The first record for a client connection, with the socket-endpoints of the connection.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">File</span> <span class="n">descriptor</span> <span class="n">number</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">Session</span> <span class="n">start</span> <span class="n">time</span> <span class="p">(</span><span class="n">unix</span> <span class="n">epoch</span><span class="p">)</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">Local</span> <span class="n">TCP</span> <span class="n">port</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">UDS</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----------</span> <span class="n">Local</span> <span class="n">IPv4</span><span class="o">/</span><span class="mi">6</span> <span class="n">address</span> <span class="o">/</span> <span class="mf">0.0.0.0</span> <span class="k">for</span> <span class="n">UDS</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------------</span> <span class="n">Socket</span> <span class="n">name</span> <span class="p">(</span><span class="kn">from</span><span class="w"> </span><span class="o">-</span><span class="n">a</span> <span class="n">argument</span><span class="p">)</span>
+<span class="o">|</span>  <span class="o">+----------------</span> <span class="n">Remote</span> <span class="n">TCP</span> <span class="n">port</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">UDS</span>
+<span class="o">+-------------------</span> <span class="n">Remote</span> <span class="n">IPv4</span><span class="o">/</span><span class="mi">6</span> <span class="n">address</span> <span class="o">/</span> <span class="mf">0.0.0.0</span> <span class="k">for</span> <span class="n">UDS</span>
+</pre></div>
+</div>
+</dd>
+<dt>Storage - Where object is stored</dt><dd><p>Type and name of the storage backend the object is stored in.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">+-</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">storage</span> <span class="n">backend</span>
+<span class="o">+----</span> <span class="n">Type</span> <span class="p">(</span><span class="s2">&quot;malloc&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;persistent&quot;</span> <span class="n">etc</span><span class="o">.</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>TTL - TTL set on object</dt><dd><p>A TTL record is emitted whenever the ttl, grace or keep values for an object is set as well as whether the object is  cacheable or not.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="p">[</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">u</span> <span class="p">]</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">+-</span> <span class="s2">&quot;cacheable&quot;</span> <span class="ow">or</span> <span class="s2">&quot;uncacheable&quot;</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+------</span> <span class="n">Max</span><span class="o">-</span><span class="n">Age</span> <span class="kn">from</span><span class="w"> </span><span class="nn">Cache</span><span class="o">-</span><span class="n">Control</span> <span class="n">header</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>  <span class="o">|</span>  <span class="o">+---------</span> <span class="n">Expires</span> <span class="n">header</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">|</span>  <span class="o">+------------</span> <span class="n">Date</span> <span class="n">header</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>    <span class="o">+---------------</span> <span class="n">Age</span> <span class="p">(</span><span class="n">incl</span> <span class="n">Age</span><span class="p">:</span> <span class="n">header</span> <span class="n">value</span><span class="p">)</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+--------------------</span> <span class="n">Reference</span> <span class="n">time</span> <span class="k">for</span> <span class="n">TTL</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-----------------------</span> <span class="n">Keep</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+--------------------------</span> <span class="n">Grace</span>
+<span class="o">|</span>  <span class="o">+-----------------------------</span> <span class="n">TTL</span>
+<span class="o">+--------------------------------</span> <span class="s2">&quot;RFC&quot;</span><span class="p">,</span> <span class="s2">&quot;VCL&quot;</span> <span class="ow">or</span> <span class="s2">&quot;HFP&quot;</span>
+</pre></div>
+</div>
+<p>The four optional fields are only present in “RFC” headers.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RFC</span> <span class="mi">60</span> <span class="mi">10</span> <span class="o">-</span><span class="mi">1</span> <span class="mi">1312966109</span> <span class="mi">1312966109</span> <span class="mi">1312966109</span> <span class="mi">0</span> <span class="mi">60</span> <span class="n">cacheable</span>
+<span class="n">VCL</span> <span class="mi">120</span> <span class="mi">10</span> <span class="mi">0</span> <span class="mi">1312966111</span> <span class="n">uncacheable</span>
+<span class="n">HFP</span> <span class="mi">2</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1312966113</span> <span class="n">uncacheable</span>
+</pre></div>
+</div>
+</dd>
+<dt>Timestamp - Timing information</dt><dd><p>Contains timing information for the vinyld worker threads.</p>
+<p>Time stamps are issued by vinyld on certain events, and show the absolute time of the event, the time spent since the start of the work unit, and the time spent since the last timestamp was logged. See the TIMESTAMPS section below for information about the individual time stamps.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span><span class="p">:</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">f</span> <span class="o">%</span><span class="n">f</span>
+<span class="o">|</span>   <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>   <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Time</span> <span class="n">since</span> <span class="n">last</span> <span class="n">timestamp</span>
+<span class="o">|</span>   <span class="o">|</span>  <span class="o">+----</span> <span class="n">Time</span> <span class="n">since</span> <span class="n">start</span> <span class="n">of</span> <span class="n">work</span> <span class="n">unit</span>
+<span class="o">|</span>   <span class="o">+-------</span> <span class="n">Absolute</span> <span class="n">time</span> <span class="n">of</span> <span class="n">event</span>
+<span class="o">+-----------</span> <span class="n">Event</span> <span class="n">label</span>
+</pre></div>
+</div>
+</dd>
+<dt>VCL_Error - VCL execution error message</dt><dd><p>Logs error messages generated during VCL execution.</p>
+</dd>
+<dt>VCL_Log - Log statement from VCL</dt><dd><p>User generated log messages insert from VCL through std.log()</p>
+</dd>
+<dt>VCL_acl - VCL ACL check results</dt><dd><p>ACLs with the <cite>+log</cite> flag emits this record with the result.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="p">[</span><span class="o">%</span><span class="n">s</span> <span class="p">[</span><span class="o">%</span><span class="n">s</span> <span class="p">[</span><span class="n">fixed</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span><span class="p">]]]</span>
+<span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>          <span class="o">|</span>
+<span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>          <span class="o">+-</span> <span class="n">Fix</span> <span class="n">info</span> <span class="p">(</span><span class="n">see</span> <span class="n">below</span><span class="p">)</span>
+<span class="o">|</span>   <span class="o">|</span>   <span class="o">+------------</span> <span class="n">Matching</span> <span class="n">entry</span> <span class="p">(</span><span class="n">only</span> <span class="k">for</span> <span class="n">MATCH</span><span class="p">)</span>
+<span class="o">|</span>   <span class="o">+----------------</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ACL</span> <span class="k">for</span> <span class="n">MATCH</span> <span class="ow">or</span> <span class="n">NO_MATCH</span>
+<span class="o">+--------------------</span> <span class="n">MATCH</span><span class="p">,</span> <span class="n">NO_MATCH</span> <span class="ow">or</span> <span class="n">NO_FAM</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Fix info: either contains network/mask for non-canonical entries (see acl +pedantic flag) or <code class="docutils literal notranslate"><span class="pre">folded</span></code> for entries which were the result of a fold operation (see acl +fold flag).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MATCH</span></code> denotes an ACL match</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NO_MATCH</span></code> denotes that a checked ACL has not matched</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NO_FAM</span></code> denotes a missing address family and should not occur.</p></li>
+</ul>
+</dd>
+<dt>VCL_call - VCL method called</dt><dd><p>Logs the VCL method name when a VCL method is called.</p>
+</dd>
+<dt>VCL_return - VCL method return value</dt><dd><p>Logs the VCL method terminating statement.</p>
+</dd>
+<dt>VCL_trace - VCL trace data</dt><dd><p>Logs VCL execution trace data.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">u</span> <span class="o">%</span><span class="n">u</span><span class="o">.%</span><span class="n">u</span><span class="o">.%</span><span class="n">u</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">VCL</span> <span class="n">program</span> <span class="n">line</span> <span class="n">position</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">+----</span> <span class="n">VCL</span> <span class="n">program</span> <span class="n">line</span> <span class="n">number</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-------</span> <span class="n">VCL</span> <span class="n">program</span> <span class="n">source</span> <span class="n">index</span>
+<span class="o">|</span>  <span class="o">+----------</span> <span class="n">VCL</span> <span class="n">trace</span> <span class="n">point</span> <span class="n">index</span>
+<span class="o">+-------------</span> <span class="n">VCL</span> <span class="n">configname</span>
+</pre></div>
+</div>
+<p>NB: This log record is masked by default.</p>
+</dd>
+<dt>VCL_use - VCL in use</dt><dd><p>Records the name of the VCL being used.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="p">[</span> <span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">s</span> <span class="p">]</span>
+<span class="o">|</span>    <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>    <span class="o">|</span>  <span class="o">+-</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">label</span> <span class="n">used</span> <span class="n">to</span> <span class="n">find</span> <span class="n">it</span>
+<span class="o">|</span>    <span class="o">+----</span> <span class="s2">&quot;via&quot;</span>
+<span class="o">+---------</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">VCL</span> <span class="n">put</span> <span class="ow">in</span> <span class="n">use</span>
+</pre></div>
+</div>
+</dd>
+<dt>VSL - VSL API warnings and error message</dt><dd><p>Warnings and error messages generated by the VSL API while reading the shared memory log.</p>
+</dd>
+<dt>VdpAcct - Deliver filter accounting</dt><dd><p>Contains name of VDP and statistics.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">produced</span>
+<span class="o">|</span>  <span class="o">+----</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">calls</span> <span class="n">made</span>
+<span class="o">+-------</span> <span class="n">Name</span> <span class="n">of</span> <span class="nb">filter</span>
+</pre></div>
+</div>
+<p>NB: This log record is masked by default.</p>
+</dd>
+<dt>VfpAcct - Fetch filter accounting</dt><dd><p>Contains name of VFP and statistics.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">s</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">d</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+-</span> <span class="n">Total</span> <span class="nb">bytes</span> <span class="n">produced</span>
+<span class="o">|</span>  <span class="o">+----</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">calls</span> <span class="n">made</span>
+<span class="o">+-------</span> <span class="n">Name</span> <span class="n">of</span> <span class="nb">filter</span>
+</pre></div>
+</div>
+<p>NB: This log record is masked by default.</p>
+</dd>
+<dt>Witness - Lock order witness records</dt><dd><p>Diagnostic recording of locking order.</p>
+</dd>
+<dt>WorkThread - Logs thread start/stop events</dt><dd><p>Logs worker thread creation and termination events.</p>
+<p>The format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">p</span> <span class="o">%</span><span class="n">s</span>
+<span class="o">|</span>  <span class="o">|</span>
+<span class="o">|</span>  <span class="o">+-</span> <span class="p">[</span><span class="n">start</span><span class="o">|</span><span class="n">end</span><span class="p">]</span>
+<span class="o">+----</span> <span class="n">Worker</span> <span class="n">struct</span> <span class="n">pointer</span>
+</pre></div>
+</div>
+<p>NB: This log record is masked by default.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="timestamps">
+<h3>TIMESTAMPS<a class="headerlink" href="#timestamps" title="Link to this heading">¶</a></h3>
+<p>Timestamps are inserted in the log on completing certain events during
+the worker thread’s task handling. The timestamps has a label showing
+which event was completed. The reported fields show the absolute time
+of the event, the time spent since the start of the task and the time
+spent since the last timestamp was logged.</p>
+<p>The timestamps logged automatically by <cite>vinyld</cite> are inserted after
+completing events that are expected to have delays (e.g. network IO or
+spending time on a waitinglist). Timestamps can also be inserted from
+VCL using the std.timestamp() function. If one is doing time consuming
+tasks in the VCL configuration, it’s a good idea to log a timestamp
+after completing that task. This keeps the timing information in
+subsequent timestamps from including the time spent on the VCL event.</p>
+<section id="request-handling-timestamps">
+<h4>Request handling timestamps<a class="headerlink" href="#request-handling-timestamps" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Start</dt><dd><p>The start of request processing (first byte received or
+restart).</p>
+</dd>
+<dt>Req</dt><dd><p>Complete client request received.</p>
+</dd>
+<dt>ReqBody</dt><dd><p>Client request body processed (discarded, cached or passed to
+the backend).</p>
+</dd>
+<dt>Waitinglist</dt><dd><p>Came off waitinglist.</p>
+</dd>
+<dt>Fetch</dt><dd><p>Fetch processing finished (completely fetched or ready for
+streaming).</p>
+</dd>
+<dt>Process</dt><dd><p>Processing finished, ready to deliver the client response.</p>
+</dd>
+<dt>Resp</dt><dd><p>Delivery of response to the client finished.</p>
+</dd>
+<dt>Restart</dt><dd><p>Client request is being restarted.</p>
+</dd>
+<dt>Reset</dt><dd><p>The client closed its connection, reset its stream or caused
+a stream error that forced <cite>vinyld</cite> to reset the stream. Request
+processing is interrupted and considered failed, with a 408
+“Request Timeout” status code.</p>
+</dd>
+</dl>
+</section>
+<section id="pipe-handling-timestamps">
+<h4>Pipe handling timestamps<a class="headerlink" href="#pipe-handling-timestamps" title="Link to this heading">¶</a></h4>
+<p>The following timestamps are client timestamps specific to pipe transactions:</p>
+<dl class="simple">
+<dt>Pipe</dt><dd><p>Opened a pipe to the backend and forwarded the request.</p>
+</dd>
+<dt>PipeSess</dt><dd><p>The pipe session has finished.</p>
+</dd>
+</dl>
+<p>The following timestamps change meaning in a pipe transaction:</p>
+<dl class="simple">
+<dt>Process</dt><dd><p>Processing finished, ready to begin the pipe delivery.</p>
+</dd>
+</dl>
+</section>
+<section id="backend-fetch-timestamps">
+<h4>Backend fetch timestamps<a class="headerlink" href="#backend-fetch-timestamps" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Start</dt><dd><p>Start of the backend fetch processing.</p>
+</dd>
+<dt>Fetch</dt><dd><p>Came off vcl_backend_fetch ready to send the backend request.</p>
+</dd>
+<dt>Connected</dt><dd><p>Successfully established a backend connection, or selected a recycled
+connection from the pool.</p>
+</dd>
+<dt>Bereq</dt><dd><p>Backend request sent.</p>
+</dd>
+<dt>Beresp</dt><dd><p>Backend response headers received.</p>
+</dd>
+<dt>Process</dt><dd><p>Processing finished, ready to fetch the response body.</p>
+</dd>
+<dt>BerespBody</dt><dd><p>Backend response body received.</p>
+</dd>
+<dt>Retry</dt><dd><p>Backend request is being retried.</p>
+</dd>
+<dt>Error</dt><dd><p>Backend request failed to vcl_backend_error.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="notice-messages">
+<h3>NOTICE MESSAGES<a class="headerlink" href="#notice-messages" title="Link to this heading">¶</a></h3>
+<p>Notice messages contain informational messages about the handling of a
+request. These can be exceptional circumstances encountered that causes
+deviation from the normal handling. The messages are prefixed with <code class="docutils literal notranslate"><span class="pre">vsl:</span></code>
+for core <cite>vinyld</cite> generated messages, and VMOD authors are encouraged to
+use <code class="docutils literal notranslate"><span class="pre">vmod_&lt;name&gt;:</span></code> for their own notice messages. This matches the name
+of the manual page where detailed descriptions of notice messages are
+expected.</p>
+<p>The core messages are described below.</p>
+<section id="conditional-fetch-wait-for-streaming-object">
+<h4>Conditional fetch wait for streaming object<a class="headerlink" href="#conditional-fetch-wait-for-streaming-object" title="Link to this heading">¶</a></h4>
+<p>The backend answered 304 Not Modified on a conditional fetch using an object
+that has not yet been fully fetched as the stale template object. This can
+only happen when the TTL of the object is less than the time it takes to fetch
+it. The fetch is halted until the stale object is fully fetched, upon which
+the new object is created as normal. While waiting, any grace time on the
+stale object will be in effect.</p>
+</section>
+<section id="high-number-of-variants">
+<h4>High number of variants<a class="headerlink" href="#high-number-of-variants" title="Link to this heading">¶</a></h4>
+<p>Objects are primarily looked up from an index using the hash key computed from
+the <code class="docutils literal notranslate"><span class="pre">hash_data()</span></code> VCL function. When variants are involved, that is to say
+when a backend response was stored with a <code class="docutils literal notranslate"><span class="pre">Vary</span></code> header, a secondary lookup
+is performed but it is not indexed. As the number of variants for a given key
+increases, this can slow cache lookups down, and since this happens under a
+lock, this can greatly increase lock contention, even more so for frequently
+requested objects. Variants should therefore be used sparingly on cacheable
+responses, but since they can originate from either VCL or origin servers,
+this notice should help identify problematic resources.</p>
+</section>
+</section>
+<section id="history">
+<h3>HISTORY<a class="headerlink" href="#history" title="Link to this heading">¶</a></h3>
+<p>This document was initially written by Poul-Henning Kamp, and later updated by
+Martin Blix Grydeland.</p>
+</section>
+<section id="see-also">
+<h3>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinylhist.html#vinylhist-1"><span class="std std-ref">vinylhist</span></a></p></li>
+<li><p><a class="reference internal" href="vinyllog.html#vinyllog-1"><span class="std std-ref">vinyllog</span></a></p></li>
+<li><p><a class="reference internal" href="vinylncsa.html#vinylncsa-1"><span class="std std-ref">vinylncsa</span></a></p></li>
+<li><p><a class="reference internal" href="vinyltop.html#vinyltop-1"><span class="std std-ref">vinyltop</span></a></p></li>
+</ul>
+</section>
+<section id="copyright">
+<h3>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h3>
+<p>This document is licensed under the same licence as Vinyl Cache
+itself. See LICENCE for details.</p>
+<ul class="simple">
+<li><p>Copyright (c) 2006 Verdens Gang AS</p></li>
+<li><p>Copyright (c) 2006-2015 Varnish Software AS</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vsl-query.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">vsl-query</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vinyl-cli.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">vinyl-cli</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">VSL</a><ul>
+<li><a class="reference internal" href="#vinyl-cache-shared-memory-logging">Vinyl Cache Shared Memory Logging</a><ul>
+<li><a class="reference internal" href="#overview">OVERVIEW</a><ul>
+<li><a class="reference internal" href="#vsl-tags">VSL tags</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#timestamps">TIMESTAMPS</a><ul>
+<li><a class="reference internal" href="#request-handling-timestamps">Request handling timestamps</a></li>
+<li><a class="reference internal" href="#pipe-handling-timestamps">Pipe handling timestamps</a></li>
+<li><a class="reference internal" href="#backend-fetch-timestamps">Backend fetch timestamps</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notice-messages">NOTICE MESSAGES</a><ul>
+<li><a class="reference internal" href="#conditional-fetch-wait-for-streaming-object">Conditional fetch wait for streaming object</a></li>
+<li><a class="reference internal" href="#high-number-of-variants">High number of variants</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#history">HISTORY</a></li>
+<li><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+<li><a class="reference internal" href="#copyright">COPYRIGHT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

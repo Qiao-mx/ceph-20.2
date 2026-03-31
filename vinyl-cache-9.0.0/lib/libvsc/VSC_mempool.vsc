@@ -1,0 +1,80 @@
+..
+	Copyright (c) 2017 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+..
+	This is *NOT* a RST file but the syntax has been chosen so
+	that it may become an RST file at some later date.
+
+.. vinyl_vsc_begin::	mempool
+	:oneliner:	Memory Pool Counters
+	:order:		30
+
+.. vinyl_vsc:: live
+	:type:	gauge
+	:level:	debug
+	:oneliner:	In use
+
+
+.. vinyl_vsc:: pool
+	:type:	gauge
+	:level:	debug
+	:oneliner:	In Pool
+
+
+.. vinyl_vsc:: sz_wanted
+	:type:	gauge
+	:level:	debug
+	:format: bytes
+	:oneliner:	Size requested
+
+
+.. vinyl_vsc:: sz_actual
+	:type:	gauge
+	:level:	debug
+	:format: bytes
+	:oneliner:	Size allocated
+
+
+.. vinyl_vsc:: allocs
+	:type:	counter
+	:level:	debug
+	:oneliner:	Allocations
+
+.. vinyl_vsc:: frees
+	:type:	counter
+	:level:	debug
+	:oneliner:	Frees
+
+.. vinyl_vsc:: recycle
+	:type:	counter
+	:level:	debug
+	:oneliner:	Recycled from pool
+
+
+.. vinyl_vsc:: timeout
+	:type:	counter
+	:level:	debug
+	:oneliner:	Timed out from pool
+
+
+.. vinyl_vsc:: toosmall
+	:type:	counter
+	:level:	debug
+	:oneliner:	Too small to recycle
+
+
+.. vinyl_vsc:: surplus
+	:type:	counter
+	:level:	debug
+	:oneliner:	Too many for pool
+
+
+.. vinyl_vsc:: randry
+	:type:	counter
+	:level:	debug
+	:oneliner:	Pool ran dry
+
+
+.. vinyl_vsc_end::	mempool

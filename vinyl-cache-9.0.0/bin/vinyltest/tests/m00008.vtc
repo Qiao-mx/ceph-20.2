@@ -1,0 +1,57 @@
+vtest "VCL compiler vmod coverage / vmod loading"
+
+feature topbuild
+
+vinyl v1 -errvcl {Symbol 'debug' has wrong type (sub), expected vmod:} {
+	backend b { .host = "${localhost}"; }
+	sub debug {}
+	import debug;
+
+	sub vcl_recv {
+		call debug;
+	}
+}
+
+vinyl v1 -errvcl {Another module already imported as foo} {
+	import debug as foo;
+	import
+	    directors
+		as
+		    foo;
+}
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import std;
+}
+
+vinyl v1 -cliok "param.set vcc_feature -unsafe_path"
+
+vinyl v1 -errvcl {'import ... from path ...' is unsafe.} {
+	backend default { .host = "${s1_sock}"; }
+	import std from "${topbuild}/vmod/.libs/";
+}
+
+vinyl v1 \
+    -cliok "param.set vmod_path /nowhere:${topbuild}/vmod/.libs/"
+
+vinyl v1 -vcl+backend {
+	import std;
+}
+
+vinyl v1 -cliok "param.set vcc_feature +unsafe_path"
+
+vinyl v1 -cliok "param.set vmod_path /nowhere:/else"
+
+vinyl v1 -vcl+backend {
+	import std from "${topbuild}/vmod/.libs/";
+}
+
+vinyl v1 -errvcl {Wrong file for VMOD std} {
+	backend default { .host = "${s1_sock}"; }
+	import std from "${topbuild}/vmod/.libs/libvmod_debug.so";
+}

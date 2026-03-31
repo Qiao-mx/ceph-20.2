@@ -1,0 +1,1617 @@
+# RGW C Common 开发规范
+
+本文档定义 RGW C Common 项目的编码规范和 C++ 转 C 转换规则。
+
+---
+ ** 本项目旨在将RGW的C++代码转成C代码，有代码冲突问题优先参考c++代码的实现进行修改。**
+ ** 要求必须完全生成C++对应的功能 **
+
+## 一、模块职责划分
+
+### 1.1 c_common 模块（基础公共层）
+
+**职责定位**：提供全项目通用的基础功能组件，**仅包含**与具体存储实现无关的通用代码。
+
+**允许包含的内容**：
+
+| 类型 | 文件位置 | 说明 |
+|------|----------|------|
+| 容器库 | `include/containers/*.h`, `containers/*.c` | 替代 STL 的通用容器 |
+| 错误处理 | `include/rgw_errors.h`, `src/rgw_errors.c` | 统一错误码框架 |
+| 内存管理 | `include/containers/rgw_cmemory.h`, `src/rgw_cmemory.c` | 内存分配/释放封装 |
+| 基础类型 | `include/containers/rgw_ctypes.h` | 基础类型定义 |
+| 缓冲区 | `include/rgw_buffer.h`, `src/rgw_buffer.c` | 缓冲区管理 |
+| 内部数据结构 | `include/internal/*.h` | 红黑树、AVL树、链表等内部实现 |
+| 第三方库 | `include/internal/ut*.h` | uthash 家族库 |
+
+
+## 二、目录结构规范
+
+### 2.1 c_common 标准目录结构
+
+```
+src/rgw/c_common/
+├── include/
+│   ├── containers/              # 通用容器（必须放在此目录）
+│   │   ├── rgw_carray.h        # 动态数组 (替代 std::vector)
+│   │   ├── rgw_cstring.h       # 字符串 (替代 std::string)
+│   │   ├── rgw_cmap.h          # 有序映射 (替代 std::map)
+│   │   ├── rgw_cset.h          # 有序集合 (替代 std::set)
+│   │   ├── rgw_clist.h         # 双向链表 (替代 std::list)
+│   │   ├── rgw_cdeque.h        # 双端队列 (替代 std::deque)
+│   │   ├── rgw_cstack.h        # 栈 (替代 std::stack)
+│   │   ├── rgw_cqueue.h        # 队列 (替代 std::queue)
+│   │   ├── rgw_cpriority_queue.h  # 优先队列 (替代 std::priority_queue)
+│   │   ├── rgw_chash_map.h     # 哈希表 (替代 std::unordered_map)
+│   │   ├── rgw_coptional.h     # 可选类型 (替代 std::optional)
+│   │   ├── rgw_cmemory.h       # 内存管理
+│   │   └── rgw_ctypes.h        # 基础类型定义
+│   ├── internal/               # 内部实现头文件
+│   │   ├── rgw_rbtree.h        # 红黑树
+│   │   ├── rgw_avltree.h       # AVL 树
+│   │   ├── rgw_list.h          # 链表定义
+│   │   ├── uthash.h            # uthash 主头文件
+│   │   ├── utarray.h           # uthash 动态数组
+│   │   ├── utstring.h          # uthash 字符串
+│   │   ├── utlist.h            # uthash 链表
+│   │   ├── utstack.h           # uthash 栈
+│   │   └── utringbuffer.h      # uthash 环形缓冲区
+│   ├── rgw_ccommon.h           # 统一头文件
+│   ├── rgw_errors.h            # 错误处理
+│   ├── rgw_buffer.h            # 缓冲区管理
+│   ├── rgw_b64.h               # Base64 编解码
+│   ├── rgw_hex.h               # Hex 编解码
+│   └── rgw_xml.h               # XML 解析
+├── src/
+│   ├── rgw_carray.c
+│   ├── rgw_cstring.c
+│   ├── rgw_cmap.c
+│   ├── rgw_cdeque.c
+│   ├── rgw_cstack.c
+│   ├── rgw_cqueue.c
+│   ├── rgw_cpriority_queue.c
+│   ├── rgw_coptional.c
+│   ├── rgw_cmemory.c
+│   ├── rgw_errors.c
+│   ├── rgw_buffer.c
+│   ├── rgw_b64.c
+│   ├── rgw_hex.c
+│   ├── rgw_xml.c
+│   └── csort.c
+├── containers/                  # 容器实现文件
+│   ├── rgw_chash_map.c
+│   ├── rgw_cset.c
+│   ├── rgw_clist.c
+│   ├── rgw_avl.c
+│   ├── rgw_rbtree.c
+│   ├── rgw_bst.c
+│   └── rgw_splaytree.c
+└── tests/
+```
+
+## 三、C++ 转 C 转换规则
+
+### 3.1 虚函数表 (vtable) 转换
+
+C++ 类转换为 C 结构体 + 虚函数表。
+
+**vtable 定义位置（强制要求）**：
+- 所有 vtable 定义**必须**放在 `rgw_sal_vtable.h` 中
+- 驱动辅助函数定义在 `rgw_sal_driver.h` 中
+- **禁止**在其他头文件中定义 vtable 结构
+
+**转换模式**：
+
+```c
+// C++ 原代码
+class RGWSalUser {
+public:
+    virtual ~RGWSalUser() = default;
+    virtual int load() = 0;
+    virtual int store() = 0;
+};
+
+// C 转换后 - 参考 rgw_sal_vtable.h
+typedef struct rgw_sal_user_vtable {
+    rgw_sal_user_load_fn load;
+    rgw_sal_user_store_fn store;
+    rgw_sal_user_remove_fn remove;
+    rgw_sal_user_destroy_fn destroy;
+    rgw_sal_user_get_id_fn get_id;
+    // ... 其他函数指针
+    uint32_t struct_version;
+} rgw_sal_user_vtable_t;
+
+typedef struct rgw_sal_user_t {
+    const char* tenant;
+    const char* id;
+    rgw_sal_user_vtable_t* vtable;
+    void* impl;
+} rgw_sal_user_t;
+```
+
+**vtable 调用方式**：
+
+```c
+// 通过辅助函数调用（推荐）
+int ret = rgw_sal_user_load(user, dpp, y);
+
+// 直接通过 vtable 调用
+if (!user || !user->vtable || !user->vtable->load) {
+    return RGW_SAL_ERR_NOT_IMPLEMENTED;
+}
+return user->vtable->load(user, dpp, y);
+```
+
+### 3.2 继承转换
+
+使用结构体嵌入实现组合而非继承。
+
+```c
+// C++ 原代码
+class RGWSalBucket : public RGWSalUser {
+    // ...
+};
+
+// C 转换后 - 使用组合
+typedef struct rgw_sal_bucket_t {
+    rgw_sal_driver_t* driver;           // 父对象的引用
+    rgw_sal_bucket_vtable_t* vtable;
+    void* impl;
+    // ...
+} rgw_sal_bucket_t;
+```
+
+### 3.3 命名空间转换
+
+| C++ | C |
+|-----|---|
+| `namespace rgw { class User; }` | `rgw_sal_user_t` |
+| `rgw::sal::Driver` | `rgw_sal_driver_t` |
+| `rados::UserImpl` | `rados_user_impl_t` |
+
+### 3.4 智能指针转换
+
+使用 `rgw_object_t` + 引用计数替代 `std::shared_ptr`。
+
+```c
+// C++ 原代码
+std::shared_ptr<RGWSalUser> user = std::make_shared<RGWSalUser>();
+
+// C 转换后
+rgw_sal_user_t* user = rados_user_create(driver);
+rgw_object_ref(&user->base);  // 增加引用计数
+// 使用完成后
+rgw_object_unref(&user->base);  // 减少引用计数
+```
+
+### 3.5 异常处理转换
+
+使用错误码替代异常。
+
+```c
+// C++ 原代码
+try {
+    user->load();
+} catch (const std::exception& e) {
+    return -EINVAL;
+}
+
+// C 转换后
+int ret = user->vtable->load(user, dpp, y);
+if (ret < 0) {
+    return ret;
+}
+```
+
+### 3.6 STL 容器转换
+
+| C++ | C (必须使用) |
+|-----|--------------|
+| `std::vector<T>` | `rgw_carray_t` (在 containers/ 目录) |
+| `std::string` | `rgw_cstring_t` (在 containers/ 目录) |
+| `std::map<K,V>` | `rgw_cmap_t` (在 containers/ 目录) |
+| `std::set<T>` | `rgw_cset_t` (在 containers/ 目录) |
+| `std::list<T>` | `rgw_clist_t` (在 containers/ 目录) |
+| `std::deque<T>` | `rgw_cdeque_t` (在 containers/ 目录) |
+| `std::unordered_map<K,V>` | `rgw_chash_map_t` (在 containers/ 目录) |
+| `std::optional<T>` | `rgw_coptional_t` (在 containers/ 目录) |
+
+**重要**：这些容器**必须**从 `include/containers/` 目录引用，**禁止**在 sal_c 或其他位置创建同名或功能相似的容器。
+
+---
+
+## 四、代码重复性检查（强制要求）
+
+### 4.1 新增文件前检查（必须执行）
+
+在创建新文件前，**必须**按顺序执行以下检查：
+
+1. **同名文件检查**：使用 `Glob` 搜索同名文件
+2. **功能相似检查**：使用 `Grep` 搜索相似功能
+3. **结构体名检查**：使用 `Grep` 搜索同名结构体
+4. **命名规范检查**：确认符合本规范的命名规则
+
+**检查命令示例**：
+
+```bash
+# 检查同名文件
+Glob "**/rgw_carray.h"  # 检查数组容器是否已存在
+
+# 检查功能相似文件
+Grep "rgw_carray"  # 检查是否有类似实现
+
+# 检查结构体定义
+Grep "typedef struct rgw_carray"  # 检查结构体是否已定义
+```
+
+### 4.2 重复代码检测
+
+**必须使用 `Grep` 检查以下模式**：
+
+| 检查内容 | 搜索模式 | 说明 |
+|----------|----------|------|
+| 相似容器 | `rgw_cstring`, `rgw_string` | 避免重复字符串容器 |
+| 相似映射 | `rgw_cmap`, `rgw_map` | 避免重复映射实现 |
+| 重复宏定义 | `RGW_ERR_` | 确保错误码不冲突 |
+| 重复结构体 | `struct rgw_` | 确保类型定义唯一 |
+
+### 4.3 类型定义统一规则
+
+**已定义在 c_common 的类型，sal_c 必须复用，禁止重新定义**：
+
+| 类型 | 定义位置 | sal_c 必须使用 |
+|------|----------|---------------|
+| 错误码 | `rgw_errors.h` | `#include "rgw_errors.h"` |
+| 动态数组 | `containers/rgw_carray.h` | `#include "containers/rgw_carray.h"` |
+| 字符串 | `containers/rgw_cstring.h` | `#include "containers/rgw_cstring.h"` |
+| 有序映射 | `containers/rgw_cmap.h` | `#include "containers/rgw_cmap.h"` |
+| 有序集合 | `containers/rgw_cset.h` | `#include "containers/rgw_cset.h"` |
+| 双向链表 | `containers/rgw_clist.h` | `#include "containers/rgw_clist.h"` |
+| 哈希表 | `containers/rgw_chash_map.h` | `#include "containers/rgw_chash_map.h"` |
+| 可选类型 | `containers/rgw_coptional.h` | `#include "containers/rgw_coptional.h"` |
+
+---
+
+## 五、编码规范
+
+### 5.1 命名规范
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 公开类型 | `rgw_sal_<功能>_<类型>` | `rgw_sal_user_t` |
+| 内部类型 | `<驱动>_impl_t` | `rados_user_impl_t` |
+| 虚函数表 | `rgw_sal_<实体>_vtable` | `rgw_sal_user_vtable_t` |
+| 驱动层函数 | `<驱动>_<实体>_<操作>` | `rados_user_load` |
+| 错误码 | `RGW_ERR_<名称>` | `RGW_ERR_INVALID_ARG` |
+| 宏常量 | `RGW_<模块>_<名称>` | `RGW_SAL_MAX_NAME_LEN` |
+| 容器类型 | `rgw_c<container>_t` | `rgw_carray_t` |
+
+### 5.2 文件命名规范
+
+| 内容类型 | 命名模式 | 示例 |
+|----------|----------|------|
+| 容器头文件 | `rgw_c<container>.h` | `rgw_carray.h` |
+| 容器实现 | `rgw_c<container>.c` | `rgw_carray.c` |
+| SAL 核心头文件 | `rgw_sal.h`, `rgw_sal_types.h` | - |
+| 驱动头文件 | `rgw_sal_<driver>.h` | `rgw_sal_rados.h` |
+| 驱动实现 | `rgw_sal_<driver>.c` | `rgw_sal_rados.c` |
+
+### 5.3 内存管理规范
+
+```c
+// 正确：配对分配释放
+void* ptr = malloc(size);
+free(ptr);
+ptr = NULL;
+
+// 正确：strdup 后需 free
+char* str = strdup(original);
+free(str);
+
+// 错误：禁止混用分配器
+void* ptr = malloc(size);
+rgw_c_free(ptr);  // 错误！
+```
+
+### 5.4 参数校验规范
+
+```c
+int rgw_sal_user_load(rgw_sal_user_t* user,
+                      const rgw_sal_dpp_t* dpp,
+                      rgw_sal_yield_t* y) {
+    // 必须校验所有输入参数
+    if (!user) {
+        return RGW_ERR_INVALID_ARG;
+    }
+    
+    // 标记未使用的参数
+    (void)dpp;
+    (void)y;
+    
+    return RGW_OK;
+}
+```
+
+### 5.5 错误码规范
+
+所有模块必须使用 `rgw_errors.h` 中定义的错误码：
+
+| 错误码 | 值 | 含义 |
+|--------|-----|------|
+| `RGW_OK` | 0 | 成功 |
+| `RGW_ERR_INVALID_ARG` | 1 | 参数无效 |
+| `RGW_ERR_OUT_OF_MEMORY` | 2 | 内存分配失败 |
+| `RGW_ERR_NOT_FOUND` | 4 | 资源不存在 |
+| `RGW_ERR_ALREADY_EXISTS` | 5 | 资源已存在 |
+| `RGW_ERR_PERMISSION_DENIED` | 6 | 权限不足 |
+| `RGW_ERR_INTERNAL_ERROR` | 16 | 内部错误 |
+
+---
+
+## 六、禁止事项
+
+### 6.1 禁止创建已存在的功能
+
+在创建新文件或实现新功能前，**必须**：
+
+1. 使用 `Glob` 搜索同名文件
+2. 使用 `Grep` 搜索功能相似的实现
+3. 确认不存在后再开始实现
+
+**违规示例**：
+- 在 sal_c 中创建 `rgw_cstring.h` 或 `rgw_string.h`
+- 在 c_common 中创建 SAL 相关的 vtable
+
+### 6.2 禁止使用 todo/存根
+
+所有代码必须是**完整实现**，禁止：
+- 包含 `// TODO` 注释的未完成实现
+- 返回固定值的存根函数
+- 未实现的虚函数
+
+### 6.3 禁止随意修改已有代码
+
+修改已有代码前必须：
+1. 理解现有实现逻辑
+2. 确保修改不破坏现有功能
+3. 更新相关测试
+4. 更新相关文档
+
+### 6.4 禁止魔法数
+
+所有常量必须使用 `#define` 定义：
+
+```c
+// 错误
+if (size > 4096)
+
+// 正确
+#define RGW_SAL_BUF_SIZE 4096
+if (size > RGW_SAL_BUF_SIZE)
+```
+
+### 6.5 禁止重复类型定义
+
+数据结构类型**只应在一处定义**，其他位置必须引用：
+
+
+---
+
+## 七、代码生成前计划要求
+
+### 7.1 必须制定计划
+
+在生成任何新代码前，必须：
+
+1. **分析阶段**：
+   - 明确要实现的功能
+   - 确定功能属于哪个模块（c_common 或 sal_c）
+   - 确定需要使用或扩展的现有类型
+
+2. **搜索阶段**：
+   - 使用 `Glob` 搜索同名/相似文件
+   - 使用 `Grep` 搜索相关实现
+   - 检查是否有可复用的代码
+
+3. **设计阶段**：
+   - 制定类型/函数命名
+   - 确定文件位置
+   - 设计接口签名
+
+4. **实现阶段**：
+   - 完整实现所有功能
+   - 添加必要的测试
+   - 更新文档
+
+### 7.2 计划模板
+
+```markdown
+## [功能名称] 实现计划
+
+### 1. 功能分析
+- 功能描述：...
+- 所属模块：c_common / sal_c
+- 依赖关系：...
+
+### 2. 搜索结果
+- 同名文件检查：[结果]
+- 功能相似检查：[结果]
+- 可复用代码：[列表]
+
+### 3. 设计方案
+- 新增文件：[文件列表]
+- 新增类型：[类型列表]
+- 新增函数：[函数列表]
+
+### 4. 实现步骤
+1. ...
+2. ...
+3. ...
+
+### 5. 测试计划
+- 单元测试：...
+- 集成测试：...
+```
+
+---
+
+## 八、代码格式化
+
+### 8.1 格式化规则
+
+- 使用 `clang-format` 格式化所有代码
+- 缩进：使用 Tab，宽度 8
+- 行长度：无限制
+
+### 8.2 格式化命令
+
+```bash
+# 格式化代码
+clang-format -i src/file.c
+
+# 检查格式
+clang-format --dry-run src/file.c
+```
+
+---
+
+## 九、第三方库使用
+
+### 9.1 已集成的库（必须使用）
+
+| 库 | 头文件 | 用途 |
+|----|--------|------|
+| uthash | `internal/uthash.h` | 哈希表实现 |
+| utarray | `internal/utarray.h` | 动态数组 |
+| utstring | `internal/utstring.h` | 字符串工具 |
+| utlist | `internal/utlist.h` | 链表工具 |
+| utstack | `internal/utstack.h` | 栈工具 |
+| utringbuffer | `internal/utringbuffer.h` | 环形缓冲区 |
+
+
+
+---
+
+## 十、常见错误预防
+
+### 10.1 内存管理
+
+- 每个 `malloc`/`strdup` 都有对应的 `free`
+- 避免双重释放
+- 避免 use-after-free（释放后将指针置为 NULL）
+
+### 10.2 字符处理
+
+```c
+// 正确：转换为 unsigned char
+tolower((unsigned char)*p)
+```
+
+### 10.3 边界条件
+
+- 空容器处理
+- 单个元素处理
+- 容量边界处理
+
+### 10.4 填充字符处理（编解码）
+
+```c
+// Base64 解码时特殊处理填充字符
+int sextet_c = (input[i] != '=') ? b64_decode_table[input[i]] : 0;
+```
+
+---
+
+## 十一、vtable 统一规范
+
+### 11.1 vtable 定义位置（强制要求）
+
+**vtable 定义位置**：
+- 所有存储抽象层和驱动层的核心 vtable 定义**必须**放在 `rgw_sal_vtable.h` 中
+- 驱动辅助函数定义在 `rgw_sal_driver.h` 中
+- 禁止在其他头文件中定义 vtable 结构
+
+**vtable 设计原则**：
+
+1. **每个实体类型有独立 vtable**：
+
+2. **vtable 结构体包含**：
+   - 函数指针成员
+   - 版本号 (`struct_version`) 用于兼容性检查
+
+3. **实体结构体包含**：
+   - vtable 指针
+   - 驱动私有实现 (`impl`)
+   - 公共成员
+
+### 11.2 vtable 完整性验证机制
+
+**验证级别**：
+
+| 级别 | 验证方式 | 使用场景 |
+|------|----------|----------|
+| L1 | 编译时宏 `RGW_SAL_VTABLE_CHECK` | 快速检查 |
+| L2 | 内联验证函数 `rgw_sal_*_vtable_check` | 初始化时验证 |
+| L3 | 运行时验证 `rgw_sal_*_vtable_is_valid` | 调试和诊断 |
+
+**NULL vtable 默认实现**：
+
+提供 NULL vtable 全局常量，用于：
+- 可选函数的占位符
+- 初始化时的默认值
+- 单元测试
+
+```c
+// 使用示例
+extern const rgw_sal_driver_vtable_t rgw_sal_driver_vtable_null;
+extern const rgw_sal_user_vtable_t rgw_sal_user_vtable_null;
+extern const rgw_sal_bucket_vtable_t rgw_sal_bucket_vtable_null;
+extern const rgw_sal_object_vtable_t rgw_sal_object_vtable_null;
+```
+
+**vtable 调用规范**：
+
+```c
+// 1. 使用辅助函数（推荐）
+int ret = rgw_sal_user_load(user, dpp, y);
+
+
+// 2. 使用验证宏
+RGW_SAL_VTABLE_CHECK(user->vtable, load, RGW_SAL_ERR_NOT_IMPLEMENTED);
+return user->vtable->load(user, dpp, y);
+```
+
+**驱动实现者检查清单**：
+
+- [ ] 实现所有必需的 vtable 函数指针
+- [ ] 初始化 `struct_version` 为 1
+- [ ] 使用验证函数确认 vtable 完整性
+- [ ] 提供 NULL 检查的销毁函数
+- [ ] 确保所有函数指针在初始化时被赋值
+
+---
+
+## 十二、C++ 高级特性转换规则
+
+本章节规定 C++ 高级语法特性向 C 语言的转换规则。
+
+### 12.1 模板 (Templates) 转换
+
+C++ 模板用于实现泛型编程，C 中可通过宏或函数指针实现类似功能。
+
+**转换模式一：宏替代（简单场景）**
+
+```c
+// C++ 模板
+template<typename T>
+T max(T a, T b) {
+    return a > b ? a : b;
+}
+
+// C 宏实现
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+```
+
+**转换模式二：函数指针 + 上下文（复杂场景）**
+
+```c
+// C++ 模板排序
+template<typename T>
+void sort(T* arr, size_t n, bool (*cmp)(T, T)) {
+    // 排序逻辑
+}
+
+// C 转换
+typedef int (*compare_fn)(const void*, const void*, void* ctx);
+
+void rgw_array_sort(void* arr, size_t n, size_t elem_size,
+                    compare_fn cmp, void* ctx) {
+    // 使用 qsort 风格的排序
+    qsort_r(arr, n, elem_size, cmp, ctx);
+}
+```
+
+**转换模式三：类型特化宏（推荐）**
+
+```c
+// C++ 模板特化
+template<>
+int max<int>(int a, int b) { return a > b ? a : b; }
+
+// C 预处理器
+#define DEFINE_MAX(type) \
+    static inline type max_##type(type a, type b) { \
+        return a > b ? a : b; \
+    }
+
+DEFINE_MAX(int)
+DEFINE_MAX(uint64_t)
+DEFINE_MAX(double)
+
+// 使用：max_int(1, 2), max_uint64_t(x, y)
+```
+
+### 12.2 Lambda 表达式转换
+
+Lambda 是匿名函数对象，C 中使用静态函数或函数指针加上下文实现。
+
+**转换模式一：静态函数替代（无捕获）**
+
+```c
+// C++ Lambda（无捕获）
+auto add = [](int a, int b) { return a + b; };
+
+// C 转换
+static int add(int a, int b) {
+    return a + b;
+}
+
+// 函数指针
+typedef int (*binary_op)(int, int);
+binary_op add_fn = add;
+```
+
+**转换模式二：函数 + 上下文指针（带捕获）**
+
+```c
+// C++ Lambda（带捕获）
+int multiplier = 10;
+auto multiply = [multiplier](int x) { return x * multiplier; };
+
+// C 转换：上下文结构体 + 函数
+typedef struct {
+    int multiplier;
+} multiply_ctx_t;
+
+static int multiply_fn(int x, void* ctx) {
+    multiply_ctx_t* mctx = (multiply_ctx_t*)ctx;
+    return x * mctx->multiplier;
+}
+
+// 使用
+multiply_ctx_t ctx = { .multiplier = 10 };
+int result = multiply_fn(5, &ctx);
+```
+
+**转换模式三：回调函数模式（用于 STL 算法）**
+
+```c
+// C++ Lambda 用于算法
+std::vector<int> nums = {1, 2, 3, 4, 5};
+std::for_each(nums.begin(), nums.end(), [](int& n) { n *= 2; });
+
+// C 转换
+typedef void (*foreach_fn)(void* elem, void* ctx);
+
+void double_int(void* elem, void* ctx) {
+    (void)ctx;
+    int* n = (int*)elem;
+    *n *= 2;
+}
+
+void rgw_carray_foreach(rgw_carray_t* arr, foreach_fn fn, void* ctx) {
+    for (size_t i = 0; i < arr->size; i++) {
+        fn(arr->data[i], ctx);
+    }
+}
+
+// 使用
+rgw_carray_foreach(array, double_int, NULL);
+```
+
+### 12.3 auto / decltype 转换
+
+C++ 的 `auto` 自动类型推导和 `decltype` 类型推断在 C 中需显式指定类型。
+
+**转换规则**
+
+```c
+// C++ auto
+auto x = 42;           // x 类型为 int
+auto y = 3.14;         // y 类型为 double
+auto ptr = &x;         // ptr 类型为 int*
+
+// C 转换：显式类型
+int x = 42;
+double y = 3.14;
+int* ptr = &x;
+
+// C++ decltype
+int i = 10;
+decltype(i) j = 20;    // j 类型为 int
+
+// C 转换：使用 typeof（C99）或显式类型
+int i = 10;
+int j = 20;            // 或使用编译器扩展 typeof
+```
+
+**typeof 使用示例（GCC/Clang 扩展）**
+
+```c
+// GCC/Clang typeof
+int x = 42;
+typeof(x) y = 3.14;    // y 类型为 int，会截断小数
+
+// 推荐：显式转换
+double tmp = 3.14;
+int y = (int)tmp;
+```
+
+### 12.4 移动语义 (Move Semantics) 转换
+
+C++ 移动语义用于高效转移资源所有权，C 中需显式管理所有权转移。
+
+**转换原则**
+
+| C++ 移动语义 | C 等价实现 |
+|-------------|-----------|
+| `std::move(x)` | 直接赋值 + 清空源 |
+| 移动构造函数 | 复制 + 重置源 |
+| 移动赋值运算符 | 释放目标 + 复制 + 重置源 |
+
+**转换示例**
+
+```c
+// C++ 移动语义
+class Buffer {
+    char* data;
+    size_t size;
+public:
+    Buffer(Buffer&& other) noexcept {
+        data = other.data;
+        size = other.size;
+        other.data = nullptr;
+        other.size = 0;
+    }
+    
+    Buffer& operator=(Buffer&& other) noexcept {
+        if (this != &other) {
+            delete[] data;
+            data = other.data;
+            size = other.size;
+            other.data = nullptr;
+            other.size = 0;
+        }
+        return *this;
+    }
+};
+
+// C 转换：所有权转移函数
+typedef struct {
+    char* data;
+    size_t size;
+    size_t capacity;
+} buffer_t;
+
+void buffer_move(buffer_t* dest, buffer_t* src) {
+    // 释放目标原有资源
+    if (dest->data) {
+        free(dest->data);
+    }
+    // 转移所有权
+    dest->data = src->data;
+    dest->size = src->size;
+    dest->capacity = src->capacity;
+    // 重置源
+    src->data = NULL;
+    src->size = 0;
+    src->capacity = 0;
+}
+
+void buffer_destroy(buffer_t* buf) {
+    if (buf->data) {
+        free(buf->data);
+        buf->data = NULL;
+    }
+    buf->size = 0;
+    buf->capacity = 0;
+}
+```
+
+### 12.5 右值引用 (&&) 转换
+
+C++ 右值引用主要用于移动语义和完美转发，C 中通过显式参数区分。
+
+**转换规则**
+
+| C++ 特性 | C 等价实现 |
+|---------|-----------|
+| `T&&` 参数 | `T*` 输出参数 或 显式 `move` 函数 |
+| `std::forward<T>(x)` | 直接传值或指针 |
+| 临时对象 | 栈上分配的对象 |
+
+**转换示例**
+
+```c
+// C++ 右值引用参数
+class String {
+public:
+    void append(String&& s);  // 接收临时对象
+};
+
+// C 转换：使用输出参数或所有权转移
+typedef struct rgw_string_t rgw_string_t;
+
+// 模式一：输出参数
+int rgw_string_append(rgw_string_t* dest, rgw_string_t* src) {
+    // dest 接收追加结果，src 可被清空
+    // ...
+    return RGW_OK;
+}
+
+// 模式二：转移所有权（推荐用于消耗临时对象）
+int rgw_string_concat_move(rgw_string_t* dest, rgw_string_t** src) {
+    // 消耗 src 的内容转移到 dest
+    int ret = rgw_string_append(dest, *src);
+    rgw_string_destroy(*src);
+    *src = NULL;
+    return ret;
+}
+```
+
+### 12.6 范围 for 循环转换
+
+C++ 范围 for 循环提供便捷的容器遍历，C 中需使用显式迭代器或索引。
+
+**转换规则**
+
+| C++ 范围 for | C 等价实现 |
+|-------------|-----------|
+| `for (auto x : vec)` | 显式 for 循环或迭代器宏 |
+| `for (auto& x : vec)` | 同上，注意引用语义 |
+| `for (const auto& x : vec)` | const 限定 |
+
+**转换示例**
+
+```c
+// C++ 范围 for
+std::vector<int> nums = {1, 2, 3};
+for (auto n : nums) {
+    printf("%d\n", n);
+}
+
+// C 转换：显式索引
+rgw_carray_t* nums = create_int_array();
+for (size_t i = 0; i < rgw_carray_size(nums); i++) {
+    int n = *(int*)rgw_carray_get(nums, i);
+    printf("%d\n", n);
+}
+
+// C 转换：宏封装
+#define RGWCARRAY_FOREACH(arr, type, var, iter) \
+    for (size_t iter = 0; iter < rgw_carray_size(arr) && ((var = *(type*)rgw_carray_get(arr, iter)), 1); iter++)
+
+// 使用
+int value;
+RGWCARRAY_FOREACH(nums, int, value, i) {
+    printf("%d\n", value);
+}
+```
+
+### 12.7 RAII / 析构函数模式转换
+
+C++ RAII 通过构造函数获取资源、析构函数自动释放，C 中需使用配对模式和清理函数。
+
+**转换模式一：配对函数**
+
+```c
+// C++ RAII
+class FileHandler {
+    FILE* file;
+public:
+    FileHandler(const char* path) : file(fopen(path, "r")) {}
+    ~FileHandler() { if (file) fclose(file); }
+};
+
+// C 转换：配对函数
+typedef struct {
+    FILE* file;
+} file_handler_t;
+
+int file_handler_open(file_handler_t* h, const char* path) {
+    h->file = fopen(path, "r");
+    return h->file ? 0 : -1;
+}
+
+void file_handler_close(file_handler_t* h) {
+    if (h->file) {
+        fclose(h->file);
+        h->file = NULL;
+    }
+}
+
+// 使用（必须配对）
+file_handler_t handler;
+if (file_handler_open(&handler, "file.txt") != 0) {
+    return -1;
+}
+// ... 使用 handler ...
+file_handler_close(&handler);
+```
+
+**转换模式二：cleanup 属性（GCC）**
+
+```c
+// C++ RAII
+class Lock {
+    std::mutex& mtx;
+public:
+    Lock(std::mutex& m) : mtx(m) { mtx.lock(); }
+    ~Lock() { mtx.unlock(); }
+};
+
+// C 转换：cleanup 属性
+typedef struct {
+    pthread_mutex_t* mutex;
+} auto_lock_t;
+
+void auto_lock_init(auto_lock_t* lock, pthread_mutex_t* mtx) {
+    lock->mutex = mtx;
+    pthread_mutex_lock(mtx);
+}
+
+void auto_lock_release(auto_lock_t* lock) __attribute__((cleanup(auto_lock_release_helper)));
+
+static inline void auto_lock_release_helper(auto_lock_t** lock) {
+    if (*lock && (*lock)->mutex) {
+        pthread_mutex_unlock((*lock)->mutex);
+    }
+}
+
+// 使用
+void some_function() {
+    auto_lock_t lock;
+    pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+    auto_lock_init(&lock, &mtx);
+    // ... 自动解锁 ...
+}
+```
+
+**转换模式三：goto cleanup（经典模式）**
+
+```c
+// C 转换：goto cleanup 模式
+int complex_operation() {
+    int ret = -1;
+    resource_t* r1 = NULL;
+    resource_t* r2 = NULL;
+    
+    r1 = alloc_resource();
+    if (!r1) goto cleanup;
+    
+    r2 = alloc_resource();
+    if (!r2) goto cleanup;
+    
+    // ... 操作 ...
+    ret = 0;
+    
+cleanup:
+    if (r1) free_resource(r1);
+    if (r2) free_resource(r2);
+    return ret;
+}
+```
+
+### 12.8 运算符重载转换
+
+C++ 运算符重载允许自定义类型使用运算符语法，C 中需使用函数替代。
+
+**转换规则**
+
+| C++ 运算符重载 | C 等价实现 |
+|--------------|-----------|
+| `a + b` | `add(a, b)` |
+| `a == b` | `equals(a, b)` |
+| `a[i]` | `get(a, i)` / `array_at(a, i)` |
+| `*ptr` | `deref(ptr)` |
+| `obj.method()` | `type_method(obj)` |
+
+**转换示例**
+
+```c
+// C++ 运算符重载
+class Vec2 {
+public:
+    int x, y;
+    Vec2 operator+(const Vec2& other) const {
+        return Vec2{x + other.x, y + other.y};
+    }
+    bool operator==(const Vec2& other) const {
+        return x == other.x && y == other.y;
+    }
+    int operator[](int i) const {
+        return i == 0 ? x : y;
+    }
+};
+
+// C 转换：函数替代
+typedef struct {
+    int x;
+    int y;
+} vec2_t;
+
+static inline vec2_t vec2_add(vec2_t a, vec2_t b) {
+    return (vec2_t){a.x + b.x, a.y + b.y};
+}
+
+static inline bool vec2_equals(vec2_t a, vec2_t b) {
+    return a.x == b.x && a.y == b.y;
+}
+
+static inline int vec2_get(vec2_t v, int i) {
+    return i == 0 ? v.x : v.y;
+}
+
+// 使用
+vec2_t a = {1, 2};
+vec2_t b = {3, 4};
+vec2_t c = vec2_add(a, b);
+bool eq = vec2_equals(a, c);
+int x = vec2_get(a, 0);
+```
+
+### 12.9 const 成员函数转换
+
+C++ `const` 成员函数承诺不修改对象状态，C 中通过函数命名约定或上下文区分。
+
+**转换规则**
+
+| C++ 特性 | C 等价实现 |
+|---------|-----------|
+| `int get() const` | `int get(const obj_t* obj)` |
+| `void modify()` | `int modify(obj_t* obj)` |
+| mutable 成员 | 外部状态参数 |
+
+**转换示例**
+
+```c
+// C++ const 成员函数
+class Config {
+    int value;
+    mutable int access_count;
+public:
+    int get() const {
+        access_count++;  // mutable 允许修改
+        return value;
+    }
+    void set(int v) {
+        value = v;
+    }
+};
+
+// C 转换：const 参数 + 访问计数外部管理
+typedef struct {
+    int value;
+    int access_count;
+} config_t;
+
+int config_get(const config_t* cfg) {
+    // 允许修改 const 结构中的某些字段
+    ((config_t*)cfg)->access_count++;  // 仅在 C 中可行（类型退化）
+    return cfg->value;
+}
+
+int config_set(config_t* cfg, int value) {
+    cfg->value = value;
+    return 0;
+}
+```
+
+### 12.10 mutable 关键字转换
+
+C++ `mutable` 允许在 `const` 成员函数中修改字段，C 中需通过外部机制处理。
+
+**转换模式**
+
+```c
+// C++ mutable
+class Cache {
+    std::string data;
+    mutable std::mutex mtx;
+    mutable bool cached;
+public:
+    const std::string& get() const {
+        std::lock_guard<std::mutex> lock(mtx);
+        if (!cached) {
+            // 计算并缓存...
+            cached = true;
+        }
+        return data;
+    }
+};
+
+// C 转换：分离状态或使用线程安全包装
+typedef struct {
+    char* data;
+    pthread_mutex_t mtx;
+    bool cached;
+} cache_t;
+
+int cache_get(cache_t* cache, const char** out_data) {
+    pthread_mutex_lock(&cache->mtx);
+    if (!cache->cached) {
+        // 计算并缓存...
+        cache->cached = true;
+    }
+    *out_data = cache->data;
+    pthread_mutex_unlock(&cache->mtx);
+    return 0;
+}
+```
+
+### 12.11 explicit 关键字转换
+
+C++ `explicit` 阻止隐式类型转换，C 中需显式调用转换函数。
+
+**转换规则**
+
+| C++ 特性 | C 等价实现 |
+|---------|-----------|
+| `explicit operator bool()` | `bool is_valid(obj_t*)` |
+| `explicit` 构造函数 | 显式初始化函数 |
+| 隐式转换 | 显式转换函数 |
+
+**转换示例**
+
+```c
+// C++ explicit
+class String {
+public:
+    explicit String(const char* s);
+    explicit operator bool() const { return !empty(); }
+};
+
+// C 转换：显式函数
+typedef struct {
+    char* data;
+    size_t len;
+} string_t;
+
+int string_init(string_t* str, const char* s);
+bool string_is_valid(const string_t* str);
+bool string_to_bool(const string_t* str);
+
+// 使用：必须显式调用
+string_t s;
+string_init(&s, "hello");
+if (string_to_bool(&s)) {  // 不能直接 if (s)
+    // ...
+}
+```
+
+### 12.12 转换规则速查表
+
+| C++ 特性 | C 等价实现 | 章节 |
+|---------|-----------|------|
+| `class`/`struct` | `struct` + vtable | 3.1 |
+| 继承 | 结构体嵌入（组合） | 3.2 |
+| namespace | 命名前缀 | 3.3 |
+| `shared_ptr` | 引用计数结构体 | 3.4 |
+| 异常 | 错误码 | 3.5 |
+| STL 容器 | c_common 容器库 | 3.6 |
+| 模板 | 宏/函数指针/类型特化 | 12.1 |
+| Lambda | 静态函数 + 上下文指针 | 12.2 |
+| `auto`/`decltype` | 显式类型 | 12.3 |
+| 移动语义 | 所有权转移函数 | 12.4 |
+| 右值引用 | 输出参数/转移函数 | 12.5 |
+| 范围 for | 显式循环/宏封装 | 12.6 |
+| RAII | 配对函数/cleanup/goto | 12.7 |
+| 运算符重载 | 函数替代 | 12.8 |
+| const 成员 | const 参数函数 | 12.9 |
+| mutable | 外部状态分离 | 12.10 |
+| explicit | 显式转换函数 | 12.11 |
+
+---
+
+## 十三、代码检查规则
+
+### 13.1 函数签名检查
+
+在调用或实现函数时，必须确保函数签名完全匹配。
+
+**检查项目**：
+
+| 检查项 | 要求 |
+|--------|------|
+| 返回类型 | 必须与声明/定义一致 |
+| 参数个数 | 必须完全匹配 |
+| 参数类型 | 必须逐个匹配 |
+| 参数顺序 | 必须保持一致 |
+| 指针层级 | `*` 和 `const` 的位置必须一致 |
+| 函数命名 | 必须区分大小写 |
+
+**常见错误示例**：
+
+```c
+// 错误：参数类型不匹配
+int func(int a, const char* b);  // 声明
+int ret = func("hello", 42);     // 调用：参数类型反了
+
+// 错误：指针层级不一致
+int func(int* ptr);              // 声明
+int ret = func(int val);         // 调用：应为 int* ptr
+
+// 错误：const 位置不一致
+int func(const char* str);        // 声明
+int func(char* const str);       // 定义：两者语义不同
+
+// 正确：严格匹配签名
+int func(int* ptr, const char* str);
+```
+
+**vtable 函数指针签名检查**：
+
+```c
+// vtable 定义
+typedef int (*rgw_sal_user_load_fn)(
+    rgw_sal_user_t* user,
+    const rgw_sal_dpp_t* dpp,
+    rgw_sal_yield_t* y
+);
+
+// 驱动实现必须严格匹配
+static int rados_user_load(
+    rgw_sal_user_t* user,        // 第1参数
+    const rgw_sal_dpp_t* dpp,    // 第2参数
+    rgw_sal_yield_t* y           // 第3参数
+) {
+    // 实现...
+}
+```
+
+### 13.2 类型成员检查
+
+访问结构体/联合体成员时，必须确保成员存在。
+
+**检查项目**：
+
+| 检查项 | 要求 |
+|--------|------|
+| 成员存在性 | 必须在定义中声明过 |
+| 成员类型 | 访问方式必须与类型匹配 |
+| 嵌套访问 | 必须确保每一层结构都定义 |
+| 联合体成员 | 只能访问已激活的成员 |
+
+**常见错误示例**：
+
+```c
+// 错误：访问不存在的成员
+typedef struct {
+    int id;
+    const char* name;
+} user_t;
+
+user_t u;
+u.age = 25;  // 错误：user_t 没有 age 成员
+
+// 错误：结构体未完整定义
+typedef struct rgw_sal_user_t {
+    const char* tenant;
+    // 缺少 driver 成员定义
+    rgw_sal_driver_t* driver;  // 错误：rgw_sal_driver_t 未定义
+} rgw_sal_user_t;
+
+// 正确：先声明再使用
+typedef struct rgw_sal_driver_t rgw_sal_driver_t;  // 前向声明
+typedef struct rgw_sal_user_t {
+    const char* tenant;
+    rgw_sal_driver_t* driver;
+} rgw_sal_user_t;
+```
+
+### 13.3 函数声明检查
+
+函数在使用前必须先声明。
+
+**检查项目**：
+
+| 检查项 | 要求 |
+|--------|------|
+| 前向声明 | 调用前必须有声明或定义 |
+| 头文件包含 | 使用外部函数必须包含对应头文件 |
+| 静态函数 | 同一文件内调用前必须声明 |
+| 声明一致性 | 声明与定义必须完全匹配 |
+
+**常见错误示例**：
+
+```c
+// 错误：调用未声明的函数
+int main() {
+    ret = do_something();  // 错误：do_something 未声明
+    return 0;
+}
+
+// 错误：声明与定义不匹配
+int func(int a, int b);    // 声明
+int func(int x) {           // 定义：参数名和个数不匹配
+    return x * 2;
+}
+
+// 正确：标准模式
+// === 头文件.h ===
+int do_something(int value);
+
+// === 源文件.c ===
+#include "头文件.h"
+
+int do_something(int value) {
+    return value + 1;
+}
+```
+
+### 13.4 前向声明检查
+
+使用不完整类型前，必须有前向声明。
+
+**检查项目**：
+
+| 检查项 | 要求 |
+|--------|------|
+| 不完整类型引用 | 必须有对应前向声明 |
+| 指针成员 | 可以使用前向声明 |
+| 实体成员 | 不能使用前向声明（需完整定义） |
+| 循环依赖 | 必须用前向声明打破 |
+
+**常见错误示例**：
+
+```c
+// 错误：使用未声明的不完整类型
+typedef struct rgw_sal_user_t {
+    const char* tenant;
+    const char* id;
+    rgw_sal_bucket_t* default_bucket;  // 错误：rgw_sal_bucket_t 未声明
+} rgw_sal_user_t;
+
+// 正确：添加前向声明
+typedef struct rgw_sal_bucket_t rgw_sal_bucket_t;  // 前向声明
+
+typedef struct rgw_sal_user_t {
+    const char* tenant;
+    const char* id;
+    rgw_sal_bucket_t* default_bucket;  // 正确：使用指针只需前向声明
+} rgw_sal_user_t;
+
+// 完整定义（可在其他头文件或同一文件后续部分）
+struct rgw_sal_bucket_t {
+    const char* name;
+    // ...
+};
+```
+
+**循环依赖处理**：
+
+```c
+// 文件 A：user.h
+typedef struct rgw_sal_user_t rgw_sal_user_t;          // 前向声明
+typedef struct rgw_sal_bucket_t rgw_sal_bucket_t;      // 前向声明
+
+struct rgw_sal_user_t {
+    const char* id;
+    rgw_sal_bucket_t* buckets;  // 正确：使用前向声明
+};
+
+// 文件 B：bucket.h
+typedef struct rgw_sal_bucket_t rgw_sal_bucket_t;
+typedef struct rgw_sal_user_t rgw_sal_user_t;          // 前向声明
+
+struct rgw_sal_bucket_t {
+    const char* name;
+    rgw_sal_user_t* owner;      // 正确：使用前向声明
+};
+```
+
+### 13.5 重复定义检查
+
+类型、宏、变量等不能重复定义。
+
+**检查项目**：
+
+| 检查项 | 要求 |
+|--------|------|
+| 结构体定义 | 同一类型只能定义一次 |
+| 枚举定义 | 枚举值不能重复 |
+| 宏定义 | 同一宏不能重复定义 |
+| 全局变量 | 只能初始化一次 |
+| inline 函数 | C99+ 必须使用 static inline |
+
+**常见错误示例**：
+
+```c
+// 错误：结构体重复定义
+// file1.h
+typedef struct {
+    int id;
+} user_t;
+
+// file2.h
+typedef struct {        // 错误：重复定义 user_t
+    int id;
+    const char* name;
+} user_t;
+
+// 正确：合并定义或使用条件编译
+// file.h
+#ifndef RGW_SAL_USER_T
+#define RGW_SAL_USER_T
+typedef struct rgw_sal_user_t {
+    int id;
+    const char* name;
+} rgw_sal_user_t;
+#endif
+
+// 错误：枚举值重复
+typedef enum {
+    STATUS_OK = 0,
+    STATUS_ERROR = 1,
+    STATUS_PENDING = 2,
+    STATUS_OK = 3,     // 错误：STATUS_OK 重复
+} status_t;
+
+// 错误：宏重复定义（无防护）
+#define MAX_SIZE 1024
+#define MAX_SIZE 2048   // 错误：重复定义
+
+// 正确：使用 #ifndef 防护
+#ifndef MAX_SIZE
+#define MAX_SIZE 1024
+#endif
+```
+
+### 13.6 NULL 值与边界值处理
+
+**NULL 值检查**：
+
+| 检查项 | 要求 |
+|--------|------|
+| 指针使用前 | 必须检查 NULL |
+| 函数返回值 | 必须检查是否为 NULL |
+| 内存分配 | 必须检查 malloc/calloc 返回值 |
+| 字符串函数 | 特别注意 strdup/strndup 返回值 |
+
+**边界值检查**：
+
+| 边界类型 | 检查要求 |
+|----------|----------|
+| 数组索引 | 必须在 [0, size) 范围内 |
+| 循环边界 | 避免 off-by-one 错误 |
+| 整数溢出 | 使用前检查溢出风险 |
+| 缓冲区大小 | 读写不能超过分配大小 |
+
+**常见错误示例**：
+
+```c
+// 错误：未检查 NULL
+char* str = strdup("hello");
+int len = strlen(str);  // 如果 strdup 失败，str 为 NULL，会崩溃
+
+// 正确：检查 NULL
+char* str = strdup("hello");
+if (!str) {
+    return RGW_ERR_OUT_OF_MEMORY;
+}
+int len = strlen(str);
+
+// 错误：数组越界
+int arr[10];
+for (int i = 0; i <= 10; i++) {  // 错误：i=10 时越界
+    arr[i] = i;
+}
+
+// 正确：边界检查
+for (int i = 0; i < 10; i++) {
+    arr[i] = i;
+}
+
+// 错误：整数溢出风险
+size_t size = count * sizeof(int);
+if (size > MAX_BUFFER_SIZE) {  // size 可能已经溢出
+    return RGW_ERR_INVALID_ARG;
+}
+
+// 正确：先检查再计算
+if (count > MAX_BUFFER_SIZE / sizeof(int)) {
+    return RGW_ERR_INVALID_ARG;
+}
+size_t size = count * sizeof(int);
+
+// 错误：字符串拼接越界
+char buf[32];
+strcpy(buf, "very long string that exceeds buffer");
+
+// 正确：使用安全函数
+strncpy(buf, long_string, sizeof(buf) - 1);
+buf[sizeof(buf) - 1] = '\0';
+```
+
+**标准 NULL 检查模式**：
+
+```c
+// 函数参数检查
+int func(ptr_t* ptr, const char* str) {
+    if (!ptr) {
+        return RGW_ERR_INVALID_ARG;
+    }
+    if (!str) {
+        return RGW_ERR_INVALID_ARG;
+    }
+    // ...
+}
+
+// 内存分配检查
+ptr_t* obj = malloc(sizeof(ptr_t));
+if (!obj) {
+    return RGW_ERR_OUT_OF_MEMORY;
+}
+
+// vtable 调用前检查
+int ret;
+if (!user || !user->vtable || !user->vtable->load) {
+    return RGW_SAL_ERR_NOT_IMPLEMENTED;
+}
+ret = user->vtable->load(user, dpp, y);
+if (ret < 0) {
+    return ret;
+}
+
+// 容器检查
+if (!array || rgw_carray_empty(array)) {
+    return RGW_ERR_NOT_FOUND;
+}
+```
+
+### 13.7 编译前自动检查清单
+
+在编译前，必须确认以下检查项全部通过：
+
+**函数相关**：
+- [ ] 所有调用的函数都有对应声明
+- [ ] 函数声明与定义签名完全匹配
+- [ ] vtable 函数指针类型与实现函数签名一致
+
+**类型相关**：
+- [ ] 所有使用的结构体/联合体都已定义
+- [ ] 使用不完整类型前有前向声明
+- [ ] 不存在重复的类型定义
+
+**内存相关**：
+- [ ] 所有 malloc/calloc/strdup 检查返回值
+- [ ] 所有 free 后将指针置为 NULL
+- [ ] 不存在 use-after-free
+
+**边界相关**：
+- [ ] 数组/缓冲区访问不越界
+- [ ] 整数运算无溢出风险
+- [ ] 字符串操作不越界
+
+---
+
+## 十五、文档版本
+
+| 版本 | 日期 | 说明 |
+|------|------|------|
+| 1.0 | 2026-03-24 | 整合虚函数表转换规则、代码重复性检查 |
+| 2.0 | 2026-03-27 | 完善模块职责划分，规范 c_common 和 sal_c 边界，增加代码生成前计划要求 |
+| 3.0 | 2026-03-27 | 统一 vtable 定义位置，添加 vtable 完整性验证机制和 NULL vtable 默认实现 |
+| 4.0 | 2026-03-31 | 新增代码检查规则：函数签名、类型成员、函数声明、前向声明、重复定义、NULL/边界值处理 |
+| 5.0 | 2026-03-31 | 新增第十二章：C++ 高级特性转换规则，包括模板、Lambda、auto/decltype、移动语义、右值引用、范围for、RAII、运算符重载、const/explicit等特性转换 |

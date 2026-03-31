@@ -1,0 +1,258 @@
+..
+	Copyright (c) 2012-2020 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+.. _guide-storage:
+
+Storage backends
+----------------
+
+
+Intro
+~~~~~
+
+Vinyl Cache has pluggable storage backends. It can store data in various
+backends which can have different performance characteristics. The default
+configuration is to use the malloc backend with a limited size. For a
+serious Vinyl Cache deployment you probably would want to adjust the storage
+settings.
+
+All built-in storage backends cache full objects only, so, for example, to
+support *n* concurrent cache hits on 1GB sized objects, the storage backend
+should be configured to provide at least *n*\ GB of storage. For uncacheable
+objects, the rule of thumb is *n* x ``transit_buffer``.
+
+Storage backends are also called stevedores.
+
+.. _vmods: https://www.vinyl-cache.org/vmods
+
+Besides the built-in storage backends, separately distributed extensions exist,
+
+Storage Selection
+~~~~~~~~~~~~~~~~~
+
+By default, Vinyl Cache will store short-lived and passed objects in a storage
+called `Transient`, described below.
+
+For other objects, it will rotate between all the non-transient storages,
+unless the VCL variable `beresp.storage` is explicitly set.
+
+default
+~~~~~~~
+
+syntax: default[,size]
+
+The default storage backend is an alias to umem, where available, or
+malloc otherwise.
+
+malloc
+~~~~~~
+
+syntax: malloc[,size]
+
+Malloc is a virtual memory based storage backend. Each object will be allocated
+using whatever ``malloc()`` implementation is in effect. If configured, virtual
+memory might get paged in and out to swap space by the operating system.
+
+The size parameter specifies the maximum *net* amount of memory `vinyld` will
+allocate.  The size is assumed to be in bytes, unless followed by one of the
+following suffixes:
+
+      K, k    The size is expressed in kibibytes.
+
+      M, m    The size is expressed in mebibytes.
+
+      G, g    The size is expressed in gibibytes.
+
+      T, t    The size is expressed in tebibytes.
+
+The default size is unlimited.
+
+The *net* amount of memory comprises object metadata (typically in the order of
+the total size of headers), segmented body data and metadata for the storage
+engine itself.
+
+This *net* amount of memory is the sum of all allocation sizes from the
+perspective of `vinyld`, but for the actual *gross* amount, two additional
+factors need to be considered: `vinyld` also requires memory outside the
+storage engine in the order of 1KB per object. And, more importantly, due to
+fragmentation, the amount of memory actually used by the malloc implementation
+might be substantially higher by a factor of typically **two to four times**.
+Specific optimizations like :ref:`platform-thp` can amplify this effect.
+
+malloc's performance is bound to memory speed, so it is very fast. If
+the dataset is bigger than available memory, performance will
+depend on the operating system's ability to page effectively.
+
+.. _guide-storage_umem:
+
+umem
+~~~~
+
+syntax: umem[,size]
+
+Umem is a better alternative to the malloc backend where `libumem`_ is
+available. All other configuration aspects are considered equal to
+malloc.
+
+`libumem`_ implements a slab allocator similar to the kernel memory
+allocator used in virtually all modern operating systems and is
+considered more efficient and scalable than classical
+implementations. In particular, `libumem`_ is included in the family
+of OpenSolaris descendent operating systems where jemalloc(3) is not
+commonly available.
+
+If `libumem`_ is not used otherwise, Vinyl Cache will only use it for
+storage allocations and keep the default libc allocator for all other
+Vinyl Cache memory allocation purposes.
+
+If `libumem`_ is already loaded when Vinyl Cache initializes, this message
+is output::
+
+  notice: libumem was already found to be loaded
+
+to indicate that `libumem`_ will not only be used for storage. Likely
+reasons for this to be the case are:
+
+* some library ``vinyld`` is linked against was linked against
+  `libumem`_ (most likely ``libpcre2-8``, check with ``ldd``)
+
+* ``LD_PRELOAD_64=/usr/lib/amd64/libumem.so.1``,
+  ``LD_PRELOAD_32=/usr/lib/libumem.so.1`` or
+  ``LD_PRELOAD=/usr/lib/libumem.so.1`` is set
+
+Vinyl Cache will also output this message to recommend settings for using
+`libumem`_ for all allocations::
+
+  it is recommended to set UMEM_OPTIONS=perthread_cache=0,backend=mmap
+  before starting vinyl Cache
+
+This recommendation should be followed to achieve an optimal
+`libumem`_ configuration for Vinyl Cache. Setting this environment
+variable before starting Vinyl Cache is required because `libumem`_ cannot
+be reconfigured once loaded.
+
+.. _libumem: http://dtrace.org/blogs/ahl/2004/07/13/number-11-of-20-libumem/
+
+file
+~~~~
+
+syntax: file,path[,size[,granularity[,advice]]]
+
+The file backend stores objects in virtual memory backed by an
+unlinked file on disk with `mmap`, relying on the kernel to handle
+paging as parts of the file are being accessed.
+
+This implies that sufficient *virtual* memory needs to be available to
+accomodate the file size in addition to any memory Vinyl Cache requires
+anyway. Traditionally, the virtual memory limit is configured with
+``ulimit -v``, but modern operating systems have other abstractions
+for this limit like control groups (Linux) or resource controls
+(Solaris).
+
+.. XXX idk about the BSD and macOS abstractions -- slink
+
+The 'path' parameter specifies either the path to the backing file or
+the path to a directory in which `vinyld` will create the backing file.
+
+The size parameter specifies the size of the backing file. The size
+is assumed to be in bytes, unless followed by one of the following
+suffixes:
+
+      K, k    The size is expressed in kibibytes.
+
+      M, m    The size is expressed in mebibytes.
+
+      G, g    The size is expressed in gibibytes.
+
+      T, t    The size is expressed in tebibytes.
+
+If 'path' points to an existing file and no size is specified, the
+size of the existing file will be used. If 'path' does not point to an
+existing file it is an error to not specify the size.
+
+If the backing file already exists, it will be truncated or expanded
+to the specified size.
+
+Note that if `vinyld` has to create or expand the file, it will not
+pre-allocate the added space, leading to fragmentation, which may
+adversely impact performance on rotating hard drives.  Pre-creating
+the storage file using `dd(1)` will reduce fragmentation to a minimum.
+
+.. XXX:1? benc
+
+The 'granularity' parameter specifies the granularity of
+allocation. All allocations are rounded up to this size. The granularity
+is assumed to be expressed in bytes, unless followed by one of the
+suffixes described for size.
+
+The default granularity is the VM page size. The size should be reduced if you
+have many small objects.
+
+File performance is typically limited to the write speed of the
+device, and depending on use, the seek time.
+
+The 'advice' parameter tells the kernel how `vinyld` expects to
+use this mapped region so that the kernel can choose the appropriate
+read-ahead and caching techniques.  Possible values are ``normal``,
+``random`` and ``sequential``, corresponding to MADV_NORMAL, MADV_RANDOM
+and MADV_SEQUENTIAL madvise() advice argument, respectively.  Defaults to
+``random``.
+
+On Linux, large objects and rotational disk should benefit from
+"sequential".
+
+deprecated_persistent
+~~~~~~~~~~~~~~~~~~~~~
+
+syntax: deprecated_persistent,path,size {experimental}
+
+*Before using, read* :ref:`phk_persistent`\ *!*
+
+Persistent storage. Vinyl Cache will store objects in a file in a manner
+that will secure the survival of *most* of the objects in the event of
+a planned or unplanned shutdown of Vinyl Cache.
+
+The 'path' parameter specifies the path to the backing file. If
+the file doesn't exist Vinyl Cache will create it.
+
+The 'size' parameter specifies the size of the backing file. The
+size is expressed in bytes, unless followed by one of the
+following suffixes:
+
+      K, k    The size is expressed in kibibytes.
+
+      M, m    The size is expressed in mebibytes.
+
+      G, g    The size is expressed in gibibytes.
+
+      T, t    The size is expressed in tebibytes.
+
+Vinyl Cache will split the file into logical *silos* and write to the
+silos in the manner of a circular buffer. Only one silo will be kept
+open at any given point in time. Full silos are *sealed*. When Vinyl Cache
+starts after a shutdown it will discard the content of any silo that
+isn't sealed.
+
+Note that taking persistent silos offline and at the same time using
+bans can cause problems. This is due to the fact that bans added while
+the silo was offline will not be applied to the silo when it reenters
+the cache. Consequently enabling previously banned objects to
+reappear.
+
+Transient Storage
+-----------------
+
+If you name any of your storage backend "Transient" it will be used
+for transient (short lived) objects. This includes the temporary
+objects created when returning a synthetic object. By default Vinyl Cache
+would use an unlimited malloc backend for this.
+
+.. XXX: Is this another parameter? In that case handled in the same manner as above? benc
+
+Vinyl Cache will consider an object short lived if the TTL is below the
+parameter 'shortlived'.
+
+
+.. XXX: I am generally missing samples of setting all of these parameters, maybe one sample per section or a couple of examples here with a brief explanation to also work as a summary? benc

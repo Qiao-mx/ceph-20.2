@@ -1,0 +1,22 @@
+vtest "Test return(synth) from vcl_pipe"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		return (pipe);
+	}
+
+	sub vcl_pipe {
+		return (synth(401));
+	}
+} -start
+
+client c1 {
+	txreq -req PROPFIND
+	rxresp
+	expect resp.status == 401
+} -run

@@ -1,0 +1,79 @@
+vtest "Test backend fetch byte counters"
+
+server s1 {
+	rxreq
+	expect req.url == "/1"
+	txresp -nodate -bodylen 1000
+
+	rxreq
+	expect req.url == "/2"
+	send "HTTP/1.1\r\n\r\n"
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		# make BereqAcct deterministic
+		unset req.http.via;
+	}
+	sub vcl_backend_fetch {
+		unset bereq.http.x-forwarded-for;
+		unset bereq.http.X-Vinyl;
+		set bereq.http.Host = "foo.bar";
+	}
+	sub vcl_backend_response {
+		set beresp.do_stream = false;
+	}
+} -start
+
+# Request (1002):
+# POST /1 HTTP/1.1\r\n		 18 bytes
+# Content-Length: 4\r\n		 19 bytes
+# User-Agent: c1\r\n		 16 bytes
+# Host: foo.bar\r\n		 15 bytes
+# \r\n				  2 bytes
+# Total:			 70 bytes
+# Response:
+# HTTP/1.1 200 OK\r\n		 17 bytes
+# Content-Length: 1000\r\n	 22 bytes
+# Server: s1\r\n		 12 bytes
+# \r\n				  2 bytes
+# Total:			 53 bytes
+
+# Request (1004):
+# POST /2 HTTP/1.1\r\n		 18 bytes
+# Content-Length: 4\r\n		 19 bytes
+# User-Agent: c1\r\n		 16 bytes
+# Host: foo.bar\r\n		 15 bytes
+# \r\n				  2 bytes
+# Total:			 70 bytes
+# Response:
+# HTTP/1.1\r\n			 10 bytes
+# \r\n				  2 bytes
+# Total:			 12 bytes
+
+logexpect l1 -v v1 -g session {
+	expect * 1001	Begin		"^req .* rxreq"
+	expect * =	End
+	expect 0 1003	Begin		"^req .* rxreq"
+	expect * =	End
+	expect 0 1002   Begin		"^bereq "
+	expect * =      BereqAcct       "^70 4 74 53 1000 1053$"
+	expect 0 =      End
+	expect 0 1004	Begin		"^bereq"
+	expect * =	BereqAcct	"^70 4 74 12 0 12$"
+	expect * =	End
+
+} -start
+
+# Request 1001
+client c1 {
+	txreq -req "POST" -url "/1" -body "asdf"
+	rxresp
+	expect resp.status == 200
+
+	txreq -req "POST" -url "/2" -body "asdf"
+	rxresp
+	expect resp.status == 503
+} -run
+
+logexpect l1 -wait

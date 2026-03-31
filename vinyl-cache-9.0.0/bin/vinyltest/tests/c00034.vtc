@@ -1,0 +1,403 @@
+vtest "Range headers"
+
+server s1 {
+	rxreq
+	txresp -bodylen 100
+} -start
+
+########################################################################
+# VCL control over range processing with built-in range support disabled
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.do_stream = false;
+	}
+	sub vcl_deliver {
+		if (req.http.range) {
+			set resp.filters = "range";
+		}
+		set resp.http.Accept-Ranges = "bytes";
+	}
+} -start
+
+vinyl v1 -cliok "param.set http_range_support off"
+
+client c1 {
+	txreq -hdr "Range: bytes=0-9"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 10
+	expect resp.http.content-range == "bytes 0-9/100"
+	expect resp.http.accept-ranges == "bytes"
+} -run
+
+########################################################################
+# Neither explicit range processing nor built-in
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.do_stream = false;
+	}
+}
+
+client c1 {
+	txreq -hdr "Range: bytes=0-9"
+	rxresp
+	expect resp.http.accept-ranges == <undef>
+	expect resp.status == 200
+	expect resp.bodylen == 100
+} -run
+
+vinyl v1 -expect s_resp_bodybytes == 110
+
+vinyl v1 -vsl_catchup
+
+########################################################################
+# Only built-in processing
+
+vinyl v1 -cliok "param.set http_range_support on"
+
+client c2 {
+	# Invalid range requests
+
+	txreq -hdr "Range: bytes =0-9"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+	expect resp.http.content-length == "0"
+	expect resp.http.transfer-encoding == "<undef>"
+	expect resp.http.content-range == "bytes */100"
+
+	txreq -hdr "Range: bytes=0- 9"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+
+	txreq -hdr "Range: bytes =-9"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+
+	txreq -hdr "Range: bytes =0-a"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+
+	txreq -hdr "Range: bytes=-"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+
+	txreq -hdr "Range: bytes=5-2"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+
+	txreq -hdr "Range: bytes=-0"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+
+	txreq -hdr "Range: bytes=100-"
+	rxresp
+	expect resp.status == 416
+	expect resp.bodylen == 0
+} -run
+
+vinyl v1 -expect s_resp_bodybytes == 110
+
+vinyl v1 -vsl_catchup
+
+client c3 {
+	# Valid range requests
+
+	txreq -hdr "Range: bytes=0-49"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 50
+	expect resp.http.content-range == "bytes 0-49/100"
+	expect resp.http.accept-ranges == "bytes"
+
+	txreq -hdr "Range: bytes=50-99"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 50
+	expect resp.http.content-range == "bytes 50-99/100"
+
+	txreq -hdr "Range: bytes=-50"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 50
+	expect resp.http.content-range == "bytes 50-99/100"
+
+	txreq -hdr "Range: bytes=50-"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 50
+	expect resp.http.content-range == "bytes 50-99/100"
+
+	txreq -hdr "Range: bytes=0-0"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 1
+	expect resp.http.content-range == "bytes 0-0/100"
+
+	txreq -hdr "Range: bytes=-2000"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 100
+	expect resp.http.content-range == "bytes 0-99/100"
+
+	txreq -hdr "Range: bytes=0-"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 100
+	expect resp.http.content-range == "bytes 0-99/100"
+} -run
+
+vinyl v1 -expect s_resp_bodybytes == 511
+
+vinyl v1 -vsl_catchup
+
+# Test Range streaming with streaming objects with C-L
+
+server s1 {
+	loop 2 {
+		rxreq
+		txresp -nolen -hdr "Content-Length: 100"
+		send "0123456789"
+		send "0123456789"
+		send "0123456789"
+		send "0123456789"
+		send "0123456789"
+		send "0123456789"
+		send "0123456789"
+		send "0123456789"
+		send "0123456789"
+		delay 2
+		send "0123456789"
+	}
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		if (bereq.url == "/2") {
+			set beresp.do_gzip = true;
+		}
+	}
+}
+
+client c4 {
+	# Open ended range to force C-L usage
+	txreq -url /1 \
+		-hdr "Range: bytes=20-" \
+		-hdr "Connection: close"
+	rxresp
+	expect resp.status == 206
+	expect resp.http.Content-Range == "bytes 20-99/100"
+	expect resp.http.Content-Length == 80
+	expect resp.bodylen == 80
+	expect_close
+} -run
+
+vinyl v1 -vsl_catchup
+
+client c5 {
+	# Closed C-L because we cannot use C-L
+	txreq -url /2 \
+		-hdr "Range: bytes=2-5" \
+		-hdr "Accept-encoding: gzip"
+	rxresp
+	expect resp.status == 206
+	expect resp.http.Content-Range == "bytes 2-5/*"
+	expect resp.http.Content-Length == <undef>
+	expect resp.bodylen == 4
+} -run
+
+# Test partial range with http2
+
+server s1 {
+	rxreq
+	expect req.url == "/3"
+	txresp -hdr "Content-length: 3" -body "BLA"
+} -start
+
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -vcl+backend ""
+
+client c6 {
+	stream 1 {
+		txreq -url /3 -hdr "range" "bytes=0-1"
+		rxresp
+		expect resp.status == 206
+		expect resp.http.content-length == 2
+		expect resp.body == BL
+	} -run
+} -run
+
+vinyl v1 -vsl_catchup
+
+server s1 {
+	rxreq
+	txresp
+	rxreq
+	txresp -hdr "Accept-Ranges: foobar"
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		return (pass);
+	}
+	sub vcl_deliver {
+		set resp.http.foobar = resp.http.accept-ranges;
+	}
+}
+
+client c7 {
+	txreq
+	rxresp
+	expect resp.http.foobar == ""
+	expect resp.http.accept-ranges == <undef>
+	txreq
+	rxresp
+	expect resp.http.foobar == foobar
+	expect resp.http.accept-ranges == foobar
+} -run
+
+server s1 {
+	rxreq
+	expect req.http.range == "bytes=10-19"
+	txresp -status 206 -hdr "content-range: bytes 0-49/100" -bodylen 40
+
+	rxreq
+	expect req.http.range == "bytes=10-19"
+	txresp -status 206 -hdr "content-range: bytes 10-19/100" -bodylen 40
+
+	rxreq
+	expect req.http.range == "bytes=90-119"
+	txresp -status 416 -hdr "content-range: bytes */100" -bodylen 100
+
+	rxreq
+	expect req.url == "/?unexpected=content-range"
+	expect req.http.range == <undef>
+	txresp -hdr "content-range: bytes 0-49/100" -bodylen 40
+
+	rxreq
+	expect req.url == "/?unexpected=unsatisfied-range"
+	expect req.http.range == <undef>
+	txresp -hdr "content-range: bytes */100" -bodylen 100
+
+	rxreq
+	expect req.url == "/?invalid=content-range"
+	expect req.http.range == <undef>
+	txresp -hdr "content-range: bytes=0-99/100" -bodylen 100
+
+	rxreq
+	expect req.http.range == "bytes=0-0"
+	txresp -hdr "content-range: bytes */*" -bodylen 100
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		if (req.http.return == "pass") {
+			return (pass);
+		}
+	}
+
+	sub vcl_beresp_range {
+		return;
+	}
+}
+
+client c8 {
+	# range vs content-range vs content-length
+
+	txreq -hdr "range: bytes=10-19" -hdr "return: pass"
+	rxresp
+	expect resp.status == 503
+
+	txreq -hdr "range: bytes=10-19" -hdr "return: pass"
+	rxresp
+	expect resp.status == 503
+
+	txreq -hdr "range: bytes=90-119" -hdr "return: pass"
+	rxresp
+	expect resp.status == 416
+
+	txreq -url "/?unexpected=content-range"
+	rxresp
+	expect resp.status == 503
+
+	txreq -url "/?unexpected=unsatisfied-range"
+	rxresp
+	expect resp.status == 503
+
+	txreq -url "/?invalid=content-range"
+	rxresp
+	expect resp.status == 503
+
+	txreq -hdr "range: bytes=0-0" -hdr "return: pass"
+	rxresp
+	expect resp.status == 503
+} -run
+
+# range filter without a range header
+
+server s1 {
+	rxreq
+	txresp -bodylen 256
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_deliver {
+		set resp.filters = "range";
+	}
+}
+
+client c9 {
+	txreq -url /5
+	rxresp
+	expect resp.status == 200
+	expect resp.bodylen == 256
+} -run
+
+# built-in vcl has vcl_beresp_range to ignore content-range for responses but
+# 206, 416
+#
+server s1 {
+	rxreq
+	expect req.url == "/?unexpected=content-range"
+	expect req.http.range == <undef>
+	txresp -hdr "content-range: bytes 0-49/100" -bodylen 40
+
+	rxreq
+	expect req.url == "/?unexpected=unsatisfied-range"
+	expect req.http.range == <undef>
+	txresp -hdr "content-range: bytes */100" -bodylen 100
+
+	rxreq
+	expect req.url == "/?invalid=content-range"
+	expect req.http.range == <undef>
+	txresp -hdr "content-range: bytes=0-99/100" -bodylen 100
+
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		return (pass);
+	}
+}
+
+client c10 {
+	txreq -url "/?unexpected=content-range"
+	rxresp
+	expect resp.status == 200
+
+	txreq -url "/?unexpected=unsatisfied-range"
+	rxresp
+	expect resp.status == 200
+
+	txreq -url "/?invalid=content-range"
+	rxresp
+	expect resp.status == 200
+} -run

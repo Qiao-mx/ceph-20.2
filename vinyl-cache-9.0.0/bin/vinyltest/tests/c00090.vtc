@@ -1,0 +1,65 @@
+vtest "Forcing health of backends listening at UDS"
+
+server s1 -listen "${tmpdir}/s1.sock" -repeat 3 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl {
+	backend s1 {
+		.path = "${s1_sock}";
+		.probe = {
+			.window = 8;
+			.initial = 7;
+			.threshold = 8;
+			.interval = 10s;
+		}
+	}
+
+	sub vcl_recv {
+		return(pass);
+	}
+
+} -start
+
+delay 1
+
+vinyl v1 -cliok "vcl.list"
+vinyl v1 -cliok "backend.list -p"
+vinyl v1 -cliok "backend.set_health s1 auto"
+vinyl v1 -cliok "backend.list -p"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+vinyl v1 -cliok "backend.list"
+vinyl v1 -cliok "backend.set_health s1 sick"
+vinyl v1 -cliok "backend.list"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 503
+} -run
+
+vinyl v1 -cliok "backend.list"
+vinyl v1 -cliok "backend.set_health s1 healthy"
+vinyl v1 -cliok "backend.list"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+vinyl v1 -clierr 106 "backend.set_health s1 foo"
+vinyl v1 -clierr 106 "backend.set_health s2 foo"
+vinyl v1 -clierr 106 "backend.set_health s2 auto"
+vinyl v1 -cliok "vcl.list"
+vinyl v1 -cliok "backend.list *"
+vinyl v1 -cliok "backend.list *.foo"
+vinyl v1 -cliok "backend.list vcl1.*"
+

@@ -1,0 +1,43 @@
+vtest "builtin purge from vcl_recv{}"
+
+server s1 {
+	rxreq
+	txresp -hdr "foo: 1"
+	rxreq
+	txresp -hdr "foo: 2"
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		if (req.method == "PURGE") {
+			return (purge);
+		}
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.http.foo == 1
+
+	txreq
+	rxresp
+	expect resp.http.foo == 1
+
+	txreq -req PURGE
+	rxresp
+	expect resp.reason == "Purged"
+
+	txreq
+	rxresp
+	expect resp.http.foo == 2
+
+} -run
+
+vinyl v1 -vsl_catchup
+
+vinyl v1 -expect MAIN.n_purges == 1
+vinyl v1 -expect MAIN.n_obj_purged == 1
+
+# NB: a purge used to increase n_expired
+vinyl v1 -expect MAIN.n_expired == 0

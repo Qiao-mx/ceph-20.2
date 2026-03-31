@@ -1,0 +1,57 @@
+vtest "Ban a persistent object"
+
+feature persistent_storage
+
+shell "rm -f ${tmpdir}/_.per"
+
+server s1 {
+	rxreq
+	txresp -hdr "Foo: foo"
+} -start
+
+vinyl v1 \
+	-arg "-pfeature=+wait_silo" \
+	-arg "-sdeprecated_persistent,${tmpdir}/_.per,5m" \
+	-arg "-pban_lurker_sleep=0" \
+	-vcl+backend { } -start
+
+vinyl v1 -cliok ban.list
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.X-Vinyl == "1001"
+	expect resp.http.foo == "foo"
+} -run
+
+vinyl v1 -cliok "ban req.url == /"
+vinyl v1 -cliok ban.list
+vinyl v1 -stop
+server s1 -wait
+
+server s1 {
+	rxreq
+	txresp -hdr "Foo: bar"
+} -start
+
+vinyl v1 -vcl+backend {} -start
+
+vinyl v1 -cliok ban.list
+
+# Count of 2 here, because the "magic" ban is also there"
+# vinyl v1 -expect n_ban == 2
+
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.X-Vinyl == "1001"
+	expect resp.http.foo == "bar"
+} -run
+
+
+vinyl v1 -cliok ban.list
+
+vinyl v1 -stop

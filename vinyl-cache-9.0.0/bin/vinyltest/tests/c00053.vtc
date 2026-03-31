@@ -1,0 +1,74 @@
+vtest "Test include vs. unsafe_path and include glob-ing"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+shell "echo > ${tmpdir}/_.c00053"
+
+vinyl v1 -vcl+backend {
+	include "${tmpdir}/_.c00053";
+}
+
+vinyl v1 -cliok "param.set vcc_feature -unsafe_path"
+
+vinyl v1 -errvcl {' is unsafe} {
+	backend default { .host = "${s1_sock}"; }
+	include "${tmpdir}/_.c00053";
+}
+
+vinyl v1 -cliok "param.set vcl_path ${tmpdir}"
+
+vinyl v1 -vcl+backend {
+	include "_.c00053";
+}
+
+shell "rm -f ${tmpdir}/_.c00053"
+
+# Testing of include +glob
+
+vinyl v1 -cliok "param.set vcc_feature +unsafe_path"
+
+vinyl v1 -errvcl "glob pattern matched no files." {
+	vcl 4.0;
+
+	include +glob "${tmpdir}/Q*.vcl";
+}
+
+shell {
+	echo 'sub vcl_deliver { set resp.http.foo = "foo"; }' > ${tmpdir}/sub_foo.vcl
+	echo 'sub vcl_deliver { set resp.http.bar = "bar"; }' > ${tmpdir}/sub_bar.vcl
+	echo 'vcl 4.0; backend default { .host = "0:0"; } include +glob "./sub_*.vcl";' > ${tmpdir}/top.vcl
+}
+
+vinyl v1 -vcl+backend {
+	include +glob "${tmpdir}/sub_*.vcl";
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.http.foo == foo
+	expect resp.http.bar == bar
+} -run
+
+vinyl v1 -errvcl {needs absolute filename of including file.} {
+	include +glob "./sub_*.vcl";
+	backend default none;
+}
+
+vinyl v1 -cliok "vcl.load foo ${tmpdir}/top.vcl"
+vinyl v1 -cliok "vcl.use foo"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.http.foo == foo
+	expect resp.http.bar == bar
+} -run
+
+vinyl v1 -errvcl "+glob can only be used with absolute paths or relative paths starting with './'" {
+	include +glob "sub_*.vcl";
+	backend default none;
+}

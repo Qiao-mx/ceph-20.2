@@ -1,0 +1,3001 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="VTC" href="vtc.html"><link rel="prev" title="vinylstat" href="vinylstat.html">
+        <link rel="prefetch" href="../_static/vinyl-cache-logo-primary.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/vinyl-cache-symbol-crop-square.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>vinyld - Vinyl Cache version 9.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=30eb20ad" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Vinyl Cache version 9.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/vinyl-cache-logo-primary.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Vinyl Cache version 9.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../installation/index.html">Vinyl Cache Installation</a><input aria-label="Toggle navigation of Vinyl Cache Installation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html">Installing Vinyl Cache</a><input aria-label="Toggle navigation of Installing Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_debian.html">Installing on Debian/Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_freebsd.html">Installing on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_openbsd.html">Installing on OpenBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_redhat.html">Installing on RedHat or CentOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../installation/install.html#compiling-vinyl-cache-from-source">Compiling Vinyl Cache from source</a><input aria-label="Toggle navigation of Compiling Vinyl Cache from source" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/install_source.html">Compiling Vinyl Cache from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/install.html#other-pre-built-vinyl-cache-packages">Other pre-built Vinyl Cache packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/help.html">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/bugs.html">Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/platformnotes.html">Platform specific notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">The Vinyl Cache Tutorial</a><input aria-label="Toggle navigation of The Vinyl Cache Tutorial" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html">Vinyl Cache: The beef in the sandwich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#how-vinyl-cache-works">How Vinyl Cache works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#caching-with-vinyl-cache">Caching with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-composition-with-vinyl-cache">Content Composition with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#content-policy-with-vinyl-cache">Content Policy with Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/introduction.html#vinyl-cache-is-general-purpose">Vinyl Cache is general purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/starting_vinyl.html">Starting Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html">Put Vinyl Cache on port 80</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/putting_vinyl_on_port_80.html#restarting-vinyld-again">Restarting <code class="docutils literal notranslate"><span class="pre">vinyld</span></code> again</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/backend_servers.html">Backend servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/peculiarities.html">Peculiarities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/now_what.html">Now what?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../users-guide/index.html">The Vinyl Cache Users Guide</a><input aria-label="Toggle navigation of The Vinyl Cache Users Guide" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/intro.html">The Big Vinyl Cache Picture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/running.html">Starting and running Vinyl Cache</a><input aria-label="Toggle navigation of Starting and running Vinyl Cache" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_security.html">Security first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/command-line.html">Required command line arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/run_cli.html">CLI - bossing Vinyl Cache around</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html">Storage backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/storage-backends.html#transient-storage">Transient Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/params.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/sizing-your-cache.html">Sizing your cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/vcl.html">VCL - Vinyl Configuration Language</a><input aria-label="Toggle navigation of VCL - Vinyl Configuration Language" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-syntax.html">VCL Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-built-in-code.html">Built-in VCL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-variables.html">Request and response VCL objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html">Backend servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#the-none-backend">The “none” backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#multiple-backends">Multiple backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#backends-and-virtual-hosts-in-vinyl-cache">Backends and virtual hosts in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connecting-through-a-proxy">Connecting Through a Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#directors">Directors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#health-checks">Health checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#layering">Layering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#director-resolution">Director Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-backends.html#connection-pooling">Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-hashing.html">Hashing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-grace.html">Grace mode and keep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-separate.html">Separate VCL files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/vcl-inline-c.html">Using inline C to extend Vinyl Cache</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../users-guide/vcl-examples.html">VCL Examples</a><input aria-label="Toggle navigation of VCL Examples" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-headers.html">Manipulating request headers in VCL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-manipulating-responses.html">Altering the backend response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-acls.html">ACLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../users-guide/vcl-example-websockets.html">Adding WebSockets support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/devicedetection.html">Device detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/report.html">Reporting and statistics</a><input aria-label="Toggle navigation of Reporting and statistics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-logging.html">Logging in Vinyl Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/operation-statistics.html">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../users-guide/performance.html">Vinyl Cache and Website Performance</a><input aria-label="Toggle navigation of Vinyl Cache and Website Performance" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html">Achieving a high hitrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#the-role-of-http-headers">The role of HTTP Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#http-vary">HTTP Vary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#cache-misses">Cache misses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/increasing-your-hitrate.html#uncacheable-content">Uncacheable content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/purging.html">Purging and banning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../users-guide/compression.html">Compression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/esi.html">Content composition with Edge Side Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../users-guide/troubleshooting.html">Troubleshooting Vinyl Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">The Vinyl Cache Reference Manual</a><input aria-label="Toggle navigation of The Vinyl Cache Reference Manual" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vcl.html">VCL - The Vinyl Configuration Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-var.html">VCL Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-step.html">VCL Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-backend.html">VCL backend configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcl-probe.html">VCL backend health probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html">Vinyl Cache Processing States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_blob.html">VMOD blob - Utilities for the VCL blob type, encoding and decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_cookie.html">VMOD cookie - Vinyl Cache Cookie Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_directors.html">VMOD directors - Vinyl Cache Directors Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_h2.html">VMOD h2 - Module to control the built-in HTTP2 transport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_math.html">VMOD math - VMOD wrapping math.h</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_proxy.html">VMOD proxy - Vinyl Cache Module to extract TLV attributes from PROXYv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_purge.html">VMOD purge - Vinyl Cache Purge Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_std.html">VMOD std - Vinyl Cache Standard Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_unix.html">VMOD unix - Utilities for Unix domain sockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyladm.html">VinylAdm - Control program for Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-cli.html">CLI - The commands Vinyl Cache understands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl.html">VSL - The log records Vinyl Cache generates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsl-query.html">VSLQ - Filter/Query expressions for VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyllog.html">VinylLog - Logging raw VSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylncsa.html">VinylNCSA - Logging in NCSA format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylhist.html">VinylHist - Realtime response histogram display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltop.html">VinylTop - Realtime activity display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyl-counters.html">VSC - The statistics Vinyl Cache collects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinylstat.html">VinylStat - Watching and logging statistics</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">VinylD - The program which does the actual work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtc.html">VTC - Language for writing test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vinyltest.html">VinylTest - execute test cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod_vtc.html">VMOD vtc - Utility module for vinyltest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell_tricks.html">Shell tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vmod.html">VMODS - Extensions to VCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vext.html">VEXT - Vinyl Cache Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vsm.html">VSM - Shared memory use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directors.html">VDIR - Backends &amp; Directors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_protocol.html">VCLI - CLI protocol API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vtla.html">VTLA - Vinyl Three Letter Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vcl-design-patterns/index.html">VCL Design Patterns</a><input aria-label="Toggle navigation of VCL Design Patterns" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/resp-status.html">Using extra digits in resp.status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vcl-design-patterns/req-hash_ignore_vary.html">Ignoring the Vary header for bots</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../whats-new/index.html">What’s new / Upgrading</a><input aria-label="Toggle navigation of What’s new / Upgrading" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-9.0.html">Changes in Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-9.0.html">Upgrading to Vinyl Cache 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-8.0.html">Changes in Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-8.0.html">Upgrading to Varnish-Cache 8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-7.7.html">Changes in Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-7.7.html">Upgrading to Varnish-Cache 7.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/changes-6.0.html">Changes in Varnish 6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../whats-new/upgrading-6.0.html">Upgrading to Varnish 6.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-guide/index.html">The Vinyl cache Developers Guide</a><input aria-label="Toggle navigation of The Vinyl cache Developers Guide" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://vinyl-cache.org/organization/index.html">Vinyl Cache organization and day-to-day operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/policy_vmods.html">Bundling VMODs with the Vinyl Cache distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_dogfood.html">How our website works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/homepage_contrib.html">How to contribute content to vinyl-cache.org</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-guide/who.html">Who is … ?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../phk/index.html">Poul-Hennings random outbursts</a><input aria-label="Toggle navigation of Poul-Hennings random outbursts" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../phk/h2againagainagain.html">On the deck-chairs of HTTP/2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri7.html">How Varnish met CHERI 7/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri6.html">How Varnish met CHERI 6/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri5.html">How Varnish met CHERI 5/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri4.html">How Varnish met CHERI 4/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri3.html">How Varnish met CHERI 3/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri2.html">How Varnish met CHERI 2/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/cheri1.html">How Varnish met CHERI 1/N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/routine.html">Getting into the routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/503aroundtheworld.html">The 503’s heard around the world</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/legacy.html">Legacy-.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ip_address.html">IP Addresses - A long expected problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vdd19q3.html">Varnish Developer Day 2019Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/quic.html">QUIC visions of OSI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00003.html">Here we are again - VSV00003 in perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/patent.html">A patently good idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/lucky.html">Do you feel lucky ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/apispaces.html">API spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/VSV00001.html">Yah!  A security issue - finally!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/somethinghappened.html">Something (funny) happened on the way to 5.1.0^H1^H2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/trialerror.html">Trial&amp;Error - Prototyping - Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/farfaraway.html">Far, far away</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thatslow.html">Going fast slowly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/firstdesign.html">The first design of Varnish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/10goingon50.html">Varnish - 10 going on 50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/brinch-hansens-arrows.html">Brinch-Hansens Arrows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl_again.html">SSL revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/persistent.html">A persistent message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/dough.html">Raking in the dough on Free and Open Source Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/wanton_destruction.html">Wanton destruction for the greater good</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/spdy.html">What SPDY did to my summer vacation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/http20.html">Why HTTP/2.0 does not seem interesting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/varnish_does_not_hash.html">Varnish Does Not Hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thetoolsweworkwith.html">The Tools We Work With</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/three-zero.html">Thoughts on the eve of Varnish 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ssl.html">Why no SSL ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/gzip.html">How GZIP, and GZIP+ESI works in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/vcl_expr.html">VCL Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/ipv6suckage.html">IPv6 Suckage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/backends.html">What do you mean by ‘backend’ ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/platforms.html">Picking platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/barriers.html">Security barriers in Vinyl Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/thoughts.html">What were they thinking ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/autocrap.html">Did you call them <em>autocrap</em> tools ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/sphinx.html">Why Sphinx and reStructuredText ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phk/notes.html">Notes from the Architect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">Vinyl Cache Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="vinyld">
+<span id="vinyld-1"></span><h1>vinyld<a class="headerlink" href="#vinyld" title="Link to this heading">¶</a></h1>
+<section id="http-accelerator-daemon">
+<h2>HTTP accelerator daemon<a class="headerlink" href="#http-accelerator-daemon" title="Link to this heading">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Manual section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1</p>
+</dd>
+</dl>
+<section id="synopsis">
+<h3>SYNOPSIS<a class="headerlink" href="#synopsis" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>vinyld</dt><dd><p>[-a [name=][listen_address[,PROTO|,option=value,…]]
+[-b [host[:port]|path]]
+[-C]
+[-d]
+[-E extension]
+[-F]
+[-f config]
+[-h type[,options]]
+[-I clifile]
+[-i identity]
+[-j jail[,jailoptions]]
+[-l vsl]
+[-M address:port]
+[-n workdir]
+[-P file]
+[-p param=value]
+[-r param[,param…]]
+[-S secret-file]
+[-s [name=]kind[,options]]
+[-T address[:port]]
+[-t TTL]
+[-V]
+[-W waiter]</p>
+</dd>
+</dl>
+<p>vinyld [-x parameter|vsl|cli|builtin|optstring]</p>
+<p>vinyld [-?]</p>
+</section>
+<section id="description">
+<h3>DESCRIPTION<a class="headerlink" href="#description" title="Link to this heading">¶</a></h3>
+<p>The <cite>vinyld</cite> daemon accepts HTTP requests from clients, passes them on
+to a backend server and caches the returned documents to better
+satisfy future requests for the same document.</p>
+</section>
+<section id="options">
+<span id="ref-vinyld-options"></span><h3>OPTIONS<a class="headerlink" href="#options" title="Link to this heading">¶</a></h3>
+<section id="basic-options">
+<h4>Basic options<a class="headerlink" href="#basic-options" title="Link to this heading">¶</a></h4>
+<dl class="option-list">
+<dt><kbd><span class="option">-a <var>&lt;[name=][listen_address[,PROTO|,option=value,…]]&gt;</var></span></kbd></dt>
+<dd><p>Generic syntax to accept client requests on a listen_address. See below for
+details.</p>
+<p>Name is referenced in logs and available to vcl as <code class="docutils literal notranslate"><span class="pre">local.socket</span></code>. If name
+is not specified, <code class="docutils literal notranslate"><span class="pre">a</span></code> with a numerical sequence (“a0”, “a1”, etc.) is used.</p>
+<p>Any arguments after the listen_address separated by comma are taken as either
+an acceptor <code class="docutils literal notranslate"><span class="pre">option=value</span></code> pair if containing a <code class="docutils literal notranslate"><span class="pre">=</span></code>, or as a PROTO(col)
+selection otherwise.</p>
+<p>Valid options depend on the acceptor type, see below.</p>
+<p>PROTO can be “HTTP” (the default) or “PROXY”.  Both version 1
+and 2 of the proxy protocol can be used.</p>
+<p>Multiple -a arguments are allowed.</p>
+<p>If no -a argument is given, the default <cite>-a :80</cite> will listen on
+all IPv4 and IPv6 interfaces.</p>
+</dd>
+<dt><kbd><span class="option">-a <var>&lt;[name=][ip_address][:port][,PROTO]&gt;</var></span></kbd></dt>
+<dd><p>The ip_address can be a host name (“localhost”), an IPv4 dotted-quad
+(“127.0.0.1”) or an IPv6 address enclosed in square brackets
+(“[::1]”)</p>
+<p>The port can be a port number (80), a service name (http), or a port
+range (80-81). Port ranges are inclusive and cannot overlap. If port
+is not specified, port 80 (http) is used.</p>
+<p>At least one of ip_address or port is required.</p>
+</dd>
+<dt><kbd><span class="option">-a <var>&lt;[name=][path][,PROTO][,user=name][,group=name][,mode=octal]&gt;</var></span></kbd></dt>
+<dd><p>(VCL4.1 and higher)</p>
+<p>Accept connections on a Unix domain socket.  Path must be absolute
+(“/path/to/listen.sock”) or “&#64;” followed by the name of an abstract
+socket (“&#64;myvinyld”).</p>
+<p>The user, group and mode sub-arguments may be used to specify the
+permissions of the socket file – use names for user and group, and
+a 3-digit octal value for mode. These sub-arguments do not apply to
+abstract sockets.</p>
+</dd>
+<dt><kbd><span class="option">-b <var>&lt;[host[:port]|path]&gt;</var></span></kbd></dt>
+<dd><p>Use the specified host as backend server. If port is not specified,
+the default is 8080.</p>
+<p>If the value of <code class="docutils literal notranslate"><span class="pre">-b</span></code> begins with <code class="docutils literal notranslate"><span class="pre">/</span></code>, it is interpreted as the
+absolute path of a Unix domain socket to which <cite>vinyld</cite> connects. In
+that case, the value of <code class="docutils literal notranslate"><span class="pre">-b</span></code> must satisfy the conditions required
+for the <code class="docutils literal notranslate"><span class="pre">.path</span></code> field of a backend declaration, see <a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a>.
+Backends with Unix socket addresses may only be used with VCL
+versions &gt;= 4.1.</p>
+<p>-b can be used only once, and not together with f.</p>
+</dd>
+<dt><kbd><span class="option">-f <var>config</var></span></kbd></dt>
+<dd><p>Use the specified VCL configuration file instead of the builtin
+default.  See <a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a> for details on VCL syntax.</p>
+<p>If a single -f option is used, then the VCL instance loaded from the
+file is named “boot” and immediately becomes active. If more than
+one -f option is used, the VCL instances are named “boot0”, “boot1”
+and so forth, in the order corresponding to the -f arguments, and
+the last one is named “boot”, which becomes active.</p>
+<p>Either -b or one or more -f options must be specified, but not both,
+and they cannot both be left out, unless -d is used to start
+<cite>vinyld</cite> in debugging mode. If the empty string is specified as
+the sole -f option, then <cite>vinyld</cite> starts without starting the
+worker process, and the management process will accept CLI commands.
+You can also combine an empty -f option with an initialization
+script (-I option) and the child process will be started if there
+is an active VCL at the end of the initialization.</p>
+<p>When used with a relative file name, config is searched in the
+<code class="docutils literal notranslate"><span class="pre">vcl_path</span></code>. It is possible to set this path prior to using <code class="docutils literal notranslate"><span class="pre">-f</span></code>
+options with a <code class="docutils literal notranslate"><span class="pre">-p</span></code> option. During startup, <cite>vinyld</cite> doesn’t
+complain about unsafe VCL paths: unlike the <cite>vinyl-cli(7)</cite> that
+could later be accessed remotely, starting <cite>vinyld</cite> requires
+local privileges.</p>
+</dd>
+</dl>
+<dl class="option-list" id="opt-n">
+<dt><kbd><span class="option">-n <var>workdir</var></span></kbd></dt>
+<dd><p>Runtime directory for the shared memory, compiled VCLs etc.</p>
+<p>In performance critical applications, this directory should be on a RAM backed filesystem.</p>
+<p>When running multiple vinyld instances, separate directories need to be used.</p>
+<p>The default is taken from the <code class="docutils literal notranslate"><span class="pre">VINYL_DEFAULT_N</span></code> environment variable.</p>
+<p>Relative paths will be appended to <code class="docutils literal notranslate"><span class="pre">/var/run</span></code>.</p>
+<p>If neither <code class="docutils literal notranslate"><span class="pre">VINYL_DEFAULT_N</span></code> nor <code class="docutils literal notranslate"><span class="pre">-n</span></code> are present, the value is <code class="docutils literal notranslate"><span class="pre">/var/run/vinyld</span></code>.</p>
+<p>Note: These defaults may be distribution specific.</p>
+</dd>
+</dl>
+</section>
+<section id="documentation-options">
+<h4>Documentation options<a class="headerlink" href="#documentation-options" title="Link to this heading">¶</a></h4>
+<p>For these options, <cite>vinyld</cite> prints information to standard output
+and exits. When a -x option is used, it must be the only option (it
+outputs documentation in reStructuredText, aka RST).</p>
+<p>-?</p>
+<blockquote>
+<div><p>Print the usage message.</p>
+</div></blockquote>
+<dl class="option-list">
+<dt><kbd><span class="option">-x <var>parameter</var></span></kbd></dt>
+<dd><p>Print documentation of the runtime parameters (-p options), see
+<a class="reference internal" href="#list-of-parameters">List of Parameters</a>.</p>
+</dd>
+<dt><kbd><span class="option">-x <var>vsl</var></span></kbd></dt>
+<dd><p>Print documentation of the tags used in the Vinyld Cache shared memory
+log, see <a class="reference internal" href="vsl.html#vsl-7"><span class="std std-ref">VSL</span></a>.</p>
+</dd>
+<dt><kbd><span class="option">-x <var>cli</var></span></kbd></dt>
+<dd><p>Print documentation of the command line interface, see
+<a class="reference internal" href="vinyl-cli.html#vinyl-cli-7"><span class="std std-ref">vinyl-cli</span></a>.</p>
+</dd>
+<dt><kbd><span class="option">-x <var>builtin</var></span></kbd></dt>
+<dd><p>Print the contents of the default VCL program <code class="docutils literal notranslate"><span class="pre">builtin.vcl</span></code>.</p>
+</dd>
+<dt><kbd><span class="option">-x <var>optstring</var></span></kbd></dt>
+<dd><p>Print the optstring parameter to <code class="docutils literal notranslate"><span class="pre">getopt(3)</span></code> to help writing
+wrapper scripts.</p>
+</dd>
+</dl>
+</section>
+<section id="operations-options">
+<h4>Operations options<a class="headerlink" href="#operations-options" title="Link to this heading">¶</a></h4>
+<dl class="option-list">
+<dt><kbd><span class="option">-F</span></kbd></dt>
+<dd><p>Do not fork, run in the foreground. Only one of -F or -d can be
+specified, and -F cannot be used together with -C.</p>
+</dd>
+<dt><kbd><span class="option">-T <var>&lt;address[:port]&gt;</var></span></kbd></dt>
+<dd><p>Offer a management interface on the specified address and port. See
+<a class="reference internal" href="vinyl-cli.html#vinyl-cli-7"><span class="std std-ref">vinyl-cli</span></a> for documentation of the management commands.
+To disable the management interface use <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
+</dd>
+<dt><kbd><span class="option">-M <var>&lt;address:port&gt;</var></span></kbd></dt>
+<dd><p>Connect to this port and offer the command line interface.  Think of
+it as a reverse shell. When running with -M and there is no backend
+defined the child process (the cache) will not start initially.</p>
+</dd>
+<dt><kbd><span class="option">-P <var>file</var></span></kbd></dt>
+<dd><p>Write the PID of the process to the specified file.</p>
+</dd>
+<dt><kbd><span class="option">-i <var>identity</var></span></kbd></dt>
+<dd><p>Specify the identity of the Vinyl Cache server. This can be accessed
+using <code class="docutils literal notranslate"><span class="pre">server.identity</span></code> from VCL.</p>
+<p>The server identity is used for the <code class="docutils literal notranslate"><span class="pre">received-by</span></code> field of <code class="docutils literal notranslate"><span class="pre">Via</span></code>
+headers generated by Vinyl Cache. For this reason, it must be a valid
+token as defined by the HTTP grammar.</p>
+<p>If not specified the output of <code class="docutils literal notranslate"><span class="pre">gethostname(3)</span></code> is used, in which
+case the syntax is assumed to be correct.</p>
+</dd>
+<dt><kbd><span class="option">-I <var>clifile</var></span></kbd></dt>
+<dd><p>Execute the management commands in the file given as <code class="docutils literal notranslate"><span class="pre">clifile</span></code>
+before the worker process starts, see <a class="reference internal" href="#cli-command-file">CLI Command File</a>.</p>
+</dd>
+<dt><kbd><span class="option">-E <var>extension</var></span></kbd></dt>
+<dd><p>Load the named extension. Extensions are modules (VMODs) which can modify
+<cite>vinyld</cite> behavior outside VCL, for example by adding storage- or protocol
+implementations. Extensions are always also VMODs, even if they do not provide
+any functionality to VCL, but in most cases they will.</p>
+<p>Any VMOD can be loaded as an extension, in which case it is simply pre-loaded
+at startup and prevented from ever getting unloaded.</p>
+<p>If <cite>extension</cite> contains any slashes <code class="docutils literal notranslate"><span class="pre">/</span></code>, it is taken as an abslute path.
+Otherwise, for <cite>extention</cite> <code class="docutils literal notranslate"><span class="pre">ext</span></code>, a <code class="docutils literal notranslate"><span class="pre">vmod_ext.so</span></code> is searched for in
+<code class="docutils literal notranslate"><span class="pre">vmod_path</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">vinyld</span></code> startup fails if loading the extension fails for any reason.</p>
+</dd>
+</dl>
+</section>
+<section id="tuning-options">
+<h4>Tuning options<a class="headerlink" href="#tuning-options" title="Link to this heading">¶</a></h4>
+<dl class="option-list">
+<dt><kbd><span class="option">-t <var>TTL</var></span></kbd></dt>
+<dd><p>Specifies the default time to live (TTL) for cached objects. This is
+a shortcut for specifying the <em>default_ttl</em> run-time parameter.</p>
+</dd>
+<dt><kbd><span class="option">-p <var>&lt;param=value&gt;</var></span></kbd></dt>
+<dd><p>Set the parameter specified by param to the specified value, see
+<a class="reference internal" href="#list-of-parameters">List of Parameters</a> for details. This option can be used multiple
+times to specify multiple parameters.</p>
+</dd>
+<dt><kbd><span class="option">-s <var>&lt;[name=]type[,options]&gt;</var></span></kbd></dt>
+<dd><p>Use the specified storage backend. See <a class="reference internal" href="#storage-backend">Storage Backend</a> section.</p>
+<p>This option can be used multiple times to specify multiple storage
+files. Name is referenced in logs, VCL, statistics, etc. If name
+is not specified, “s0”, “s1” and so forth is used.</p>
+</dd>
+<dt><kbd><span class="option">-l <var>&lt;vsl&gt;</var></span></kbd></dt>
+<dd><p>Specifies size of the space for the VSL records, shorthand for
+<code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">vsl_space=&lt;vsl&gt;</span></code>. Scaling suffixes like ‘K’ and ‘M’ can be
+used up to (G)igabytes. See <a class="reference internal" href="#vsl-space">vsl_space</a> for more information.</p>
+</dd>
+</dl>
+</section>
+<section id="security-options">
+<h4>Security options<a class="headerlink" href="#security-options" title="Link to this heading">¶</a></h4>
+<dl class="option-list">
+<dt><kbd><span class="option">-r <var>&lt;param[,param…]&gt;</var></span></kbd></dt>
+<dd><p>Make the listed parameters read only. This gives the system
+administrator a way to limit what the Vinyl Cache CLI can do.  Consider
+making parameters such as <em>cc_command</em>, <em>vcc_allow_inline_c</em> and
+<em>vmod_path</em> read only as these can potentially be used to escalate
+privileges from the CLI.</p>
+</dd>
+<dt><kbd><span class="option">-S <var>secret-file</var></span></kbd></dt>
+<dd><p>Path to a file containing a secret used for authorizing access to
+the management port. To disable authentication use <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
+<p>If this argument is not provided, a secret drawn from the system
+PRNG will be written to a file called <code class="docutils literal notranslate"><span class="pre">_.secret</span></code> in the working
+directory (see <a class="reference internal" href="#opt-n">opt_n</a>) with default ownership and permissions of
+the user having started <cite>vinyld</cite>.</p>
+<p>Thus, users wishing to delegate control over <cite>vinyld</cite> will probably
+want to create a custom secret file with appropriate permissions
+(ie. readable by a unix group to delegate control to).</p>
+</dd>
+<dt><kbd><span class="option">-j <var>&lt;jail[,jailoptions]&gt;</var></span></kbd></dt>
+<dd><p>Specify the jailing mechanism to use. See <a class="reference internal" href="#jail">Jail</a> section.</p>
+</dd>
+</dl>
+</section>
+<section id="advanced-development-and-debugging-options">
+<h4>Advanced, development and debugging options<a class="headerlink" href="#advanced-development-and-debugging-options" title="Link to this heading">¶</a></h4>
+<dl class="option-list">
+<dt><kbd><span class="option">-d</span></kbd></dt>
+<dd><p>Enables debugging mode: The parent process runs in the foreground
+with a CLI connection on stdin/stdout, and the child process must be
+started explicitly with a CLI command. Terminating the parent
+process will also terminate the child.</p>
+<p>Only one of -d or -F can be specified, and -d cannot be used together
+with -C.</p>
+</dd>
+<dt><kbd><span class="option">-C</span></kbd></dt>
+<dd><p>Print VCL code compiled to C language and exit. Specify the VCL file
+to compile with the -f option. Either -f or -b must be used with -C,
+and -C cannot be used with -F or -d.</p>
+</dd>
+<dt><kbd><span class="option">-V</span></kbd></dt>
+<dd><p>Display the version number and exit. This must be the only option.</p>
+</dd>
+<dt><kbd><span class="option">-h <var>&lt;type[,options]&gt;</var></span></kbd></dt>
+<dd><p>Specifies the hash algorithm. See <a class="reference internal" href="#hash-algorithm">Hash Algorithm</a> section for a list
+of supported algorithms.</p>
+</dd>
+<dt><kbd><span class="option">-W <var>waiter</var></span></kbd></dt>
+<dd><p>Specifies the waiter type to use.</p>
+</dd>
+</dl>
+</section>
+<section id="hash-algorithm">
+<span id="opt-h"></span><h4>Hash Algorithm<a class="headerlink" href="#hash-algorithm" title="Link to this heading">¶</a></h4>
+<p>The following hash algorithms are available:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-h <var>critbit</var></span></kbd></dt>
+<dd><p>self-scaling tree structure. The default hash algorithm in Vinyl
+Cache 2.1 and onwards. In comparison to a more traditional B tree
+the critbit tree is almost completely lockless. Do not change this
+unless you are certain what you’re doing.</p>
+</dd>
+<dt><kbd><span class="option">-h <var>simple_list</var></span></kbd></dt>
+<dd><p>A simple doubly-linked list.  Not recommended for production use.</p>
+</dd>
+<dt><kbd><span class="option">-h <var>&lt;classic[,buckets]&gt;</var></span></kbd></dt>
+<dd><p>A standard hash table. The hash key is the CRC32 of the object’s URL
+modulo the size of the hash table.  Each table entry points to a
+list of elements which share the same hash key. The buckets
+parameter specifies the number of entries in the hash table.  The
+default is 16383.</p>
+</dd>
+</dl>
+</section>
+<section id="storage-backend">
+<span id="ref-vinyld-opt-s"></span><h4>Storage Backend<a class="headerlink" href="#storage-backend" title="Link to this heading">¶</a></h4>
+<p>Multiple storage backends (where the cached and in-flight objects are held) can
+be defined, and VCL can pilot which store is used by setting the
+<cite>beresp.storage</cite> variable (see <cite>man vcl-var</cite> for more information).</p>
+<p>The argument format to define storage backends is:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-s <var>&lt;[name]=kind[,options]&gt;</var></span></kbd></dt>
+<dd><p>If <em>name</em> is omitted, <cite>vinyld</cite> will name storages <code class="docutils literal notranslate"><span class="pre">s</span></code><em>N</em>,
+starting with <code class="docutils literal notranslate"><span class="pre">s0</span></code> and incrementing <em>N</em> for every new storage.</p>
+<p>For <em>kind</em> and <em>options</em> see details below.</p>
+</dd>
+</dl>
+<p>Storages can be used in vcl as <code class="docutils literal notranslate"><span class="pre">storage.</span></code><em>name</em>, so, for
+example if <code class="docutils literal notranslate"><span class="pre">myStorage</span></code> was defined by <code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">myStorage=malloc,5G</span></code>, it
+could be used in VCL like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">beresp</span><span class="o">.</span><span class="n">storage</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">myStorage</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>A special <em>name</em> is <code class="docutils literal notranslate"><span class="pre">Transient</span></code> which is the default storage for
+uncacheable objects as resulting from a pass, hit-for-miss or
+hit-for-pass.</p>
+<p>If no <code class="docutils literal notranslate"><span class="pre">-s</span></code> options are given, the default is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">s</span> <span class="n">default</span><span class="p">,</span><span class="mi">100</span><span class="n">m</span>
+</pre></div>
+</div>
+<p>If no <code class="docutils literal notranslate"><span class="pre">Transient</span></code> storage is defined, the default is an unbound
+<code class="docutils literal notranslate"><span class="pre">default</span></code> storage as if defined as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">s</span> <span class="n">Transient</span><span class="o">=</span><span class="n">default</span>
+</pre></div>
+</div>
+<p>The following storage types and options are available:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-s <var>&lt;default[,size]&gt;</var></span></kbd></dt>
+<dd><p>The default storage type resolves to <code class="docutils literal notranslate"><span class="pre">umem</span></code> where available and
+<code class="docutils literal notranslate"><span class="pre">malloc</span></code> otherwise.</p>
+</dd>
+<dt><kbd><span class="option">-s <var>&lt;malloc[,size]&gt;</var></span></kbd></dt>
+<dd><p>malloc is a memory based backend.</p>
+</dd>
+<dt><kbd><span class="option">-s <var>&lt;umem[,size]&gt;</var></span></kbd></dt>
+<dd><p>umem is a storage backend which is more efficient than malloc on
+platforms where it is available.</p>
+<p>See the section on umem in chapter <cite>Storage backends</cite> of <cite>The
+Vinyl Users Guide</cite> for details.</p>
+</dd>
+<dt><kbd><span class="option">-s <var>&lt;file,path[,size[,granularity[,advice]]]&gt;</var></span></kbd></dt>
+<dd><p>The file backend stores data in a file on disk. The file will be
+accessed using mmap. Note that this storage provide no cache persistence.</p>
+<p>The path is mandatory. If path points to a directory, a temporary
+file will be created in that directory and immediately unlinked. If
+path points to a non-existing file, the file will be created.</p>
+<p>If size is omitted, and path points to an existing file with a size
+greater than zero, the size of that file will be used. If not, an
+error is reported.</p>
+<p>Granularity sets the allocation block size. Defaults to the system
+page size or the filesystem block size, whichever is larger.</p>
+<p>Advice tells the kernel how <cite>vinyld</cite> expects to use this mapped
+region so that the kernel can choose the appropriate read-ahead
+and caching techniques. Possible values are <code class="docutils literal notranslate"><span class="pre">normal</span></code>, <code class="docutils literal notranslate"><span class="pre">random</span></code>
+and <code class="docutils literal notranslate"><span class="pre">sequential</span></code>, corresponding to MADV_NORMAL, MADV_RANDOM and
+MADV_SEQUENTIAL madvise() advice argument, respectively. Defaults to
+<code class="docutils literal notranslate"><span class="pre">random</span></code>.</p>
+</dd>
+<dt><kbd><span class="option">-s <var>&lt;persistent,path,size&gt;</var></span></kbd></dt>
+<dd><p>Persistent storage. <cite>vinyld</cite> will store objects in a file in a manner
+that will secure the survival of <em>most</em> of the objects in the event
+of a planned or unplanned shutdown of <cite>vinyld</cite>. The persistent
+storage backend has multiple issues with it and will likely be
+removed from a future version of Vinyl Cache</p>
+</dd>
+</dl>
+</section>
+<section id="jail">
+<span id="ref-vinyld-opt-j"></span><h4>Jail<a class="headerlink" href="#jail" title="Link to this heading">¶</a></h4>
+<p>Vinyl Cache jails are a generalization over various platform specific
+methods to reduce the privileges of <cite>vinyld</cite> processes. They may have
+specific options. Available jails are:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-j <var>&lt;solaris[,worker=`privspec`]&gt;</var></span></kbd></dt>
+<dd><p>Reduce <cite>privileges(5)</cite> for <cite>vinyld</cite> and sub-processes to the
+minimally required set. Only available on platforms which have the
+<cite>setppriv(2)</cite> call.</p>
+<p>The optional <cite>worker</cite> argument can be used to pass a
+privilege-specification (see <cite>ppriv(1)</cite>) by which to extend the
+effective set of the <cite>vinyld</cite> worker process. While extended
+privileges may be required by custom vmods, <em>not</em> using the <cite>worker</cite>
+option is always more secure.</p>
+<p>Example to grant basic privileges to the worker process:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">j</span> <span class="n">solaris</span><span class="p">,</span><span class="n">worker</span><span class="o">=</span><span class="n">basic</span>
+</pre></div>
+</div>
+</dd>
+<dt><kbd><span class="option">-j <var>&lt;linux[,transparent_hugepage=`thp_setting`][,`unix jail option`…]&gt;</var></span></kbd></dt>
+<dd><p>Default on Linux platforms, it extends the UNIX jail with
+Linux-specific mechanisms:</p>
+<ul class="simple">
+<li><p>It warns when <em>workdir</em> is not on a <code class="docutils literal notranslate"><span class="pre">tmpfs</span></code>.</p></li>
+<li><p>It tries to keep the process dumpable after dropping privileges.</p></li>
+<li><p>It adds control over the transparent hugepage (THP) setting.</p></li>
+</ul>
+<p><cite>thp_setting</cite> can take these values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ignore</span></code>: Do nothing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable</span></code>: Enable THP (see Note below)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">disable</span></code>: Disable THP</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">try-disable</span></code> (default): Try to disable, ignore failure (but emit a
+warning)</p></li>
+</ul>
+<p>Note: Technically, <code class="docutils literal notranslate"><span class="pre">enable</span></code> is “disable the disable”, so it does not
+necessarily enable THP. The setting names have been chosen to avoid a
+confusing double negation.</p>
+</dd>
+<dt><kbd><span class="option">-j <var>&lt;unix[,user=`user`][,ccgroup=`group`][,workuser=`user`]&gt;</var></span></kbd></dt>
+<dd><p>Default on all other platforms when <cite>vinyld</cite> is started with an
+effective uid of 0 (“as root”).</p>
+<p>With the <code class="docutils literal notranslate"><span class="pre">unix</span></code> jail mechanism activated, <cite>vinyld</cite> will switch to
+an alternative user for subprocesses and change the effective uid of
+the master process whenever possible.</p>
+<p>The optional <cite>user</cite> argument specifies which alternative user to
+use. It defaults to <code class="docutils literal notranslate"><span class="pre">vinyl</span></code>.</p>
+<p>The optional <cite>ccgroup</cite> argument specifies a group to add to <code class="docutils literal notranslate"><span class="pre">vinyld</span></code>
+subprocesses requiring access to a c-compiler. There is no default.</p>
+<p>The optional <cite>workuser</cite> argument specifies an alternative user to use
+for the worker process. It defaults to <code class="docutils literal notranslate"><span class="pre">vcache</span></code>.</p>
+<p>The users given for the <cite>user</cite> and <cite>workuser</cite> arguments need to have
+the same primary (“login”) group.</p>
+<p>For users migrating from Varnish Cache, shell commands similar to the
+following may be used to remove the previous default user and group:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">userdel</span> <span class="n">varnish</span> <span class="o">||</span> <span class="n">true</span>
+<span class="n">userdel</span> <span class="n">vcache</span> <span class="o">||</span> <span class="n">true</span>
+<span class="n">userdel</span> <span class="n">varnishlog</span> <span class="o">||</span> <span class="n">true</span> <span class="c1"># to remove reference to varnish group</span>
+<span class="n">groupdel</span> <span class="n">varnish</span> <span class="o">||</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>To set up a system for the default users with a group name
+<code class="docutils literal notranslate"><span class="pre">vinyl</span></code>, shell commands similar to these may be used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">groupadd</span> <span class="n">vinyl</span>
+<span class="n">useradd</span> <span class="o">-</span><span class="n">g</span> <span class="n">vinyl</span> <span class="o">-</span><span class="n">d</span> <span class="o">/</span><span class="n">nonexistent</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">false</span> \
+  <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;Vinyl Cache Daemon User&quot;</span> <span class="n">vinyl</span>
+<span class="n">useradd</span> <span class="o">-</span><span class="n">g</span> <span class="n">vinyl</span> <span class="o">-</span><span class="n">d</span> <span class="o">/</span><span class="n">nonexistent</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">false</span> \
+  <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;Vinyl Cache Worker User&quot;</span> <span class="n">vcache</span>
+<span class="n">useradd</span> <span class="o">-</span><span class="n">g</span> <span class="n">vinyl</span> <span class="o">-</span><span class="n">d</span> <span class="o">/</span><span class="n">nonexistent</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">false</span> \
+  <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;Vinyl Log User&quot;</span> <span class="n">vinyllog</span>
+</pre></div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">vinyllog</span></code> user is not required and only added because, by
+convention, it may be used to run <code class="docutils literal notranslate"><span class="pre">vinyllog</span></code>, <code class="docutils literal notranslate"><span class="pre">vinylncsa</span></code> and other
+VSM/VSL based tools.</p>
+</dd>
+<dt><kbd><span class="option">-j <var>none</var></span></kbd></dt>
+<dd><p>last resort jail choice: With jail mechanism <code class="docutils literal notranslate"><span class="pre">none</span></code>, <cite>vinyld</cite> will
+run all processes with the privileges it was started with.</p>
+</dd>
+</dl>
+</section>
+<section id="management-interface">
+<span id="ref-vinyld-opt-t"></span><h4>Management Interface<a class="headerlink" href="#management-interface" title="Link to this heading">¶</a></h4>
+<p>If the -T option was specified, <cite>vinyld</cite> will offer a command-line
+management interface on the specified address and port.  The
+recommended way of connecting to the command-line management interface
+is through <a class="reference internal" href="vinyladm.html#vinyladm-1"><span class="std std-ref">vinyladm</span></a>.</p>
+<p>The commands available are documented in <a class="reference internal" href="vinyl-cli.html#vinyl-cli-7"><span class="std std-ref">vinyl-cli</span></a>.</p>
+</section>
+<section id="cli-command-file">
+<h4>CLI Command File<a class="headerlink" href="#cli-command-file" title="Link to this heading">¶</a></h4>
+<p>The -I option makes it possible to run arbitrary management commands
+when <cite>vinyld</cite> is launched, before the worker process is started. In
+particular, this is the way to load configurations, apply labels to
+them, and make a VCL instance active that uses those labels on
+startup:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcl</span><span class="o">.</span><span class="n">load</span> <span class="n">panic</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">vinyl</span><span class="o">-</span><span class="n">cache</span><span class="o">/</span><span class="n">panic</span><span class="o">.</span><span class="n">vcl</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">load</span> <span class="n">siteA0</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">vinyl</span><span class="o">-</span><span class="n">cache</span><span class="o">/</span><span class="n">siteA</span><span class="o">.</span><span class="n">vcl</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">load</span> <span class="n">siteB0</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">vinyl</span><span class="o">-</span><span class="n">cache</span><span class="o">/</span><span class="n">siteB</span><span class="o">.</span><span class="n">vcl</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">load</span> <span class="n">siteC0</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">vinyl</span><span class="o">-</span><span class="n">cache</span><span class="o">/</span><span class="n">siteC</span><span class="o">.</span><span class="n">vcl</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">label</span> <span class="n">siteA</span> <span class="n">siteA0</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">label</span> <span class="n">siteB</span> <span class="n">siteB0</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">label</span> <span class="n">siteC</span> <span class="n">siteC0</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">load</span> <span class="n">main</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">vinyl</span><span class="o">-</span><span class="n">cache</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">vcl</span>
+<span class="n">vcl</span><span class="o">.</span><span class="n">use</span> <span class="n">main</span>
+</pre></div>
+</div>
+<p>Every line in the file, including the last line, must be terminated by
+a newline or carriage return or is otherwise considered truncated, which
+is a fatal error.</p>
+<p>If a command in the file is prefixed with ‘-’, failure will not abort
+the startup.</p>
+<p>Note that it is necessary to include an explicit <cite>vcl.use</cite> command to
+select which VCL should be the active VCL when relying on CLI Command File
+to load the configurations at startup.</p>
+</section>
+</section>
+<section id="run-time-parameters">
+<span id="ref-vinyld-params"></span><h3>RUN TIME PARAMETERS<a class="headerlink" href="#run-time-parameters" title="Link to this heading">¶</a></h3>
+<p>Runtime parameters can either be set during startup with the <code class="docutils literal notranslate"><span class="pre">-p</span></code> command
+line option for <cite>vinyld(1)</cite> or through the CLI using the <code class="docutils literal notranslate"><span class="pre">param.set</span></code> or
+<code class="docutils literal notranslate"><span class="pre">param.reset</span></code> commands. They can be locked during startup with the <code class="docutils literal notranslate"><span class="pre">-r</span></code>
+command line option.</p>
+<section id="run-time-parameter-units">
+<h4>Run Time Parameter Units<a class="headerlink" href="#run-time-parameter-units" title="Link to this heading">¶</a></h4>
+<p>There are different types of parameters that may accept a list of specific
+values, or optionally take a unit suffix.</p>
+<section id="bool">
+<h5>bool<a class="headerlink" href="#bool" title="Link to this heading">¶</a></h5>
+<p>A boolean parameter accepts the values <code class="docutils literal notranslate"><span class="pre">on</span></code> and <code class="docutils literal notranslate"><span class="pre">off</span></code>.</p>
+<p>It will also recognize the following values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yes</span></code> and <code class="docutils literal notranslate"><span class="pre">no</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable</span></code> and <code class="docutils literal notranslate"><span class="pre">disable</span></code></p></li>
+</ul>
+</section>
+<section id="bytes">
+<h5>bytes<a class="headerlink" href="#bytes" title="Link to this heading">¶</a></h5>
+<p>A bytes parameter requires one of the following units suffixes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> (bytes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">k</span></code> (kibibytes, 1024 bytes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m</span></code> (mebibytes, 1024 kibibytes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">g</span></code> (gibibytes, 1024 mebibytes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span></code> (tebibytes, 1024 gibibytes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> (pebibytes, 1024 tebibytes)</p></li>
+</ul>
+<p>Multiplicator units may be appended with an extra <code class="docutils literal notranslate"><span class="pre">b</span></code>. For example <code class="docutils literal notranslate"><span class="pre">32k</span></code>
+is equivalent to <code class="docutils literal notranslate"><span class="pre">32kb</span></code>. Bytes units are case-insensitive.</p>
+</section>
+<section id="seconds">
+<h5>seconds<a class="headerlink" href="#seconds" title="Link to this heading">¶</a></h5>
+<p>A duration parameter may accept the following units suffixes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ms</span></code> (milliseconds)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> (seconds)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m</span></code> (minutes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">h</span></code> (hours)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d</span></code> (days)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">w</span></code> (weeks)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code> (years)</p></li>
+</ul>
+<p>If the parameter is a timeout or a deadline, a value of “never” (when allowed)
+disables the effect of the parameter.</p>
+</section>
+</section>
+<section id="run-time-parameter-flags">
+<h4>Run Time Parameter Flags<a class="headerlink" href="#run-time-parameter-flags" title="Link to this heading">¶</a></h4>
+<p>Runtime parameters are marked with shorthand flags to avoid repeating
+the same text over and over in the table below. The meaning of the
+flags are:</p>
+<ul>
+<li><p><cite>experimental</cite></p>
+<p>We have no solid information about good/bad/optimal values for this
+parameter. Feedback with experience and observations are most
+welcome.</p>
+</li>
+<li><p><cite>delayed</cite></p>
+<p>This parameter can be changed on the fly, but will not take effect
+immediately.</p>
+</li>
+<li><p><cite>restart</cite></p>
+<p>The worker process must be stopped and restarted, before this
+parameter takes effect.</p>
+</li>
+<li><p><cite>reload</cite></p>
+<p>The VCL programs must be reloaded for this parameter to take effect.</p>
+</li>
+<li><p><cite>wizard</cite></p>
+<p>Do not touch unless you <em>really</em> know what you’re doing.</p>
+</li>
+<li><p><cite>only_root</cite></p>
+<p>Only works if <cite>vinyld</cite> is running as root.</p>
+</li>
+</ul>
+</section>
+<section id="default-value-exceptions-on-32-bit-systems">
+<h4>Default Value Exceptions on 32 bit Systems<a class="headerlink" href="#default-value-exceptions-on-32-bit-systems" title="Link to this heading">¶</a></h4>
+<p>Be aware that on 32 bit systems, certain default or maximum values are
+reduced relative to the values listed below, in order to conserve VM
+space:</p>
+<ul class="simple">
+<li><p>workspace_client: 24k</p></li>
+<li><p>workspace_backend: 20k</p></li>
+<li><p>http_resp_size: 8k</p></li>
+<li><p>http_req_size: 12k</p></li>
+<li><p>gzip_buffer: 4k</p></li>
+<li><p>vsl_buffer: 4k</p></li>
+<li><p>vsl_space: 1G (maximum)</p></li>
+<li><p>thread_pool_stack: 64k</p></li>
+</ul>
+</section>
+<section id="list-of-parameters">
+<span id="id1"></span><h4>List of Parameters<a class="headerlink" href="#list-of-parameters" title="Link to this heading">¶</a></h4>
+<p>This text is produced from the same text you will find in the CLI if
+you use the param.show command:</p>
+<section id="accept-filter">
+<span id="ref-param-accept-filter"></span><h5>accept_filter<a class="headerlink" href="#accept-filter" title="Link to this heading">¶</a></h5>
+<p>NB: This parameter depends on a feature which is not available on all platforms.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on (if your platform supports accept filters)</p></li>
+</ul>
+</div></blockquote>
+<p>Enable kernel accept-filters. This may require a kernel module to be loaded to have an effect when enabled.</p>
+<p>Enabling accept_filter may prevent some requests to reach Vinyl Cache in the first place. Malformed requests may go unnoticed and not increase the client_req_400 counter. GET or HEAD requests with a body may be blocked altogether.</p>
+</section>
+<section id="acceptor-sleep-decay">
+<span id="ref-param-acceptor-sleep-decay"></span><h5>acceptor_sleep_decay<a class="headerlink" href="#acceptor-sleep-decay" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 0.9</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Maximum: 1</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>If we run out of resources, such as file descriptors or worker threads, the acceptor will sleep between accepts.
+This parameter (multiplicatively) reduce the sleep duration for each successful accept. (ie: 0.9 = reduce by 10%)</p>
+</section>
+<section id="acceptor-sleep-incr">
+<span id="ref-param-acceptor-sleep-incr"></span><h5>acceptor_sleep_incr<a class="headerlink" href="#acceptor-sleep-incr" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Maximum: 1.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>If we run out of resources, such as file descriptors or worker threads, the acceptor will sleep between accepts.
+This parameter control how much longer we sleep, each time we fail to accept a new connection.</p>
+</section>
+<section id="acceptor-sleep-max">
+<span id="ref-param-acceptor-sleep-max"></span><h5>acceptor_sleep_max<a class="headerlink" href="#acceptor-sleep-max" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.050</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Maximum: 10.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>If we run out of resources, such as file descriptors or worker threads, the acceptor will sleep between accepts.
+This parameter limits how long it can sleep between attempts to accept new connections.</p>
+</section>
+<section id="auto-restart">
+<span id="ref-param-auto-restart"></span><h5>auto_restart<a class="headerlink" href="#auto-restart" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on</p></li>
+</ul>
+</div></blockquote>
+<p>Automatically restart the child/worker process if it dies.</p>
+</section>
+<section id="backend-idle-timeout">
+<span id="ref-param-backend-idle-timeout"></span><h5>backend_idle_timeout<a class="headerlink" href="#backend-idle-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 1.000</p></li>
+</ul>
+</div></blockquote>
+<p>Timeout before we close unused backend connections.</p>
+</section>
+<section id="backend-local-error-holddown">
+<span id="ref-param-backend-local-error-holddown"></span><h5>backend_local_error_holddown<a class="headerlink" href="#backend-local-error-holddown" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 10.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>When connecting to backends, certain error codes (EADDRNOTAVAIL, EACCESS, EPERM) signal a local resource shortage or configuration issue for which retrying connection attempts may worsen the situation due to the complexity of the operations involved in the kernel.
+This parameter prevents repeated connection attempts for the configured duration.</p>
+</section>
+<section id="backend-remote-error-holddown">
+<span id="ref-param-backend-remote-error-holddown"></span><h5>backend_remote_error_holddown<a class="headerlink" href="#backend-remote-error-holddown" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.250</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>When connecting to backends, certain error codes (ECONNREFUSED, ENETUNREACH) signal fundamental connection issues such as the backend not accepting connections or routing problems for which repeated connection attempts are considered useless
+This parameter prevents repeated connection attempts for the configured duration.</p>
+</section>
+<section id="backend-wait-limit">
+<span id="ref-param-backend-wait-limit"></span><h5>backend_wait_limit<a class="headerlink" href="#backend-wait-limit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 0</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of transactions that can queue waiting for a backend connection to become available.  This default of 0 (zero) means that there is no transaction queueing. VCL can override this default value for each backend.</p>
+<p>Note that this feature must be used with caution, as it can cause threads to pile up and increase response times.</p>
+</section>
+<section id="backend-wait-timeout">
+<span id="ref-param-backend-wait-timeout"></span><h5>backend_wait_timeout<a class="headerlink" href="#backend-wait-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout, experimental</p></li>
+</ul>
+</div></blockquote>
+<p>When a backend has no connections available for a transaction, the transaction can be queued (see backend_wait_limit) to wait for a connection.  This is the default time that the transaction will wait before giving up. VCL can override this default value for each backend.</p>
+<p>It is strongly advised to never set this higher than a couple of seconds.</p>
+</section>
+<section id="ban-any-variant">
+<span id="ref-param-ban-any-variant"></span><h5>ban_any_variant<a class="headerlink" href="#ban-any-variant" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: checks</p></li>
+<li><p>Default: 0</p></li>
+<li><p>Minimum: 0</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of possibly non matching variants that we evaluate against the ban list during a lookup.
+Setting this to 0 means that only the matching variants will be evaluated against the current ban list.</p>
+</section>
+<section id="ban-cutoff">
+<span id="ref-param-ban-cutoff"></span><h5>ban_cutoff<a class="headerlink" href="#ban-cutoff" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bans</p></li>
+<li><p>Default: 0</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Expurge long tail content from the cache to keep the number of bans below this value. 0 disables.</p>
+<p>When this parameter is set to a non-zero value, the ban lurker continues to work the ban list as usual top to bottom, but when it reaches the ban_cutoff-th ban, it treats all objects as if they matched a ban and expunges them from cache. As actively used objects get tested against the ban list at request time and thus are likely to be associated with bans near the top of the ban list, with ban_cutoff, least recently accessed objects (the “long tail”) are removed.</p>
+<p>This parameter is a safety net to avoid bad response times due to bans being tested at lookup time. Setting a cutoff trades response time for cache efficiency. The recommended value is proportional to rate(bans_lurker_tests_tested) / n_objects while the ban lurker is working, which is the number of bans the system can sustain. The additional latency due to request ban testing is in the order of ban_cutoff / rate(bans_lurker_tests_tested). For example, for rate(bans_lurker_tests_tested) = 2M/s and a tolerable latency of 100ms, a good value for ban_cutoff may be 200K.</p>
+</section>
+<section id="ban-dups">
+<span id="ref-param-ban-dups"></span><h5>ban_dups<a class="headerlink" href="#ban-dups" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on</p></li>
+</ul>
+</div></blockquote>
+<p>Eliminate older identical bans when a new ban is added.  This saves CPU cycles by not comparing objects to identical bans.
+This is a waste of time if you have many bans which are never identical.</p>
+</section>
+<section id="ban-lurker-age">
+<span id="ref-param-ban-lurker-age"></span><h5>ban_lurker_age<a class="headerlink" href="#ban-lurker-age" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+</ul>
+</div></blockquote>
+<p>The ban lurker will ignore bans until they are this old.  When a ban is added, the active traffic will be tested against it as part of object lookup.  Because many applications issue bans in bursts, this parameter holds the ban-lurker off until the rush is over.
+This should be set to the approximate time which a ban-burst takes.</p>
+</section>
+<section id="ban-lurker-batch">
+<span id="ref-param-ban-lurker-batch"></span><h5>ban_lurker_batch<a class="headerlink" href="#ban-lurker-batch" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 1000</p></li>
+<li><p>Minimum: 1</p></li>
+</ul>
+</div></blockquote>
+<p>The ban lurker sleeps ${ban_lurker_sleep} after examining this many objects.  Use this to pace the ban-lurker if it eats too many resources.</p>
+</section>
+<section id="ban-lurker-holdoff">
+<span id="ref-param-ban-lurker-holdoff"></span><h5>ban_lurker_holdoff<a class="headerlink" href="#ban-lurker-holdoff" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.010</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>How long the ban lurker sleeps when giving way to lookup due to lock contention.</p>
+</section>
+<section id="ban-lurker-sleep">
+<span id="ref-param-ban-lurker-sleep"></span><h5>ban_lurker_sleep<a class="headerlink" href="#ban-lurker-sleep" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.010</p></li>
+<li><p>Minimum: 0.000</p></li>
+</ul>
+</div></blockquote>
+<p>How long the ban lurker sleeps after examining ${ban_lurker_batch} objects.  Use this to pace the ban-lurker if it eats too many resources.
+A value of zero will disable the ban lurker entirely.</p>
+</section>
+<section id="between-bytes-timeout">
+<span id="ref-param-between-bytes-timeout"></span><h5>between_bytes_timeout<a class="headerlink" href="#between-bytes-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout</p></li>
+</ul>
+</div></blockquote>
+<p>We only wait for this many seconds between bytes received from the backend before giving up the fetch.
+VCL values, per backend or per backend request take precedence.
+This parameter does not apply to pipe’ed requests.</p>
+</section>
+<section id="cc-command">
+<span id="ref-param-cc-command"></span><h5>cc_command<a class="headerlink" href="#cc-command" title="Link to this heading">¶</a></h5>
+<p>NB: The actual default value for this parameter depends on the Vinyl Cache build environment and options.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: exec $CC $CFLAGS %w -shared -o %o %s</p></li>
+<li><p>Flags: must_reload</p></li>
+</ul>
+</div></blockquote>
+<p>The command used for compiling the C source code to a dlopen(3) loadable object. The following expansions can be used:</p>
+<ul class="simple">
+<li><p>%s: the source file name</p></li>
+<li><p>%o: the output file name</p></li>
+<li><p>%w: the cc_warnings parameter</p></li>
+<li><p>%d: the raw default cc_command</p></li>
+<li><p>%D: the expanded default cc_command</p></li>
+<li><p>%n: the working directory (-n option)</p></li>
+<li><p>%%: a percent sign</p></li>
+</ul>
+<p>Unknown percent expansion sequences are ignored, and to avoid future incompatibilities percent characters should be escaped with a double percent sequence.</p>
+<p>The %d and %D expansions allow passing the parameter’s default value to a wrapper script to perform additional processing.</p>
+</section>
+<section id="cc-warnings">
+<span id="ref-param-cc-warnings"></span><h5>cc_warnings<a class="headerlink" href="#cc-warnings" title="Link to this heading">¶</a></h5>
+<p>NB: The actual default value for this parameter depends on the Vinyl Cache build environment and options.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: -Wall -Werror</p></li>
+<li><p>Flags: must_reload</p></li>
+</ul>
+</div></blockquote>
+<p>Warnings used when compiling the C source code with the cc_command parameter. By default, VCL is compiled with the same set of warnings as Vinyl Cache itself.</p>
+</section>
+<section id="cli-limit">
+<span id="ref-param-cli-limit"></span><h5>cli_limit<a class="headerlink" href="#cli-limit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 64k</p></li>
+<li><p>Minimum: 128b</p></li>
+<li><p>Maximum: 99999999b</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum size of CLI response.  If the response exceeds this limit, the response code will be 201 instead of 200 and the last line will indicate the truncation.</p>
+</section>
+<section id="cli-timeout">
+<span id="ref-param-cli-timeout"></span><h5>cli_timeout<a class="headerlink" href="#cli-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout</p></li>
+</ul>
+</div></blockquote>
+<p>Timeout for the child’s replies to CLI requests.</p>
+</section>
+<section id="clock-skew">
+<span id="ref-param-clock-skew"></span><h5>clock_skew<a class="headerlink" href="#clock-skew" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 10</p></li>
+<li><p>Minimum: 0</p></li>
+</ul>
+</div></blockquote>
+<p>How much clockskew we are willing to accept between the backend and our own clock.</p>
+</section>
+<section id="clock-step">
+<span id="ref-param-clock-step"></span><h5>clock_step<a class="headerlink" href="#clock-step" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 1.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+</ul>
+</div></blockquote>
+<p>How much observed clock step we are willing to accept before we panic.</p>
+</section>
+<section id="connect-timeout">
+<span id="ref-param-connect-timeout"></span><h5>connect_timeout<a class="headerlink" href="#connect-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 3.500</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout</p></li>
+</ul>
+</div></blockquote>
+<p>Default connection timeout for backend connections. We only try to connect to the backend for this many seconds before giving up. VCL can override this default value for each backend and backend request.</p>
+</section>
+<section id="critbit-cooloff">
+<span id="ref-param-critbit-cooloff"></span><h5>critbit_cooloff<a class="headerlink" href="#critbit-cooloff" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 180.000</p></li>
+<li><p>Minimum: 60.000</p></li>
+<li><p>Maximum: 254.000</p></li>
+<li><p>Flags: wizard</p></li>
+</ul>
+</div></blockquote>
+<p>How long the critbit hasher keeps deleted objheads on the cooloff list.</p>
+</section>
+<section id="debug">
+<span id="ref-param-debug"></span><h5>debug<a class="headerlink" href="#debug" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: none</p></li>
+</ul>
+</div></blockquote>
+<p>Enable/Disable various kinds of debugging.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>none</em></dt><dd><p>Disable all debugging</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Use +/- prefix to set/reset individual bits:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>req_state</em></dt><dd><p>VSL Request state engine</p>
+</dd>
+<dt><em>workspace</em></dt><dd><p>VSL Workspace operations</p>
+</dd>
+<dt><em>waitinglist</em></dt><dd><p>VSL Waitinglist events</p>
+</dd>
+<dt><em>syncvsl</em></dt><dd><p>Make VSL synchronous</p>
+</dd>
+<dt><em>hashedge</em></dt><dd><p>Edge cases in Hash</p>
+</dd>
+<dt><em>vclrel</em></dt><dd><p>Rapid VCL release</p>
+</dd>
+<dt><em>lurker</em></dt><dd><p>VSL Ban lurker</p>
+</dd>
+<dt><em>esi_chop</em></dt><dd><p>Chop ESI fetch to bits</p>
+</dd>
+<dt><em>flush_head</em></dt><dd><p>Flush after http1 head</p>
+</dd>
+<dt><em>vtc_mode</em></dt><dd><p>Vinyltest Mode</p>
+</dd>
+<dt><em>witness</em></dt><dd><p>Emit WITNESS lock records</p>
+</dd>
+<dt><em>vsm_keep</em></dt><dd><p>Keep the VSM file on restart</p>
+</dd>
+<dt><em>slow_acceptor</em></dt><dd><p>Slow down Acceptor</p>
+</dd>
+<dt><em>h2_nocheck</em></dt><dd><p>Disable various H2 checks</p>
+</dd>
+<dt><em>vmod_so_keep</em></dt><dd><p>Keep copied VMOD libraries</p>
+</dd>
+<dt><em>processors</em></dt><dd><p>Fetch/Deliver processors</p>
+</dd>
+<dt><em>protocol</em></dt><dd><p>Protocol debugging</p>
+</dd>
+<dt><em>vcl_keep</em></dt><dd><p>Keep VCL C and so files</p>
+</dd>
+<dt><em>lck</em></dt><dd><p>Additional lock statistics</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="default-grace">
+<span id="ref-param-default-grace"></span><h5>default_grace<a class="headerlink" href="#default-grace" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 10s</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: obj_sticky</p></li>
+</ul>
+</div></blockquote>
+<p>Default grace period.  We will deliver an object this long after it has expired, provided another thread is attempting to get a new copy.</p>
+</section>
+<section id="default-keep">
+<span id="ref-param-default-keep"></span><h5>default_keep<a class="headerlink" href="#default-keep" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0s</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: obj_sticky</p></li>
+</ul>
+</div></blockquote>
+<p>Default keep period.  We will keep a useless object around this long, making it available for conditional backend fetches.  That means that the object will be removed from the cache at the end of ttl+grace+keep.</p>
+</section>
+<section id="default-ttl">
+<span id="ref-param-default-ttl"></span><h5>default_ttl<a class="headerlink" href="#default-ttl" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 2m</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: obj_sticky</p></li>
+</ul>
+</div></blockquote>
+<p>The TTL assigned to objects if neither the backend nor the VCL code assigns one.</p>
+</section>
+<section id="experimental">
+<span id="ref-param-experimental"></span><h5>experimental<a class="headerlink" href="#experimental" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: none</p></li>
+</ul>
+</div></blockquote>
+<p>Enable/Disable experimental features.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>none</em></dt><dd><p>Disable all experimental features</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Use +/- prefix to set/reset individual bits:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>drop_pools</em></dt><dd><p>Drop thread pools</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="feature">
+<span id="ref-param-feature"></span><h5>feature<a class="headerlink" href="#feature" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: none,+https_scheme,+validate_headers,+vcl_req_reset</p></li>
+</ul>
+</div></blockquote>
+<p>Enable/Disable various minor features.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>default</em></dt><dd><p>Set default value (deprecated: use param.reset)</p>
+</dd>
+<dt><em>none</em></dt><dd><p>Disable all features.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Use +/- prefix to enable/disable individual feature:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>http2</em></dt><dd><p>Enable HTTP/2 protocol support.</p>
+</dd>
+<dt><em>short_panic</em></dt><dd><p>Short panic message.</p>
+</dd>
+<dt><em>no_coredump</em></dt><dd><p>No coredumps.  Must be set before child process starts.</p>
+</dd>
+<dt><em>https_scheme</em></dt><dd><p>Extract host from full URI in the HTTP/1 request line, if the scheme is https.</p>
+</dd>
+<dt><em>http_date_postel</em></dt><dd><p>Tolerate non compliant timestamp headers like <cite>Date</cite>, <cite>Last-Modified</cite>, <cite>Expires</cite> etc.</p>
+</dd>
+<dt><em>esi_ignore_https</em></dt><dd><p>Convert <cite>&lt;esi:include src”https://…</cite> to <cite>http://…</cite></p>
+</dd>
+<dt><em>esi_disable_xml_check</em></dt><dd><p>Allow ESI processing on non-XML ESI bodies</p>
+</dd>
+<dt><em>esi_ignore_other_elements</em></dt><dd><p>Ignore XML syntax errors in ESI bodies.</p>
+</dd>
+<dt><em>esi_remove_bom</em></dt><dd><p>Ignore UTF-8 BOM in ESI bodies.</p>
+</dd>
+<dt><em>esi_include_onerror</em></dt><dd><p>Parse the onerror attribute of &lt;esi:include&gt; tags.</p>
+</dd>
+<dt><em>wait_silo</em></dt><dd><p>Wait for persistent silos to completely load before serving requests.</p>
+</dd>
+<dt><em>validate_headers</em></dt><dd><p>Validate all header set operations to conform to RFC9110 section 5.5.</p>
+</dd>
+<dt><em>busy_stats_rate</em></dt><dd><p>Make busy workers comply with thread_stats_rate.</p>
+</dd>
+<dt><em>trace</em></dt><dd><p>Enable VCL tracing by default (enable (be)req.trace). Required for tracing vcl_init / vcl_fini</p>
+</dd>
+<dt><em>vcl_req_reset</em></dt><dd><p>Stop processing client VCL once the client is gone. When this happens MAIN.req_reset is incremented.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="fetch-chunksize">
+<span id="ref-param-fetch-chunksize"></span><h5>fetch_chunksize<a class="headerlink" href="#fetch-chunksize" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 16k</p></li>
+<li><p>Minimum: 4k</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>The default chunksize used by fetcher. This should be bigger than the majority of objects with short TTLs.
+Internal limits in the storage_file module makes increases above 128kb a dubious idea.</p>
+</section>
+<section id="fetch-maxchunksize">
+<span id="ref-param-fetch-maxchunksize"></span><h5>fetch_maxchunksize<a class="headerlink" href="#fetch-maxchunksize" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 0.25G</p></li>
+<li><p>Minimum: 64k</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>The maximum chunksize we attempt to allocate from storage. Making this too large may cause delays and storage fragmentation.</p>
+</section>
+<section id="first-byte-timeout">
+<span id="ref-param-first-byte-timeout"></span><h5>first_byte_timeout<a class="headerlink" href="#first-byte-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout</p></li>
+</ul>
+</div></blockquote>
+<p>Default timeout for receiving first byte from backend. We only wait for this many seconds for the first byte before giving up.
+VCL can override this default value for each backend and backend request.
+This parameter does not apply to pipe’ed requests.</p>
+</section>
+<section id="gzip-buffer">
+<span id="ref-param-gzip-buffer"></span><h5>gzip_buffer<a class="headerlink" href="#gzip-buffer" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 32k</p></li>
+<li><p>Minimum: 2k</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Size of malloc buffer used for gzip processing.
+Size of buffer used for gzip processing.
+These buffers are used for in-transit data, for instance gunzip’ed data being sent to a client. Making this space to small results in more overhead, writes to sockets etc, making it too big is probably just a waste of memory.
+Gzip buffers are allocated from Transient storage.</p>
+</section>
+<section id="gzip-level">
+<span id="ref-param-gzip-level"></span><h5>gzip_level<a class="headerlink" href="#gzip-level" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 6</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Maximum: 9</p></li>
+</ul>
+</div></blockquote>
+<p>Gzip compression level: 0=debug, 1=fast, 9=best</p>
+</section>
+<section id="gzip-memlevel">
+<span id="ref-param-gzip-memlevel"></span><h5>gzip_memlevel<a class="headerlink" href="#gzip-memlevel" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 8</p></li>
+<li><p>Minimum: 1</p></li>
+<li><p>Maximum: 9</p></li>
+</ul>
+</div></blockquote>
+<p>Gzip memory level 1=slow/least, 9=fast/most compression.
+Memory impact is 1=1k, 2=2k, … 9=256k.</p>
+</section>
+<section id="h2-header-table-size">
+<span id="ref-param-h2-header-table-size"></span><h5>h2_header_table_size<a class="headerlink" href="#h2-header-table-size" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 4k</p></li>
+<li><p>Minimum: 0b</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 header table size.
+This is the size that will be used for the HPACK dynamic
+decoding table.</p>
+<p>The value of this parameter defines SETTINGS_HEADER_TABLE_SIZE in the initial SETTINGS frame sent to the client when a new HTTP2 session is established.</p>
+</section>
+<section id="h2-initial-window-size">
+<span id="ref-param-h2-initial-window-size"></span><h5>h2_initial_window_size<a class="headerlink" href="#h2-initial-window-size" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 65535b</p></li>
+<li><p>Minimum: 65535b</p></li>
+<li><p>Maximum: 2147483647b</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 initial flow control window size.</p>
+<p>The value of this parameter defines SETTINGS_INITIAL_WINDOW_SIZE in the initial SETTINGS frame sent to the client when a new HTTP2 session is established.</p>
+</section>
+<section id="h2-max-concurrent-streams">
+<span id="ref-param-h2-max-concurrent-streams"></span><h5>h2_max_concurrent_streams<a class="headerlink" href="#h2-max-concurrent-streams" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: streams</p></li>
+<li><p>Default: 100</p></li>
+<li><p>Minimum: 0</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 Maximum number of concurrent streams.
+This is the number of requests that can be active
+at the same time for a single HTTP2 connection.</p>
+<p>The value of this parameter defines SETTINGS_MAX_CONCURRENT_STREAMS in the initial SETTINGS frame sent to the client when a new HTTP2 session is established.</p>
+</section>
+<section id="h2-max-frame-size">
+<span id="ref-param-h2-max-frame-size"></span><h5>h2_max_frame_size<a class="headerlink" href="#h2-max-frame-size" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 16k</p></li>
+<li><p>Minimum: 16k</p></li>
+<li><p>Maximum: 16777215b</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 maximum per frame payload size we are willing to accept.</p>
+<p>The value of this parameter defines SETTINGS_MAX_FRAME_SIZE in the initial SETTINGS frame sent to the client when a new HTTP2 session is established.</p>
+</section>
+<section id="h2-max-header-list-size">
+<span id="ref-param-h2-max-header-list-size"></span><h5>h2_max_header_list_size<a class="headerlink" href="#h2-max-header-list-size" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 0b</p></li>
+<li><p>Minimum: 0b</p></li>
+<li><p>Maximum: 2147483647b</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 maximum size of an uncompressed header list. This parameter is not mapped to SETTINGS_MAX_HEADER_LIST_SIZE in the initial SETTINGS frame, the http_req_size parameter is instead.</p>
+<p>The http_req_size advises HTTP2 clients of the maximum size for the header list. Exceeding http_req_size results in a reset stream after processing the HPACK block to preserve the connection, but exceeding h2_max_header_list_size results in the HTTP2 connection going away immediately.</p>
+<p>If h2_max_header_list_size is lower than http_req_size, it has no effect, except for the special value zero interpreted as 150% of http_req_size.</p>
+</section>
+<section id="h2-rapid-reset">
+<span id="ref-param-h2-rapid-reset"></span><h5>h2_rapid_reset<a class="headerlink" href="#h2-rapid-reset" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 1.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: delayed, experimental</p></li>
+</ul>
+</div></blockquote>
+<p>The upper threshold for how soon an http/2 RST_STREAM frame has to be parsed after a HEADERS frame for it to be treated as suspect and subjected to the rate limits specified by h2_rapid_reset_limit and h2_rapid_reset_period.
+Changes to this parameter affect the default for new HTTP2 sessions. vmod_h2(3) can be used to adjust it from VCL.</p>
+</section>
+<section id="h2-rapid-reset-limit">
+<span id="ref-param-h2-rapid-reset-limit"></span><h5>h2_rapid_reset_limit<a class="headerlink" href="#h2-rapid-reset-limit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 100</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: delayed, experimental</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 RST Allowance.
+Specifies the maximum number of allowed stream resets issued by
+a client over a time period before the connection is closed.
+Setting this parameter to 0 disables the limit.
+Changes to this parameter affect the default for new HTTP2 sessions. vmod_h2(3) can be used to adjust it from VCL.</p>
+</section>
+<section id="h2-rapid-reset-period">
+<span id="ref-param-h2-rapid-reset-period"></span><h5>h2_rapid_reset_period<a class="headerlink" href="#h2-rapid-reset-period" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 1.000</p></li>
+<li><p>Flags: delayed, experimental, wizard</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 sliding window duration for h2_rapid_reset_limit.
+Changes to this parameter affect the default for new HTTP2 sessions. vmod_h2(3) can be used to adjust it from VCL.</p>
+</section>
+<section id="h2-rx-window-increment">
+<span id="ref-param-h2-rx-window-increment"></span><h5>h2_rx_window_increment<a class="headerlink" href="#h2-rx-window-increment" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 1M</p></li>
+<li><p>Minimum: 1M</p></li>
+<li><p>Maximum: 1G</p></li>
+<li><p>Flags: wizard</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 Receive Window Increments.
+How big credits we send in WINDOW_UPDATE frames
+Only affects incoming request bodies (ie: POST, PUT etc.)</p>
+</section>
+<section id="h2-rx-window-low-water">
+<span id="ref-param-h2-rx-window-low-water"></span><h5>h2_rx_window_low_water<a class="headerlink" href="#h2-rx-window-low-water" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 10M</p></li>
+<li><p>Minimum: 65535b</p></li>
+<li><p>Maximum: 1G</p></li>
+<li><p>Flags: wizard</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 Receive Window low water mark.
+We try to keep the window at least this big
+Only affects incoming request bodies (ie: POST, PUT etc.)</p>
+</section>
+<section id="h2-rxbuf-storage">
+<span id="ref-param-h2-rxbuf-storage"></span><h5>h2_rxbuf_storage<a class="headerlink" href="#h2-rxbuf-storage" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: Transient</p></li>
+<li><p>Flags: must_restart</p></li>
+</ul>
+</div></blockquote>
+<p>The name of the storage backend that HTTP/2 receive buffers should be allocated from.</p>
+</section>
+<section id="h2-window-timeout">
+<span id="ref-param-h2-window-timeout"></span><h5>h2_window_timeout<a class="headerlink" href="#h2-window-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 5.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout, wizard</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP2 time limit without window credits. How long a stream may wait for the client to credit the window and allow for more DATA frames to be sent.</p>
+</section>
+<section id="http1-iovs">
+<span id="ref-param-http1-iovs"></span><h5>http1_iovs<a class="headerlink" href="#http1-iovs" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: struct iovec (=16 bytes)</p></li>
+<li><p>Default: 64</p></li>
+<li><p>Minimum: 5</p></li>
+<li><p>Maximum: 1024</p></li>
+<li><p>Flags: wizard</p></li>
+</ul>
+</div></blockquote>
+<p>Number of io vectors to allocate for HTTP1 protocol transmission.  A HTTP1 header needs 7 + 2 per HTTP header field.  Allocated from workspace_thread.  This parameter affects only io vectors used for client delivery.  For backend fetches, the maximum number of io vectors (up to IOV_MAX)  is allocated from available workspace_thread memory.</p>
+</section>
+<section id="http-gzip-support">
+<span id="ref-param-http-gzip-support"></span><h5>http_gzip_support<a class="headerlink" href="#http-gzip-support" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>Enable gzip support. When enabled Vinyl Cache request compressed objects from the backend and store them compressed. If a client does not support gzip encoding Vinyl Cache will uncompress compressed objects on demand. Vinyl Cache will also rewrite the Accept-Encoding header of clients indicating support for gzip to:</dt><dd><p>Accept-Encoding: gzip</p>
+</dd>
+</dl>
+<p>Clients that do not support gzip will have their Accept-Encoding header removed. For more information on how gzip is implemented please see the chapter on gzip in the Vinyl Cache reference.</p>
+<p>When gzip support is disabled the variables beresp.do_gzip and beresp.do_gunzip have no effect in VCL.</p>
+</section>
+<section id="http-max-hdr">
+<span id="ref-param-http-max-hdr"></span><h5>http_max_hdr<a class="headerlink" href="#http-max-hdr" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: header lines</p></li>
+<li><p>Default: 64</p></li>
+<li><p>Minimum: 32</p></li>
+<li><p>Maximum: 65535</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of HTTP header lines we allow in {req|resp|bereq|beresp}.http (obj.http is autosized to the exact number of headers).
+Cheap, ~20 bytes, in terms of workspace memory.
+Note that the first line occupies five header lines.</p>
+</section>
+<section id="http-range-support">
+<span id="ref-param-http-range-support"></span><h5>http_range_support<a class="headerlink" href="#http-range-support" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on</p></li>
+</ul>
+</div></blockquote>
+<p>Enable support for HTTP Range headers.</p>
+</section>
+<section id="http-req-hdr-len">
+<span id="ref-param-http-req-hdr-len"></span><h5>http_req_hdr_len<a class="headerlink" href="#http-req-hdr-len" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 8k</p></li>
+<li><p>Minimum: 40b</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum length of any HTTP client request header we will allow.  The limit is inclusive its continuation lines.</p>
+</section>
+<section id="http-req-overflow-status">
+<span id="ref-param-http-req-overflow-status"></span><h5>http_req_overflow_status<a class="headerlink" href="#http-req-overflow-status" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: HTTP status code or 0 to disable</p></li>
+<li><p>Default: 0</p></li>
+<li><p>Minimum: 400</p></li>
+<li><p>Maximum: 500</p></li>
+</ul>
+</div></blockquote>
+<p>HTTP status code to be returned if http_req_size is exceeded. The default value of 0 closes the connection silently without sending a HTTP response.
+Note that there is no standard HTTP status which exactly matches the implementation of http_req_size. 414 applies to the URL only, while 413 applies to the request body. 400 is probably the least incorrect alternative value to sending no response at all (0). It can also be seen as an internal error on the Vinyl Cache side due to configured limits, so 500 is also allowed.</p>
+</section>
+<section id="http-req-size">
+<span id="ref-param-http-req-size"></span><h5>http_req_size<a class="headerlink" href="#http-req-size" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 32k</p></li>
+<li><p>Minimum: 0.25k</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of bytes of HTTP client request we will deal with. This is a limit on all bytes up to the double blank line which ends the HTTP request. The memory for the request is allocated from the client workspace (param: workspace_client) and this parameter limits how much of that the request is allowed to take up.</p>
+<p>For HTTP2 clients, it is advertised as MAX_HEADER_LIST_SIZE in the initial SETTINGS frame.</p>
+</section>
+<section id="http-resp-hdr-len">
+<span id="ref-param-http-resp-hdr-len"></span><h5>http_resp_hdr_len<a class="headerlink" href="#http-resp-hdr-len" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 8k</p></li>
+<li><p>Minimum: 40b</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum length of any HTTP backend response header we will allow.  The limit is inclusive its continuation lines.</p>
+</section>
+<section id="http-resp-size">
+<span id="ref-param-http-resp-size"></span><h5>http_resp_size<a class="headerlink" href="#http-resp-size" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 32k</p></li>
+<li><p>Minimum: 0.25k</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of bytes of HTTP backend response we will deal with.  This is a limit on all bytes up to the double blank line which ends the HTTP response.
+The memory for the response is allocated from the backend workspace (param: workspace_backend) and this parameter limits how much of that the response is allowed to take up.</p>
+</section>
+<section id="ref-param-idle-send-timeout">
+<span id="idle-send-timeout"></span><h5>idle_send_timeout<a class="headerlink" href="#ref-param-idle-send-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Maximum: 3600.000</p></li>
+<li><p>Flags: timeout, delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Send timeout for individual pieces of data on client connections. May get extended if ‘send_timeout’ applies.</p>
+<p>When this timeout is hit, the session is closed.</p>
+<p>See the man page for <cite>setsockopt(2)</cite> or <cite>socket(7)</cite> under <code class="docutils literal notranslate"><span class="pre">SO_SNDTIMEO</span></code> for more information.</p>
+</section>
+<section id="listen-depth">
+<span id="ref-param-listen-depth"></span><h5>listen_depth<a class="headerlink" href="#listen-depth" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: connections</p></li>
+<li><p>Default: 1024</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: must_restart</p></li>
+</ul>
+</div></blockquote>
+<p>Listen queue depth.</p>
+</section>
+<section id="lru-interval">
+<span id="ref-param-lru-interval"></span><h5>lru_interval<a class="headerlink" href="#lru-interval" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 2.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Grace period before object moves on LRU list.
+Objects are only moved to the front of the LRU list if they have not been moved there already inside this timeout period.  This reduces the amount of lock operations necessary for LRU list access.</p>
+</section>
+<section id="max-esi-depth">
+<span id="ref-param-max-esi-depth"></span><h5>max_esi_depth<a class="headerlink" href="#max-esi-depth" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: levels</p></li>
+<li><p>Default: 5</p></li>
+<li><p>Minimum: 0</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum depth of esi:include processing.</p>
+</section>
+<section id="max-restarts">
+<span id="ref-param-max-restarts"></span><h5>max_restarts<a class="headerlink" href="#max-restarts" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: restarts</p></li>
+<li><p>Default: 4</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Upper limit on how many times a request can restart.</p>
+</section>
+<section id="max-retries">
+<span id="ref-param-max-retries"></span><h5>max_retries<a class="headerlink" href="#max-retries" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: retries</p></li>
+<li><p>Default: 4</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Upper limit on how many times a backend fetch can retry.</p>
+</section>
+<section id="max-vcl">
+<span id="ref-param-max-vcl"></span><h5>max_vcl<a class="headerlink" href="#max-vcl" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 100</p></li>
+<li><p>Minimum: 0</p></li>
+</ul>
+</div></blockquote>
+<p>Threshold of loaded VCL programs.  (VCL labels are not counted.)  Parameter max_vcl_handling determines behaviour.</p>
+</section>
+<section id="max-vcl-handling">
+<span id="ref-param-max-vcl-handling"></span><h5>max_vcl_handling<a class="headerlink" href="#max-vcl-handling" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 1</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Maximum: 2</p></li>
+</ul>
+</div></blockquote>
+<p>Behaviour when attempting to exceed max_vcl loaded VCL.</p>
+<ul class="simple">
+<li><p>0 - Ignore max_vcl parameter.</p></li>
+<li><p>1 - Issue warning.</p></li>
+<li><p>2 - Refuse loading VCLs.</p></li>
+</ul>
+</section>
+<section id="nuke-limit">
+<span id="ref-param-nuke-limit"></span><h5>nuke_limit<a class="headerlink" href="#nuke-limit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: allocations</p></li>
+<li><p>Default: 50</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of objects we attempt to nuke in order to make space for a object body.</p>
+</section>
+<section id="panic-buffer">
+<span id="ref-param-panic-buffer"></span><h5>panic_buffer<a class="headerlink" href="#panic-buffer" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 64k</p></li>
+<li><p>Minimum: 4k</p></li>
+<li><p>Maximum: 10M</p></li>
+<li><p>Flags: must_restart</p></li>
+</ul>
+</div></blockquote>
+<p>Size of the panic message buffer.
+The panic buffer is allocated in the working directory as memory shared between the management and worker process, so sufficient working directory space should be accounted for if this value is adjusted. Panic messages are truncated to the configured size.</p>
+</section>
+<section id="pcre2-depth-limit">
+<span id="ref-param-pcre2-depth-limit"></span><h5>pcre2_depth_limit<a class="headerlink" href="#pcre2-depth-limit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 20</p></li>
+<li><p>Minimum: 1</p></li>
+</ul>
+</div></blockquote>
+<p>The recursion depth-limit for the internal match logic in a pcre2_match().</p>
+<p>(See: pcre2_set_depth_limit() in pcre2 docs.)</p>
+<p>This puts an upper limit on the amount of stack used by PCRE2 for certain classes of regular expressions.</p>
+<p>We have set the default value low in order to prevent crashes, at the cost of possible regexp matching failures.</p>
+<p>Matching failures will show up in the log as VCL_Error messages.</p>
+</section>
+<section id="pcre2-jit-compilation">
+<span id="ref-param-pcre2-jit-compilation"></span><h5>pcre2_jit_compilation<a class="headerlink" href="#pcre2-jit-compilation" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on</p></li>
+</ul>
+</div></blockquote>
+<p>Use the pcre2 JIT compiler if available.</p>
+</section>
+<section id="pcre2-match-limit">
+<span id="ref-param-pcre2-match-limit"></span><h5>pcre2_match_limit<a class="headerlink" href="#pcre2-match-limit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 10000</p></li>
+<li><p>Minimum: 1</p></li>
+</ul>
+</div></blockquote>
+<p>The limit for the number of calls to the internal match logic in pcre2_match().</p>
+<p>(See: pcre2_set_match_limit() in pcre2 docs.)</p>
+<p>This parameter limits how much CPU time regular expression matching can soak up.</p>
+</section>
+<section id="ping-interval">
+<span id="ref-param-ping-interval"></span><h5>ping_interval<a class="headerlink" href="#ping-interval" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 3</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: must_restart</p></li>
+</ul>
+</div></blockquote>
+<p>Interval between pings from parent to child.
+Zero will disable pinging entirely, which makes it possible to attach a debugger to the child.</p>
+</section>
+<section id="pipe-sess-max">
+<span id="ref-param-pipe-sess-max"></span><h5>pipe_sess_max<a class="headerlink" href="#pipe-sess-max" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: connections</p></li>
+<li><p>Default: 0</p></li>
+<li><p>Minimum: 0</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of sessions dedicated to pipe transactions.</p>
+</section>
+<section id="pipe-task-deadline">
+<span id="ref-param-pipe-task-deadline"></span><h5>pipe_task_deadline<a class="headerlink" href="#pipe-task-deadline" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout</p></li>
+</ul>
+</div></blockquote>
+<p>Deadline for PIPE sessions. Regardless of activity in either direction after this many seconds, the session is closed.</p>
+</section>
+<section id="pipe-timeout">
+<span id="ref-param-pipe-timeout"></span><h5>pipe_timeout<a class="headerlink" href="#pipe-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout</p></li>
+</ul>
+</div></blockquote>
+<p>Idle timeout for PIPE sessions. If nothing have been received in either direction for this many seconds, the session is closed.</p>
+</section>
+<section id="pool-req">
+<span id="ref-param-pool-req"></span><h5>pool_req<a class="headerlink" href="#pool-req" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 10,100,10</p></li>
+</ul>
+</div></blockquote>
+<p>Parameters for per worker pool request memory pool.</p>
+<p>The three numbers are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>min_pool</em></dt><dd><p>minimum size of free pool.</p>
+</dd>
+<dt><em>max_pool</em></dt><dd><p>maximum size of free pool.</p>
+</dd>
+<dt><em>max_age</em></dt><dd><p>max age of free element.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="pool-sess">
+<span id="ref-param-pool-sess"></span><h5>pool_sess<a class="headerlink" href="#pool-sess" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 10,100,10</p></li>
+</ul>
+</div></blockquote>
+<p>Parameters for per worker pool session memory pool.</p>
+<p>The three numbers are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>min_pool</em></dt><dd><p>minimum size of free pool.</p>
+</dd>
+<dt><em>max_pool</em></dt><dd><p>maximum size of free pool.</p>
+</dd>
+<dt><em>max_age</em></dt><dd><p>max age of free element.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="pool-vbo">
+<span id="ref-param-pool-vbo"></span><h5>pool_vbo<a class="headerlink" href="#pool-vbo" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: 10,100,10</p></li>
+</ul>
+</div></blockquote>
+<p>Parameters for backend object fetch memory pool.</p>
+<p>The three numbers are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>min_pool</em></dt><dd><p>minimum size of free pool.</p>
+</dd>
+<dt><em>max_pool</em></dt><dd><p>maximum size of free pool.</p>
+</dd>
+<dt><em>max_age</em></dt><dd><p>max age of free element.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="prefer-ipv6">
+<span id="ref-param-prefer-ipv6"></span><h5>prefer_ipv6<a class="headerlink" href="#prefer-ipv6" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: off</p></li>
+</ul>
+</div></blockquote>
+<p>Prefer IPv6 address when connecting to backends which have both IPv4 and IPv6 addresses.</p>
+</section>
+<section id="rush-exponent">
+<span id="ref-param-rush-exponent"></span><h5>rush_exponent<a class="headerlink" href="#rush-exponent" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: requests per request</p></li>
+<li><p>Default: 3</p></li>
+<li><p>Minimum: 1</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>How many parked request we start for each completed request on the object.
+NB: Even with the implicit delay of delivery, this parameter controls an exponential increase in number of worker threads. A value of 1 will instead serialize requests resumption and is only useful for testing purposes.</p>
+</section>
+<section id="send-timeout">
+<span id="ref-param-send-timeout"></span><h5>send_timeout<a class="headerlink" href="#send-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 600.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout, delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Total timeout for ordinary HTTP1 responses. Does not apply to some internally generated errors and pipe mode.</p>
+<p>When ‘idle_send_timeout’ is hit while sending an HTTP1 response, the timeout is extended unless the total time already taken for sending the response in its entirety exceeds this many seconds.</p>
+<p>When this timeout is hit, the session is closed</p>
+</section>
+<section id="shortlived">
+<span id="ref-param-shortlived"></span><h5>shortlived<a class="headerlink" href="#shortlived" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 10.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+</ul>
+</div></blockquote>
+<p>Objects created with (ttl+grace+keep) shorter than this are always put in transient storage.</p>
+</section>
+<section id="sigsegv-handler">
+<span id="ref-param-sigsegv-handler"></span><h5>sigsegv_handler<a class="headerlink" href="#sigsegv-handler" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on</p></li>
+<li><p>Flags: must_restart</p></li>
+</ul>
+</div></blockquote>
+<p>Install a signal handler which tries to dump debug information on segmentation faults, bus errors and abort signals.</p>
+</section>
+<section id="startup-timeout">
+<span id="ref-param-startup-timeout"></span><h5>startup_timeout<a class="headerlink" href="#startup-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: timeout</p></li>
+</ul>
+</div></blockquote>
+<p>Alternative timeout for the initial worker process startup.
+If cli_timeout is longer than startup_timeout, it is used instead.</p>
+</section>
+<section id="syslog-cli-traffic">
+<span id="ref-param-syslog-cli-traffic"></span><h5>syslog_cli_traffic<a class="headerlink" href="#syslog-cli-traffic" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: on</p></li>
+</ul>
+</div></blockquote>
+<p>Log all CLI traffic to syslog(LOG_INFO).</p>
+</section>
+<section id="tcp-fastopen">
+<span id="ref-param-tcp-fastopen"></span><h5>tcp_fastopen<a class="headerlink" href="#tcp-fastopen" title="Link to this heading">¶</a></h5>
+<p>NB: This parameter depends on a feature which is not available on all platforms.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bool</p></li>
+<li><p>Default: off</p></li>
+<li><p>Flags: must_restart</p></li>
+</ul>
+</div></blockquote>
+<p>Enable TCP Fast Open extension.</p>
+</section>
+<section id="tcp-keepalive-intvl">
+<span id="ref-param-tcp-keepalive-intvl"></span><h5>tcp_keepalive_intvl<a class="headerlink" href="#tcp-keepalive-intvl" title="Link to this heading">¶</a></h5>
+<p>NB: This parameter depends on a feature which is not available on all platforms.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: platform dependent</p></li>
+<li><p>Minimum: 1.000</p></li>
+<li><p>Maximum: 100.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>The number of seconds between TCP keep-alive probes. Ignored for Unix domain sockets.</p>
+</section>
+<section id="tcp-keepalive-probes">
+<span id="ref-param-tcp-keepalive-probes"></span><h5>tcp_keepalive_probes<a class="headerlink" href="#tcp-keepalive-probes" title="Link to this heading">¶</a></h5>
+<p>NB: This parameter depends on a feature which is not available on all platforms.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: probes</p></li>
+<li><p>Default: platform dependent</p></li>
+<li><p>Minimum: 1</p></li>
+<li><p>Maximum: 100</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>The maximum number of TCP keep-alive probes to send before giving up and killing the connection if no response is obtained from the other end. Ignored for Unix domain sockets.</p>
+</section>
+<section id="tcp-keepalive-time">
+<span id="ref-param-tcp-keepalive-time"></span><h5>tcp_keepalive_time<a class="headerlink" href="#tcp-keepalive-time" title="Link to this heading">¶</a></h5>
+<p>NB: This parameter depends on a feature which is not available on all platforms.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: platform dependent</p></li>
+<li><p>Minimum: 1.000</p></li>
+<li><p>Maximum: 7200.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>The number of seconds a connection needs to be idle before TCP begins sending out keep-alive probes. Ignored for Unix domain sockets.</p>
+</section>
+<section id="thread-pool-add-delay">
+<span id="ref-param-thread-pool-add-delay"></span><h5>thread_pool_add_delay<a class="headerlink" href="#thread-pool-add-delay" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Wait at least this long after creating a thread.</p>
+<p>Some (buggy) systems may need a short (sub-second) delay between creating threads.
+Set this to a few milliseconds if you see the ‘threads_failed’ counter grow too much.</p>
+<p>Setting this too high results in insufficient worker threads.</p>
+</section>
+<section id="thread-pool-destroy-delay">
+<span id="ref-param-thread-pool-destroy-delay"></span><h5>thread_pool_destroy_delay<a class="headerlink" href="#thread-pool-destroy-delay" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 1.000</p></li>
+<li><p>Minimum: 0.010</p></li>
+<li><p>Flags: delayed, experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Wait this long after destroying a thread.</p>
+<p>This controls the decay of thread pools when idle(-ish).</p>
+</section>
+<section id="thread-pool-fail-delay">
+<span id="ref-param-thread-pool-fail-delay"></span><h5>thread_pool_fail_delay<a class="headerlink" href="#thread-pool-fail-delay" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.200</p></li>
+<li><p>Minimum: 0.010</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Wait at least this long after a failed thread creation before trying to create another thread.</p>
+<p>Failure to create a worker thread is often a sign that  the end is near, because the process is running out of some resource.  This delay tries to not rush the end on needlessly.</p>
+<p>If thread creation failures are a problem, check that thread_pool_max is not too high.</p>
+<p>It may also help to increase thread_pool_timeout and thread_pool_min, to reduce the rate at which treads are destroyed and later recreated.</p>
+</section>
+<section id="thread-pool-max">
+<span id="ref-param-thread-pool-max"></span><h5>thread_pool_max<a class="headerlink" href="#thread-pool-max" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: threads</p></li>
+<li><p>Default: 5000</p></li>
+<li><p>Minimum: thread_pool_min</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>The maximum number of worker threads in each pool.</p>
+<p>Do not set this higher than you have to, since excess worker threads soak up RAM and CPU and generally just get in the way of getting work done.</p>
+</section>
+<section id="thread-pool-min">
+<span id="ref-param-thread-pool-min"></span><h5>thread_pool_min<a class="headerlink" href="#thread-pool-min" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: threads</p></li>
+<li><p>Default: 100</p></li>
+<li><p>Minimum: 5</p></li>
+<li><p>Maximum: thread_pool_max</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>The minimum number of worker threads in each pool.</p>
+<p>Increasing this may help ramp up faster from low load situations or when threads have expired.</p>
+<p>Technical minimum is 5 threads, but this parameter is strongly recommended to be at least 10</p>
+</section>
+<section id="thread-pool-reserve">
+<span id="ref-param-thread-pool-reserve"></span><h5>thread_pool_reserve<a class="headerlink" href="#thread-pool-reserve" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: threads</p></li>
+<li><p>Default: 0 (auto-tune: 5% of thread_pool_min)</p></li>
+<li><p>Maximum: 95% of thread_pool_min</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>The number of worker threads reserved for vital tasks in each pool.</p>
+<p>Tasks may require other tasks to complete (for example, client requests may require backend requests, http2 sessions require streams, which require requests). This reserve is to ensure that lower priority tasks do not prevent higher priority tasks from running even under high load.</p>
+<p>The effective value is at least 5 (the number of internal priority classes), irrespective of this parameter.</p>
+</section>
+<section id="thread-pool-stack">
+<span id="ref-param-thread-pool-stack"></span><h5>thread_pool_stack<a class="headerlink" href="#thread-pool-stack" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 80k</p></li>
+<li><p>Minimum: sysconf(_SC_THREAD_STACK_MIN)</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Worker thread stack size.
+This will likely be rounded up to a multiple of 4k (or whatever the page_size might be) by the kernel.</p>
+<p>The required stack size is primarily driven by the depth of the call-tree. The most common relevant determining factors in Vinyl Cache core code are GZIP (un)compression, ESI processing and regular expression matches. VMODs may also require significant amounts of additional stack. The nesting depth of VCL subs is another factor, although typically not predominant.</p>
+<p>The stack size is per thread, so the maximum total memory required for worker thread stacks is in the order of size = thread_pools x thread_pool_max x thread_pool_stack.</p>
+<p>Thus, in particular for setups with many threads, keeping the stack size at a minimum helps reduce the amount of memory required by Vinyl Cache.</p>
+<p>On the other hand, thread_pool_stack must be large enough under all circumstances, otherwise Vinyl Cache will crash due to a stack overflow. Usually, a stack overflow manifests itself as a segmentation fault (aka segfault / SIGSEGV) with the faulting address being near the stack pointer (sp).</p>
+<p>Unless stack usage can be reduced, thread_pool_stack must be increased when a stack overflow occurs. Setting it in 150%-200% increments is recommended until stack overflows cease to occur.</p>
+</section>
+<section id="thread-pool-timeout">
+<span id="ref-param-thread-pool-timeout"></span><h5>thread_pool_timeout<a class="headerlink" href="#thread-pool-timeout" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 300.000</p></li>
+<li><p>Minimum: 10.000</p></li>
+<li><p>Flags: delayed, experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Thread idle threshold.</p>
+<p>Threads in excess of thread_pool_min, which have been idle for at least this long, will be destroyed.</p>
+</section>
+<section id="thread-pool-watchdog">
+<span id="ref-param-thread-pool-watchdog"></span><h5>thread_pool_watchdog<a class="headerlink" href="#thread-pool-watchdog" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 0.100</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Thread queue stuck watchdog.</p>
+<p>If no queued work have been released for this long, the worker process panics itself.</p>
+</section>
+<section id="thread-pools">
+<span id="ref-param-thread-pools"></span><h5>thread_pools<a class="headerlink" href="#thread-pools" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: pools</p></li>
+<li><p>Default: 2</p></li>
+<li><p>Minimum: 1</p></li>
+<li><p>Maximum: 32</p></li>
+<li><p>Flags: delayed, experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Number of worker thread pools.</p>
+<p>Increasing the number of worker pools decreases lock contention. Each worker pool also has a thread accepting new connections, so for very high rates of incoming new connections on systems with many cores, increasing the worker pools may be required.</p>
+<p>Too many pools waste CPU and RAM resources, and more than one pool for each CPU is most likely detrimental to performance.</p>
+<p>Can be increased on the fly, but decreases require a restart to take effect, unless the drop_pools experimental debug flag is set.</p>
+</section>
+<section id="thread-queue-limit">
+<span id="ref-param-thread-queue-limit"></span><h5>thread_queue_limit<a class="headerlink" href="#thread-queue-limit" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: requests</p></li>
+<li><p>Default: 20</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Permitted request queue length per thread-pool.</p>
+<p>This sets the number of requests we will queue, waiting for an available thread.  Above this limit sessions will be dropped instead of queued.</p>
+</section>
+<section id="thread-stats-rate">
+<span id="ref-param-thread-stats-rate"></span><h5>thread_stats_rate<a class="headerlink" href="#thread-stats-rate" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: requests</p></li>
+<li><p>Default: 10</p></li>
+<li><p>Minimum: 0</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>Worker threads accumulate statistics, and dump these into the global stats counters if the lock is free when they finish a job (request/fetch etc.)
+This parameters defines the maximum number of jobs a worker thread may handle, before it is forced to dump its accumulated stats into the global counters.</p>
+</section>
+<section id="timeout-idle">
+<span id="ref-param-timeout-idle"></span><h5>timeout_idle<a class="headerlink" href="#timeout-idle" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 5.000</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Maximum: 3600.000</p></li>
+</ul>
+</div></blockquote>
+<p>Idle timeout for client connections.</p>
+<p>A connection is considered idle until we have received the full request headers.</p>
+<p>This parameter is particularly relevant for HTTP1 keepalive  connections which are closed unless the next request is received before this timeout is reached.</p>
+</section>
+<section id="timeout-linger">
+<span id="ref-param-timeout-linger"></span><h5>timeout_linger<a class="headerlink" href="#timeout-linger" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 0.050</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: experimental</p></li>
+</ul>
+</div></blockquote>
+<p>How long the worker thread lingers on an idle session before handing it over to the waiter.
+When sessions are reused, as much as half of all reuses happen within the first 100 msec of the previous request completing.
+Setting this too high results in worker threads not doing anything for their keep, setting it too low just means that more sessions take a detour around the waiter.</p>
+</section>
+<section id="transit-buffer">
+<span id="ref-param-transit-buffer"></span><h5>transit_buffer<a class="headerlink" href="#transit-buffer" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 0b</p></li>
+<li><p>Minimum: 0b</p></li>
+</ul>
+</div></blockquote>
+<p>The number of bytes which Vinyl Cache buffers for uncacheable backend streaming fetches - in other words, how many bytes Vinyl Cache reads from the backend ahead of what has been sent to the client.
+A zero value means no limit, the object is fetched as fast as possible.</p>
+<p>When dealing with slow clients, setting this parameter to non-zero can prevent large uncacheable objects from being stored in full when the intent is to simply stream them to the client. As a result, a slow client transaction holds onto a backend connection until the end of the delivery.</p>
+<p>This parameter is the default to the VCL variable <code class="docutils literal notranslate"><span class="pre">beresp.transit_buffer</span></code>, which can be used to control the transit buffer per backend request.</p>
+</section>
+<section id="uncacheable-ttl">
+<span id="ref-param-uncacheable-ttl"></span><h5>uncacheable_ttl<a class="headerlink" href="#uncacheable-ttl" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 2m</p></li>
+<li><p>Minimum: 0.000</p></li>
+<li><p>Flags: obj_sticky</p></li>
+</ul>
+</div></blockquote>
+<p>The TTL assigned to uncacheable objects by the built-in VCL.</p>
+</section>
+<section id="vary-notice">
+<span id="ref-param-vary-notice"></span><h5>vary_notice<a class="headerlink" href="#vary-notice" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: variants</p></li>
+<li><p>Default: 10</p></li>
+<li><p>Minimum: 1</p></li>
+</ul>
+</div></blockquote>
+<p>How many variants need to be evaluated to log a Notice that there might be too many variants.</p>
+</section>
+<section id="vcc-allow-inline-c">
+<span id="ref-param-vcc-allow-inline-c"></span><h5>vcc_allow_inline_c<a class="headerlink" href="#vcc-allow-inline-c" title="Link to this heading">¶</a></h5>
+<p>Deprecated alias for the vcc_feature parameter.</p>
+</section>
+<section id="vcc-err-unref">
+<span id="ref-param-vcc-err-unref"></span><h5>vcc_err_unref<a class="headerlink" href="#vcc-err-unref" title="Link to this heading">¶</a></h5>
+<p>Deprecated alias for the vcc_feature parameter.</p>
+</section>
+<section id="vcc-feature">
+<span id="ref-param-vcc-feature"></span><h5>vcc_feature<a class="headerlink" href="#vcc-feature" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: none,+err_unref,+unsafe_path</p></li>
+</ul>
+</div></blockquote>
+<p>Enable/Disable various VCC behaviors.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>default</em></dt><dd><p>Set default value (deprecated: use param.reset)</p>
+</dd>
+<dt><em>none</em></dt><dd><p>Disable all behaviors.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Use +/- prefix to enable/disable individual behavior:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>err_unref</em></dt><dd><p>Unreferenced VCL objects result in error.</p>
+</dd>
+<dt><em>allow_inline_c</em></dt><dd><p>Allow inline C code in VCL.</p>
+</dd>
+<dt><em>unsafe_path</em></dt><dd><p>Allow ‘/’ in vmod &amp; include paths. Allow ‘import … from …’.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="vcc-unsafe-path">
+<span id="ref-param-vcc-unsafe-path"></span><h5>vcc_unsafe_path<a class="headerlink" href="#vcc-unsafe-path" title="Link to this heading">¶</a></h5>
+<p>Deprecated alias for the vcc_feature parameter.</p>
+</section>
+<section id="vcl-cooldown">
+<span id="ref-param-vcl-cooldown"></span><h5>vcl_cooldown<a class="headerlink" href="#vcl-cooldown" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 600.000</p></li>
+<li><p>Minimum: 1.000</p></li>
+</ul>
+</div></blockquote>
+<p>How long a VCL is kept warm after being replaced as the active VCL (granularity approximately 30 seconds).</p>
+</section>
+<section id="vcl-path">
+<span id="ref-param-vcl-path"></span><h5>vcl_path<a class="headerlink" href="#vcl-path" title="Link to this heading">¶</a></h5>
+<p>NB: The actual default value for this parameter depends on the Vinyl Cache build environment and options.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: ${sysconfdir}/vinyl-cache:${datadir}/vinyl-cache/vcl</p></li>
+</ul>
+</div></blockquote>
+<p>Directory (or colon separated list of directories) from which relative VCL filenames (vcl.load and include) are to be found.  By default Vinyl Cache searches VCL files in both the system configuration and shared data directories to allow packages to drop their VCL files in a standard location where relative includes would work. Includes using +glob cannot be searched in vcl_path.</p>
+</section>
+<section id="vmod-path">
+<span id="ref-param-vmod-path"></span><h5>vmod_path<a class="headerlink" href="#vmod-path" title="Link to this heading">¶</a></h5>
+<p>NB: The actual default value for this parameter depends on the Vinyl Cache build environment and options.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: ${libdir}/vinyl-cache/vmods</p></li>
+</ul>
+</div></blockquote>
+<p>Directory (or colon separated list of directories) where VMODs are to be found.</p>
+</section>
+<section id="vsl-buffer">
+<span id="ref-param-vsl-buffer"></span><h5>vsl_buffer<a class="headerlink" href="#vsl-buffer" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 16k</p></li>
+<li><p>Minimum: vsl_reclen + 12 bytes</p></li>
+</ul>
+</div></blockquote>
+<p>Bytes of (req-/backend-)workspace dedicated to buffering VSL records.
+When this parameter is adjusted, most likely workspace_client and workspace_backend will have to be adjusted by the same amount.</p>
+<p>Setting this too high costs memory, setting it too low will cause more VSL flushes and likely increase lock-contention on the VSL mutex.</p>
+</section>
+<section id="vsl-mask">
+<span id="ref-param-vsl-mask"></span><h5>vsl_mask<a class="headerlink" href="#vsl-mask" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default: all,-Debug,-ObjProtocol,-ObjStatus,-ObjReason,-ObjHeader,-ExpKill,-WorkThread,-Hash,-VfpAcct,-H2RxHdr,-H2RxBody,-H2TxHdr,-H2TxBody,-VdpAcct,-ReqTarget</p></li>
+</ul>
+</div></blockquote>
+<p>Mask individual VSL messages from being logged.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>all</em></dt><dd><p>Enable all tags</p>
+</dd>
+<dt><em>default</em></dt><dd><p>Set default value (deprecated: use param.reset)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Use +/- prefix in front of VSL tag name to unmask/mask individual VSL messages. See vsl(7) for possible values.</p>
+</section>
+<section id="vsl-reclen">
+<span id="ref-param-vsl-reclen"></span><h5>vsl_reclen<a class="headerlink" href="#vsl-reclen" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 255b</p></li>
+<li><p>Minimum: 16b</p></li>
+<li><p>Maximum: vsl_buffer - 12 bytes</p></li>
+</ul>
+</div></blockquote>
+<p>Maximum number of bytes in SHM log record.</p>
+</section>
+<section id="vsl-space">
+<span id="ref-param-vsl-space"></span><h5>vsl_space<a class="headerlink" href="#vsl-space" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 80M</p></li>
+<li><p>Minimum: 1M</p></li>
+<li><p>Maximum: 4G</p></li>
+<li><p>Flags: must_restart</p></li>
+</ul>
+</div></blockquote>
+<p>The amount of space to allocate for the VSL fifo buffer in the VSM memory segment.  If you make this too small, vinyl{ncsa|log} etc will not be able to keep up.  Making it too large just costs memory resources.</p>
+</section>
+<section id="vsm-free-cooldown">
+<span id="ref-param-vsm-free-cooldown"></span><h5>vsm_free_cooldown<a class="headerlink" href="#vsm-free-cooldown" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: seconds</p></li>
+<li><p>Default: 60.000</p></li>
+<li><p>Minimum: 10.000</p></li>
+<li><p>Maximum: 600.000</p></li>
+</ul>
+</div></blockquote>
+<p>How long VSM memory is kept warm after a deallocation (granularity approximately 2 seconds).</p>
+</section>
+<section id="workspace-backend">
+<span id="ref-param-workspace-backend"></span><h5>workspace_backend<a class="headerlink" href="#workspace-backend" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 96k</p></li>
+<li><p>Minimum: 1k</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Bytes of HTTP protocol workspace for backend HTTP req/resp.  If larger than 4k, use a multiple of 4k for VM efficiency.</p>
+</section>
+<section id="workspace-client">
+<span id="ref-param-workspace-client"></span><h5>workspace_client<a class="headerlink" href="#workspace-client" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 96k</p></li>
+<li><p>Minimum: 9k</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Bytes of HTTP protocol workspace for clients HTTP req/resp.  Use a multiple of 4k for VM efficiency.
+For HTTP/2 compliance this must be at least 20k, in order to receive fullsize (=16k) frames from the client.   That usually happens only in POST/PUT bodies.  For other traffic-patterns smaller values work just fine.</p>
+</section>
+<section id="workspace-session">
+<span id="ref-param-workspace-session"></span><h5>workspace_session<a class="headerlink" href="#workspace-session" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 0.75k</p></li>
+<li><p>Minimum: 384b</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Allocation size for session structure and workspace.    The workspace is primarily used for TCP connection addresses.  If larger than 4k, use a multiple of 4k for VM efficiency.</p>
+</section>
+<section id="workspace-thread">
+<span id="ref-param-workspace-thread"></span><h5>workspace_thread<a class="headerlink" href="#workspace-thread" title="Link to this heading">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>Units: bytes</p></li>
+<li><p>Default: 2k</p></li>
+<li><p>Minimum: 0.25k</p></li>
+<li><p>Maximum: 8k</p></li>
+<li><p>Flags: delayed</p></li>
+</ul>
+</div></blockquote>
+<p>Bytes of auxiliary workspace per thread.
+This workspace is used for certain temporary data structures during the operation of a worker thread.
+One use is for the IO-vectors used during delivery. Setting this parameter too low may increase the number of writev() syscalls, setting it too high just wastes space.  ~0.1k + UIO_MAXIOV * sizeof(struct iovec) (typically = ~16k for 64bit) is considered the maximum sensible value under any known circumstances (excluding exotic vmod use).</p>
+</section>
+</section>
+</section>
+<section id="exit-codes">
+<h3>EXIT CODES<a class="headerlink" href="#exit-codes" title="Link to this heading">¶</a></h3>
+<p>Vinyl Cache and bundled tools will, in most cases, exit with one of the
+following codes</p>
+<ul class="simple">
+<li><p><cite>0</cite> OK</p></li>
+<li><p><cite>1</cite> Some error which could be system-dependent and/or transient</p></li>
+<li><p><cite>2</cite> Serious configuration / parameter error - retrying with the same
+configuration / parameters is most likely useless</p></li>
+</ul>
+<p>The <cite>vinyld</cite> master process may also OR its exit code</p>
+<ul class="simple">
+<li><p>with <cite>0x20</cite> when the <cite>vinyld</cite> child process died,</p></li>
+<li><p>with <cite>0x40</cite> when the <cite>vinyld</cite> child process was terminated by a
+signal and</p></li>
+<li><p>with <cite>0x80</cite> when a core was dumped.</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h3>SEE ALSO<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="vinyllog.html#vinyllog-1"><span class="std std-ref">vinyllog</span></a></p></li>
+<li><p><a class="reference internal" href="vinylhist.html#vinylhist-1"><span class="std std-ref">vinylhist</span></a></p></li>
+<li><p><a class="reference internal" href="vinylncsa.html#vinylncsa-1"><span class="std std-ref">vinylncsa</span></a></p></li>
+<li><p><a class="reference internal" href="vinylstat.html#vinylstat-1"><span class="std std-ref">vinylstat</span></a></p></li>
+<li><p><a class="reference internal" href="vinyltop.html#vinyltop-1"><span class="std std-ref">vinyltop</span></a></p></li>
+<li><p><a class="reference internal" href="vinyl-cli.html#vinyl-cli-7"><span class="std std-ref">vinyl-cli</span></a></p></li>
+<li><p><a class="reference internal" href="vcl.html#vcl-7"><span class="std std-ref">VCL</span></a></p></li>
+</ul>
+</section>
+<section id="history">
+<h3>HISTORY<a class="headerlink" href="#history" title="Link to this heading">¶</a></h3>
+<p>The <cite>vinyld</cite> daemon was developed by Poul-Henning Kamp in cooperation
+with Verdens Gang AS and Redpill-Linpro</p>
+<p>This manual page was written by Dag-Erling Smørgrav with updates by
+Stig Sandbeck Mathisen &lt;<a class="reference external" href="mailto:ssm&#37;&#52;&#48;debian&#46;org">ssm<span>&#64;</span>debian<span>&#46;</span>org</a>&gt;, Nils Goroll and others.</p>
+</section>
+<section id="copyright">
+<h3>COPYRIGHT<a class="headerlink" href="#copyright" title="Link to this heading">¶</a></h3>
+<p>This document is licensed under the same licence as Vinyl Cache
+itself. See LICENCE for details.</p>
+<ul class="simple">
+<li><p>Copyright (c) 2007-2015 Varnish Software AS</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="vtc.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">VTC</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vinylstat.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">vinylstat</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016-2026, The Vinyl Cache Project and contributors. Vinyl Cache Logo &amp; Mascot: CC-BY 4.0 Rhubarbe.design
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">vinyld</a><ul>
+<li><a class="reference internal" href="#http-accelerator-daemon">HTTP accelerator daemon</a><ul>
+<li><a class="reference internal" href="#synopsis">SYNOPSIS</a></li>
+<li><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li><a class="reference internal" href="#options">OPTIONS</a><ul>
+<li><a class="reference internal" href="#basic-options">Basic options</a></li>
+<li><a class="reference internal" href="#documentation-options">Documentation options</a></li>
+<li><a class="reference internal" href="#operations-options">Operations options</a></li>
+<li><a class="reference internal" href="#tuning-options">Tuning options</a></li>
+<li><a class="reference internal" href="#security-options">Security options</a></li>
+<li><a class="reference internal" href="#advanced-development-and-debugging-options">Advanced, development and debugging options</a></li>
+<li><a class="reference internal" href="#hash-algorithm">Hash Algorithm</a></li>
+<li><a class="reference internal" href="#storage-backend">Storage Backend</a></li>
+<li><a class="reference internal" href="#jail">Jail</a></li>
+<li><a class="reference internal" href="#management-interface">Management Interface</a></li>
+<li><a class="reference internal" href="#cli-command-file">CLI Command File</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#run-time-parameters">RUN TIME PARAMETERS</a><ul>
+<li><a class="reference internal" href="#run-time-parameter-units">Run Time Parameter Units</a><ul>
+<li><a class="reference internal" href="#bool">bool</a></li>
+<li><a class="reference internal" href="#bytes">bytes</a></li>
+<li><a class="reference internal" href="#seconds">seconds</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#run-time-parameter-flags">Run Time Parameter Flags</a></li>
+<li><a class="reference internal" href="#default-value-exceptions-on-32-bit-systems">Default Value Exceptions on 32 bit Systems</a></li>
+<li><a class="reference internal" href="#list-of-parameters">List of Parameters</a><ul>
+<li><a class="reference internal" href="#accept-filter">accept_filter</a></li>
+<li><a class="reference internal" href="#acceptor-sleep-decay">acceptor_sleep_decay</a></li>
+<li><a class="reference internal" href="#acceptor-sleep-incr">acceptor_sleep_incr</a></li>
+<li><a class="reference internal" href="#acceptor-sleep-max">acceptor_sleep_max</a></li>
+<li><a class="reference internal" href="#auto-restart">auto_restart</a></li>
+<li><a class="reference internal" href="#backend-idle-timeout">backend_idle_timeout</a></li>
+<li><a class="reference internal" href="#backend-local-error-holddown">backend_local_error_holddown</a></li>
+<li><a class="reference internal" href="#backend-remote-error-holddown">backend_remote_error_holddown</a></li>
+<li><a class="reference internal" href="#backend-wait-limit">backend_wait_limit</a></li>
+<li><a class="reference internal" href="#backend-wait-timeout">backend_wait_timeout</a></li>
+<li><a class="reference internal" href="#ban-any-variant">ban_any_variant</a></li>
+<li><a class="reference internal" href="#ban-cutoff">ban_cutoff</a></li>
+<li><a class="reference internal" href="#ban-dups">ban_dups</a></li>
+<li><a class="reference internal" href="#ban-lurker-age">ban_lurker_age</a></li>
+<li><a class="reference internal" href="#ban-lurker-batch">ban_lurker_batch</a></li>
+<li><a class="reference internal" href="#ban-lurker-holdoff">ban_lurker_holdoff</a></li>
+<li><a class="reference internal" href="#ban-lurker-sleep">ban_lurker_sleep</a></li>
+<li><a class="reference internal" href="#between-bytes-timeout">between_bytes_timeout</a></li>
+<li><a class="reference internal" href="#cc-command">cc_command</a></li>
+<li><a class="reference internal" href="#cc-warnings">cc_warnings</a></li>
+<li><a class="reference internal" href="#cli-limit">cli_limit</a></li>
+<li><a class="reference internal" href="#cli-timeout">cli_timeout</a></li>
+<li><a class="reference internal" href="#clock-skew">clock_skew</a></li>
+<li><a class="reference internal" href="#clock-step">clock_step</a></li>
+<li><a class="reference internal" href="#connect-timeout">connect_timeout</a></li>
+<li><a class="reference internal" href="#critbit-cooloff">critbit_cooloff</a></li>
+<li><a class="reference internal" href="#debug">debug</a></li>
+<li><a class="reference internal" href="#default-grace">default_grace</a></li>
+<li><a class="reference internal" href="#default-keep">default_keep</a></li>
+<li><a class="reference internal" href="#default-ttl">default_ttl</a></li>
+<li><a class="reference internal" href="#experimental">experimental</a></li>
+<li><a class="reference internal" href="#feature">feature</a></li>
+<li><a class="reference internal" href="#fetch-chunksize">fetch_chunksize</a></li>
+<li><a class="reference internal" href="#fetch-maxchunksize">fetch_maxchunksize</a></li>
+<li><a class="reference internal" href="#first-byte-timeout">first_byte_timeout</a></li>
+<li><a class="reference internal" href="#gzip-buffer">gzip_buffer</a></li>
+<li><a class="reference internal" href="#gzip-level">gzip_level</a></li>
+<li><a class="reference internal" href="#gzip-memlevel">gzip_memlevel</a></li>
+<li><a class="reference internal" href="#h2-header-table-size">h2_header_table_size</a></li>
+<li><a class="reference internal" href="#h2-initial-window-size">h2_initial_window_size</a></li>
+<li><a class="reference internal" href="#h2-max-concurrent-streams">h2_max_concurrent_streams</a></li>
+<li><a class="reference internal" href="#h2-max-frame-size">h2_max_frame_size</a></li>
+<li><a class="reference internal" href="#h2-max-header-list-size">h2_max_header_list_size</a></li>
+<li><a class="reference internal" href="#h2-rapid-reset">h2_rapid_reset</a></li>
+<li><a class="reference internal" href="#h2-rapid-reset-limit">h2_rapid_reset_limit</a></li>
+<li><a class="reference internal" href="#h2-rapid-reset-period">h2_rapid_reset_period</a></li>
+<li><a class="reference internal" href="#h2-rx-window-increment">h2_rx_window_increment</a></li>
+<li><a class="reference internal" href="#h2-rx-window-low-water">h2_rx_window_low_water</a></li>
+<li><a class="reference internal" href="#h2-rxbuf-storage">h2_rxbuf_storage</a></li>
+<li><a class="reference internal" href="#h2-window-timeout">h2_window_timeout</a></li>
+<li><a class="reference internal" href="#http1-iovs">http1_iovs</a></li>
+<li><a class="reference internal" href="#http-gzip-support">http_gzip_support</a></li>
+<li><a class="reference internal" href="#http-max-hdr">http_max_hdr</a></li>
+<li><a class="reference internal" href="#http-range-support">http_range_support</a></li>
+<li><a class="reference internal" href="#http-req-hdr-len">http_req_hdr_len</a></li>
+<li><a class="reference internal" href="#http-req-overflow-status">http_req_overflow_status</a></li>
+<li><a class="reference internal" href="#http-req-size">http_req_size</a></li>
+<li><a class="reference internal" href="#http-resp-hdr-len">http_resp_hdr_len</a></li>
+<li><a class="reference internal" href="#http-resp-size">http_resp_size</a></li>
+<li><a class="reference internal" href="#ref-param-idle-send-timeout">idle_send_timeout</a></li>
+<li><a class="reference internal" href="#listen-depth">listen_depth</a></li>
+<li><a class="reference internal" href="#lru-interval">lru_interval</a></li>
+<li><a class="reference internal" href="#max-esi-depth">max_esi_depth</a></li>
+<li><a class="reference internal" href="#max-restarts">max_restarts</a></li>
+<li><a class="reference internal" href="#max-retries">max_retries</a></li>
+<li><a class="reference internal" href="#max-vcl">max_vcl</a></li>
+<li><a class="reference internal" href="#max-vcl-handling">max_vcl_handling</a></li>
+<li><a class="reference internal" href="#nuke-limit">nuke_limit</a></li>
+<li><a class="reference internal" href="#panic-buffer">panic_buffer</a></li>
+<li><a class="reference internal" href="#pcre2-depth-limit">pcre2_depth_limit</a></li>
+<li><a class="reference internal" href="#pcre2-jit-compilation">pcre2_jit_compilation</a></li>
+<li><a class="reference internal" href="#pcre2-match-limit">pcre2_match_limit</a></li>
+<li><a class="reference internal" href="#ping-interval">ping_interval</a></li>
+<li><a class="reference internal" href="#pipe-sess-max">pipe_sess_max</a></li>
+<li><a class="reference internal" href="#pipe-task-deadline">pipe_task_deadline</a></li>
+<li><a class="reference internal" href="#pipe-timeout">pipe_timeout</a></li>
+<li><a class="reference internal" href="#pool-req">pool_req</a></li>
+<li><a class="reference internal" href="#pool-sess">pool_sess</a></li>
+<li><a class="reference internal" href="#pool-vbo">pool_vbo</a></li>
+<li><a class="reference internal" href="#prefer-ipv6">prefer_ipv6</a></li>
+<li><a class="reference internal" href="#rush-exponent">rush_exponent</a></li>
+<li><a class="reference internal" href="#send-timeout">send_timeout</a></li>
+<li><a class="reference internal" href="#shortlived">shortlived</a></li>
+<li><a class="reference internal" href="#sigsegv-handler">sigsegv_handler</a></li>
+<li><a class="reference internal" href="#startup-timeout">startup_timeout</a></li>
+<li><a class="reference internal" href="#syslog-cli-traffic">syslog_cli_traffic</a></li>
+<li><a class="reference internal" href="#tcp-fastopen">tcp_fastopen</a></li>
+<li><a class="reference internal" href="#tcp-keepalive-intvl">tcp_keepalive_intvl</a></li>
+<li><a class="reference internal" href="#tcp-keepalive-probes">tcp_keepalive_probes</a></li>
+<li><a class="reference internal" href="#tcp-keepalive-time">tcp_keepalive_time</a></li>
+<li><a class="reference internal" href="#thread-pool-add-delay">thread_pool_add_delay</a></li>
+<li><a class="reference internal" href="#thread-pool-destroy-delay">thread_pool_destroy_delay</a></li>
+<li><a class="reference internal" href="#thread-pool-fail-delay">thread_pool_fail_delay</a></li>
+<li><a class="reference internal" href="#thread-pool-max">thread_pool_max</a></li>
+<li><a class="reference internal" href="#thread-pool-min">thread_pool_min</a></li>
+<li><a class="reference internal" href="#thread-pool-reserve">thread_pool_reserve</a></li>
+<li><a class="reference internal" href="#thread-pool-stack">thread_pool_stack</a></li>
+<li><a class="reference internal" href="#thread-pool-timeout">thread_pool_timeout</a></li>
+<li><a class="reference internal" href="#thread-pool-watchdog">thread_pool_watchdog</a></li>
+<li><a class="reference internal" href="#thread-pools">thread_pools</a></li>
+<li><a class="reference internal" href="#thread-queue-limit">thread_queue_limit</a></li>
+<li><a class="reference internal" href="#thread-stats-rate">thread_stats_rate</a></li>
+<li><a class="reference internal" href="#timeout-idle">timeout_idle</a></li>
+<li><a class="reference internal" href="#timeout-linger">timeout_linger</a></li>
+<li><a class="reference internal" href="#transit-buffer">transit_buffer</a></li>
+<li><a class="reference internal" href="#uncacheable-ttl">uncacheable_ttl</a></li>
+<li><a class="reference internal" href="#vary-notice">vary_notice</a></li>
+<li><a class="reference internal" href="#vcc-allow-inline-c">vcc_allow_inline_c</a></li>
+<li><a class="reference internal" href="#vcc-err-unref">vcc_err_unref</a></li>
+<li><a class="reference internal" href="#vcc-feature">vcc_feature</a></li>
+<li><a class="reference internal" href="#vcc-unsafe-path">vcc_unsafe_path</a></li>
+<li><a class="reference internal" href="#vcl-cooldown">vcl_cooldown</a></li>
+<li><a class="reference internal" href="#vcl-path">vcl_path</a></li>
+<li><a class="reference internal" href="#vmod-path">vmod_path</a></li>
+<li><a class="reference internal" href="#vsl-buffer">vsl_buffer</a></li>
+<li><a class="reference internal" href="#vsl-mask">vsl_mask</a></li>
+<li><a class="reference internal" href="#vsl-reclen">vsl_reclen</a></li>
+<li><a class="reference internal" href="#vsl-space">vsl_space</a></li>
+<li><a class="reference internal" href="#vsm-free-cooldown">vsm_free_cooldown</a></li>
+<li><a class="reference internal" href="#workspace-backend">workspace_backend</a></li>
+<li><a class="reference internal" href="#workspace-client">workspace_client</a></li>
+<li><a class="reference internal" href="#workspace-session">workspace_session</a></li>
+<li><a class="reference internal" href="#workspace-thread">workspace_thread</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exit-codes">EXIT CODES</a></li>
+<li><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+<li><a class="reference internal" href="#history">HISTORY</a></li>
+<li><a class="reference internal" href="#copyright">COPYRIGHT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=0b13d40c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

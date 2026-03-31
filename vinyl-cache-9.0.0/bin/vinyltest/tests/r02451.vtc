@@ -1,0 +1,76 @@
+vtest "test PRIV_TASK in vcl_init is per vmod"
+
+server s1 {
+	rxreq
+	txresp -body "ech3Ooj"
+} -start
+
+server s2 {
+	rxreq
+	txresp -body "ieQu2qua"
+} -start
+
+server s3 {
+	rxreq
+	txresp -body "xiuFi3Pe"
+} -start
+
+vinyl v1 -vcl+backend {
+	import directors;
+	import debug;
+	import std;
+
+	sub vcl_init {
+		new objx = debug.obj();
+		new vd = directors.shard();
+		debug.test_priv_task("something");
+		debug.test_priv_task("to remember");
+		objx.test_priv_task(debug.test_priv_task());
+
+		vd.add_backend(s1);
+		vd.add_backend(s2);
+		vd.add_backend(s3);
+		vd.reconfigure(replicas=25);
+
+		std.log("func " + debug.test_priv_task());
+		std.log("obj "	+ objx.test_priv_task());
+	}
+
+	sub vcl_recv {
+		set req.backend_hint = vd.backend();
+		return(pass);
+	}
+
+} -start
+
+logexpect l1 -v v1 -g raw -d 1 {
+	expect 0 0    CLI		{^Rd vcl.load}
+	expect 0 *    Debug             {^test_priv_task.*new}
+	expect 0 *    Debug             {^test_priv_task.*update}
+	expect 0 *    Debug             {^test_priv_task.*exists}
+	expect 0 *    Debug             {^objx.priv_task.*"something to remember".*new}
+	expect 0 *    Debug             {^test_priv_task.*exists}
+	expect 0 *    VCL_Log           {^func something to remember}
+	expect 0 *    Debug             {^objx.priv_task.*"something to remember".$}
+	expect 0 *    VCL_Log           {^obj something to remember}
+	# string stored in obj priv_task has already been freed
+	expect ? *    Debug             {^priv_task_fini}
+	expect ? *    Debug             {^obj_priv_task_fini}
+	expect 0 *    Debug             {^vcl1: VCL_EVENT_WARM}
+} -start
+
+client c1 {
+	txreq -url /Boo0aixe
+	rxresp
+	expect resp.body == "ech3Ooj"
+
+	txreq -url /eishoSu2
+	rxresp
+	expect resp.body == "ieQu2qua"
+
+	txreq -url /Aunah3uo
+	rxresp
+	expect resp.body == "xiuFi3Pe"
+} -run
+
+logexpect l1 -wait

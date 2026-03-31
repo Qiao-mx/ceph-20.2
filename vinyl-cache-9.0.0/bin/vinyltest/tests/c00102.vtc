@@ -1,0 +1,64 @@
+vtest "TCP pool teardown with open connection"
+
+feature ipv6
+
+# when c1's request has gotten to s1
+barrier b1 cond 3
+
+# when vcls have been swizzled
+barrier b2 cond 3
+
+server s1 -listen "::1" {
+	rxreq
+	expect req.url == "/s1"
+	barrier b1 sync
+	barrier b2 sync
+	txresp -hdr "Host: s1"
+	expect_close
+} -start
+
+vinyl v1 -cliok "param.set debug +vclrel"
+
+vinyl v1 -vcl+backend {} -start
+
+client c1 {
+	txreq -url /s1
+	barrier b1 sync
+	barrier b2 sync
+	rxresp
+	expect resp.http.host == "s1"
+
+	txreq -url /s2
+	rxresp
+	expect resp.http.host == "s2"
+} -start
+
+barrier b1 sync
+
+vinyl v1 -cliok "param.set debug +vclrel"
+
+server s2 -listen "::1" {
+	rxreq
+	expect req.url == "/s2"
+	txresp -hdr "Host: s2"
+} -start
+
+vinyl v1 -vcl {
+	backend b2 {
+		.host = "${s2_sock}";
+	}
+}
+
+vinyl v1 -vsc LCK.conn_pool.*
+vinyl v1 -cliok "vcl.discard vcl1"
+vinyl v1 -cliok "vcl.list"
+vinyl v1 -vsc LCK.conn_pool.*
+vinyl v1 -expect LCK.conn_pool.destroy == 0
+
+barrier b2 sync
+
+client c1 -wait
+vinyl v1 -cliok "vcl.list"
+server s1 -wait
+vinyl v1 -vsc LCK.conn_pool.*
+vinyl v1 -expect LCK.conn_pool.destroy == 1

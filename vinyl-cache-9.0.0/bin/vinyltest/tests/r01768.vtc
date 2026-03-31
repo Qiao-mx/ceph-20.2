@@ -1,0 +1,22 @@
+vtest "http header collision -/_"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_deliver {
+		if (req.http.foo_bar == req.http.foo-bar) {
+			set resp.http.foo = "xxx";
+		} else {
+			set resp.http.foo = "yyy";
+		}
+	}
+} -start
+
+client c1 {
+	txreq -hdr "foo_bar: 1" -hdr "foo-bar: 2"
+	rxresp
+	expect resp.http.foo == yyy
+} -run

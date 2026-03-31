@@ -1,0 +1,41 @@
+vtest	"vcl_backend_response{} retry with a UDS backend"
+
+server s0 -listen "${tmpdir}/s1.sock" {
+	rxreq
+	txresp -hdr "connection: close"
+} -dispatch
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv { return (pass); }
+	sub vcl_backend_response {
+		set beresp.http.retries = bereq.retries;
+		if (bereq.http.stop != beresp.http.retries) {
+			return (retry);
+		}
+	}
+} -start
+
+client c1 {
+	txreq -hdr "stop: 2"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.retries == 2
+} -run
+
+vinyl v1 -cliok "param.set max_retries 2"
+
+client c2 {
+	txreq -hdr "stop: 2"
+	rxresp
+	expect resp.status == 200
+	expect resp.http.retries == 2
+} -run
+
+client c3 {
+	txreq -hdr "stop: 3"
+	rxresp
+	expect resp.status == 503
+	expect resp.http.retries == <undef>
+} -run
+
+vinyl v1 -expect backend_conn == 9

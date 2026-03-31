@@ -1,0 +1,24 @@
+vtest "% escapes in VCL source and vcl.show"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -cliok "param.set vcc_feature +allow_inline_c" -vcl+backend {
+	C{
+	#include <stdio.h>
+	}C
+	sub vcl_recv {
+		C{
+		printf("%s %s %s", "foo", "bar", "barf");
+		}C
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+} -run
+
+vinyl v1 -cliok "vcl.show vcl1"

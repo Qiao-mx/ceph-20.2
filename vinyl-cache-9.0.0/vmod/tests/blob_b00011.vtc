@@ -1,0 +1,360 @@
+vtest "VMOD blob workspace overflow conditions"
+
+# This test case is tricky to get right and is somewhat repetitive. The VCL
+# below provides off-the-shelves subs to abstract away some of the complexity.
+# Since not all of them may be called by all VCLs we also need to ensure this
+# will not result in a compilation failure.
+
+vinyl v1 -cliok "param.set vcc_feature -err_unref"
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+shell {
+	cat >vrt_blob.vcl <<-EOF
+	import blob;
+	import std;
+	import vtc;
+
+	backend be none;
+
+	sub vcl_recv {
+		set req.http.vrt_blob = vtc.typesize("uuzp");
+	}
+
+	sub shrink {
+		std.log("shrink");
+		vtc.workspace_alloc(client, -std.integer(req.http.leave));
+	}
+
+	sub leave_struct {
+		set req.http.leave = std.integer(req.http.vrt_blob);
+		call shrink;
+	}
+
+	sub leave_half_struct {
+		set req.http.leave = std.integer(req.http.vrt_blob) / 2;
+		call shrink;
+	}
+
+	sub leave_blob {
+		set req.http.leave = std.integer(req.http.vrt_blob) +
+		    std.integer(req.http.blob);
+		call shrink;
+	}
+	EOF
+}
+
+# For each type of BLOB codec we may use some of the prepared clients. It is
+# important not to run them concurrently to ensure we can predictably peek at
+# logs.
+
+client c-struct {
+	txreq -url "/struct"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+	expect_close
+}
+
+client c-encode {
+	txreq -url "/encode"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+	expect_close
+}
+
+client c-decode {
+	txreq -url "/decode"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+	expect_close
+}
+
+client c-req-hash {
+	txreq -url "/req.hash"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+	expect_close
+}
+
+client c-sub {
+	txreq -url "/sub"
+	rxresp
+	expect resp.status == 503
+	expect resp.reason == "VCL failed"
+	expect_close
+}
+
+# For each type of BLOB codec we will check failure conditions from the logs
+# so we provision a log reader that will only deal with meaningful log records
+# for this job. This means that all logexpect expect commands must use 0 as
+# their first argument. Meaning we make a comprehensive check of all the log
+# records that aren't filtered out.
+
+logexpect l1 -v v1 -i ReqURL,VCL_Error,VCL_Log,VCL_use -q "ReqURL ~ decode"
+logexpect l2 -v v1 -i ReqURL,VCL_Error,VCL_Log,VCL_use -q "ReqURL ~ struct"
+logexpect l3 -v v1 -i ReqURL,VCL_Error,VCL_Log,VCL_use -q "ReqURL ~ encode"
+logexpect l4 -v v1 -i ReqURL,VCL_Error,VCL_Log,VCL_use -q "ReqURL ~ req.hash"
+
+# IDENTITY codec
+
+vinyl v1 -vcl {
+	include "${tmpdir}/vrt_blob.vcl";
+
+	sub vcl_recv {
+		if (req.url ~ "decode") {
+			# Not enough space to collect the string.
+			set req.http.leave = 5;
+			call shrink;
+		}
+		if (req.url ~ "struct") {
+			# Enough space to collect the decoded string.
+			# Not enough space to allocate a blob (aligned).
+			set req.http.leave = 16;
+			call shrink;
+		}
+		if (req.url ~ "encode") {
+			# Enough space to decode the string.
+			# Not enough space to encode the blob.
+			set req.http.blob = 16;
+			call leave_blob;
+		}
+		blob.encode(blob=blob.decode(encoded="1234567890"));
+		return (synth(200));
+	}
+} -start
+
+logexpect l1 {
+	expect 0 * VCL_use	vcl1
+	expect 0 = ReqURL	decode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot decode, out of space"
+} -start
+logexpect l2 {
+	expect 0 * VCL_use	vcl1
+	expect 0 = ReqURL	struct
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"Workspace overflow .blob.decode."
+} -start
+logexpect l3 {
+	expect 0 * VCL_use	vcl1
+	expect 0 = ReqURL	encode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot encode, out of space"
+} -start
+
+client c-decode -run
+client c-struct -run
+client c-encode -run
+
+logexpect l1 -wait
+logexpect l2 -wait
+logexpect l3 -wait
+
+# BASE64 codec
+
+vinyl v1 -vcl {
+	include "${tmpdir}/vrt_blob.vcl";
+
+	sub vcl_recv {
+		if (req.url ~ "decode") {
+			# Not enough space to collect the string.
+			set req.http.leave = 5;
+			call shrink;
+		}
+		if (req.url ~ "struct") {
+			# Enough space to collect the decoded string.
+			# Not enough space to allocate a blob.
+			set req.http.leave = 16;
+			call shrink;
+		}
+		if (req.url ~ "encode") {
+			# Enough space to decode the string.
+			# Not enough space to encode the blob.
+			set req.http.blob = 16;
+			call leave_blob;
+		}
+		blob.encode(
+		    blob=blob.decode(BASE64, encoded="MTIzNDU2Nzg5MA=="));
+		return (synth(200));
+	}
+}
+
+logexpect l1 {
+	expect 0 * VCL_use	vcl2
+	expect 0 = ReqURL	decode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot decode, out of space"
+} -start
+logexpect l2 {
+	expect 0 * VCL_use	vcl2
+	expect 0 = ReqURL	struct
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"Workspace overflow .blob.decode."
+} -start
+logexpect l3 {
+	expect 0 * VCL_use	vcl2
+	expect 0 = ReqURL	encode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot encode, out of space"
+} -start
+
+client c-decode -run
+client c-struct -run
+client c-encode -run
+
+logexpect l1 -wait
+logexpect l2 -wait
+logexpect l3 -wait
+
+# URL codec
+
+vinyl v1 -vcl {
+	include "${tmpdir}/vrt_blob.vcl";
+
+	sub vcl_recv {
+		if (req.url ~ "decode") {
+			# Not enough space to collect the string.
+			set req.http.leave = 5;
+			call shrink;
+		}
+		if (req.url ~ "struct") {
+			# Enough space to collect the decoded string.
+			# Not enough space to allocate a blob (aligned).
+			set req.http.leave = 16;
+			call shrink;
+		}
+		if (req.url ~ "encode") {
+			# Enough space to decode the string.
+			# Not enough space to encode the blob.
+			set req.http.blob = 16;
+			call leave_blob;
+		}
+		blob.encode(blob=blob.decode(URL, encoded="1234567890"));
+		return (synth(200));
+	}
+}
+
+logexpect l1 {
+	expect 0 * VCL_use	vcl3
+	expect 0 = ReqURL	decode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot decode, out of space"
+} -start
+logexpect l2 {
+	expect 0 * VCL_use	vcl3
+	expect 0 = ReqURL	struct
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"Workspace overflow .blob.decode."
+} -start
+logexpect l3 {
+	expect 0 * VCL_use	vcl3
+	expect 0 = ReqURL	encode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot encode, out of space"
+} -start
+
+client c-decode -run
+client c-struct -run
+client c-encode -run
+
+logexpect l1 -wait
+logexpect l2 -wait
+logexpect l3 -wait
+
+# HEX codec
+
+vinyl v1 -vcl {
+	include "${tmpdir}/vrt_blob.vcl";
+
+	sub vcl_recv {
+		if (req.url ~ "decode") {
+			# Not enough space to collect the string.
+			set req.http.leave = 5;
+			call shrink;
+		}
+		if (req.url ~ "struct") {
+			# Enough space to collect the decoded string.
+			# Not enough space to allocate a blob (aligned).
+			set req.http.leave = 20;
+			call shrink;
+		}
+		if (req.url ~ "encode") {
+			# Enough space to decode the string.
+			# Not enough space to encode the blob.
+			set req.http.blob = 20;
+			call leave_blob;
+		}
+		blob.encode(
+		    blob=blob.decode(HEX, encoded="31323334353637383930"));
+		return (synth(200));
+	}
+}
+
+logexpect l1 {
+	expect 0 * VCL_use	vcl4
+	expect 0 = ReqURL	decode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot decode, out of space"
+} -start
+logexpect l2 {
+	expect 0 * VCL_use	vcl4
+	expect 0 = ReqURL	struct
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"Workspace overflow .blob.decode."
+} -start
+logexpect l3 {
+	expect 0 * VCL_use	vcl4
+	expect 0 = ReqURL	encode
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"cannot encode, out of space"
+} -start
+
+client c-decode -run
+client c-struct -run
+client c-encode -run
+
+logexpect l1 -wait
+logexpect l2 -wait
+logexpect l3 -wait
+
+# blob.sub() function
+
+vinyl v1 -vcl {
+	include "${tmpdir}/vrt_blob.vcl";
+
+	sub vcl_miss {
+		if (req.url ~ "req.hash") {
+			# Not enough to create the req.hash blob.
+			call leave_half_struct;
+		}
+		if (req.url ~ "struct") {
+			# Enough for the req.hash blob.
+			# Not enough for the sub-blob.
+			call leave_struct;
+		}
+		blob.encode(blob=blob.sub(req.hash, 30B));
+		return (synth(200));
+	}
+}
+
+logexpect l4 {
+	expect 0 * VCL_use	vcl5
+	expect 0 = ReqURL	req.hash
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"Workspace overflow .req.hash."
+} -start
+logexpect l2 {
+	expect 0 * VCL_use	vcl5
+	expect 0 = ReqURL	struct
+	expect 0 = VCL_Log	shrink
+	expect 0 = VCL_Error	"Workspace overflow .blob.sub."
+} -start
+
+client c-req-hash -run
+client c-struct -run
+
+logexpect l4 -wait
+logexpect l2 -wait

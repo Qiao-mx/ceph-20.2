@@ -1,0 +1,169 @@
+vtest "ESI include"
+
+feature cmd "command -v diff"
+
+server s1 {
+	rxreq
+	expect req.http.esi0 == "foo"
+	txresp -body {
+		<html>
+		Before include
+		<esi:include src="/body" sr="foo"/><esi:include src="/synth"/>After include
+		</html>
+	}
+	rxreq
+	expect req.url == "/body1"
+	expect req.http.esi0 != "foo"
+	txresp -body {
+		Included file
+	}
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_synth {
+		set resp.body = """
+		""";
+		return (deliver);
+	}
+	sub vcl_recv {
+		if (req.esi_level > 0) {
+			set req.url = req.url + req.esi_level;
+			if (req.url ~ "^/synth") {
+				return (synth(3200));
+			}
+		} else {
+			set req.http.esi0 = "foo";
+		}
+	}
+	sub vcl_backend_response {
+		if (bereq.url == "/") {
+			set beresp.do_esi = true;
+		}
+	}
+	sub vcl_deliver {
+		set resp.http.can_esi = obj.can_esi;
+
+		# make ReqAcct deterministic
+		unset resp.http.via;
+	}
+} -start
+
+logexpect l1 -v v1 -g request {
+	expect 0 1001   Begin   "^req .* rxreq"
+	expect * =	ReqAcct	"^45 0 45 180 75 255$"
+	expect 0 =      End
+} -start
+
+logexpect l2 -v v1 -g request {
+	expect * 1002   Begin   "^bereq "
+	expect * =      End
+} -start
+
+logexpect l3 -v v1 -g request {
+	expect * 1003   Begin   "^req .* esi"
+	expect * =	ReqAcct	"^0 0 0 0 18 18$"
+	expect 0 =      End
+} -start
+
+logexpect l4 -v v1 -g request {
+	expect * 1004   Begin   "^bereq "
+	expect * =      End
+} -start
+
+logexpect l5 -v v1 -g request {
+	expect * 1006   Begin   "^req .* rxreq"
+	# Header bytes is 5 larger than in l1 due to two item X-Vinyl hdr
+	expect * =	ReqAcct	"^45 0 45 185 75 260$"
+	expect 0 =      End
+} -start
+
+client c1 {
+	txreq -hdr "Host: foo"
+	rxresp
+	expect resp.bodylen == 75
+	expect resp.status == 200
+	expect resp.http.can_esi == "true"
+
+	delay .1
+	# test that there is no difference on miss/hit
+	txreq -hdr "Host: foo"
+	rxresp
+	expect resp.bodylen == 75
+	expect resp.status == 200
+	expect resp.http.can_esi == "true"
+}
+
+client c1 -run
+vinyl v1 -expect esi_req == 4
+vinyl v1 -expect esi_errors == 0
+vinyl v1 -expect MAIN.s_resp_bodybytes == 150
+
+logexpect l1 -wait
+logexpect l2 -wait
+logexpect l3 -wait
+logexpect l4 -wait
+logexpect l5 -wait
+
+shell {
+	vinylncsa -n ${v1_name} -d \
+		-F '%{Vinyl:vxid}x %{Vinyl:side}x %{VSL:Begin[3]}x' |
+	sort > ncsa.txt
+
+	cat >expected.txt <<-EOF
+	1001 c rxreq
+	1006 c rxreq
+	EOF
+	diff -u expected.txt ncsa.txt
+}
+
+shell {
+	vinylncsa -n ${v1_name} -d -b \
+		-F '%{Vinyl:vxid}x %{Vinyl:side}x %{VSL:Begin[3]}x' |
+	sort > ncsa.txt
+
+	cat >expected.txt <<-EOF
+	1002 b fetch
+	1004 b fetch
+	EOF
+	diff -u expected.txt ncsa.txt
+}
+
+shell {
+	vinylncsa -n ${v1_name} -d -E \
+		-F '%{Vinyl:vxid}x %{Vinyl:side}x %{VSL:Begin[3]}x' |
+	sort > ncsa.txt
+
+	cat >expected.txt <<-EOF
+	1001 c rxreq
+	1003 c esi
+	1005 c esi
+	1006 c rxreq
+	1007 c esi
+	1008 c esi
+	EOF
+	diff -u expected.txt ncsa.txt
+}
+
+shell {
+	vinylncsa -n ${v1_name} -d -b -E \
+		-F '%{Vinyl:vxid}x %{Vinyl:side}x %{VSL:Begin[3]}x' |
+	sort > ncsa.txt
+
+	cat >expected.txt <<-EOF
+	1001 c rxreq
+	1002 b fetch
+	1003 c esi
+	1004 b fetch
+	1005 c esi
+	1006 c rxreq
+	1007 c esi
+	1008 c esi
+	EOF
+	diff -u expected.txt ncsa.txt
+}
+
+shell -err {vinyllog -n ${v1_name} -d -c -i Begin | grep esi}
+shell -err {vinyllog -n ${v1_name} -d -c -i Begin -g request | grep esi}
+shell {vinyllog -n ${v1_name} -d -c -i Begin -g raw | grep esi}
+shell {vinyllog -n ${v1_name} -d -E -i Begin | grep esi}
+shell {vinyllog -n ${v1_name} -d -E -i Begin | grep rxreq}

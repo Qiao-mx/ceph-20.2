@@ -1,0 +1,120 @@
+vtest "test certain malformed requests and validate_headers"
+
+server s1 {
+	rxreq
+	expect req.url == /4
+	txresp
+	rxreq
+	expect req.url == /9
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import debug;
+
+	sub vcl_recv {
+		if (req.url == "/9") {
+			set req.http.foo = {"
+			"};
+		}
+	}
+	sub vcl_deliver {
+		if (req.url == "/9") {
+			set resp.http.valid1 = debug.validhdr({"
+			"});
+			set resp.http.valid2 = debug.validhdr("a");
+		}
+	}
+} -start
+
+logexpect l1 -v v1 -g raw {
+	expect * 1001 BogoHeader {1st header has white space:.*}
+	expect * 1003 BogoHeader {1st header has white space:.*}
+	expect * 1005 BogoHeader {Header has ctrl char 0x0d}
+	expect * 1010 BogoHeader {Header has ctrl char 0x01}
+	expect * 1012 BogoHeader {Header has ctrl char 0x0d}
+	expect * 1014 BogoHeader {Header has ctrl char 0x0d}
+	expect * 1016 BogoHeader {Missing header name:.*}
+	expect * 1018 VCL_Error  {Bad header foo:}
+} -start
+
+client c1 {
+	send "GET /1 HTTP/1.1\r\n"
+	send " Host: foo\r\n"
+	send "\r\n"
+	rxresp
+	expect resp.status == 400
+} -run
+delay .1
+
+client c1 {
+	send "GET /2 HTTP/1.1\r\n"
+	send " Host: foo\r\n"
+	send "\r\n"
+	rxresp
+	expect resp.status == 400
+} -run
+delay .1
+
+client c1 {
+	send "GET /3 HTTP/1.1\r\n"
+	send "\rHost: foo\r\n"
+	send "\r\n"
+	rxresp
+	expect resp.status == 400
+} -run
+delay .1
+
+client c1 {
+	send "GET /4 HTTP/1.1\r\n"
+	send "Host: foo\r\n\r\n"
+	rxresp
+	expect resp.status == 200
+} -run
+delay .1
+
+client c1 {
+	send "GET /5 HTTP/1.1\r\nHost: foo\r\nBogo: Header\001More\r\n\r\n"
+	rxresp
+	expect resp.status == 400
+} -run
+delay .1
+
+client c1 {
+	send "GET /6 HTTP/1.1\r\nHost: foo\r\nBogo: Header\r\r\n\r\n"
+	rxresp
+	expect resp.status == 400
+} -run
+delay .1
+
+client c1 {
+	send "GET /7 HTTP/1.1\r\nHost: foo\r\nBogo: Header\rMore\r\n\r\n"
+	rxresp
+	expect resp.status == 400
+} -run
+delay .1
+
+client c1 {
+	send "GET /8 HTTP/1.1\r\nHost: foo\r\n: Header\r\n\r\n"
+	rxresp
+	expect resp.status == 400
+} -run
+delay .1
+
+client c1 {
+	txreq -url /9
+	rxresp
+	expect resp.status == 503
+} -run
+
+logexpect l1 -wait
+
+vinyl v1 -cliok "param.set feature -validate_headers"
+
+client c1 {
+	txreq -url /9
+	rxresp
+	expect resp.status == 200
+	expect resp.http.valid1 == false
+	expect resp.http.valid2 == true
+} -run

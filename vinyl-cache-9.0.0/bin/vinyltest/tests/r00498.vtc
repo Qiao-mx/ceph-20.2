@@ -1,0 +1,18 @@
+vtest "very very very long return header"
+
+server s1 {
+	rxreq
+	expect req.url == "/"
+	txresp -noserver -hdr "Location: ${string,repeat,8136,1}" -nodate -body {foo}
+} -start
+
+vinyl v1 -vcl+backend {
+} -start
+
+vinyl v1 -cliok "param.set http_resp_hdr_len 32768"
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.bodylen == 3
+} -run

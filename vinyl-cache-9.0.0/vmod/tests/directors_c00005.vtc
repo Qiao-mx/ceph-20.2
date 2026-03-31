@@ -1,0 +1,52 @@
+vtest "shard director by req.url (default)"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+server s2 {
+	rxreq
+	txresp
+} -start
+
+server s3 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	import directors;
+
+	sub vcl_init {
+		new vd = directors.shard();
+		vd.add_backend(s1);
+		vd.add_backend(s2);
+		vd.add_backend(s3);
+		vd.reconfigure(replicas=25);
+	}
+
+	sub vcl_recv {
+		set req.backend_hint = vd.backend();
+		return(pass);
+	}
+
+	sub vcl_backend_response {
+		set beresp.http.backend = beresp.backend;
+	}
+} -start
+
+
+client c1 {
+	txreq -url /Boo0aixe
+	rxresp
+	expect resp.http.backend == s1
+
+	txreq -url /eishoSu2
+	rxresp
+	expect resp.http.backend == s2
+
+	txreq -url /Aunah3uo
+	rxresp
+	expect resp.http.backend == s3
+} -run

@@ -1,0 +1,47 @@
+vtest "#1804: vinylapi transaction grouping fails for PROXY"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+
+vinyl v1 -arg "-a foo=${listen_addr},PROXY"
+vinyl v1 -arg "-p thread_pools=1"
+vinyl v1 -vcl+backend "" -start
+
+logexpect l1 -v v1 -g session {
+	expect * 1000	Begin		{^sess .* PROXY$}
+	expect 0 =	SessOpen	{^.* foo .*}
+	expect * =	Proxy		{^1 }
+	expect * 1001	Begin		{^req}
+} -start
+
+client c1 {
+	send "PROXY TCP4 1.2.3.4 5.6.7.8 1234 5678\r\n"
+	txreq
+	rxresp
+} -run
+
+logexpect l1 -wait
+
+logexpect l2 -v v1 -g session {
+	expect * 1003	Begin		{^sess .* PROXY$}
+	expect 0 =	SessOpen	{^.* foo .*}
+	expect * =	Proxy		{^2 }
+	expect * 1004	Begin		{^req}
+} -start
+
+client c2 {
+	# good IPv4
+	sendhex "0d 0a 0d 0a 00 0d 0a 51 55 49 54 0a"
+	sendhex "21 11 00 0c"
+	sendhex "01 02 03 04"
+	sendhex "05 06 07 08"
+	sendhex "09 0a"
+	sendhex "0b 0c"
+	txreq
+	rxresp
+} -run
+
+logexpect l2 -wait

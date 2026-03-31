@@ -1,0 +1,38 @@
+vtest "very long backend names"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	backend fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210
+	{
+		.host = "${localhost}";
+		.port = "54321";
+	}
+	sub vcl_backend_fetch {
+		if (bereq.url == "never") {
+			set bereq.backend = fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210;
+		}
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+vinyl v1 -errvcl {Expected ID got '0'} {
+	backend 0fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210
+	{
+		.host = "${localhost}";
+		.port = "54321";
+	}
+	sub vcl_backend_fetch {
+		if (bereq.url == "never") {
+			set bereq.backend = fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210;
+		}
+	}
+}

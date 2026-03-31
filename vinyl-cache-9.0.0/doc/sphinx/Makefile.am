@@ -1,0 +1,230 @@
+# Makefile for Sphinx documentation
+#
+
+# You can set these variables from the command line.
+SPHINXOPTS    =
+SPHINXBUILD   = $(SPHINX) -W -N
+BUILDDIR      = build
+
+ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(SPHINXOPTS) $(builddir)
+
+.PHONY: help clean html linkcheck doctest
+
+help:
+	@echo "Please use \`make <target>' where <target> is one of"
+	@echo "  html      to make standalone HTML files"
+	@echo "  linkcheck to check all external links for integrity"
+
+clean:
+	-rm -rf $(BUILDDIR)/* $(CLEANFILES)
+
+# use index.rst as an indicator if we have copied already
+.PHONY: link_srcdir
+link_srcdir: graphviz conf.py $(BUILT_SOURCES)
+	if test "x$(srcdir)" != "x$(builddir)" && test ! -f index.rst; then \
+		s=`cd $(srcdir) && pwd`; \
+		for f in `cd $$s && find . -type f`; do \
+			d=`dirname $$f`; \
+			test -d $$d || mkdir -p $$d; \
+			test -f $$f || ln -s $$s/$$f $$f; \
+		done \
+	fi
+
+# workaround for make html called within doc/sphinx
+.PHONY: graphviz
+graphviz:
+	cd ../graphviz && $(MAKE) html
+
+sphinx_prereq: link_srcdir
+
+all: link_srcdir
+
+html: sphinx_prereq
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	@echo
+	@echo "Build finished. The HTML pages are in $(subdir)/$(BUILDDIR)/html."
+
+linkcheck: sphinx_prereq
+	$(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) $(BUILDDIR)/linkcheck
+	@echo
+	@echo "Link check complete; look for any errors in the above output " \
+	      "or in $(subdir)/$(BUILDDIR)/linkcheck/output.txt."
+
+EXTRA_DIST = \
+	conf.py \
+	dev-guide \
+	glossary \
+	include \
+	index.rst \
+	installation \
+	phk \
+	tutorial \
+	reference \
+	users-guide \
+	vcl-design-patterns \
+	vtc-syntax.py \
+	whats-new \
+	_static/custom.css \
+	_static/fonts/DMMono-Medium.woff2 \
+	_static/fonts/HostGrotesk-BoldItalic.woff2 \
+	_static/fonts/HostGrotesk-Bold.woff2 \
+	_static/fonts/LICENSE.txt \
+	_static/fonts/Literata-Italic.woff2 \
+	_static/fonts/Literata-Regular.woff2 \
+	_static/fonts/Literata-SemiBoldItalic.woff2 \
+	_static/fonts/Literata-SemiBold.woff2 \
+	_static/LICENSE.txt \
+	_static/vinyl-cache-logo-primary.png \
+	_static/vinyl-cache-logo-primary.svg \
+	_static/vinyl-cache-symbol-crop-square.svg \
+	_static/vinyl-cache-symbol.ico
+
+dist-hook:
+	$(MAKE) html
+	rm -rf $(BUILDDIR)/doctrees
+	cp -r $(BUILDDIR)/html $(distdir)/../
+	@ # Remove build artifacts.
+	rm $(distdir)/../html/.buildinfo $(distdir)/../html/*.inv
+
+distclean-local:
+	rm -rf $(BUILDDIR)
+
+include/cli.rst: $(top_builddir)/bin/vinyld/vinyld
+	$(top_builddir)/bin/vinyld/vinyld -x cli > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES = include/cli.rst
+
+include/params.rst: $(top_builddir)/bin/vinyld/vinyld
+	$(top_builddir)/bin/vinyld/vinyld -x parameter > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/params.rst
+
+include/options.rst: $(top_builddir)/bin/vinyld/vinyld
+	$(top_builddir)/bin/vinyld/vinyld -x options > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/options.rst
+
+include/counters.rst:
+	ln -s $(abs_top_builddir)/lib/libvsc/counters.rst $@
+BUILT_SOURCES += include/counters.rst
+
+include/vinylncsa_options.rst: $(top_builddir)/bin/vinylncsa/vinylncsa
+	$(top_builddir)/bin/vinylncsa/vinylncsa --options > ${@}_
+	mv -f ${@}_ ${@}
+include/vinylncsa_synopsis.rst: $(top_builddir)/bin/vinylncsa/vinylncsa
+	$(top_builddir)/bin/vinylncsa/vinylncsa --synopsis > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/vinylncsa_options.rst \
+	include/vinylncsa_synopsis.rst
+
+include/vinyllog_options.rst: $(top_builddir)/bin/vinyllog/vinyllog
+	$(top_builddir)/bin/vinyllog/vinyllog --options > ${@}_
+	mv -f ${@}_ ${@}
+include/vinyllog_synopsis.rst: $(top_builddir)/bin/vinyllog/vinyllog
+	$(top_builddir)/bin/vinyllog/vinyllog --synopsis > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/vinyllog_options.rst \
+	include/vinyllog_synopsis.rst
+
+include/vinyltop_options.rst: $(top_builddir)/bin/vinyltop/vinyltop
+	$(top_builddir)/bin/vinyltop/vinyltop --options > ${@}_
+	mv -f ${@}_ ${@}
+include/vinyltop_synopsis.rst: $(top_builddir)/bin/vinyltop/vinyltop
+	$(top_builddir)/bin/vinyltop/vinyltop --synopsis > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/vinyltop_options.rst \
+	 include/vinyltop_synopsis.rst
+
+include/vinylhist_options.rst: $(top_builddir)/bin/vinylhist/vinylhist
+	$(top_builddir)/bin/vinylhist/vinylhist --options > ${@}_
+	mv -f ${@}_ ${@}
+include/vinylhist_synopsis.rst: $(top_builddir)/bin/vinylhist/vinylhist
+	$(top_builddir)/bin/vinylhist/vinylhist --synopsis > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/vinylhist_options.rst \
+	 include/vinylhist_synopsis.rst
+
+include/vinylstat_options.rst: $(top_builddir)/bin/vinylstat/vinylstat
+	$(top_builddir)/bin/vinylstat/vinylstat --options > ${@}_
+	mv -f ${@}_ ${@}
+include/vinylstat_synopsis.rst: $(top_builddir)/bin/vinylstat/vinylstat
+	$(top_builddir)/bin/vinylstat/vinylstat --synopsis > ${@}_
+	mv -f ${@}_ ${@}
+include/vinylstat_bindings.rst: $(top_builddir)/bin/vinylstat/vinylstat
+	$(top_builddir)/bin/vinylstat/vinylstat --bindings > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/vinylstat_options.rst \
+	 include/vinylstat_synopsis.rst \
+	 include/vinylstat_bindings.rst
+
+include/vsl-tags.rst: $(top_builddir)/lib/libvinylapi/vsl2rst
+	$(top_builddir)/lib/libvinylapi/vsl2rst > ${@}_
+	mv -f ${@}_ ${@}
+BUILT_SOURCES += include/vsl-tags.rst
+
+vtest2_src = $(top_srcdir)/bin/vinyltest/vtest2/src
+
+VTCSYN_SRC = \
+	$(vtest2_src)/vtc.c \
+	$(vtest2_src)/vtc_barrier.c \
+	$(vtest2_src)/vtc_haproxy.c \
+	$(vtest2_src)/vtc_http.c \
+	$(vtest2_src)/vtc_http2.c \
+	$(vtest2_src)/vtc_logexp.c \
+	$(vtest2_src)/vtc_misc.c \
+	$(vtest2_src)/vtc_process.c \
+	$(vtest2_src)/vtc_syslog.c \
+	$(vtest2_src)/vtc_tunnel.c \
+	$(top_srcdir)/bin/vinyltest/vtc_vinyl.c \
+	$(vtest2_src)/vtc_vsm.c
+include/vtc-syntax.rst: $(srcdir)/vtc-syntax.py $(VTCSYN_SRC)
+	$(AM_V_GEN) $(PYTHON) $(srcdir)/vtc-syntax.py $(VTCSYN_SRC) > ${@}_
+	@mv -f ${@}_ ${@}
+BUILT_SOURCES += include/vtc-syntax.rst
+
+# XXX copy/paste rules need some TLC
+
+include/vmod_std.generated.rst: $(top_builddir)/vmod/vmod_std.rst
+	cp $(top_builddir)/vmod/vmod_std.rst $@
+BUILT_SOURCES += include/vmod_std.generated.rst
+
+include/vmod_directors.generated.rst: $(top_builddir)/vmod/vmod_directors.rst
+	cp $(top_builddir)/vmod/vmod_directors.rst $@
+BUILT_SOURCES += include/vmod_directors.generated.rst
+
+include/vmod_purge.generated.rst: $(top_builddir)/vmod/vmod_purge.rst
+	cp $(top_builddir)/vmod/vmod_purge.rst $@
+BUILT_SOURCES += include/vmod_purge.generated.rst
+
+include/vmod_vtc.generated.rst: $(top_builddir)/vmod/vmod_vtc.rst
+	cp $(top_builddir)/vmod/vmod_vtc.rst $@
+BUILT_SOURCES += include/vmod_vtc.generated.rst
+
+include/vmod_blob.generated.rst: $(top_builddir)/vmod/vmod_blob.rst
+	cp $(top_builddir)/vmod/vmod_blob.rst $@
+BUILT_SOURCES += include/vmod_blob.generated.rst
+
+include/vmod_cookie.generated.rst: $(top_builddir)/vmod/vmod_cookie.rst
+	cp $(top_builddir)/vmod/vmod_cookie.rst $@
+BUILT_SOURCES += include/vmod_cookie.generated.rst
+
+include/vmod_h2.generated.rst: $(top_builddir)/vmod/vmod_h2.rst
+	cp $(top_builddir)/vmod/vmod_h2.rst $@
+BUILT_SOURCES += include/vmod_h2.generated.rst
+
+include/vmod_unix.generated.rst: $(top_builddir)/vmod/vmod_unix.rst
+	cp $(top_builddir)/vmod/vmod_unix.rst $@
+BUILT_SOURCES += include/vmod_unix.generated.rst
+
+include/vmod_proxy.generated.rst: $(top_builddir)/vmod/vmod_proxy.rst
+	cp $(top_builddir)/vmod/vmod_proxy.rst $@
+BUILT_SOURCES += include/vmod_proxy.generated.rst
+
+include/vmod_math.generated.rst: $(top_builddir)/vmod/vmod_math.rst
+	cp $(top_builddir)/vmod/vmod_math.rst $@
+BUILT_SOURCES += include/vmod_math.generated.rst
+
+EXTRA_DIST += $(BUILT_SOURCES)
+CLEANFILES = $(BUILT_SOURCES)
+
+.NOPATH: $(BUILT_SOURCES)

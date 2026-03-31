@@ -1,0 +1,162 @@
+..
+	Copyright (c) 2017-2021 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+..
+	This is *NOT* a RST file but the syntax has been chosen so
+	that it may become an RST file at some later date.
+
+.. vinyl_vsc_begin::	vbe
+	:oneliner:	Backend Counters
+	:order:		60
+
+.. vinyl_vsc:: happy
+	:type:	bitmap
+	:format:	bitmap
+	:level:	info
+	:oneliner:	Happy health probes
+
+	Represents the last probe results as a bitmap. Happy probes are bits set
+	to 1, and the unhappy ones are set to 0. The highest bits represent the
+	oldest probes.
+
+.. vinyl_vsc:: bereq_hdrbytes
+	:type:	counter
+	:level:	info
+	:format: bytes
+	:oneliner:	Request header bytes
+
+	Total backend request header bytes sent
+
+.. vinyl_vsc:: bereq_bodybytes
+	:type:	counter
+	:level:	info
+	:format: bytes
+	:oneliner:	Request body bytes
+
+	Total backend request body bytes sent
+
+.. vinyl_vsc:: beresp_hdrbytes
+	:type:	counter
+	:level:	info
+	:format: bytes
+	:oneliner:	Response header bytes
+
+	Total backend response header bytes received
+
+.. vinyl_vsc:: beresp_bodybytes
+	:type:	counter
+	:level:	info
+	:format: bytes
+	:oneliner:	Response body bytes
+
+	Total backend response body bytes received
+
+.. vinyl_vsc:: pipe_hdrbytes
+	:type:	counter
+	:level:	info
+	:format: bytes
+	:oneliner:	Pipe request header bytes
+
+	Total request bytes sent for piped sessions
+
+.. vinyl_vsc:: pipe_out
+	:type:	counter
+	:level:	info
+	:format: bytes
+	:oneliner:	Piped bytes to backend
+
+	Total number of bytes forwarded to backend in pipe sessions
+
+.. vinyl_vsc:: pipe_in
+	:type:	counter
+	:level:	info
+	:format: bytes
+	:oneliner:	Piped bytes from backend
+
+	Total number of bytes forwarded from backend in pipe sessions
+
+.. vinyl_vsc:: conn
+	:type:	gauge
+	:level:	info
+	:oneliner:	Concurrent connections used
+
+	The number of currently used connections to the backend. This
+	number is always less or equal to the number of connections to
+	the backend (as, for example shown as ESTABLISHED for TCP
+	connections in netstat) due to connection pooling.
+
+.. vinyl_vsc:: req
+	:type:	counter
+	:level:	info
+	:oneliner:	Backend requests sent
+
+.. vinyl_vsc:: unhealthy
+	:type:	counter
+	:level: info
+	:oneliner:	Fetches not attempted due to backend being unhealthy
+
+.. vinyl_vsc:: busy
+	:type:	counter
+	:level: info
+	:oneliner:	Fetches not attempted due to backend being busy
+
+	Number of times the max_connections limit was reached
+
+..
+	=== Anything below is actually per VCP entry, but collected per
+	=== backend for simplicity
+
+.. vinyl_vsc:: fail
+	:type:	counter
+	:level: info
+	:oneliner:	Connections failed
+
+	Counter of failed opens. Detailed reasons are given in the
+	fail_* counters (DIAG level) and in the log under the FetchError tag.
+
+	This counter is the sum of all detailed fail_* counters.
+
+	All fail_* counters may be slightly inaccurate for efficiency.
+
+.. vinyl_vsc:: fail_eacces
+	:type:	counter
+	:level: diag
+	:oneliner:	Connections failed with EACCES or EPERM
+
+.. vinyl_vsc:: fail_eaddrnotavail
+	:type:	counter
+	:level: diag
+	:oneliner:	Connections failed with EADDRNOTAVAIL
+
+.. vinyl_vsc:: fail_econnrefused
+	:type:	counter
+	:level: diag
+	:oneliner:	Connections failed with ECONNREFUSED
+
+.. vinyl_vsc:: fail_enetunreach
+	:type:	counter
+	:level: diag
+	:oneliner:	Connections failed with ENETUNREACH
+
+.. vinyl_vsc:: fail_etimedout
+	:type:	counter
+	:level: diag
+	:oneliner:	Connections failed ETIMEDOUT
+
+.. vinyl_vsc:: fail_other
+	:type:	counter
+	:level: diag
+	:oneliner:	Connections failed for other reason
+
+.. vinyl_vsc:: helddown
+	:type:	counter
+	:level: diag
+	:oneliner:	Connection opens not attempted
+
+	Connections not attempted during the backend_local_error_holddown
+	or backend_remote_error_holddown interval after a fundamental
+	connection issue.
+
+.. vinyl_vsc_end::	vbe

@@ -1,0 +1,70 @@
+vtest "Test dynamic backends listening at Unix domain sockets"
+
+server s1 -listen "${tmpdir}/s1.sock" {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl {
+	import debug;
+
+	backend dummy None;
+
+	sub vcl_init {
+		new s1 = debug.dyn_uds("${s1_sock}");
+	}
+
+	sub vcl_recv {
+		set req.backend_hint = s1.backend();
+	}
+} -start
+
+vinyl v1 -expect MAIN.n_backend == 1
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run
+
+vinyl v1 -errvcl {path must be an absolute path} {
+	import debug;
+
+	backend dummy None;
+
+	sub vcl_init {
+		new s1 = debug.dyn_uds("");
+	}
+}
+
+vinyl v1 -errvcl {path must be an absolute path} {
+	import debug;
+
+	backend dummy None;
+
+	sub vcl_init {
+		new s1 = debug.dyn_uds("s1.sock");
+	}
+}
+
+shell { rm -f ${tmpdir}/foo }
+
+vinyl v1 -errvcl {Cannot stat path} {
+	import debug;
+
+	backend dummy None;
+
+	sub vcl_init {
+		new s1 = debug.dyn_uds("${tmpdir}/foo");
+	}
+}
+
+vinyl v1 -errvcl {is not a socket} {
+	import debug;
+
+	backend dummy None;
+
+	sub vcl_init {
+		new s1 = debug.dyn_uds("${tmpdir}");
+	}
+}

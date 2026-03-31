@@ -1,0 +1,42 @@
+vtest "Test WS_ReserveSize() overflow behavior"
+
+vinyl v1 -vcl {
+	import vtc;
+	import std;
+
+	backend dummy None;
+
+	sub vcl_recv {
+		return (synth(200));
+	}
+
+	sub vcl_synth {
+		vtc.workspace_alloc(session, -16);
+		std.log("res(8) = " + vtc.workspace_reserve(session, 8));
+		std.log("res(15) = " + vtc.workspace_reserve(session, 15));
+		std.log("res(16) = " + vtc.workspace_reserve(session, 16));
+		std.log("res(17) = " + vtc.workspace_reserve(session, 17));
+		std.log("res(8) = " + vtc.workspace_reserve(session, 8));
+	}
+} -start
+
+logexpect l1 -v v1 -g raw {
+	expect * * VCL_Log	{^\Qres(8) = 8\E$}
+	expect 0 = VCL_Log	{^\Qres(15) = 15\E$}
+	expect 0 = VCL_Log	{^\Qres(16) = 16\E$}
+
+	expect 0 = VCL_Log	{^\Qres(17) = 0\E$}
+
+	# workspace is now overflown, but smaller reservation still succeeds
+	expect 0 = VCL_Log	{^\Qres(8) = 8\E$}
+
+	expect * = Error	{^workspace_session overflow$}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 500
+} -run
+
+logexpect l1 -wait

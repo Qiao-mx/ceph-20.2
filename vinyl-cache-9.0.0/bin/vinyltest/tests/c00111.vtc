@@ -1,0 +1,36 @@
+vtest "LRU error without transit buffer"
+
+server s1 -repeat 2 {
+	non_fatal
+	rxreq
+	txresp -bodylen 1850000
+} -start
+
+vinyl v1 -arg "-s Transient=malloc,1m" -vcl+backend { } -start
+
+client c1 {
+	non_fatal
+	txreq -method POST
+	rxresp
+} -run
+
+vinyl v1 -vsl_catchup
+# with vai, this no longer fails systematically (which is good)
+vinyl v1 -expect fetch_failed <= 1
+vinyl v1 -expect transit_stored > 0
+vinyl v1 -expect transit_stored <= 1850000
+vinyl v1 -expect transit_buffered == 0
+
+vinyl v1 -cliok "param.set transit_buffer 4k"
+
+client c2 {
+	txreq -method POST
+	rxresp
+	expect resp.bodylen == 1850000
+} -run
+
+vinyl v1 -vsl_catchup
+vinyl v1 -expect s_fetch == 2
+vinyl v1 -expect fetch_failed <= 1
+vinyl v1 -expect transit_stored <= 1850000
+vinyl v1 -expect transit_buffered == 1850000

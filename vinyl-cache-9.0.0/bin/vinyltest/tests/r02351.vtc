@@ -1,0 +1,59 @@
+vtest "#2351: h2 pseudo-headers error handling"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {} -start
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+client c1 {
+	# missing everything
+	stream 1 {
+		txreq -noadd
+		rxrst
+		expect rst.err == PROTOCOL_ERROR
+	} -run
+
+	# missing :path
+	stream 3 {
+		txreq -noadd -hdr ":authority" "example.com" \
+		    -hdr ":method" "GET" -hdr ":scheme" "http"
+		rxrst
+		expect rst.err == PROTOCOL_ERROR
+	} -run
+
+	# missing :method
+	stream 5 {
+		txreq -noadd -hdr ":authority" "example.com" \
+		    -hdr ":path" "/foo" -hdr ":scheme" "http"
+		rxrst
+		expect rst.err == PROTOCOL_ERROR
+	} -run
+
+	# Duplicate :path
+	stream 7 {
+		txreq -noadd -hdr ":path" "/" -hdr ":path" "/foo" \
+		    -hdr ":method" "GET" -hdr ":authority" "example.com" \
+		    -hdr ":scheme" "http"
+		rxrst
+		expect rst.err == PROTOCOL_ERROR
+	} -run
+} -run
+
+client c2 {
+	# Duplicate :authority
+	stream next {
+		txreq -noadd -hdr :path / -hdr :method GET -hdr :scheme http \
+		    -hdr :authority example.com -hdr :authority example.org
+		rxrst
+		expect rst.err == PROTOCOL_ERROR
+	} -run
+} -run
+
+vinyl v1 -expect MEMPOOL.req0.live == 0
+vinyl v1 -expect MEMPOOL.req1.live == 0
+vinyl v1 -expect MEMPOOL.sess0.live == 0
+vinyl v1 -expect MEMPOOL.sess1.live == 0

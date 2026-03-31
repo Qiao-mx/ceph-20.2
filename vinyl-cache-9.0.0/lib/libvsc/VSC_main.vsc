@@ -1,0 +1,1031 @@
+..
+	Copyright (c) 2017-2020 Varnish Software AS
+	SPDX-License-Identifier: BSD-2-Clause
+	See LICENSE file for full text of license
+
+..
+	This is *NOT* a RST file but the syntax has been chosen so
+	that it may become an RST file at some later date.
+
+.. vinyl_vsc_begin::	main
+	:oneliner:	Main counters
+	:order:		10
+	:sumfunction:	wrk_wrk wrk pool
+
+.. vinyl_vsc:: summs
+	:level:	debug
+	:group: wrk
+	:oneliner:	stat summ operations
+
+	Number of times per-thread statistics were summed into the
+	global counters.
+
+.. vinyl_vsc:: uptime
+	:oneliner:	Child process uptime
+	:format:	duration
+
+	How long the child process has been running.
+
+.. vinyl_vsc:: sess_conn
+	:group: wrk
+	:oneliner:	Sessions accepted
+
+	Count of sessions successfully accepted
+
+.. vinyl_vsc:: sess_fail
+	:group: wrk
+	:oneliner:	Session accept failures
+
+	Count of failures to accept TCP connection.
+
+	This counter is the sum of the sess_fail_* counters, which
+	give more detailed information.
+
+.. vinyl_vsc:: sess_fail_econnaborted
+	:group: wrk
+	:oneliner:	Session accept failures: connection aborted
+
+	Detailed reason for sess_fail: Connection aborted by the
+	client, usually harmless.
+
+.. vinyl_vsc:: sess_fail_eintr
+	:group: wrk
+	:oneliner:	Session accept failures: interrupted system call
+
+	Detailed reason for sess_fail: The accept() call was
+	interrupted, usually harmless
+
+.. vinyl_vsc:: sess_fail_emfile
+	:group: wrk
+	:oneliner:	Session accept failures: too many open files
+
+	Detailed reason for sess_fail: No file descriptor was
+	available. Consider raising RLIMIT_NOFILE (see ulimit -n).
+
+.. vinyl_vsc:: sess_fail_ebadf
+	:group: wrk
+	:oneliner:	Session accept failures: bad file descriptor
+
+	Detailed reason for sess_fail: The listen socket file
+	descriptor was invalid. Should never happen.
+
+.. vinyl_vsc:: sess_fail_enomem
+	:group: wrk
+	:oneliner:	Session accept failures: not enough memory
+
+	Detailed reason for sess_fail: Most likely insufficient
+	socket buffer memory. Should never happen
+
+.. vinyl_vsc:: sess_fail_other
+	:group: wrk
+	:oneliner:	Session accept failures: other
+
+	Detailed reason for sess_fail: neither of the above, see
+	SessError log (vinyllog -g raw -i SessError).
+
+.. vinyl_vsc:: client_req_400
+	:group: wrk
+	:oneliner:	Client requests received, subject to 400 errors
+
+	400 means we couldn't make sense of the request, it was malformed
+	in some drastic way.
+
+.. vinyl_vsc:: client_req_417
+	:group: wrk
+	:oneliner:	Client requests received, subject to 417 errors
+
+	417 means that something went wrong with an Expect: header.
+
+.. vinyl_vsc:: client_req
+	:group: wrk
+	:oneliner:	Good client requests received
+
+	The count of parseable client requests seen.
+
+.. vinyl_vsc:: esi_req
+	:group: wrk
+	:oneliner:	ESI subrequests
+
+	Number of ESI subrequests made.
+
+.. vinyl_vsc:: cache_hit
+	:group: wrk
+	:oneliner:	Cache hits
+
+	Count of cache hits.  A cache hit indicates that an object has been
+	delivered to a client without fetching it from a backend server.
+
+.. vinyl_vsc:: cache_hit_grace
+	:group: wrk
+	:oneliner:	Cache grace hits
+
+	Count of cache hits with grace. A cache hit with grace is a cache
+	hit where the object is expired. Note that such hits are also
+	included in the cache_hit counter.
+
+.. vinyl_vsc:: cache_hitpass
+	:group: wrk
+	:oneliner:	Cache hits for pass.
+
+	Count of hits for pass. A cache hit for pass indicates that
+	Vinyl Cache is going to pass the request to the backend and
+	this decision has been cached in it self. This counts how
+	many times the cached decision is being used.
+
+.. vinyl_vsc:: cache_hitmiss
+	:group: wrk
+	:oneliner:	Cache hits for miss.
+
+	Count of hits for miss. A cache hit for miss indicates that
+	Vinyl Cache is going to proceed as for a cache miss without
+	request coalescing, and this decision has been cached. This
+	counts how many times the cached decision is being used.
+
+.. vinyl_vsc:: cache_miss
+	:group: wrk
+	:oneliner:	Cache misses
+
+	Count of misses. A cache miss indicates the object was fetched from
+	the backend before delivering it to the client.
+
+.. vinyl_vsc:: beresp_uncacheable
+   :group: wrk
+   :oneliner: Uncacheable backend responses
+
+   Count of backend responses considered uncacheable.
+
+.. vinyl_vsc:: beresp_shortlived
+   :group: wrk
+   :oneliner: Shortlived objects
+
+   Count of objects created with ttl+grace+keep shorter than the 'shortlived'
+   runtime parameter.
+
+.. vinyl_vsc:: backend_conn
+	:oneliner:	Backend conn. success
+
+	How many backend connections have successfully been established.
+
+.. vinyl_vsc:: backend_unhealthy
+	:oneliner:	Backend conn. not attempted
+
+
+.. vinyl_vsc:: backend_busy
+	:oneliner:	Backend conn. too many
+
+
+.. vinyl_vsc:: backend_fail
+	:oneliner:	Backend conn. failures
+
+
+.. vinyl_vsc:: backend_reuse
+	:oneliner:	Backend conn. reuses
+
+	Count of backend connection reuses. This counter is increased
+	whenever we reuse a recycled connection.
+
+.. vinyl_vsc:: backend_recycle
+	:oneliner:	Backend conn. recycles
+
+	Count of backend connection recycles. This counter is increased
+	whenever we have a keep-alive connection that is put back into the
+	pool of connections. It has not yet been used, but it might be,
+	unless the backend closes it.
+
+.. vinyl_vsc:: backend_retry
+	:oneliner:	Backend conn. retry
+
+.. vinyl_vsc:: backend_wait
+	:oneliner:	Backend conn. waited in queue for a connection
+
+	Count of backend requests that waited in a backend_wait queue for
+	a connection to become available.  The size of a backend wait queue
+	is defined by the backend wait_limit property.  The wait queue is
+	only used when max_connections to the backend are in use.
+
+.. vinyl_vsc:: backend_wait_fail
+	:oneliner:	Backend conn. waited in queue and did not get a connection
+
+	Count of backend requests that waited in a backend_wait queue for
+	a connection to become available and did not get one (timed out).
+	The maximum time to wait in the queue is defined by the backend
+	wait_timeout property.
+
+.. vinyl_vsc:: fetch_head
+	:group: wrk
+	:oneliner:	Fetch no body (HEAD)
+
+	beresp with no body because the request is HEAD.
+
+.. vinyl_vsc:: fetch_length
+	:group: wrk
+	:oneliner:	Fetch with Length
+
+	beresp.body with Content-Length.
+
+.. vinyl_vsc:: fetch_chunked
+	:group: wrk
+	:oneliner:	Fetch chunked
+
+	beresp.body with Chunked.
+
+.. vinyl_vsc:: fetch_eof
+	:group: wrk
+	:oneliner:	Fetch EOF
+
+	beresp.body with EOF.
+
+.. vinyl_vsc:: fetch_bad
+	:group: wrk
+	:oneliner:	Fetch bad T-E
+
+	beresp.body length/fetch could not be determined.
+
+.. vinyl_vsc:: fetch_none
+	:group: wrk
+	:oneliner:	Fetch no body
+
+	beresp.body empty
+
+.. vinyl_vsc:: fetch_1xx
+	:group: wrk
+	:oneliner:	Fetch no body (1xx)
+
+	beresp with no body because of 1XX response.
+
+.. vinyl_vsc:: fetch_204
+	:group: wrk
+	:oneliner:	Fetch no body (204)
+
+	beresp with no body because of 204 response.
+
+.. vinyl_vsc:: fetch_304
+	:group: wrk
+	:oneliner:	Fetch no body (304)
+
+	beresp with no body because of 304 response.
+
+.. vinyl_vsc:: fetch_failed
+	:group: wrk
+	:oneliner:	Fetch failed (all causes)
+
+	beresp fetch failed.
+
+.. vinyl_vsc:: bgfetch_no_thread
+	:group: wrk
+	:oneliner:	Background fetch failed (no thread)
+
+	A bgfetch triggered by a grace hit failed, no thread available.
+
+.. vinyl_vsc:: pools
+	:type:	gauge
+	:oneliner:	Number of thread pools
+
+	Number of thread pools. See also parameter thread_pools. NB: Presently
+	pools cannot be removed once created.
+
+.. vinyl_vsc:: threads
+	:type:	gauge
+	:oneliner:	Total number of threads
+
+	Number of threads in all pools. See also parameters thread_pools,
+	thread_pool_min and thread_pool_max.
+
+.. vinyl_vsc:: threads_limited
+	:oneliner:	Threads hit max
+
+	Number of times more threads were needed, but limit was reached in
+	a thread pool. See also parameter thread_pool_max.
+
+.. vinyl_vsc:: threads_created
+	:oneliner:	Threads created
+
+	Total number of threads created in all pools.
+
+.. vinyl_vsc:: threads_destroyed
+	:oneliner:	Threads destroyed
+
+	Total number of threads destroyed in all pools.
+
+.. vinyl_vsc:: threads_failed
+	:oneliner:	Thread creation failed
+
+	Number of times creating a thread failed. See VSL::Debug for
+	diagnostics. See also parameter thread_fail_delay.
+
+.. vinyl_vsc:: thread_queue_len
+	:type:	gauge
+	:oneliner:	Length of session queue
+
+	Length of session queue waiting for threads. NB: Only updates once
+	per second. See also parameter thread_queue_limit.
+
+.. vinyl_vsc:: busy_sleep
+	:group: wrk
+	:oneliner:	Number of requests sent to sleep on busy objhdr
+
+	Number of requests sent to sleep without a worker thread because
+	they found a busy object.
+
+.. vinyl_vsc:: busy_wakeup
+	:group: wrk
+	:oneliner:	Number of requests woken after sleep on busy objhdr
+
+	Number of requests taken off the busy object sleep list and rescheduled.
+
+.. vinyl_vsc:: busy_killed
+	:oneliner:	Number of requests killed after sleep on busy objhdr
+
+	Number of requests killed from the busy object sleep list due to
+	lack of resources.
+
+.. vinyl_vsc:: sess_queued
+	:group: pool
+	:oneliner:	Sessions queued for thread
+
+	Number of times session was queued waiting for a thread. See also
+	parameter thread_queue_limit.
+
+.. vinyl_vsc:: sess_dropped
+	:group: pool
+	:oneliner:	Sessions dropped for thread
+
+	Number of times an HTTP/1 session was dropped because the queue was
+	too long already. See also parameter thread_queue_limit.
+
+.. vinyl_vsc:: req_dropped
+	:group: pool
+	:oneliner:	Requests dropped
+
+	Number of times an HTTP/2 stream was refused because the queue was
+	too long already. See also parameter thread_queue_limit.
+
+.. vinyl_vsc:: req_reset
+	:group: wrk
+	:oneliner:	Requests reset
+
+	Number of times a client left before the VCL processing of its
+	requests completed. For HTTP/2 sessions, either the stream was
+	reset by an RST_STREAM frame from the client, or a stream or
+	connection error occurred.
+
+.. vinyl_vsc:: n_object
+	:type:	gauge
+	:group: wrk
+	:oneliner:	object structs made
+
+	Approximate number of HTTP objects (headers + body, if present) in
+	the cache.
+
+.. vinyl_vsc:: n_vampireobject
+	:type:	gauge
+	:level:	diag
+	:group: wrk
+	:oneliner:	unresurrected objects
+
+	Number of unresurrected objects
+
+.. vinyl_vsc:: n_objectcore
+	:type:	gauge
+	:group: wrk
+	:oneliner:	objectcore structs made
+
+	Approximate number of object metadata elements in the cache. Each
+	object needs an objectcore, extra objectcores are for hit-for-miss,
+	hit-for-pass and busy objects.
+
+.. vinyl_vsc:: n_objecthead
+	:type:	gauge
+	:group: wrk
+	:oneliner:	objecthead structs made
+
+	Approximate number of different hash entries in the cache.
+
+.. vinyl_vsc:: n_backend
+	:type:	gauge
+	:oneliner:	Number of backends
+
+	Number of backends known to us.
+
+.. vinyl_vsc:: n_expired
+	:oneliner:	Number of expired objects
+
+	Number of objects that expired from cache because of old age.
+
+.. vinyl_vsc:: n_superseded
+	:level:	diag
+	:oneliner:	Number of superseded objects
+
+	Number of times an object was superseded by a new one.
+
+.. vinyl_vsc:: n_lru_nuked
+	:oneliner:	Number of LRU nuked objects
+
+	How many objects have been forcefully evicted from storage to make
+	room for a new object.
+
+.. vinyl_vsc:: n_lru_moved
+	:level:	diag
+	:oneliner:	Number of LRU moved objects
+
+	Number of move operations done on the LRU list.
+
+.. vinyl_vsc:: n_lru_limited
+	:oneliner:	Reached nuke_limit
+
+	Number of times more storage space were needed, but limit was reached in
+	a nuke_limit. See also parameter nuke_limit.
+
+.. vinyl_vsc:: losthdr
+	:oneliner:	HTTP header overflows
+
+
+.. vinyl_vsc:: s_sess
+	:group: wrk
+	:oneliner:	Total sessions seen
+
+
+.. vinyl_vsc:: n_pipe
+	:type:	gauge
+	:oneliner:	Number of ongoing pipe sessions
+
+
+.. vinyl_vsc:: pipe_limited
+	:group: wrk
+	:oneliner:	Pipes hit pipe_sess_max
+
+	Number of times more pipes were needed, but the limit was reached. See
+	also parameter pipe_sess_max.
+
+
+.. vinyl_vsc:: s_pipe
+	:group: wrk
+	:oneliner:	Total pipe sessions seen
+
+
+.. vinyl_vsc:: s_pass
+	:group: wrk
+	:oneliner:	Total pass-ed requests seen
+
+
+.. vinyl_vsc:: s_fetch
+	:group: wrk
+	:oneliner:	Total backend fetches initiated
+
+	Total backend fetches initiated, including background fetches.
+
+.. vinyl_vsc:: s_bgfetch
+	:group: wrk
+	:oneliner:	Total backend background fetches initiated
+
+
+.. vinyl_vsc:: s_synth
+	:group: wrk
+	:oneliner:	Total synthetic responses made
+
+
+.. vinyl_vsc:: s_req_hdrbytes
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Request header bytes
+
+	Total request header bytes received
+
+.. vinyl_vsc:: s_req_bodybytes
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Request body bytes
+
+	Total request body bytes received
+
+.. vinyl_vsc:: s_resp_hdrbytes
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Response header bytes
+
+	Total response header bytes transmitted
+
+.. vinyl_vsc:: s_resp_bodybytes
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Response body bytes
+
+	Total response body bytes transmitted
+
+.. vinyl_vsc:: s_pipe_hdrbytes
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Pipe request header bytes
+
+	Total request bytes received for piped sessions
+
+.. vinyl_vsc:: s_pipe_in
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Piped bytes from client
+
+	Total number of bytes forwarded from clients in pipe sessions
+
+.. vinyl_vsc:: s_pipe_out
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Piped bytes to client
+
+	Total number of bytes forwarded to clients in pipe sessions
+
+.. vinyl_vsc:: transit_stored
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Stored uncacheable body bytes
+
+	Total number of transient body bytes written to storage as if they
+	were reusable like a cacheable backend response. Transient objects
+	are stored for a single transaction, this includes uncacheable backend
+	responses, synthetic responses and client requests.
+
+.. vinyl_vsc:: transit_buffered
+	:format:	bytes
+	:group:		wrk
+	:oneliner:	Buffered uncacheable response body bytes
+
+	Total number of uncacheable responses body bytes forwarded using a
+	fixed buffer allocated from storage. This behavior can be enabled by
+	the 'transit_buffer' parameter, or the 'beresp.transit_buffer' VCL
+	variable.
+
+.. vinyl_vsc:: sess_closed
+	:group: wrk
+	:oneliner:	Session Closed
+
+.. vinyl_vsc:: sess_closed_err
+	:oneliner:	Session Closed with error
+
+	Total number of sessions closed with errors. See sc_* diag counters
+	for detailed breakdown
+
+.. vinyl_vsc:: sess_readahead
+	:group: wrk
+	:oneliner:	Session Read Ahead
+
+.. vinyl_vsc:: sess_herd
+	:level:	diag
+	:group: wrk
+	:oneliner:	Session herd
+
+	Number of times the timeout_linger triggered
+
+.. vinyl_vsc:: sc_rem_close
+	:level:	diag
+	:oneliner:	Session OK  REM_CLOSE
+
+	Number of session closes with REM_CLOSE (Client Closed)
+
+.. vinyl_vsc:: sc_req_close
+	:level:	diag
+	:oneliner:	Session OK  REQ_CLOSE
+
+	Number of session closes with REQ_CLOSE (Client requested close)
+
+.. vinyl_vsc:: sc_req_http10
+	:level:	diag
+	:oneliner:	Session Err REQ_HTTP10
+
+	Number of session closes with Error REQ_HTTP10 (Proto < HTTP/1.1)
+
+.. vinyl_vsc:: sc_rx_bad
+	:level:	diag
+	:oneliner:	Session Err RX_BAD
+
+	Number of session closes with Error RX_BAD (Received bad req/resp)
+
+.. vinyl_vsc:: sc_rx_body
+	:level:	diag
+	:oneliner:	Session Err RX_BODY
+
+	Number of session closes with Error RX_BODY (Failure receiving req.body)
+
+.. vinyl_vsc:: sc_rx_junk
+	:level:	diag
+	:oneliner:	Session Err RX_JUNK
+
+	Number of session closes with Error RX_JUNK (Received junk data)
+
+.. vinyl_vsc:: sc_rx_overflow
+	:level:	diag
+	:oneliner:	Session Err RX_OVERFLOW
+
+	Number of session closes with Error RX_OVERFLOW (Received buffer overflow)
+
+.. vinyl_vsc:: sc_rx_timeout
+	:level:	diag
+	:oneliner:	Session Err RX_TIMEOUT
+
+	Number of session closes with Error RX_TIMEOUT (Receive timeout)
+
+.. vinyl_vsc:: sc_rx_close_idle
+	:level:	diag
+	:oneliner:	Session Err RX_CLOSE_IDLE
+
+	Number of session closes with Error RX_CLOSE_IDLE:
+	timeout_idle has been exceeded while waiting for a
+	client request.
+
+.. vinyl_vsc:: sc_tx_pipe
+	:level:	diag
+	:oneliner:	Session OK  TX_PIPE
+
+	Number of session closes with TX_PIPE (Piped transaction)
+
+.. vinyl_vsc:: sc_tx_error
+	:level:	diag
+	:oneliner:	Session Err TX_ERROR
+
+	Number of session closes with Error TX_ERROR (Error transaction)
+
+.. vinyl_vsc:: sc_tx_eof
+	:level:	diag
+	:oneliner:	Session OK  TX_EOF
+
+	Number of session closes with TX_EOF (EOF transmission)
+
+.. vinyl_vsc:: sc_resp_close
+	:level:	diag
+	:oneliner:	Session OK  RESP_CLOSE
+
+	Number of session closes with RESP_CLOSE (Backend/VCL requested close)
+
+.. vinyl_vsc:: sc_overload
+	:level:	diag
+	:oneliner:	Session Err OVERLOAD
+
+	Number of session closes with Error OVERLOAD (Out of some resource)
+
+.. vinyl_vsc:: sc_pipe_overflow
+	:level:	diag
+	:oneliner:	Session Err PIPE_OVERFLOW
+
+	Number of session closes with Error PIPE_OVERFLOW (Session pipe overflow)
+
+.. vinyl_vsc:: sc_range_short
+	:level:	diag
+	:oneliner:	Session Err RANGE_SHORT
+
+	Number of session closes with Error RANGE_SHORT (Insufficient data for range)
+
+.. vinyl_vsc:: sc_req_http20
+	:level:	diag
+	:oneliner:	Session Err REQ_HTTP20
+
+	Number of session closes with Error REQ_HTTP20 (HTTP2 not accepted)
+
+.. vinyl_vsc:: sc_vcl_failure
+	:level:	diag
+	:oneliner:	Session Err VCL_FAILURE
+
+	Number of session closes with Error VCL_FAILURE (VCL failure)
+
+.. vinyl_vsc:: sc_rapid_reset
+       :level: diag
+       :oneliner:      Session Err RAPID_RESET
+
+       Number of times we failed an http/2 session because it hit its
+       configured limits for the number of permitted rapid stream
+       resets.
+
+.. vinyl_vsc:: sc_bankrupt
+	:level: diag
+	:oneliner:      Session Err BANKRUPT
+
+	Number of times we failed an http/2 session because all the streams
+	were waiting for their windows to be credited when h2_window_timeout
+	triggered.
+
+.. vinyl_vsc:: client_resp_500
+	:level: diag
+	:group: wrk
+	:oneliner:	Delivery failed due to insufficient workspace.
+
+	Number of times we failed a response due to running out of
+	workspace memory during delivery.
+
+.. vinyl_vsc:: ws_backend_overflow
+	:group: wrk
+	:oneliner: workspace_backend overflows
+
+	Number of times we ran out of space in workspace_backend.
+
+.. vinyl_vsc:: ws_client_overflow
+	:group: wrk
+	:oneliner: workspace_client overflows
+
+	Number of times we ran out of space in workspace_client.
+
+.. vinyl_vsc:: ws_thread_overflow
+	:group: wrk
+	:oneliner: workspace_thread overflows
+
+	Number of times we ran out of space in workspace_thread.
+
+.. vinyl_vsc:: ws_session_overflow
+	:oneliner: workspace_session overflows
+
+	Number of times we ran out of space in workspace_session.
+
+.. vinyl_vsc:: shm_records
+	:level:	diag
+	:oneliner:	SHM records
+
+	Number of log records written to the shared memory log.
+
+
+.. vinyl_vsc:: shm_writes
+	:level:	diag
+	:oneliner:	SHM writes
+
+	Number of individual writes to the shared memory log. A single
+	write may batch multiple records for buffered tasks.
+
+
+.. vinyl_vsc:: shm_flushes
+	:level:	diag
+	:oneliner:	SHM flushes due to overflow
+
+	Number of writes performed before the end of a buffered task
+	because adding a record to a batch would exceed vsl_buffer.
+
+.. vinyl_vsc:: shm_cont
+	:level:	diag
+	:oneliner:	SHM lock contention
+
+	Number of times a write had to wait for the lock.
+
+
+.. vinyl_vsc:: shm_cycles
+	:level:	diag
+	:oneliner:	SHM cycles through VSL space
+
+	Number of times a write of log records would reach past the end
+	of the shared memory log, cycling back to the beginning.
+
+
+.. vinyl_vsc:: shm_bytes
+	:level:	diag
+	:format: bytes
+	:oneliner:	SHM bytes
+
+	Number of bytes written to the shared memory log.
+
+
+.. vinyl_vsc:: backend_req
+	:oneliner:	Backend requests made
+
+
+.. vinyl_vsc:: n_vcl
+	:type:	gauge
+	:oneliner:	Number of loaded VCLs in total
+
+
+.. vinyl_vsc:: n_vcl_avail
+	:type:	gauge
+	:level:	diag
+	:oneliner:	Number of VCLs available
+
+
+.. vinyl_vsc:: n_vcl_discard
+	:type:	gauge
+	:level:	diag
+	:oneliner:	Number of discarded VCLs
+
+
+.. vinyl_vsc:: vcl_fail
+	:group: wrk
+	:oneliner:	VCL failures
+
+	Count of failures which prevented VCL from completing.
+
+.. vinyl_vsc:: bans
+	:type:	gauge
+	:group: ban_mtx
+	:oneliner:	Count of bans
+
+	Number of all bans in system, including bans superseded by newer
+	bans and bans already checked by the ban-lurker.
+
+.. vinyl_vsc:: bans_completed
+	:type:	gauge
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Number of bans marked 'completed'
+
+	Number of bans which are no longer active, either because they got
+	checked by the ban-lurker or superseded by newer identical bans.
+
+.. vinyl_vsc:: bans_obj
+	:type:	gauge
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Number of bans using obj.*
+
+	Number of bans which use obj.* variables.  These bans can possibly
+	be washed by the ban-lurker.
+
+.. vinyl_vsc:: bans_req
+	:type:	gauge
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Number of bans using req.*
+
+	Number of bans which use req.* variables.  These bans cannot be
+	washed by the ban-lurker.
+
+.. vinyl_vsc:: bans_added
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Bans added
+
+	Counter of bans added to ban list.
+
+.. vinyl_vsc:: bans_deleted
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Bans deleted
+
+	Counter of bans deleted from ban list.
+
+.. vinyl_vsc:: bans_tested
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Bans tested against objects (lookup)
+
+	Count of how many bans and objects have been tested against each
+	other during hash lookup.
+
+.. vinyl_vsc:: bans_obj_killed
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Objects killed by bans (lookup)
+
+	Number of objects killed by bans during object lookup.
+
+.. vinyl_vsc:: bans_lurker_tested
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Bans tested against objects (lurker)
+
+	Count of how many bans and objects have been tested against each
+	other by the ban-lurker.
+
+.. vinyl_vsc:: bans_tests_tested
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Ban tests tested against objects (lookup)
+
+	Count of how many tests and objects have been tested against each
+	other during lookup. 'ban req.url == foo && req.http.host == bar'
+	counts as one in 'bans_tested' and as two in 'bans_tests_tested'
+
+.. vinyl_vsc:: bans_lurker_tests_tested
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Ban tests tested against objects (lurker)
+
+	Count of how many tests and objects have been tested against each
+	other by the ban-lurker. 'ban req.url == foo && req.http.host ==
+	bar' counts as one in 'bans_tested' and as two in 'bans_tests_tested'
+
+.. vinyl_vsc:: bans_lurker_obj_killed
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Objects killed by bans (lurker)
+
+	Number of objects killed by the ban-lurker.
+
+.. vinyl_vsc:: bans_lurker_obj_killed_cutoff
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Objects killed by bans for cutoff (lurker)
+
+	Number of objects killed by the ban-lurker to keep the number of
+	bans below ban_cutoff.
+
+.. vinyl_vsc:: bans_dups
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Bans superseded by other bans
+
+	Count of bans replaced by later identical bans.
+
+.. vinyl_vsc:: bans_lurker_contention
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Lurker gave way for lookup
+
+	Number of times the ban-lurker had to wait for lookups.
+
+.. vinyl_vsc:: bans_persisted_bytes
+	:type:	gauge
+	:format:	bytes
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Bytes used by the persisted ban lists
+
+	Number of bytes used by the persisted ban lists.
+
+.. vinyl_vsc:: bans_persisted_fragmentation
+	:type:	gauge
+	:format:	bytes
+	:level:	diag
+	:group: ban_mtx
+	:oneliner:	Extra bytes in persisted ban lists due to fragmentation
+
+	Number of extra bytes accumulated through dropped and completed
+	bans in the persistent ban lists.
+
+.. vinyl_vsc:: n_purges
+	:oneliner:	Number of purge operations executed
+
+
+.. vinyl_vsc:: n_obj_purged
+	:oneliner:	Number of purged objects
+
+
+.. vinyl_vsc:: exp_mailed
+	:level:	diag
+	:oneliner:	Number of objects mailed to expiry thread
+
+	Number of objects mailed to expiry thread for handling.
+
+.. vinyl_vsc:: exp_received
+	:level:	diag
+	:oneliner:	Number of objects received by expiry thread
+
+	Number of objects received by expiry thread for handling.
+
+.. vinyl_vsc:: hcb_nolock
+	:group: wrk
+	:level:	debug
+	:oneliner:	HCB Lookups without lock
+
+
+.. vinyl_vsc:: hcb_lock
+	:level:	debug
+	:oneliner:	HCB Lookups with lock
+
+
+.. vinyl_vsc:: hcb_insert
+	:level:	debug
+	:oneliner:	HCB Inserts
+
+
+.. vinyl_vsc:: esi_errors
+	:level:	diag
+	:oneliner:	ESI parse errors (unlock)
+
+
+.. vinyl_vsc:: esi_warnings
+	:level:	diag
+	:oneliner:	ESI parse warnings (unlock)
+
+
+.. vinyl_vsc:: vmods
+	:type:	gauge
+	:oneliner:	Loaded VMODs
+
+
+.. vinyl_vsc:: n_gzip
+	:oneliner:	Gzip operations
+
+
+.. vinyl_vsc:: n_gunzip
+	:oneliner:	Gunzip operations
+
+
+.. vinyl_vsc:: n_test_gunzip
+	:oneliner:	Test gunzip operations
+
+	Those operations occur when Vinyl Cache receives a compressed
+	object from a backend. They are done to verify the gzip
+	stream while it's inserted in storage.
+
+
+.. vinyl_vsc:: http1_iovs_flush
+	:oneliner:	Premature iovec flushes
+
+	Number of additional writes performed on HTTP1 connections
+	because the number of IO vectors was too small to submit all
+	possible IO in one go. This number is configured through the
+	``http1_iovs`` parameter for client connections and implicitly
+	defined by the amount of free workspace for backend
+	connections.
+
+.. vinyl_vsc:: http1_absolute_form
+	:oneliner:	Requests with absolute form request target
+
+	Number of requests for which an absolute form request target (e.g.
+	http://example.com/ or https://example.com/) was handled. The https://
+	scheme is handled unless the feature ``https_scheme`` is disabled (see
+	RUN TIME PARAMETERS in `vinyld(1)`).
+
+	See also ReqTarget in `vsl(7)`. This counter is approximately correct.
+
+.. vinyl_vsc_end::	main

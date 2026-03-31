@@ -1,0 +1,44 @@
+vtest "test vmod_std.collect()"
+
+server s1 {
+	rxreq
+	expect req.http.foo == "1, 2"
+	expect req.http.baz == "3, 4"
+	txresp -hdr "bar: a" -hdr "bar: b" -hdr "qux: c" -hdr "qux: d"
+} -start
+
+vinyl v1 -vcl+backend {
+	import std;
+
+	sub vcl_recv {
+		std.collect(req.http.foo);
+	}
+	sub vcl_hash {
+		hash_data("/");
+		return (lookup);
+	}
+	sub vcl_hit {
+		if (req.url == "/obj") {
+			std.collect(obj.http.foo);
+		}
+	}
+	sub vcl_backend_fetch {
+		std.collect(bereq.http.baz);
+	}
+	sub vcl_backend_response {
+		std.collect(beresp.http.bar);
+	}
+	sub vcl_deliver {
+		std.collect(resp.http.qux, "; ");
+	}
+} -start
+
+client c1 {
+	txreq -hdr "Foo: 1" -hdr "Foo: 2" -hdr "Baz: 3" -hdr "Baz: 4"
+	rxresp
+	expect resp.http.bar == "a, b"
+	expect resp.http.qux == "c; d"
+	txreq -url "/obj"
+	rxresp
+	expect resp.status == 503
+} -run

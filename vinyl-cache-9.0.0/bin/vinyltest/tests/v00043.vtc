@@ -1,0 +1,129 @@
+vtest "Test PRIV_TOP"
+
+# same as v00042.vtc, but the priv remains the same across esi includes
+
+server s1 {
+	rxreq
+	expect req.url == "/a"
+	expect req.http.x0 == "/a0"
+	expect req.http.x1 == "/a0"
+	expect req.http.o1 == ""
+	expect req.http.o2 == "/a0"
+	txresp -body {
+		<html>
+		<esi:include src="/foo1"/>
+		<esi:include src="/foo2"/>
+	}
+
+	rxreq
+	expect req.url == "/foo1"
+	expect req.http.x0 == "/a0"
+	expect req.http.x1 == "/a0"
+	expect req.http.o1 == "/foo11"
+	expect req.http.o2 == "/a0"
+	txresp -body {
+		<html>
+		<esi:include src="/bar"/>
+	}
+
+	rxreq
+	expect req.url == "/bar"
+	expect req.http.x0 == "/a0"
+	expect req.http.x1 == "/a0"
+	expect req.http.o1 == "/foo11"
+	expect req.http.o2 == "/a0"
+	txresp
+
+	rxreq
+	expect req.url == "/foo2"
+	expect req.http.x0 == "/a0"
+	expect req.http.x1 == "/a0"
+	expect req.http.o1 == "/foo11"
+	expect req.http.o2 == "/a0"
+	txresp -body {
+		<html>
+		<esi:include src="/bar"/>
+	}
+
+	rxreq
+	expect req.url == "/b"
+	expect req.http.x0 == "/b0"
+	expect req.http.x1 == "/b0"
+	expect req.http.o1 == ""
+	expect req.http.o2 == "/b0"
+
+	txresp
+} -start
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_backend_fetch'" {
+	import debug;
+	backend be none;
+	sub vcl_backend_fetch {
+		debug.test_priv_top("only works on client side");
+	}
+}
+
+vinyl v1 -errvcl "Not available in subroutine 'vcl_init'" {
+	import debug;
+	backend be none;
+	sub vcl_init {
+		debug.test_priv_top("only works on client side");
+	}
+}
+
+# give enough stack to 32bit systems
+vinyl v1 -cliok "param.set thread_pool_stack 128k"
+vinyl v1 -cliok "param.set debug +syncvsl"
+
+vinyl v1 -vcl+backend {
+	import debug;
+
+	sub vcl_init {
+		new o = debug.obj();
+		new o2 = debug.obj();
+	}
+
+	sub vcl_recv {
+		set req.http.x0 = debug.test_priv_top(req.url + req.esi_level);
+		# coverage
+		set req.http.x0 = debug.test_priv_top(req.url + req.esi_level);
+		if (req.url == "/foo1") {
+			o.test_priv_top(req.url + req.esi_level);
+		}
+		if (req.esi_level == 0) {
+			o2.test_priv_top(req.url + req.esi_level);
+		}
+	}
+
+	sub vcl_miss {
+		set req.http.x1 = debug.test_priv_top("");
+		set req.http.o1 = o.test_priv_top("");
+		set req.http.o2 = o2.test_priv_top("");
+	}
+
+	sub vcl_backend_fetch {
+
+	}
+
+	sub vcl_backend_response {
+		set beresp.do_esi = true;
+	}
+
+	sub vcl_deliver {
+		set resp.http.x1 = debug.test_priv_top("");
+	}
+} -start
+
+
+client c1 {
+	txreq -url /a
+	rxresp
+	expect resp.http.x1 == "/a0"
+
+	txreq -url /b
+	rxresp
+	expect resp.http.x1 == "/b0"
+} -run
+
+vinyl v1 -expect client_req == 2
+

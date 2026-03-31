@@ -1,0 +1,53 @@
+vtest "ESI spanning storage bits"
+
+# The layout of the body in the response is very carefully
+# tuned to give the desired code coverage.
+# The objects segments should have the following *precise* content
+#
+#     "Fetch 32 byte segments:"
+#     "%0a%09%09<html>filler%0a%09%09This is before"
+#     " the test%0a%09%09<![CDATA[foooooooooo"
+#     "ooooooooobar]]>%0a%09%09filler<esi:rem"
+#     "ove>%0a%09%09This is a test: Unseen Un"
+#     "iversity%0a%09%09Department of cruel a"
+#     "nd unjust geography%0a%09%09</esi:remo"
+#     "ve>%0a%09%09This is a test: Hello worl"
+#     "d%0a%09"
+
+server s1 {
+	rxreq
+	expect req.url == "/foo/bar"
+	send "HTTP/1.0 200 OK\n"
+	send "Connection: close\n"
+	send "\n"
+	send {
+		<html>filler
+		This is before the test
+		<![CDATA[fooooooooooooooooooobar]]>
+		filler<esi:remove>
+		This is a test: Unseen University
+		Department of cruel and unjust geography
+		</esi:remove>
+		This is a test: Hello world
+	}
+} -start
+
+vinyl v1 -arg "-sdefault,2m" -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.do_esi = true;
+	}
+} -start
+
+vinyl v1 -cliok "debug.fragfetch 32"
+
+client c1 {
+	txreq -url /foo/bar -hdr "Host: froboz"
+	rxresp
+	expect resp.status == 200
+	expect resp.bodylen == 120
+        expect resp.body == "\n\t\t<html>filler\n\t\tThis is before the test\n\t\t<![CDATA[fooooooooooooooooooobar]]>\n\t\tfiller\n\t\tThis is a test: Hello world\n\t"
+}
+
+client c1 -run
+vinyl v1 -expect esi_errors == 0
+vinyl v1 -expect MAIN.s_resp_bodybytes == 120

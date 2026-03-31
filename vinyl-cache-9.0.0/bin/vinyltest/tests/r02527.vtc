@@ -1,0 +1,30 @@
+vtest "Test the n_lru_moved counter"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -arg "-p lru_interval=1" -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.do_stream = false;
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+} -run
+
+vinyl v1 -expect MAIN.n_lru_moved == 0
+
+delay 2
+
+client c1 {
+	txreq
+	rxresp
+	txreq
+	rxresp
+} -run
+
+vinyl v1 -expect MAIN.n_lru_moved == 1

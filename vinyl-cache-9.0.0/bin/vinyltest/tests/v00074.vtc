@@ -1,0 +1,263 @@
+vtest "Clients in backend wait queue wakeup when backend goes sick"
+
+################### Backend goes sick from CLI ##########################
+barrier b1 cond 4 -cyclic
+barrier b2 cond 4
+
+server s1 {
+	rxreq
+	barrier b1 sync
+	barrier b1 sync
+	txresp
+} -start
+
+vinyl v1 -vcl {
+	backend s1 {
+		.host = "${s1_addr}";
+		.port = "${s1_port}";
+		.max_connections = 1;
+		.wait_timeout = 1h;
+		.wait_limit = 10;
+	}
+
+	sub vcl_recv {
+		return(pass);
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -start
+
+client c2 {
+	barrier b1 sync
+	txreq
+	delay 1
+	barrier b2 sync
+	rxresp
+	expect resp.status == 503
+	barrier b1 sync
+} -start
+
+client c3 {
+	barrier b1 sync
+	txreq
+	delay 1
+	barrier b2 sync
+	rxresp
+	expect resp.status == 503
+	barrier b1 sync
+} -start
+
+client c4 {
+	barrier b1 sync
+	txreq
+	delay 1
+	barrier b2 sync
+	rxresp
+	expect resp.status == 503
+	barrier b1 sync
+} -start
+
+# make sure c2-4 are already in the queue
+barrier b2 sync
+
+# Going from auto to sick should wakeup reqs in the wait queue
+vinyl v1 -cliok "backend.set_health s1 sick"
+
+client c1 -wait
+client c2 -wait
+client c3 -wait
+client c4 -wait
+vinyl v1 -expect backend_wait == 3
+vinyl v1 -expect backend_wait_fail == 3
+
+#################### Backend goes sick from probe #######################
+
+barrier b3 sock 4
+barrier b4 sock 4 -cyclic
+
+vinyl v0 -vcl {
+	import vtc;
+
+	backend be none;
+
+	sub vcl_recv {
+		if (req.url == "/probe") {
+			vtc.barrier_sync("${b3_sock}");
+			return (synth(503));
+		}
+		vtc.barrier_sync("${b4_sock}");
+		vtc.barrier_sync("${b4_sock}");
+		return (synth(200));
+	}
+} -start
+
+vinyl v1 -stop
+vinyl v1 -vcl {
+	backend be {
+		.host = "${v0_addr}";
+		.port = "${v0_port}";
+		.max_connections = 1;
+		.wait_timeout = 1h;
+		.wait_limit = 10;
+	}
+
+	probe default {
+		.interval = 100s;
+		.url = "/probe";
+		.window = 1;
+		.threshold = 1;
+		.initial = 1;
+		.timeout = 100s;
+	}
+
+	sub vcl_recv {
+		return(pass);
+	}
+} -start
+vinyl v1 -cliok "backend.set_health be auto"
+
+client c5 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -start
+
+client c6 {
+	barrier b4 sync
+	txreq
+	delay 1
+	barrier b3 sync
+	rxresp
+	expect resp.status == 503
+	barrier b4 sync
+} -start
+
+client c7 {
+	barrier b4 sync
+	txreq
+	delay 1
+	barrier b3 sync
+	rxresp
+	expect resp.status == 503
+	barrier b4 sync
+} -start
+
+client c8 {
+	barrier b4 sync
+	txreq
+	delay 1
+	barrier b3 sync
+	rxresp
+	expect resp.status == 503
+	barrier b4 sync
+} -start
+
+
+client c5 -wait
+client c6 -wait
+client c7 -wait
+client c8 -wait
+vinyl v1 -expect backend_wait == 3
+vinyl v1 -expect backend_wait_fail == 3
+
+########## Admin Healthy -> auto and probe indicates sick ###############
+barrier b5 sock 4 -cyclic
+barrier b6 sock 4
+
+vinyl v0 -vcl {
+	import vtc;
+	import std;
+
+	backend be none;
+
+	sub vcl_recv {
+		if (req.url == "/probe") {
+			return (synth(503));
+		}
+		vtc.barrier_sync("${b5_sock}");
+		vtc.barrier_sync("${b5_sock}");
+		return (synth(200));
+	}
+}
+
+vinyl v1 -stop
+vinyl v1 -vcl {
+	backend be {
+		.host = "${v0_addr}";
+		.port = "${v0_port}";
+		.max_connections = 1;
+	}
+
+	probe default {
+		.interval = 10s;
+		.url = "/probe";
+		.window = 1;
+		.threshold = 1;
+	}
+
+	sub vcl_recv {
+		return(pass);
+	}
+} -start
+
+vinyl v1 -cliok "backend.set_health be healthy"
+vinyl v1 -cliok "param.set backend_wait_timeout 1h"
+vinyl v1 -cliok "param.set backend_wait_limit 10"
+
+client c9 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -start
+
+client c10 {
+	barrier b5 sync
+	txreq
+	delay 1
+	barrier b6 sync
+	rxresp
+	expect resp.status == 503
+	barrier b5 sync
+} -start
+
+client c11 {
+	barrier b5 sync
+	txreq
+	delay 1
+	barrier b6 sync
+	rxresp
+	expect resp.status == 503
+	barrier b5 sync
+} -start
+
+client c12 {
+	barrier b5 sync
+	txreq
+	delay 1
+	barrier b6 sync
+	rxresp
+	expect resp.status == 503
+	barrier b5 sync
+} -start
+
+# make sure c10-12 are already in the queue
+barrier b6 sync
+
+vinyl v1 -cliok "param.reset backend_wait_timeout"
+vinyl v1 -cliok "param.reset backend_wait_limit"
+
+# Going back to probe (auto) that is sick should
+# wake up reqs in the wait queue, even if queuing
+# is currently disabled.
+vinyl v1 -cliok "backend.set_health be auto"
+
+client c9 -wait
+client c10 -wait
+client c11 -wait
+client c12 -wait
+vinyl v1 -expect backend_wait == 3
+vinyl v1 -expect backend_wait_fail == 3

@@ -1,0 +1,67 @@
+vtest "SF-decimal/SF-integer ranges"
+
+vinyl v1 -errvcl {Too many digits for integer.} {
+	sub vcl_recv { set req.http.foo = 1234567890123456; }
+}
+
+vinyl v1 -errvcl {Too many digits for real.} {
+	sub vcl_recv { set req.http.foo = 1234567890123.; }
+}
+
+vinyl v1 -errvcl {Too many digits for real.} {
+	sub vcl_recv { set req.http.foo = 123456789012.1234; }
+}
+
+vinyl v1 -errvcl {Too many digits for real.} {
+	sub vcl_recv { set req.http.foo = 0.1234; }
+}
+
+vinyl v1 -errvcl {Unexpected character 'e'.} {
+	sub vcl_recv { set req.http.foo = 42.42e42; }
+}
+
+vinyl v1 -errvcl {Unexpected character 'e'.} {
+	import std;
+	sub vcl_synth { set resp.http.foo = std.integer(real=1e10); }
+}
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_recv {
+		set req.http.foo1 = 123456789012345;
+		set req.http.foo2 = 123456789012.;
+		set req.http.foo3 = 123456789012.123;
+	}
+	sub vcl_deliver {
+		if (req.http.foo) {
+			set resp.http.foo = obj.ttl * 10000000000;
+		}
+		if (req.http.bar) {
+			# unlimited malloc stevedore returns VCL_INT_MAX - epsilon
+			set resp.http.bar = storage.Transient.free_space * 10;
+		}
+	}
+} -start
+
+logexpect l1 -v v1 -g raw -q VCL_Error {
+	expect ? 1001	VCL_Error	"REAL overflow converting to string.*"
+	expect ? 1004	VCL_Error	"INT overflow converting to string.*"
+} -start
+
+client c1 {
+	txreq -hdr "foo: 1"
+	rxresp
+	expect resp.status == 503
+} -run
+
+client c1 {
+	txreq -hdr "bar: 1"
+	rxresp
+	expect resp.status == 503
+} -run
+
+logexpect l1 -wait

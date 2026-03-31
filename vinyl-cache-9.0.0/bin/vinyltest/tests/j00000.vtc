@@ -1,0 +1,21 @@
+vtest "Code coverage basic UNIX jail"
+
+feature user_vinyl
+feature group_vinyl
+feature root
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 \
+	-jail "-junix,user=vinyl,ccgroup=vinyl" \
+	-vcl+backend {
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.status == 200
+} -run

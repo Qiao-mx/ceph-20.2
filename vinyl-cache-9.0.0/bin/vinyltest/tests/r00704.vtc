@@ -1,0 +1,22 @@
+vtest "Range bug"
+
+server s1 {
+	rxreq
+	txresp -bodylen 100
+} -start
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		set beresp.do_stream = false;
+	}
+} -start
+
+vinyl v1 -cliok "param.set http_range_support on"
+
+
+client c1 {
+	txreq -hdr "Range: bytes=-20"
+	rxresp
+	expect resp.status == 206
+	expect resp.bodylen == 20
+} -run

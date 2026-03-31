@@ -1,0 +1,96 @@
+vtest "Test request byte counters with ESI"
+
+server s1 {
+	rxreq
+	expect req.url == "/"
+	txresp -body {<esi:include src="/1"/>ghi}
+
+	rxreq
+	expect req.url == "/1"
+	txresp -body {<esi:include src="/2"/>abc<esi:include src="/2"/>def}
+
+	rxreq
+	expect req.url == "/2"
+	txresp -body {123}
+} -start
+
+# give enough stack to 32bit systems
+vinyl v1 -cliok "param.set thread_pool_stack 128k"
+
+vinyl v1 -vcl+backend {
+	sub vcl_backend_response {
+		if (bereq.url != "/2") {
+			set beresp.do_esi = true;
+		}
+	}
+	sub vcl_deliver {
+		unset resp.http.date;
+		unset resp.http.age;
+		unset resp.http.via;
+		unset resp.http.X-Vinyl;
+	}
+} -start
+
+# Request (1001):
+# GET / HTTP/1.1\r\n			16 bytes
+# Host: foo\r\n				11 bytes
+# User-Agent: c1\r\n			16 bytes
+# \r\n					 2 bytes
+# Total:				45 bytes
+
+# Response:
+# HTTP/1.1 200 OK\r\n			17 bytes
+# Accept-Ranges: bytes\r\n		22 bytes
+# Transfer-Encoding: chunked\r\n	28 bytes
+# Connection: keep-alive\r\n		24 bytes
+# Server: s1\r\n		 	12 bytes
+# \r\n					 2 bytes
+# Total:				105 bytes
+
+# Response body:
+# Chunk len				 - bytes
+# 123					 3 bytes
+# Chunk end				 - bytes
+# Chunk len				 - bytes
+# abc					 3 bytes
+# Chunk end				 - bytes
+# Chunk len				 - bytes
+# 123					 3 bytes
+# Chunk end				 - bytes
+# Chunk len				 - bytes
+# def					 3 bytes
+# Chunk end				 - bytes
+# Chunk len				 - bytes
+# ghi					 3 bytes
+# Chunk end				 - bytes
+# Chunked end				 - bytes
+# Total:				15 bytes
+
+logexpect l1 -v v1 -g request {
+	expect 0 1001	Begin	"^req .* rxreq"
+	expect * =	ReqAcct		"^45 0 45 105 15 120$"
+	expect 0 =	End
+	expect * 1003	Begin		"^req .* esi"
+	expect * =	ReqAcct		"^0 0 0 0 12 12$"
+	expect 0 =	End
+	expect * 1005	Begin		"^req .* esi"
+	expect * =	ReqAcct		"^0 0 0 0 3 3$"
+	expect 0 =	End
+	expect * 1007	Begin		"^req .* esi"
+	expect * =	ReqAcct		"^0 0 0 0 3 3$"
+	expect 0 =	End
+} -start
+
+client c1 {
+	txreq -url "/" -hdr "Host: foo"
+	rxresp
+	expect resp.status == 200
+	expect resp.body == "123abc123defghi"
+} -run
+
+logexpect l1 -wait
+
+vinyl v1 -expect s_req_hdrbytes == 45
+vinyl v1 -expect s_req_bodybytes == 0
+vinyl v1 -expect s_resp_hdrbytes == 105
+vinyl v1 -expect s_resp_bodybytes == 15

@@ -1,0 +1,38 @@
+vtest "CLI coverage test"
+
+vinyl v1 -cliok storage.list
+vinyl v1 -clijson "storage.list -j"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+vinyl v1 
+vinyl v1 -cliok vcl.list
+vinyl v1 -clijson "vcl.list -j"
+
+vinyl v1 -vcl+backend {}
+vinyl v1 -vcl+backend {}
+
+vinyl v1 -cliok vcl.list
+vinyl v1 -clijson "vcl.list -j"
+
+vinyl v1 -cliok start
+
+vinyl v1 -cliok vcl.list
+vinyl v1 -clijson "vcl.list -j"
+
+vinyl v1 -cliok "vcl.use vcl1"
+
+vinyl v1 -clierr 300 "vcl.discard vcl1"
+
+vinyl v1 -clierr 106 "vcl.discard vcl0"
+
+vinyl v1 -clierr 106 {vcl.inline vcl2 "vcl 4.0; backend foo {.host = \"${localhost}\";} "}
+
+vinyl v1 -clierr 106 {vcl.load vcl3 ./nonexistent.vcl}
+
+vinyl v1 -cliok "vcl.discard vcl2"
+
+vinyl v1 -clierr 106 {vcl.load /invalid/name.vcl vcl4}

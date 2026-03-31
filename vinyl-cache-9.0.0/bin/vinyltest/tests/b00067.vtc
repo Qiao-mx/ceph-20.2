@@ -1,0 +1,104 @@
+vtest "Check timeout_idle"
+
+vinyl v1 -arg "-p timeout_idle=2"	\
+	   -arg "-a ${listen_addr}"	\
+	   -arg "-a ${tmpdir}/v1.sock"	\
+	   -vcl {
+	backend dummy { .host = "${bad_backend}"; }
+
+	sub vcl_deliver {
+		if (req.url == "/sess") {
+			set sess.timeout_idle = 4s;
+		}
+	}
+	sub vcl_backend_error {
+		set beresp.status = 200;
+		set beresp.ttl = 1h;
+	}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	delay 0.2
+	txreq
+	rxresp
+	expect_close
+} -start
+
+client c2 {
+	txreq -url "/sess"
+	rxresp
+	delay 1.2
+	txreq
+	rxresp
+	expect_close
+} -start
+
+client c3 {
+	loop 3 {
+		# send a periodic CRLF
+		delay 0.5
+		sendhex 0d0a
+	}
+	expect_close
+} -start
+
+client c4 {
+	txreq
+	rxresp
+	loop 3 {
+		# send a periodic CRLF
+		delay 0.5
+		sendhex 0d0a
+	}
+	expect_close
+} -start
+
+client c1 -wait
+client c2 -wait
+client c3 -wait
+client c4 -wait
+
+client c1u -connect "${tmpdir}/v1.sock" {
+	txreq
+	rxresp
+	delay 0.2
+	txreq
+	rxresp
+	expect_close
+} -start
+
+client c2u -connect "${tmpdir}/v1.sock" {
+	txreq -url "/sess"
+	rxresp
+	delay 1.2
+	txreq
+	rxresp
+	expect_close
+} -start
+
+client c3u -connect "${tmpdir}/v1.sock" {
+	loop 3 {
+		# send a periodic CRLF
+		delay 0.5
+		sendhex 0d0a
+	}
+	expect_close
+} -start
+
+client c4u -connect "${tmpdir}/v1.sock" {
+	txreq
+	rxresp
+	loop 3 {
+		# send a periodic CRLF
+		delay 0.5
+		sendhex 0d0a
+	}
+	expect_close
+} -start
+
+client c1u -wait
+client c2u -wait
+client c3u -wait
+client c4u -wait

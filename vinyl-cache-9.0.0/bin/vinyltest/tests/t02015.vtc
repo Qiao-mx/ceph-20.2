@@ -1,0 +1,49 @@
+vtest "h2 ReqAcct"
+
+server s1 {
+	rxreq
+	txresp -noserver -bodylen 12345
+} -start
+
+vinyl v1 -cliok "param.set feature +http2"
+vinyl v1 -vcl+backend {
+	sub vcl_deliver {
+		# make ReqAcct deterministic
+		unset resp.http.via;
+	}
+} -start
+
+logexpect l1 -v v1 -g raw -q ReqAcct {
+	expect ? 1001	ReqAcct "46 0 46 67 12345 12412"
+	expect ? 1003	ReqAcct "46 0 46 72 1000 1072"
+} -start
+
+client c1 {
+	txpri
+
+	stream 0 {
+		rxsettings
+		expect settings.ack == false
+		txsettings -ack
+		txsettings -winsize 1000
+		rxsettings
+		expect settings.ack == true
+	} -run
+
+	stream 1 {
+		txreq -hdr stream 1
+		rxhdrs
+		rxdata
+		txwinup -size 11345
+		rxdata
+	} -run
+
+	stream 3 {
+		txreq -hdr stream 3
+		rxhdrs
+		rxdata
+		txrst
+	} -run
+} -run
+
+logexpect l1 -wait
