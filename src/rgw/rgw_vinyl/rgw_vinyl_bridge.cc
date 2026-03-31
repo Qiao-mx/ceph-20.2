@@ -19,7 +19,7 @@ int rgw_vinyl_bridge_init() {
     }
 
     int ret = rgw_vinyl_register_callbacks(
-        [](vinyl_handle_t handle, vinyl_request_ctx_t* ctx,
+        [&](vinyl_handle_t handle, vinyl_request_ctx_t* ctx,
            const char* method, const char* uri, const char* host,
            uint16_t vhost_len, const char* headers, size_t headers_len,
            char* req_body, size_t req_body_len) -> int {
@@ -43,25 +43,25 @@ int rgw_vinyl_bridge_init() {
             return ret;
         },
 
-        [](vinyl_handle_t handle, vinyl_request_ctx_t* ctx,
+        [&](vinyl_handle_t handle, vinyl_request_ctx_t* ctx,
            int status, const char* status_msg,
            const char* headers, size_t headers_len,
            const char* resp_body, size_t resp_body_len) -> int {
             return VINYL_OK;
         },
 
-        [](void* config) -> int {
+        [&](void* config) -> int {
             return VINYL_OK;
         },
 
-        [](void) {
+        [&]() {
         },
 
-        [](vinyl_handle_t handle) -> vinyl_request_ctx_t* {
+        [&](vinyl_handle_t handle) -> vinyl_request_ctx_t* {
             return new vinyl_request_ctx_t{nullptr, 0};
         },
 
-        [](vinyl_handle_t handle, vinyl_request_ctx_t* ctx) {
+        [&](vinyl_handle_t handle, vinyl_request_ctx_t* ctx) {
             delete ctx;
         },
 
