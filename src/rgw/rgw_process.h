@@ -14,6 +14,10 @@
 
 #include <atomic>
 
+#ifdef WITH_RGW_VINYL
+#include "rgw_vinyl/rgw_vinyl_process.h"
+#endif
+
 #define dout_context g_ceph_context
 
 
