@@ -499,6 +499,14 @@ int rgw::AppMain::init_frontends2(RGWLib* rgwlib)
       continue;
 #endif
     }
+    else if (framework == "vinyl") {
+#ifdef WITH_RGW_VINYL
+      fe = make_vinyl_frontend(env, config);
+#else
+      derr << "WARNING: vinyl frontend requested, but not included in build; skipping" << dendl;
+      continue;
+#endif
+    }
 
     service_map_meta["frontend_type#" + stringify(fe_count)] = framework;
     service_map_meta["frontend_config#" + stringify(fe_count)] = config->get_config();
