@@ -15,4 +15,11 @@ target_link_libraries(test_rgw_vinyl
     Boost::filesystem
 )
 
-add_test(NAME test_rgw_vinyl COMMAND test_rgw_vinyl)
+add_executable(test_rgw_vinyl_frontend test_rgw_vinyl_frontend.cc)
+
+target_link_libraries(test_rgw_vinyl_frontend
+    rgw_vinyl
+    GTest::GTest
+)
+
+add_test(NAME rgw_vinyl_frontend_test COMMAND test_rgw_vinyl_frontend)
