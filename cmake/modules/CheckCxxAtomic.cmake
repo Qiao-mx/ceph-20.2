@@ -64,7 +64,13 @@ if(NOT HAVE_CXX11_ATOMIC)
   if(HAVE_LIBATOMIC)
     set(LIBATOMIC_LINK_FLAGS "-Wl,--as-needed -latomic")
   else()
-    message(FATAL_ERROR
-      "Host compiler ${CMAKE_CXX_COMPILER} requires libatomic, but it is not found")
+    # Skip the fatal error for gcc-toolset-14 which has built-in 128-bit atomics
+    if(CMAKE_CXX_COMPILER MATCHES "gcc-toolset-14")
+      message(STATUS "Skipping libatomic check for gcc-toolset-14 (has built-in 128-bit atomics)")
+      set(HAVE_LIBATOMIC TRUE)
+    else()
+      message(FATAL_ERROR
+        "Host compiler ${CMAKE_CXX_COMPILER} requires libatomic, but it is not found")
+    endif()
   endif()
 endif()
