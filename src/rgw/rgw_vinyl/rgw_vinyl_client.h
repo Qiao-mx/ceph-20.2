@@ -16,6 +16,32 @@
 
 namespace rgw {
 
+/**
+ * HTTP 范围请求结构
+ */
+struct HTTPRange {
+  int64_t start;   // 起始字节，-1 表示从末尾计算
+  int64_t end;     // 结束字节，-1 表示到文件末尾
+
+  int64_t get_start(int64_t total_size) const {
+    return (start == -1) ? std::max<int64_t>(0, total_size - end) : start;
+  }
+
+  int64_t get_end(int64_t total_size) const {
+    return (end == -1) ? total_size - 1 : end;
+  }
+
+  int64_t length(int64_t total_size) const {
+    return get_end(total_size) - get_start(total_size) + 1;
+  }
+
+  bool is_valid(int64_t total_size) const {
+    int64_t s = get_start(total_size);
+    int64_t e = get_end(total_size);
+    return s >= 0 && e >= s && e < total_size;
+  }
+};
+
 // Forward declaration
 class VinylHTTPServer;
 
@@ -90,6 +116,64 @@ public:
    * 分块发送响应体 - 超过缓冲阈值时自动flush
    */
   size_t send_body_chunked(const char* buf, size_t len);
+
+  /**
+   * 发送 HTTP 分块
+   * @param buf 数据缓冲区
+   * @param len 数据长度
+   * @return 实际发送的字节数
+   */
+  size_t send_chunk(const char* buf, size_t len);
+
+  /**
+   * 发送最后一个分块（结束标记）
+   * @return 发送的字节数
+   */
+  size_t send_last_chunk();
+
+  /**
+   * 禁用 HTTP keep-alive
+   */
+  void disable_keepalive() {
+    impl->keepalive_enabled = false;
+  }
+
+  /**
+   * 检查是否启用 keep-alive
+   */
+  bool is_keepalive_enabled() const {
+    return impl->keepalive_enabled;
+  }
+
+  /**
+   * 发送范围响应 (206 Partial Content)
+   * @param range 范围信息
+   * @param total_size 文件总大小
+   * @param buf 数据缓冲区
+   * @param len 数据长度
+   * @return 发送的字节数
+   */
+  size_t send_range_response(
+      const struct HTTPRange& range,
+      int64_t total_size,
+      const char* buf,
+      size_t len);
+
+  /**
+   * 处理范围请求
+   * @param range_header Range 请求头值
+   * @param total_size 文件总大小
+   * @return 是否成功解析范围请求
+   */
+  bool handle_range_request(const std::string& range_header,
+                             int64_t total_size);
+
+  /**
+   * 获取当前范围请求
+   */
+  const std::optional<struct HTTPRange>& get_current_range() const {
+    return impl->current_range;
+  }
 
 private:
   class Impl;

@@ -7,6 +7,8 @@
 #include <sstream>
 #include <atomic>
 #include <future>
+#include <iomanip>
+#include <algorithm>
 
 #include "rgw_common.h"
 #include "rgw_vinyl_vmod.h"
@@ -14,6 +16,93 @@
 #define dout_subsys ceph_subsys_rgw
 
 namespace rgw {
+
+namespace {
+
+// 将十进制数字转换为十六进制字符串
+std::string to_hex(size_t n) {
+  std::ostringstream oss;
+  oss << std::hex << n << "\r\n";
+  return oss.str();
+}
+
+// 解析 Range 请求头
+// 格式: bytes=start-end
+std::optional<std::vector<HTTPRange>> parse_range(const std::string& range_str,
+                                                   int64_t total_size) {
+  std::vector<HTTPRange> ranges;
+
+  if (range_str.empty()) {
+    return std::nullopt;
+  }
+
+  // 查找 "bytes=" 前缀
+  const std::string prefix = "bytes=";
+  size_t pos = range_str.find(prefix);
+  if (pos == std::string::npos) {
+    return std::nullopt;
+  }
+
+  // 解析每个范围
+  std::string range_part = range_str.substr(pos + prefix.length());
+  std::replace(range_part.begin(), range_part.end(), ',', ' ');
+
+  std::istringstream iss(range_part);
+  std::string token;
+
+  while (iss >> token) {
+    // 跳过空 token
+    if (token.empty()) continue;
+
+    size_t dash_pos = token.find('-');
+    if (dash_pos == std::string::npos) {
+      continue;
+    }
+
+    HTTPRange range;
+    std::string start_str = token.substr(0, dash_pos);
+    std::string end_str = token.substr(dash_pos + 1);
+
+    if (start_str.empty()) {
+      // 形式: "-500" 表示最后 500 字节
+      range.start = -1;
+      range.end = std::stoll(end_str);
+    } else if (end_str.empty()) {
+      // 形式: "500-" 表示从 500 字节到末尾
+      range.start = std::stoll(start_str);
+      range.end = -1;
+    } else {
+      // 形式: "100-200"
+      range.start = std::stoll(start_str);
+      range.end = std::stoll(end_str);
+    }
+
+    // 验证范围有效性
+    if (range.start != -1 && range.end != -1 && range.start > range.end) {
+      continue;
+    }
+
+    ranges.push_back(range);
+  }
+
+  if (ranges.empty()) {
+    return std::nullopt;
+  }
+
+  return ranges;
+}
+
+// 生成 Content-Range 头
+std::string make_content_range(const HTTPRange& range, int64_t total_size) {
+  int64_t start = range.get_start(total_size);
+  int64_t end = range.get_end(total_size);
+
+  std::ostringstream oss;
+  oss << "bytes " << start << "-" << end << "/" << total_size;
+  return oss.str();
+}
+
+} // anonymous namespace
 
 class VinylClientIO::Impl {
 public:
@@ -28,6 +117,10 @@ public:
   int status = 200;
   std::string status_msg = "OK";
   bool headers_sent = false;
+
+  // HTTP/1.1 keep-alive 支持
+  bool keepalive_enabled = true;
+  std::chrono::steady_clock::time_point last_request_time;
 
   // 异步响应支持
   std::atomic<bool> async_in_progress{false};
@@ -53,6 +146,10 @@ public:
 
   // 分块编码支持
   bool chunked_encoding{false};
+
+  // 范围请求支持
+  std::optional<HTTPRange> current_range;
+  int64_t content_length = -1;
 };
 
 VinylClientIO::VinylClientIO()
@@ -68,11 +165,19 @@ int VinylClientIO::init_env(CephContext *cct) {
 size_t VinylClientIO::send_status(int status, const char* status_msg) {
   impl->status = status;
   impl->status_msg = status_msg;
+  impl->last_request_time = std::chrono::steady_clock::now();
 
   std::ostringstream oss;
   oss << "HTTP/1.1 " << status << " " << status_msg << "\r\n";
-  impl->pending_headers += oss.str();
 
+  // 添加 Connection 头
+  if (impl->keepalive_enabled) {
+    oss << "Connection: keep-alive\r\n";
+  } else {
+    oss << "Connection: close\r\n";
+  }
+
+  impl->pending_headers = oss.str();
   return impl->pending_headers.size();
 }
 
@@ -186,6 +291,9 @@ size_t VinylClientIO::complete_request() {
   impl->total_bytes_sent = 0;
   impl->total_bytes_buffered = 0;
   impl->chunked_encoding = false;
+  impl->keepalive_enabled = true;
+  impl->current_range = std::nullopt;
+  impl->content_length = -1;
 
   return 0;
 }
@@ -225,6 +333,91 @@ size_t VinylClientIO::send_body_chunked(const char* buf, size_t len) {
   }
 
   return send_body(buf, len);
+}
+
+size_t VinylClientIO::send_chunk(const char* buf, size_t len) {
+  if (len == 0) {
+    return 0;
+  }
+
+  std::string chunk;
+
+  // 添加分块大小（十六进制）
+  chunk += to_hex(len);
+
+  // 添加分块数据
+  chunk.append(buf, len);
+
+  // 添加 CRLF
+  chunk += "\r\n";
+
+  // 追加到 out_body
+  out_body.append(chunk.data(), chunk.size());
+
+  return len;
+}
+
+size_t VinylClientIO::send_last_chunk() {
+  std::string last_chunk = "0\r\n\r\n";
+  out_body.append(last_chunk.data(), last_chunk.size());
+
+  // 发送结束分块
+  if (impl->send_cb) {
+    impl->send_cb(
+      impl->status,
+      impl->status_msg.c_str(),
+      impl->pending_headers.c_str(),
+      impl->pending_headers.size(),
+      last_chunk.data(),
+      last_chunk.size()
+    );
+  }
+
+  return last_chunk.size();
+}
+
+bool VinylClientIO::handle_range_request(const std::string& range_header,
+                                          int64_t total_size) {
+  auto ranges = parse_range(range_header, total_size);
+  if (!ranges || ranges->empty()) {
+    return false;
+  }
+
+  impl->current_range = ranges->front();
+  impl->content_length = total_size;
+  return true;
+}
+
+size_t VinylClientIO::send_range_response(
+    const HTTPRange& range,
+    int64_t total_size,
+    const char* buf,
+    size_t len) {
+
+  // 发送 206 Partial Content 状态
+  send_status(206, "Partial Content");
+
+  // 发送 Content-Range 头
+  std::string content_range = make_content_range(range, total_size);
+  send_header("Content-Range", content_range);
+
+  // 计算范围长度
+  int64_t range_start = range.get_start(total_size);
+  int64_t range_end = range.get_end(total_size);
+  int64_t range_len = range_end - range_start + 1;
+
+  // 发送 Content-Length
+  send_content_length(range_len);
+
+  // 完成响应头
+  complete_header();
+
+  // 发送范围数据
+  if (buf && len > 0) {
+    send_body(buf, len);
+  }
+
+  return range_len;
 }
 
 void VinylClientIO::set_send_cb(

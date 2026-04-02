@@ -45,6 +45,9 @@ public:
     std::thread ipc_handler_thread;
     std::atomic<bool> ipc_handler_running{false};
 
+    // HTTP/1.1 keep-alive 连接追踪
+    std::atomic<int> active_connections{0};
+
     // Handle IPC request
     int handle_ipc_request(const IPCMessage& msg, int client_fd);
 };

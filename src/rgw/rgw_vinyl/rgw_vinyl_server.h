@@ -58,6 +58,10 @@ public:
 
         bool foreground = true;
         std::vector<std::string> params;
+
+        // HTTP/1.1 keep-alive 配置
+        int keepalive_timeout = 60;      // 默认 60 秒
+        int max_connections = 100;       // 默认 100 个连接
     };
 
     /**
@@ -129,6 +133,27 @@ public:
      * 获取服务器状态
      */
     State get_state() const { return state_.load(); }
+
+    /**
+     * 设置连接保持超时（秒）
+     */
+    void set_keepalive_timeout(int seconds) {
+        impl->config.keepalive_timeout = seconds;
+    }
+
+    /**
+     * 设置最大连接数
+     */
+    void set_max_connections(int max) {
+        impl->config.max_connections = max;
+    }
+
+    /**
+     * 获取当前活跃连接数
+     */
+    int get_active_connections() const {
+        return impl->active_connections.load();
+    }
 
     /**
      * 获取子进程 PID
