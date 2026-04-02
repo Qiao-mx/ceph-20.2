@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "rgw_vinyl_vmod.h"
+#include "rgw_vinyl.h"
 
 #define dout_subsys ceph_subsys_rgw
 
@@ -102,8 +103,31 @@ public:
       const char* method, const char* uri, const char* host,
       uint16_t vhost_len, const char* headers, size_t headers_len,
       char* req_body, size_t req_body_len) {
-    // TODO: Forward to RGWProcess_Vinyl for processing
-    // This will be completed after RGWProcess_Vinyl is implemented
+
+    auto* impl = static_cast<RGWVinylCacheFrontend::Impl*>(handle);
+
+    ldout(impl->cct, 20) << "vinyl_recv_cb: " << method << " " << uri << dendl;
+
+    // Forward to bridge layer for processing
+    std::string resp_headers;
+    std::string resp_body;
+    int status = 0;
+
+    int ret = rgw_vinyl_handle_request(
+        method, uri, host, vhost_len,
+        headers, headers_len,
+        req_body, req_body_len,
+        resp_headers, resp_body, status);
+
+    if (ret == VINYL_OK) {
+      // Send response via VinylCache
+      rgw_vinyl_send_response(
+          status, "OK",
+          resp_headers.c_str(), resp_headers.size(),
+          resp_body.c_str(), resp_body.size());
+      return VINYL_OK;
+    }
+
     return VINYL_PASS;
   }
 
@@ -112,7 +136,14 @@ public:
       int status, const char* status_msg,
       const char* headers, size_t headers_len,
       const char* resp_body, size_t resp_body_len) {
-    // TODO: Send response to client
+
+    auto* impl = static_cast<RGWVinylCacheFrontend::Impl*>(handle);
+
+    ldout(impl->cct, 20) << "vinyl_send_cb: status=" << status << dendl;
+
+    // Response has been sent via VinylClientIO flush
+    // This callback is for additional processing if needed
+
     return VINYL_OK;
   }
 
