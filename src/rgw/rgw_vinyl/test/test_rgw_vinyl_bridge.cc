@@ -151,3 +151,78 @@ TEST_F(VinylBridgeTest, DoubleShutdown) {
     EXPECT_NO_THROW(rgw_vinyl_bridge_shutdown());
     EXPECT_NO_THROW(rgw_vinyl_bridge_shutdown());
 }
+
+TEST_F(VinylBridgeTest, ReqStateCreation) {
+    rgw_vinyl_bridge_init();
+
+    // Test that req_state can be created from raw request data
+    const char* method = "GET";
+    const char* uri = "/mybucket/myobject?versionId=abc123";
+    const char* host = "s3.example.com";
+    const char* headers =
+        "Host: s3.example.com\r\n"
+        "Accept: */*\r\n"
+        "User-Agent: curl/7.68.0\r\n"
+        "Content-Type: application/json\r\n";
+    size_t headers_len = strlen(headers);
+
+    std::string resp_headers;
+    std::string resp_body;
+    int status = 0;
+
+    int ret = rgw_vinyl_handle_request(
+        method, uri, host, 0,
+        headers, headers_len,
+        nullptr, 0,
+        resp_headers, resp_body, status);
+
+    EXPECT_EQ(ret, VINYL_OK);
+    EXPECT_EQ(status, 200);
+    EXPECT_FALSE(resp_body.empty());
+}
+
+TEST_F(VinylBridgeTest, POSTRequestWithBody) {
+    rgw_vinyl_bridge_init();
+
+    const char* method = "POST";
+    const char* uri = "/mybucket/";
+    const char* host = "localhost";
+    const char* headers = "Host: localhost\r\nContent-Type: application/xml\r\n";
+    size_t headers_len = strlen(headers);
+    char req_body[1024] = "<?xml version=\"1.0\"?><CreateBucketConfiguration></CreateBucketConfiguration>";
+    size_t req_body_len = strlen(req_body);
+
+    std::string resp_headers;
+    std::string resp_body;
+    int status = 0;
+
+    int ret = rgw_vinyl_handle_request(
+        method, uri, host, 0,
+        headers, headers_len,
+        req_body, req_body_len,
+        resp_headers, resp_body, status);
+
+    EXPECT_EQ(ret, VINYL_OK);
+    EXPECT_EQ(status, 200);
+}
+
+TEST_F(VinylBridgeTest, DELETERequest) {
+    rgw_vinyl_bridge_init();
+
+    const char* method = "DELETE";
+    const char* uri = "/mybucket/myobject";
+    const char* host = "localhost";
+
+    std::string resp_headers;
+    std::string resp_body;
+    int status = 0;
+
+    int ret = rgw_vinyl_handle_request(
+        method, uri, host, 0,
+        nullptr, 0,
+        nullptr, 0,
+        resp_headers, resp_body, status);
+
+    EXPECT_EQ(ret, VINYL_OK);
+    EXPECT_EQ(status, 200);
+}
