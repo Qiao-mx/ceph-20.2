@@ -88,3 +88,8 @@ install(FILES rgw_vinyl_vmod.h rgw_vinyl.h rgw_vinyl_frontend.h
                      rgw_vinyl_request_context.h
                      rgw_vinyl_driver.h rgw_vinyl_request_state.h
                      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rgw)
+
+# Install startup script
+configure_file(start.sh.in ${CMAKE_CURRENT_BINARY_DIR}/start.sh IMMUTABLE)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/start.sh
+        DESTINATION ${CMAKE_INSTALL_BINDIR})

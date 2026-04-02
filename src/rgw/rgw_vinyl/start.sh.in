@@ -1,0 +1,143 @@
+#!/bin/bash
+# -*- mode:sh; -*-
+
+# VinylCache Startup Script
+# Usage: ./start.sh [OPTIONS]
+#
+# This script starts radosgw with the VinylCache frontend.
+# It supports both environment variables and command-line arguments.
+
+set -e
+
+# Default values
+PORT="${RGW_VINYL_PORT:-7480}"
+VCL_DIR="${RGW_VINYL_VCL_DIR:-/etc/rgw/vinyl}"
+LOG_DIR="${RGW_VINYL_LOG_DIR:-/var/log/rgw}"
+PID_FILE="${RGW_VINYL_PID_FILE:-/var/run/rgw-vinyl.pid}"
+VCL_FILE="${RGW_VINYL_VCL_FILE:-main.vcl}"
+CACHE_ENABLED="${RGW_VINYL_CACHE_ENABLED:-true}"
+NUM_THREADS="${RGW_VINYL_NUM_THREADS:-}"
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -p|--port)
+            PORT="$2"
+            shift 2
+            ;;
+        -v|--vcl-dir)
+            VCL_DIR="$2"
+            shift 2
+            ;;
+        -f|--vcl-file)
+            VCL_FILE="$2"
+            shift 2
+            ;;
+        -l|--log-dir)
+            LOG_DIR="$2"
+            shift 2
+            ;;
+        -c|--cache-enabled)
+            CACHE_ENABLED="$2"
+            shift 2
+            ;;
+        -n|--num-threads)
+            NUM_THREADS="$2"
+            shift 2
+            ;;
+        -h|--help)
+            echo "VinylCache Startup Script"
+            echo ""
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  -p, --port PORT           Set listen port (default: 7480)"
+            echo "  -v, --vcl-dir DIR         Set VCL config directory (default: /etc/rgw/vinyl)"
+            echo "  -f, --vcl-file FILE       Set VCL config file (default: main.vcl)"
+            echo "  -l, --log-dir DIR         Set log directory (default: /var/log/rgw)"
+            echo "  -c, --cache-enabled BOOL  Enable/disable caching (default: true)"
+            echo "  -n, --num-threads N       Set number of threads"
+            echo "  -h, --help                Show this help message"
+            echo ""
+            echo "Environment Variables:"
+            echo "  RGW_VINYL_PORT            Set listen port"
+            echo "  RGW_VINYL_VCL_DIR         Set VCL config directory"
+            echo "  RGW_VINYL_LOG_DIR         Set log directory"
+            echo "  RGW_VINYL_CACHE_ENABLED   Enable/disable caching"
+            echo ""
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
+    esac
+done
+
+# Check prerequisites
+if [ ! -d "$VCL_DIR" ]; then
+    echo "Warning: VCL directory not found: $VCL_DIR"
+    echo "Creating default VCL directory..."
+    sudo mkdir -p "$VCL_DIR"
+fi
+
+if [ ! -f "$VCL_DIR/$VCL_FILE" ]; then
+    echo "Warning: VCL file not found: $VCL_DIR/$VCL_FILE"
+    echo "Creating default VCL configuration..."
+    sudo tee "$VCL_DIR/$VCL_FILE" > /dev/null << 'VCL_EOF'
+vcl 4.1;
+
+backend default {
+    .host = "127.0.0.1";
+    .port = "7480";
+    .connect_timeout = 3s;
+    .first_byte_timeout = 30s;
+    .between_bytes_timeout = 60s;
+}
+
+sub vcl_recv {
+    return (pass);
+}
+
+sub vcl_deliver {
+    if (obj.hits > 0) {
+        set resp.http.X-Cache = "HIT";
+    } else {
+        set resp.http.X-Cache = "MISS";
+    }
+    return (deliver);
+}
+VCL_EOF
+fi
+
+# Build frontend configuration string
+FRONTEND_CONFIG="vinyl port=$PORT vcl_dir=$VCL_DIR vcl_file=$VCL_FILE cache_enabled=$CACHE_ENABLED"
+
+if [ -n "$NUM_THREADS" ]; then
+    FRONTEND_CONFIG="$FRONTEND_CONFIG num_threads=$NUM_THREADS"
+fi
+
+# Create log directory if needed
+if [ ! -d "$LOG_DIR" ]; then
+    echo "Creating log directory: $LOG_DIR"
+    sudo mkdir -p "$LOG_DIR"
+fi
+
+echo "Starting VinylCache..."
+echo "  Frontend: $FRONTEND_CONFIG"
+echo "  VCL Dir: $VCL_DIR"
+echo "  VCL File: $VCL_FILE"
+echo "  Log Dir: $LOG_DIR"
+
+# Start radosgw with vinyl frontend
+if [ -n "$PID_FILE" ]; then
+    exec radosgw \
+        --rgw-frontends="$FRONTEND_CONFIG" \
+        --log-file="$LOG_DIR/vinyl-$PORT.log" \
+        --pid-file="$PID_FILE"
+else
+    exec radosgw \
+        --rgw-frontends="$FRONTEND_CONFIG" \
+        --log-file="$LOG_DIR/vinyl-$PORT.log"
+fi
