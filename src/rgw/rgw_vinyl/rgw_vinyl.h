@@ -21,6 +21,23 @@ struct VinylCacheConfig {
     int connect_timeout_ms{3000};
     int backend_timeout_ms{30000};
     size_t max_object_size{10 * 1024 * 1024}; // 10MB
+
+    // vinyld 路径配置
+    std::string vinyld_path =
+        "../.worktrees/rgw-vinyl-phase1/vinyl-cache-9.0.0/bin/vinyld/vinyld";
+    std::string vinyld_work_dir = "/tmp/vinyl-rgw";
+
+    // VMOD 路径
+    std::string vmod_dir =
+        "../.worktrees/rgw-vinyl-phase1/vinyl-cache-9.0.0/lib/libvcc";
+
+    // IPC 机制
+    enum class IPCMode {
+        PIPE,           // 管道通信
+        UNIX_SOCKET,    // Unix Domain Socket
+        SHARED_MEMORY   // 共享内存
+    };
+    IPCMode ipc_mode = IPCMode::UNIX_SOCKET;
 };
 
 /**
@@ -251,6 +268,23 @@ private:
 };
 
 /**
+ * VinylCache 配置观察者接口
+ * 用于监听配置变更事件
+ */
+class VinylCacheConfigObserver {
+public:
+    virtual ~VinylCacheConfigObserver() = default;
+
+    /**
+     * 配置变更通知
+     * @param old_config 旧配置
+     * @param new_config 新配置
+     */
+    virtual void on_config_changed(const VinylCacheConfig& old_config,
+                                   const VinylCacheConfig& new_config) = 0;
+};
+
+/**
  * VinylCache 主类
  * 管理 Vinyl Cache 的生命周期和配置
  */
@@ -322,6 +356,34 @@ public:
     const VinylCacheConfig& get_config() const;
 
     /**
+     * 获取配置版本号
+     * 每次配置更新后递增
+     */
+    uint64_t get_config_version() const {
+        return config_version_.load();
+    }
+
+    /**
+     * 热更新配置
+     * 线程安全地更新配置并通知观察者
+     * @param new_config 新配置
+     * @return 0 成功, 负数 失败
+     */
+    int hot_update_config(const VinylCacheConfig& new_config);
+
+    /**
+     * 添加配置观察者
+     * @param observer 观察者指针，不能为 nullptr
+     */
+    void add_config_observer(VinylCacheConfigObserver* observer);
+
+    /**
+     * 移除配置观察者
+     * @param observer 观察者指针
+     */
+    void remove_config_observer(VinylCacheConfigObserver* observer);
+
+    /**
      * 获取版本信息
      */
     static const char* version();
@@ -330,6 +392,7 @@ private:
     class Impl;
     std::unique_ptr<Impl> impl_;
     std::atomic<VinylCacheState> state_{VinylCacheState::UNINITIALIZED};
+    std::atomic<uint64_t> config_version_{0};
 };
 
 /**
@@ -353,6 +416,14 @@ struct req_state;
  * @return 0 成功, 负数 失败
  */
 int rgw_vinyl_bridge_init();
+
+/**
+ * 使用 RGWProcessEnv 初始化 RGW 与 VinylCache 的桥接
+ * 这是主要的初始化函数，传入完整的 RGW 进程环境
+ * @param env RGW 进程环境（包含 rados, rest, sync_trace）
+ * @return 0 成功, 负数 失败
+ */
+int rgw_vinyl_bridge_init(const RGWProcessEnv& env);
 
 /**
  * 清理 RGW 与 VinylCache 的桥接

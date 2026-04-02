@@ -9,6 +9,8 @@
 #include <sstream>
 #include <filesystem>
 #include <regex>
+#include <mutex>
+#include <algorithm>
 
 namespace fs = std::filesystem;
 
@@ -75,8 +77,48 @@ public:
         return config_;
     }
 
+    int hot_update_config(const VinylCacheConfig& new_config) {
+        auto expected_version = 0u;
+        VinylCacheConfig old_config = config_;
+
+        // 更新配置
+        config_ = new_config;
+
+        // 通知观察者
+        {
+            std::lock_guard<std::mutex> lock(observer_mutex);
+            for (auto* observer : observers) {
+                observer->on_config_changed(old_config, new_config);
+            }
+        }
+
+        // 递增配置版本
+        config_version_.store(expected_version + 1);
+
+        return VINYL_OK;
+    }
+
+    void add_config_observer(VinylCacheConfigObserver* observer) {
+        if (!observer) return;
+        std::lock_guard<std::mutex> lock(observer_mutex);
+        observers.push_back(observer);
+    }
+
+    void remove_config_observer(VinylCacheConfigObserver* observer) {
+        if (!observer) return;
+        std::lock_guard<std::mutex> lock(observer_mutex);
+        observers.erase(
+            std::remove(observers.begin(), observers.end(), observer),
+            observers.end());
+    }
+
     VinylCacheConfig config_;
     std::atomic<VinylCacheState> state_{VinylCacheState::UNINITIALIZED};
+    std::atomic<uint64_t> config_version_{0};
+
+    // 配置观察者
+    std::vector<VinylCacheConfigObserver*> observers;
+    std::mutex observer_mutex;
 };
 
 VinylCache::VinylCache()
@@ -130,6 +172,22 @@ void VinylCache::set_cache_enabled(bool enabled) {
 
 const VinylCacheConfig& VinylCache::get_config() const {
     return impl_->get_config();
+}
+
+uint64_t VinylCache::get_config_version() const {
+    return impl_->config_version_.load();
+}
+
+int VinylCache::hot_update_config(const VinylCacheConfig& new_config) {
+    return impl_->hot_update_config(new_config);
+}
+
+void VinylCache::add_config_observer(VinylCacheConfigObserver* observer) {
+    impl_->add_config_observer(observer);
+}
+
+void VinylCache::remove_config_observer(VinylCacheConfigObserver* observer) {
+    impl_->remove_config_observer(observer);
 }
 
 // VCLConfigLoader implementation

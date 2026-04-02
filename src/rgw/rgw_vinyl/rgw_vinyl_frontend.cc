@@ -7,12 +7,15 @@
 
 #include "rgw_vinyl_vmod.h"
 #include "rgw_vinyl.h"
+#include "rgw_vinyl_server.h"
+#include "rgw_vinyl_client.h"
 
 #define dout_subsys ceph_subsys_rgw
 
 namespace rgw {
-// Forward declaration - RGWProcess_Vinyl will be implemented later
+// Forward declaration
 class RGWProcess_Vinyl;
+class VinylHTTPServer;
 } // namespace rgw
 
 namespace rgw {
@@ -65,6 +68,31 @@ public:
       vcl_file_path = vcl_dir + vcl_file;
     }
 
+    // Create VinylHTTPServer
+    server = std::make_unique<VinylHTTPServer>();
+
+    // Configure server
+    VinylHTTPServer::Config server_config;
+    server_config.port = port;
+    server_config.vcl_file = vcl_file_path;
+    server_config.work_dir = "/tmp/vinyl-rgw-" + std::to_string(getpid());
+
+    // Set response complete callback
+    server->set_response_complete_cb(
+        [this](int status, const char* status_msg,
+               const char* headers, size_t headers_len,
+               const char* body, size_t body_len) {
+            ldout(cct, 20) << "Response complete: status=" << status << dendl;
+        }
+    );
+
+    // Initialize server
+    int ret = server->init(server_config);
+    if (ret != 0) {
+      ldout(cct, 0) << "ERROR: VinylHTTPServer init failed, ret=" << ret << dendl;
+      return ret;
+    }
+
     // Create Vinyl Process
     vinyl_process = new RGWProcess_Vinyl(
         cct, env, num_threads, conf);
@@ -72,7 +100,7 @@ public:
     pprocess = vinyl_process;
 
     // Register VinylCache callbacks
-    int ret = rgw_vinyl_register_callbacks(
+    ret = rgw_vinyl_register_callbacks(
         vinyl_recv_cb,
         vinyl_send_cb,
         vinyl_init_cb,
@@ -86,12 +114,42 @@ public:
       return ret;
     }
 
+    // 获取 VinylCache 指针
+    vinyl_cache = env.vinyl_cache;
+
     init_called = true;
     return 0;
   }
 
+  int run_internal() {
+    ldout(cct, 10) << "RGWVinylCacheFrontend::Impl::run_internal()" << dendl;
+
+    // Start VinylHTTPServer
+    if (!server) {
+      ldout(cct, 0) << "ERROR: VinylHTTPServer not initialized" << dendl;
+      return VINYL_ERROR;
+    }
+
+    int ret = server->start();
+    if (ret != 0) {
+      ldout(cct, 0) << "ERROR: VinylHTTPServer start failed, ret=" << ret << dendl;
+      return ret;
+    }
+
+    ldout(cct, 1) << "RGWVinylCacheFrontend VinylHTTPServer started on port " << port << dendl;
+
+    // Run the base process loop
+    return RGWProcessFrontend::run();
+  }
+
   void stop() {
     ldout(cct, 10) << "RGWVinylCacheFrontend::Impl::stop()" << dendl;
+
+    if (server && server->is_running()) {
+      server->stop();
+      server->join();
+    }
+
     rgw_vinyl_unregister_callbacks();
     init_called = false;
   }
@@ -166,7 +224,11 @@ public:
   RGWProcessEnv& env;
   RGWFrontendConfig* conf;
   RGWProcess_Vinyl* vinyl_process;
+  std::unique_ptr<VinylHTTPServer> server;
   bool init_called;
+
+  // VinylCache 指针 (从 RGWProcessEnv 获取)
+  class VinylCache* vinyl_cache{nullptr};
 
   // Configuration
   std::string vcl_dir;
@@ -186,7 +248,16 @@ int RGWVinylCacheFrontend::init() {
 }
 
 int RGWVinylCacheFrontend::run() {
-  return RGWProcessFrontend::run();
+  ldout(cct, 10) << "RGWVinylCacheFrontend::run()" << dendl;
+
+  if (!impl->init_called) {
+    int ret = impl->init();
+    if (ret != 0) {
+      return ret;
+    }
+  }
+
+  return impl->run_internal();
 }
 
 void RGWVinylCacheFrontend::stop() {
@@ -199,10 +270,47 @@ void RGWVinylCacheFrontend::join() {
 }
 
 void RGWVinylCacheFrontend::pause_for_new_config() {
+  ldout(cct, 10) << "RGWVinylCacheFrontend::pause_for_new_config()" << dendl;
+
+  // 暂停 VinylHTTPServer 接受新连接
+  if (impl->server && impl->server->is_running()) {
+    impl->server->stop();
+  }
+
   RGWProcessFrontend::pause_for_new_config();
 }
 
 void RGWVinylCacheFrontend::unpause_with_new_config() {
+  ldout(cct, 10) << "RGWVinylCacheFrontend::unpause_with_new_config()" << dendl;
+
+  // 获取新配置
+  int num_threads;
+  impl->conf->get_val("num_threads", g_conf()->rgw_thread_pool_size, &num_threads);
+
+  bool cache_enabled = true;
+  impl->conf->get_val("cache_enabled", true, &cache_enabled);
+
+  // 更新 VinylCache 配置
+  if (impl->vinyl_cache) {
+    VinylCacheConfig new_config;
+    new_config.cache_enabled = cache_enabled;
+    impl->vinyl_cache->hot_update_config(new_config);
+  }
+
+  // 重新启动 VinylHTTPServer
+  if (impl->server) {
+    impl->server.reset(new VinylHTTPServer());
+
+    VinylHTTPServer::Config server_config;
+    server_config.port = impl->port;
+    server_config.vcl_file = impl->vcl_file_path;
+
+    int ret = impl->server->init(server_config);
+    if (ret == 0) {
+      impl->server->start();
+    }
+  }
+
   RGWProcessFrontend::unpause_with_new_config();
 }
 

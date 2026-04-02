@@ -3,10 +3,35 @@ add_subdirectory(test)
 # Find vinyl-cache library
 set(VINYL_CACHE_DIR "${CMAKE_SOURCE_DIR}/../.worktrees/rgw-vinyl-phase1/vinyl-cache-9.0.0")
 
+# Define vinyld binary path (from environment variable or default path)
+set(VINYLD_DEFAULT_PATH 
+    "${VINYL_CACHE_DIR}/bin/vinyld/vinyld"
+    CACHE PATH "Path to vinyld binary")
+
+set(VINYL_LIB_PATH 
+    "${VINYL_CACHE_DIR}/lib"
+    CACHE PATH "Path to VinylCache libraries")
+
+# Check if vinyld exists
+if(NOT EXISTS "${VINYLD_DEFAULT_PATH}")
+    message(WARNING "vinyld not found at ${VINYLD_DEFAULT_PATH}, VinylCache frontend will use mock mode")
+    set(VINYL_CACHE_AVAILABLE FALSE)
+else()
+    message(STATUS "Found vinyld at ${VINYLD_DEFAULT_PATH}")
+    set(VINYL_CACHE_AVAILABLE TRUE)
+endif()
+
+# Add compile definitions
+if(VINYL_CACHE_AVAILABLE)
+    add_definitions(-DHAVE_VINYL_CACHE=1)
+else()
+    add_definitions(-DHAVE_VINYL_CACHE=0)
+endif()
+
 find_library(VINYL_LIBVINTAGE
     NAMES vinyl vinylcache
-    PATHS ${VINYL_CACHE_DIR}/lib/libvinyl/.libs
-          ${VINYL_CACHE_DIR}/lib/libvinylapi/.libs
+    PATHS ${VINYL_LIB_PATH}/libvinyl/.libs
+          ${VINYL_LIB_PATH}/libvinylapi/.libs
     NO_DEFAULT_PATH
 )
 
@@ -23,8 +48,12 @@ set(rgw_vinyl_sources
     rgw_vinyl_vmod.cc
     rgw_vinyl_frontend.cc
     rgw_vinyl_client.cc
+    rgw_vinyl_env.cc
     rgw_vinyl_process.cc
     rgw_vinyl_server.cc
+    rgw_vinyl_request_context.cc
+    rgw_vinyl_driver.cc
+    rgw_vinyl_request_state.cc
 )
 
 add_library(rgw_vinyl STATIC ${rgw_vinyl_sources})
@@ -54,5 +83,13 @@ endif()
 # Install
 install(TARGETS rgw_vinyl DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES rgw_vinyl_vmod.h rgw_vinyl.h rgw_vinyl_frontend.h
-                     rgw_vinyl_client.h rgw_vinyl_process.h rgw_vinyl_server.h
+                     rgw_vinyl_client.h rgw_vinyl_env.h
+                     rgw_vinyl_process.h rgw_vinyl_server.h
+                     rgw_vinyl_request_context.h
+                     rgw_vinyl_driver.h rgw_vinyl_request_state.h
                      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rgw)
+
+# Install startup script
+configure_file(start.sh.in ${CMAKE_CURRENT_BINARY_DIR}/start.sh IMMUTABLE)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/start.sh
+        DESTINATION ${CMAKE_INSTALL_BINDIR})

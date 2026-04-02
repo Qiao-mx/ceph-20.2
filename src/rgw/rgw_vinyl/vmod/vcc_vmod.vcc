@@ -1,0 +1,205 @@
+#-
+# RGW VinylCache VMOD for Vinyl Cache
+#
+# This VMOD provides integration between Vinyl Cache (vinyld) and RGW,
+# allowing VCL to call RGW for request processing and receive responses.
+#
+# SPDX-License-Identifier: BSD-2-Clause
+# Author: RGW VinylCache Team
+
+$ABI vrt
+$Module rgw_vinyl 1 "RGW VinylCache Integration"
+
+DESCRIPTION
+===========
+
+This VMOD provides a bridge between Vinyl Cache (vinyld) and RGW (RadosGW).
+It allows VCL configurations to:
+
+- Initialize RGW callback handlers
+- Create request contexts for RGW processing
+- Send requests to RGW and receive responses
+- Access cached responses from VinylCache
+
+The VMOD acts as an IPC bridge, forwarding requests from vinyld to the
+RGW process and returning responses back to vinyld for caching.
+
+Example VCL usage::
+
+    vcl 4.1;
+
+    import rgw_vinyl;
+
+    sub vcl_init {
+        # Initialize the VMOD with config path and IPC socket path
+        rgw_vinyl.init("/etc/rgw/vinyl.conf",
+                       "/var/run/rgw_vinyl.sock");
+    }
+
+    sub vcl_recv {
+        # Create a request context
+        rgw_vinyl.request req = rgw_vinyl.request();
+
+        # Start the request with method, URI, and host
+        req.start(req.method, req.url, req.host);
+
+        # Send to RGW for processing
+        if (req.send() == 0) {
+            return (synth(503, "RGW unavailable"));
+        }
+
+        # If RGW processed the request, return the cached response
+        return (deliver);
+    }
+
+    sub vcl_deliver {
+        # Add cache status header
+        if (req.rgw_vinyl.cache_hit) {
+            set resp.http.X-Cache = "HIT from RGW";
+        } else {
+            set resp.http.X-Cache = "MISS";
+        }
+    }
+
+INITIALIZATION
+==============
+
+$Function VOID .init(STRING config_path = "", STRING ipc_socket_path = "")
+
+Initialize the VMOD with configuration path and IPC socket path.
+
+``config_path``
+    Path to the RGW VinylCache configuration file.
+
+``ipc_socket_path``
+    Path to the IPC Unix domain socket for communication with RGW.
+
+If called without arguments, defaults will be used from environment
+variables or compile-time settings.
+
+$Function VOID .fini(VOID)
+
+Cleanup resources allocated during initialization.
+
+Called automatically when the VCL is discarded.
+
+CLEANUP
+=======
+
+$Function VOID .cleanup(VOID)
+
+Perform any necessary cleanup of resources.
+
+REQUEST OBJECT
+==============
+
+The request object maintains state for a single RGW request.
+
+$Object request(PRIV_TASK)
+
+Create a new request context for RGW processing.
+
+The PRIV_TASK parameter ensures the request object is private to each
+request thread, avoiding race conditions.
+
+Example::
+
+    rgw_vinyl.request req = rgw_vinyl.request();
+
+REQUEST METHODS
+===============
+
+$Method VOID .start(STRING method, STRING uri, STRING host = "")
+
+Start a new RGW request with the given method, URI, and host.
+
+``method``
+    HTTP method (GET, PUT, POST, DELETE, etc.)
+
+``uri``
+    Request URI path and query string.
+
+``host``
+    Host header value (optional).
+
+$Method INT .send(PRIV_TASK)
+
+Send the request to RGW for processing via IPC.
+
+Returns:
+    - 0 on failure
+    - 1 on success (response available)
+
+The method blocks until RGW processes the request and returns the
+response.
+
+$Method STRING .get_header(STRING name)
+
+Get a response header value by name.
+
+``name``
+    Header name (e.g., "Content-Type", "ETag").
+
+Returns the header value or NULL if not found.
+
+$Method INT .cache_hit(VOID)
+
+Check if the response was served from cache.
+
+Returns:
+    - 0 if cache miss
+    - 1 if cache hit
+
+$Method VOID .free(VOID)
+
+Free resources associated with the request object.
+
+Called automatically when the request object goes out of scope.
+
+CACHE CONTROL
+=============
+
+$Function INT .cache_lookup(STRING key)
+
+Check if a response is cached for the given key.
+
+``key``
+    Cache key (typically URI).
+
+Returns:
+    - 0 if not cached
+    - 1 if cached
+
+$Function INT .cache_invalidate(STRING key)
+
+Invalidate a cached response.
+
+``key``
+    Cache key to invalidate.
+
+Returns:
+    - 0 on success
+    - 1 on failure
+
+UTILITIES
+=========
+
+$Function STRING .version(VOID)
+
+Get the VMOD version string.
+
+Returns the version in format "major.minor.patch".
+
+$Function INT .ping(VOID)
+
+Check if the RGW backend is available.
+
+Returns:
+    - 0 if RGW is unavailable
+    - 1 if RGW is available
+
+ERROR HANDLING
+==============
+
+On error, the VMOD functions will log appropriate error messages
+to the VSL (Varnish Shared Log) and return sensible default values.
