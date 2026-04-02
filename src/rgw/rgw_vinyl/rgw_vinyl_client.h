@@ -13,6 +13,9 @@
 
 namespace rgw {
 
+// Forward declaration
+class VinylHTTPServer;
+
 /**
  * VinylClientIO - Client I/O handler for VinylCache frontend
  *
@@ -46,6 +49,12 @@ public:
   void set_send_cb(std::function<int(int status, const char* status_msg,
                                       const char* headers, size_t headers_len,
                                       const char* body, size_t body_len)> cb);
+
+  /**
+   * 设置 VinylHTTPServer - 连接 VinylClientIO 到 VinylHTTPServer
+   * 此方法会自动配置发送回调
+   */
+  void set_server(VinylHTTPServer* server);
 
 private:
   class Impl;

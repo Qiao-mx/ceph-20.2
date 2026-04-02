@@ -7,12 +7,15 @@
 
 #include "rgw_vinyl_vmod.h"
 #include "rgw_vinyl.h"
+#include "rgw_vinyl_server.h"
+#include "rgw_vinyl_client.h"
 
 #define dout_subsys ceph_subsys_rgw
 
 namespace rgw {
-// Forward declaration - RGWProcess_Vinyl will be implemented later
+// Forward declaration
 class RGWProcess_Vinyl;
+class VinylHTTPServer;
 } // namespace rgw
 
 namespace rgw {
@@ -65,6 +68,31 @@ public:
       vcl_file_path = vcl_dir + vcl_file;
     }
 
+    // Create VinylHTTPServer
+    server = std::make_unique<VinylHTTPServer>();
+
+    // Configure server
+    VinylHTTPServer::Config server_config;
+    server_config.port = port;
+    server_config.vcl_file = vcl_file_path;
+    server_config.work_dir = "/tmp/vinyl-rgw-" + std::to_string(getpid());
+
+    // Set response complete callback
+    server->set_response_complete_cb(
+        [this](int status, const char* status_msg,
+               const char* headers, size_t headers_len,
+               const char* body, size_t body_len) {
+            ldout(cct, 20) << "Response complete: status=" << status << dendl;
+        }
+    );
+
+    // Initialize server
+    int ret = server->init(server_config);
+    if (ret != 0) {
+      ldout(cct, 0) << "ERROR: VinylHTTPServer init failed, ret=" << ret << dendl;
+      return ret;
+    }
+
     // Create Vinyl Process
     vinyl_process = new RGWProcess_Vinyl(
         cct, env, num_threads, conf);
@@ -72,7 +100,7 @@ public:
     pprocess = vinyl_process;
 
     // Register VinylCache callbacks
-    int ret = rgw_vinyl_register_callbacks(
+    ret = rgw_vinyl_register_callbacks(
         vinyl_recv_cb,
         vinyl_send_cb,
         vinyl_init_cb,
@@ -90,8 +118,35 @@ public:
     return 0;
   }
 
+  int run_internal() {
+    ldout(cct, 10) << "RGWVinylCacheFrontend::Impl::run_internal()" << dendl;
+
+    // Start VinylHTTPServer
+    if (!server) {
+      ldout(cct, 0) << "ERROR: VinylHTTPServer not initialized" << dendl;
+      return VINYL_ERROR;
+    }
+
+    int ret = server->start();
+    if (ret != 0) {
+      ldout(cct, 0) << "ERROR: VinylHTTPServer start failed, ret=" << ret << dendl;
+      return ret;
+    }
+
+    ldout(cct, 1) << "RGWVinylCacheFrontend VinylHTTPServer started on port " << port << dendl;
+
+    // Run the base process loop
+    return RGWProcessFrontend::run();
+  }
+
   void stop() {
     ldout(cct, 10) << "RGWVinylCacheFrontend::Impl::stop()" << dendl;
+
+    if (server && server->is_running()) {
+      server->stop();
+      server->join();
+    }
+
     rgw_vinyl_unregister_callbacks();
     init_called = false;
   }
@@ -166,6 +221,7 @@ public:
   RGWProcessEnv& env;
   RGWFrontendConfig* conf;
   RGWProcess_Vinyl* vinyl_process;
+  std::unique_ptr<VinylHTTPServer> server;
   bool init_called;
 
   // Configuration
@@ -186,7 +242,16 @@ int RGWVinylCacheFrontend::init() {
 }
 
 int RGWVinylCacheFrontend::run() {
-  return RGWProcessFrontend::run();
+  ldout(cct, 10) << "RGWVinylCacheFrontend::run()" << dendl;
+
+  if (!impl->init_called) {
+    int ret = impl->init();
+    if (ret != 0) {
+      return ret;
+    }
+  }
+
+  return impl->run_internal();
 }
 
 void RGWVinylCacheFrontend::stop() {

@@ -8,8 +8,17 @@
 #include <vector>
 #include <functional>
 #include <atomic>
+#include <sys/types.h>
 
 namespace rgw {
+
+/**
+ * 请求处理结果回调
+ * 当响应数据准备好时调用
+ */
+typedef std::function<void(int status, const char* status_msg,
+                           const char* headers, size_t headers_len,
+                           const char* body, size_t body_len)> ResponseCompleteCallback;
 
 /**
  * VinylHTTPServer - C HTTP Server wrapper
@@ -90,10 +99,59 @@ public:
                            const char* body, size_t body_len)> send_cb
     );
 
+    /**
+     * 设置响应完成回调 - 当响应数据准备好时调用
+     */
+    void set_response_complete_cb(ResponseCompleteCallback cb);
+
+    /**
+     * 发送响应 - 由 VinylClientIO 调用
+     */
+    int send_response(int status, const char* status_msg,
+                      const char* headers, size_t headers_len,
+                      const char* body, size_t body_len);
+
+    /**
+     * 服务器状态枚举
+     */
+    enum class State {
+        UNINITIALIZED,
+        INITIALIZED,
+        RUNNING,
+        STOPPING,
+        STOPPED
+    };
+
+    /**
+     * 获取服务器状态
+     */
+    State get_state() const { return state_.load(); }
+
+    /**
+     * 获取子进程 PID
+     */
+    pid_t get_pid() const { return impl->child_pid; }
+
+    /**
+     * 获取监听的端口
+     */
+    int get_port() const { return impl->config.port; }
+
+    /**
+     * 检查服务器是否响应健康检查
+     */
+    bool is_healthy() const;
+
+    /**
+     * 自动重启机制
+     */
+    int restart_if_needed();
+
 private:
     class Impl;
     std::unique_ptr<Impl> impl;
     std::atomic<bool> running_{false};
+    std::atomic<State> state_{State::UNINITIALIZED};
 };
 
 } // namespace rgw

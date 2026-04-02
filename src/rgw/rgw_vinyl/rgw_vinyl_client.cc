@@ -2,6 +2,7 @@
 // vim: ts=8 sw=2 smarttab ft=cpp
 
 #include "rgw_vinyl_client.h"
+#include "rgw_vinyl_server.h"
 
 #include <sstream>
 
@@ -17,6 +18,8 @@ public:
   std::function<int(int status, const char* status_msg,
                     const char* headers, size_t headers_len,
                     const char* body, size_t body_len)> send_cb;
+
+  VinylHTTPServer* server = nullptr;  // 指向 VinylHTTPServer
 
   std::string pending_headers;
   std::string pending_body;
@@ -108,6 +111,19 @@ void VinylClientIO::set_send_cb(
                       const char* headers, size_t headers_len,
                       const char* body, size_t body_len)> cb) {
   impl->send_cb = cb;
+}
+
+void VinylClientIO::set_server(VinylHTTPServer* server) {
+  impl->server = server;
+  if (server) {
+    set_send_cb([server](int status, const char* status_msg,
+                        const char* headers, size_t headers_len,
+                        const char* body, size_t body_len) -> int {
+      return server->send_response(status, status_msg,
+                                   headers, headers_len,
+                                   body, body_len);
+    });
+  }
 }
 
 } // namespace rgw

@@ -8,7 +8,10 @@
 #include <cstring>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <signal.h>
+#include <chrono>
+#include <thread>
 
 #define dout_subsys ceph_subsys_rgw
 
@@ -22,6 +25,17 @@ public:
     std::function<int(const char*, const char*, const char*, uint16_t,
                       const char*, size_t, char*, size_t)> recv_cb;
     std::function<void(int, const char*, const char*, size_t, const char*, size_t)> send_cb;
+
+    // Response complete callback
+    ResponseCompleteCallback response_complete_cb;
+
+    // Server state tracking
+    std::chrono::time_point<std::chrono::steady_clock> start_time;
+    int restart_count = 0;
+    static constexpr int MAX_RESTART_COUNT = 3;
+
+    // IPC file descriptor for response
+    int pending_response_fd = -1;
 };
 
 VinylHTTPServer::VinylHTTPServer()
@@ -35,11 +49,25 @@ VinylHTTPServer::~VinylHTTPServer() {
 
 int VinylHTTPServer::init(const Config& config) {
     impl->config = config;
+
+    // Ensure work directory exists
+    if (!impl->config.work_dir.empty()) {
+        ::mkdir(impl->config.work_dir.c_str(), 0755);
+    }
+
+    state_.store(State::INITIALIZED);
     return 0;
 }
 
 int VinylHTTPServer::start() {
     ldout(g_ceph_context, 10) << "VinylHTTPServer::start()" << dendl;
+
+    if (state_.load() != State::INITIALIZED) {
+        ldout(g_ceph_context, 0) << "ERROR: server not initialized" << dendl;
+        return VINYL_ERROR;
+    }
+
+    impl->start_time = std::chrono::steady_clock::now();
 
     // Build vinyld command line
     std::vector<const char*> argv;
@@ -102,6 +130,7 @@ int VinylHTTPServer::start() {
         // Parent process
         impl->child_pid = pid;
         running_.store(true);
+        state_.store(State::RUNNING);
         ldout(g_ceph_context, 1) << "VinylHTTPServer started with pid " << pid << dendl;
         return 0;
     }
@@ -112,6 +141,8 @@ int VinylHTTPServer::start() {
 
 void VinylHTTPServer::stop() {
     ldout(g_ceph_context, 10) << "VinylHTTPServer::stop()" << dendl;
+
+    state_.store(State::STOPPING);
 
     if (impl->child_pid > 0) {
         ldout(g_ceph_context, 1) << "Sending SIGTERM to vinyld (pid " << impl->child_pid << ")" << dendl;
@@ -129,6 +160,7 @@ void VinylHTTPServer::stop() {
     }
     running_.store(false);
     rgw_vinyl_unregister_callbacks();
+    state_.store(State::STOPPED);
 }
 
 void VinylHTTPServer::join() {
@@ -145,6 +177,61 @@ void VinylHTTPServer::set_callbacks(
     std::function<void(int, const char*, const char*, size_t, const char*, size_t)> send_cb) {
     impl->recv_cb = recv_cb;
     impl->send_cb = send_cb;
+}
+
+void VinylHTTPServer::set_response_complete_cb(ResponseCompleteCallback cb) {
+    impl->response_complete_cb = cb;
+}
+
+int VinylHTTPServer::send_response(int status, const char* status_msg,
+                                   const char* headers, size_t headers_len,
+                                   const char* body, size_t body_len) {
+    if (impl->response_complete_cb) {
+        impl->response_complete_cb(status, status_msg,
+                                   headers, headers_len,
+                                   body, body_len);
+        return VINYL_OK;
+    }
+    ldout(g_ceph_context, 5) << "VinylHTTPServer::send_response called but no callback set" << dendl;
+    return VINYL_ERROR;
+}
+
+bool VinylHTTPServer::is_healthy() const {
+    if (state_.load() != State::RUNNING) {
+        ldout(g_ceph_context, 10) << "VinylHTTPServer::is_healthy: not running (state="
+                                  << static_cast<int>(state_.load()) << ")" << dendl;
+        return false;
+    }
+
+    // Check if process is alive
+    if (impl->child_pid <= 0) {
+        ldout(g_ceph_context, 10) << "VinylHTTPServer::is_healthy: invalid pid" << dendl;
+        return false;
+    }
+
+    // Check process status using kill with signal 0
+    if (kill(impl->child_pid, 0) != 0) {
+        ldout(g_ceph_context, 10) << "VinylHTTPServer::is_healthy: process not responding" << dendl;
+        return false;
+    }
+
+    return true;
+}
+
+int VinylHTTPServer::restart_if_needed() {
+    if (!is_healthy()) {
+        if (impl->restart_count < Impl::MAX_RESTART_COUNT) {
+            ldout(g_ceph_context, 1) << "Restarting VinylHTTPServer (attempt "
+                                    << (impl->restart_count + 1) << "/" << Impl::MAX_RESTART_COUNT << ")" << dendl;
+            stop();
+            impl->restart_count++;
+            return start();
+        } else {
+            ldout(g_ceph_context, 0) << "ERROR: Max restart count reached for VinylHTTPServer" << dendl;
+            return VINYL_ERROR;
+        }
+    }
+    return VINYL_OK;
 }
 
 } // namespace rgw
