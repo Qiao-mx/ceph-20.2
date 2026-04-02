@@ -372,6 +372,14 @@ struct req_state;
 int rgw_vinyl_bridge_init();
 
 /**
+ * 使用 RGWProcessEnv 初始化 RGW 与 VinylCache 的桥接
+ * 这是主要的初始化函数，传入完整的 RGW 进程环境
+ * @param env RGW 进程环境（包含 rados, rest, sync_trace）
+ * @return 0 成功, 负数 失败
+ */
+int rgw_vinyl_bridge_init(const RGWProcessEnv& env);
+
+/**
  * 清理 RGW 与 VinylCache 的桥接
  */
 void rgw_vinyl_bridge_shutdown();
