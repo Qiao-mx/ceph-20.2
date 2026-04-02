@@ -39,12 +39,32 @@ public:
   int init() {
     ldout(cct, 10) << "RGWVinylCacheFrontend::Impl::init()" << dendl;
 
-    // Parse config for thread count
+    // Parse configuration from frontend config
     int num_threads;
     conf->get_val("num_threads", g_conf()->rgw_thread_pool_size, &num_threads);
 
-    // Create Vinyl Process - using incomplete type for now
-    // Actual integration with RGWProcess_Vinyl will be done in later task
+    // Get VinylCache specific config
+    std::string vcl_dir;
+    conf->get_val("vcl_dir", "/etc/rgw/vinyl", &vcl_dir);
+    this->vcl_dir = vcl_dir;
+
+    std::string vcl_file;
+    conf->get_val("vcl_file", "main.vcl", &vcl_file);
+    this->vcl_file = vcl_file;
+
+    conf->get_val("cache_enabled", true, &cache_enabled);
+
+    // Get port configuration
+    conf->get_val("port", 7480, &port);
+
+    // Build VCL file path
+    if (!vcl_dir.empty() && vcl_dir.back() != '/') {
+      vcl_file_path = vcl_dir + "/" + vcl_file;
+    } else {
+      vcl_file_path = vcl_dir + vcl_file;
+    }
+
+    // Create Vinyl Process
     vinyl_process = new RGWProcess_Vinyl(
         cct, env, num_threads, conf);
 
@@ -116,6 +136,13 @@ public:
   RGWFrontendConfig* conf;
   RGWProcess_Vinyl* vinyl_process;
   bool init_called;
+
+  // Configuration
+  std::string vcl_dir;
+  std::string vcl_file;
+  std::string vcl_file_path;
+  int port{7480};
+  bool cache_enabled{true};
 };
 
 RGWVinylCacheFrontend::RGWVinylCacheFrontend(RGWProcessEnv& env, RGWFrontendConfig* conf)
