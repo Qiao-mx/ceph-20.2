@@ -10,6 +10,9 @@
 #include <atomic>
 #include <sys/types.h>
 
+// Forward declarations
+class VinylIPC;
+
 namespace rgw {
 
 /**
@@ -146,6 +149,16 @@ public:
      * 自动重启机制
      */
     int restart_if_needed();
+
+    /**
+     * 获取 IPC 连接状态
+     */
+    bool is_ipc_connected() const;
+
+    /**
+     * 获取 IPC 客户端数量
+     */
+    size_t get_ipc_client_count() const;
 
 private:
     class Impl;
