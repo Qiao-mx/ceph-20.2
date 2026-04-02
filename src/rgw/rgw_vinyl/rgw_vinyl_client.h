@@ -6,6 +6,9 @@
 #include <memory>
 #include <string>
 #include <functional>
+#include <atomic>
+#include <future>
+#include <mutex>
 
 #include "rgw_client_io.h"
 #include "rgw_common.h"
@@ -55,6 +58,38 @@ public:
    * 此方法会自动配置发送回调
    */
   void set_server(VinylHTTPServer* server);
+
+  /**
+   * 异步发送响应 - 不阻塞等待发送完成
+   */
+  void send_response_async();
+
+  /**
+   * 获取响应状态
+   */
+  int get_status() const { return impl->status; }
+
+  /**
+   * 检查响应头是否已发送
+   */
+  bool headers_sent() const { return impl->headers_sent; }
+
+  /**
+   * 获取待发送的响应数据大小
+   */
+  size_t get_pending_size() const {
+    return impl->pending_headers.size() + out_body.length();
+  }
+
+  /**
+   * 启用分块传输编码
+   */
+  size_t enable_chunked_encoding();
+
+  /**
+   * 分块发送响应体 - 超过缓冲阈值时自动flush
+   */
+  size_t send_body_chunked(const char* buf, size_t len);
 
 private:
   class Impl;

@@ -48,6 +48,7 @@ set(rgw_vinyl_sources
     rgw_vinyl_vmod.cc
     rgw_vinyl_frontend.cc
     rgw_vinyl_client.cc
+    rgw_vinyl_env.cc
     rgw_vinyl_process.cc
     rgw_vinyl_server.cc
     rgw_vinyl_request_context.cc
@@ -80,6 +81,7 @@ endif()
 # Install
 install(TARGETS rgw_vinyl DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES rgw_vinyl_vmod.h rgw_vinyl.h rgw_vinyl_frontend.h
-                     rgw_vinyl_client.h rgw_vinyl_process.h rgw_vinyl_server.h
+                     rgw_vinyl_client.h rgw_vinyl_env.h
+                     rgw_vinyl_process.h rgw_vinyl_server.h
                      rgw_vinyl_request_context.h
                      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rgw)
