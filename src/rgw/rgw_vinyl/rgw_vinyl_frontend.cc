@@ -16,6 +16,11 @@ class RGWProcess_Vinyl;
 
 namespace rgw {
 
+// Factory function implementation
+RGWFrontend* make_vinyl_frontend(RGWProcessEnv& env, RGWFrontendConfig* conf) {
+  return new RGWVinylCacheFrontend(env, conf);
+}
+
 class RGWVinylCacheFrontend::Impl {
 public:
   Impl(RGWProcessEnv& env, RGWFrontendConfig* conf)

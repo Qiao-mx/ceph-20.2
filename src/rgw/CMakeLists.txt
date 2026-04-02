@@ -287,6 +287,10 @@ endif()
 
 add_library(rgw_common STATIC ${librgw_common_srcs})
 
+if(WITH_RGW_VINYL)
+  target_compile_definitions(rgw_common PUBLIC WITH_RGW_VINYL)
+endif()
+
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-Wimplicit-const-int-float-conversion"
   COMPILER_SUPPORTS_WARN_IMPLICIT_CONST_INT_FLOAT_CONVERSION)

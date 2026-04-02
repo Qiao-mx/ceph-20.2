@@ -17,6 +17,10 @@
 #include "rgw_auth_registry.h"
 #include "rgw_sal_rados.h"
 
+#ifdef WITH_RGW_VINYL
+#include "rgw_vinyl/rgw_vinyl_frontend.h"
+#endif
+
 #define dout_context g_ceph_context
 
 namespace rgw::dmclock {

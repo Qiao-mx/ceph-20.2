@@ -1,5 +1,6 @@
 #include "rgw_vinyl.h"
 #include "rgw_vinyl_vmod.h"
+#include "rgw_vinyl_frontend.h"
 
 #include <cstring>
 #include <thread>
@@ -265,7 +266,6 @@ sub vcl_deliver {
 
     return (deliver);
 }
-)";
-}
+");
 
 } // namespace rgw
