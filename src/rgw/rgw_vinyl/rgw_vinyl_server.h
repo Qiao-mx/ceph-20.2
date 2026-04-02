@@ -33,7 +33,17 @@ public:
         std::string vcl_dir;
         int port = 7480;
         int ssl_port = 7443;
-        std::string work_dir = "/tmp/vinyl";
+        std::string work_dir = "/tmp/vinyl-rgw";
+
+        // vinyld 路径
+        std::string vinyld_path;
+
+        // VMOD 路径
+        std::string vmod_dir;
+
+        // IPC 模式
+        std::string ipc_socket_path = "/tmp/vinyl-rgw/ipc.sock";
+
         bool foreground = true;
         std::vector<std::string> params;
     };

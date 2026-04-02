@@ -21,6 +21,23 @@ struct VinylCacheConfig {
     int connect_timeout_ms{3000};
     int backend_timeout_ms{30000};
     size_t max_object_size{10 * 1024 * 1024}; // 10MB
+
+    // vinyld 路径配置
+    std::string vinyld_path =
+        "../.worktrees/rgw-vinyl-phase1/vinyl-cache-9.0.0/bin/vinyld/vinyld";
+    std::string vinyld_work_dir = "/tmp/vinyl-rgw";
+
+    // VMOD 路径
+    std::string vmod_dir =
+        "../.worktrees/rgw-vinyl-phase1/vinyl-cache-9.0.0/lib/libvcc";
+
+    // IPC 机制
+    enum class IPCMode {
+        PIPE,           // 管道通信
+        UNIX_SOCKET,    // Unix Domain Socket
+        SHARED_MEMORY   // 共享内存
+    };
+    IPCMode ipc_mode = IPCMode::UNIX_SOCKET;
 };
 
 /**
